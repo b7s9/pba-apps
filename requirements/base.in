@@ -8,3 +8,4 @@ django-email-log
 django-environ
 mailchimp3
 psycopg2-binary
+whitenoise

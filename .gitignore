@@ -5,3 +5,4 @@ venv
 .venv
 .state
 *.swp
+__pycache__

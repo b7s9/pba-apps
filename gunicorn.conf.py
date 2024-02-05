@@ -1,2 +1,2 @@
-worker_class = "pbabp.workers.UvicornWorker"
+worker_class = "pbaabp.workers.UvicornWorker"
 accesslog = "-"
