@@ -7,13 +7,15 @@
         padding: 1em;
       }
       .form-container {
-        width: 50%;
+        width: 95%;
+        max-width: 40rem;
         margin: auto;
         border: 1px solid;
         border-radius: 5px;
       }
       .form-header {
-        width: 50%;
+        width: 95%;
+        max-width: 40rem;
         margin: auto;
         border: 1px solid;
         border-radius: 5px;
@@ -35,6 +37,15 @@
         padding-left: 1em;
         padding-right: 1em;
         color: #333333;
+      }
+      .button-holder {
+        text-align: center;
+      }
+      .submit-button {
+        background-color: #83BD56;
+        color: white;
+        border: none;
+        font-size: 2em;
       }
     </style>
   </head>
@@ -64,7 +75,9 @@
         </div>
       {% endfor %}
 
-      <input type="submit" value="Sign me in!">
+      <div class="button-holder">
+        <input class="submit-button" type="submit" value="Sign me in!">
+      </div>
       </form>
     </div>
   </body>
