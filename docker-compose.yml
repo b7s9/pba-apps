@@ -1,0 +1,74 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16-bookworm
+    restart: always
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: pbaabp
+      POSTGRES_PASSWORD: pbaabp
+      POSTGRES_DB: pbaabp
+      POSTGRES_HOST_AUTH_METHOD: trust  # never do this in production!
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "pbaabp", "-d", "pbaabp"]
+      interval: 1s
+
+  redis:
+    image: redis:7-bookworm
+    ports:
+      - "6379:6379"
+    healthcheck:
+     test: ["CMD", "redis-cli","ping"]
+     interval: 1s
+
+  web:
+    build: .
+    image: pbaabp-web:docker-compose
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql://pbaabp:pbaabp@postgres:5432/pbaabp
+      DJANGO_READ_DOT_ENV_FILE: "True"
+    depends_on:
+      redis:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+  worker:
+    image: pbaabp-web:docker-compose
+    command: hupper -m celery -A pbaabp worker --beat -l INFO
+    volumes:
+      - .:/code
+    environment:
+      DATABASE_URL: postgresql://pbaabp:pbaabp@postgres:5432/pbaabp
+      DJANGO_READ_DOT_ENV_FILE: "True"
+    depends_on:
+      redis:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+  discord:
+    image: pbaabp-web:docker-compose
+    command: python manage.py run_dev_discord
+    stop_signal: SIGINT
+    volumes:
+      - .:/code
+    environment:
+      DATABASE_URL: postgresql://pbaabp:pbaabp@postgres:5432/pbaabp
+      DJANGO_READ_DOT_ENV_FILE: "True"
+    depends_on:
+      redis:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+
+  maildev:
+    image: maildev/maildev:2.0.5
+    ports:
+      - "1080:1080"
+      - "1025:1025"

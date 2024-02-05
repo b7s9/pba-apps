@@ -1,0 +1,8 @@
+[tool.black]
+exclude = ""
+line-length = 99
+[tool.isort]
+profile = "black"
+skip_glob = []
+[tool.coverage.run]
+omit = []

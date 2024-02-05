@@ -1,0 +1,10 @@
+Celery[redis]
+Django
+channels[daphne]
+discord-py-interactions==5.11.0
+django-allauth[mfa]
+django-dotenv
+django-email-log
+django-environ
+mailchimp3
+psycopg2-binary
