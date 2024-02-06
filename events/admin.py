@@ -10,7 +10,7 @@ class ScheduledEventAdmin(admin.ModelAdmin):
 
 
 class EventSignInAdmin(admin.ModelAdmin):
-    pass
+    list_display = ["__str__", "council_district", "newsletter_opt_in"]
 
 
 admin.site.register(ScheduledEvent, ScheduledEventAdmin)
