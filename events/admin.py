@@ -10,7 +10,15 @@ class ScheduledEventAdmin(admin.ModelAdmin):
 
 
 class EventSignInAdmin(admin.ModelAdmin):
-    list_display = ["__str__", "council_district", "newsletter_opt_in"]
+    list_display = ["get_name", "get_event", "council_district", "newsletter_opt_in"]
+    list_filter = ["event__title"]
+    ordering = ["-updated_at"]
+
+    def get_name(self, obj):
+        return f"{obj.first_name} {obj.last_name}"
+
+    def get_event(self, obj):
+        return obj.event.title
 
 
 admin.site.register(ScheduledEvent, ScheduledEventAdmin)
