@@ -23,6 +23,7 @@ def sync_to_wordpress(scheduled_event_id):
             status="publish",
             start_datetime=event.start_datetime,
             end_datetime=event.end_datetime,
+            cover_url=event.cover,
         )
         event.wordpress_slug = _event["slug"]
         event.save()
@@ -34,6 +35,7 @@ def sync_to_wordpress(scheduled_event_id):
             status="publish",
             start_datetime=event.start_datetime,
             end_datetime=event.end_datetime,
+            cover_url=event.cover,
         )
         event.wordpress_id = _event["id"]
         event.wordpress_slug = _event["slug"]

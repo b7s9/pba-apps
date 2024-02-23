@@ -72,46 +72,62 @@ class WordPressAPI:
 
         return _venue["id"]
 
-    def create_event(self, title, description, location, status, start_datetime, end_datetime):
+    def create_event(
+        self, title, description, location, status, start_datetime, end_datetime, cover_url=None
+    ):
         venue_id = self.fetch_venue(location)
+        data = {
+            "title": title,
+            "description": description,
+            "status": "publish",
+            "start_date": start_datetime.astimezone(tz=ZoneInfo(settings.TIME_ZONE)).isoformat(
+                sep=" "
+            ),
+            "end_date": end_datetime.astimezone(tz=ZoneInfo(settings.TIME_ZONE)).isoformat(
+                sep=" "
+            ),
+            "timezone": settings.TIME_ZONE,
+            "venue": venue_id,
+        }
+        if cover_url is not None:
+            data["image"] = cover_url
         r = requests.post(
             f"{self.url}/wp-json/tribe/events/v1/events/",
             headers={"Authorization": f"Bearer {self.token}"},
-            data={
-                "title": title,
-                "description": description,
-                "status": "publish",
-                "start_date": start_datetime.astimezone(tz=ZoneInfo(settings.TIME_ZONE)).isoformat(
-                    sep=" "
-                ),
-                "end_date": end_datetime.astimezone(tz=ZoneInfo(settings.TIME_ZONE)).isoformat(
-                    sep=" "
-                ),
-                "timezone": settings.TIME_ZONE,
-                "venue": venue_id,
-            },
+            data=data,
         )
         return r.json()
 
     def update_event(
-        self, event_id, title, description, location, status, start_datetime, end_datetime
+        self,
+        event_id,
+        title,
+        description,
+        location,
+        status,
+        start_datetime,
+        end_datetime,
+        cover_url=None,
     ):
         venue_id = self.fetch_venue(location)
+        data = {
+            "title": title,
+            "description": description,
+            "status": "publish",
+            "start_date": start_datetime.astimezone(tz=ZoneInfo(settings.TIME_ZONE)).isoformat(
+                sep=" "
+            ),
+            "end_date": end_datetime.astimezone(tz=ZoneInfo(settings.TIME_ZONE)).isoformat(
+                sep=" "
+            ),
+            "timezone": settings.TIME_ZONE,
+            "venue": venue_id,
+        }
+        if cover_url is not None:
+            data["image"] = cover_url
         r = requests.post(
             f"{self.url}/wp-json/tribe/events/v1/events/{event_id}",
             headers={"Authorization": f"Bearer {self.token}"},
-            data={
-                "title": title,
-                "description": description,
-                "status": "publish",
-                "start_date": start_datetime.astimezone(tz=ZoneInfo(settings.TIME_ZONE)).isoformat(
-                    sep=" "
-                ),
-                "end_date": end_datetime.astimezone(tz=ZoneInfo(settings.TIME_ZONE)).isoformat(
-                    sep=" "
-                ),
-                "timezone": settings.TIME_ZONE,
-                "venue": venue_id,
-            },
+            data=data,
         )
         return r.json()
