@@ -6,9 +6,14 @@ from profiles.models import Profile
 
 
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ["user", "council_district"]
+    list_display = ["_user", "council_district"]
     search_fields = ["user__first_name", "user__last_name", "user__email"]
     autocomplete_fields = ("user",)
+
+    def _user(self, obj=None):
+        if obj is None:
+            return ""
+        return obj.user.email
 
     def get_readonly_fields(self, request, obj=None):
         if obj is None:
@@ -25,8 +30,6 @@ admin.site.register(Profile, ProfileAdmin)
 
 class UserAdmin(BaseUserAdmin):
     list_display = ["email", "first_name", "last_name", "is_staff", "is_superuser"]
-    pass
-
 
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
