@@ -54,8 +54,10 @@ INSTALLED_APPS = [
     "django_recaptcha",
     "djstripe",
     "email_log",
+    "ordered_model",
     # Our apps
     "pbaabp",
+    "membership",
     "profiles",
     "events",
 ]
@@ -216,6 +218,7 @@ else:
 # dj-stripe
 STRIPE_LIVE_SECRET_KEY = env("STRIPE_LIVE_SECRET_KEY", default=None)
 STRIPE_TEST_SECRET_KEY = env("STRIPE_TEST_SECRET_KEY", default=None)
+STRIPE_SECRET_KEY = STRIPE_TEST_SECRET_KEY if DEBUG else STRIPE_LIVE_SECRET_KEY
 STRIPE_LIVE_MODE = not DEBUG
 DJSTRIPE_USE_NATIVE_JSONFIELD = True
 DJSTRIPE_FOREIGN_KEY_TO_FIELD = "id"

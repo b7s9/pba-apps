@@ -84,6 +84,8 @@ django-email-log==1.4.0
     # via -r requirements/base.in
 django-environ==0.11.2
     # via -r requirements/base.in
+django-ordered-model==3.7.4
+    # via -r requirements/base.in
 django-recaptcha==4.0.0
     # via -r requirements/base.in
 emoji==2.10.0
@@ -127,7 +129,9 @@ pyasn1-modules==0.3.0
 pycparser==2.21
     # via cffi
 pyjwt[crypto]==2.8.0
-    # via django-allauth
+    # via
+    #   django-allauth
+    #   pyjwt
 pyopenssl==24.0.0
     # via twisted
 pypng==0.20220715.0
@@ -161,7 +165,9 @@ stripe==4.2.0
 tomli==2.0.1
     # via discord-py-interactions
 twisted[tls]==23.10.0
-    # via daphne
+    # via
+    #   daphne
+    #   twisted
 txaio==23.1.1
     # via autobahn
 typing-extensions==4.9.0
