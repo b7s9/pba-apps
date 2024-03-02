@@ -31,5 +31,6 @@ admin.site.register(Profile, ProfileAdmin)
 class UserAdmin(BaseUserAdmin):
     list_display = ["email", "first_name", "last_name", "is_staff", "is_superuser"]
 
+
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)

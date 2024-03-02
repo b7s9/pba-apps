@@ -2,6 +2,7 @@ from allauth.account.forms import SignupForm as BaseSignupForm
 from django import forms
 from django.core.validators import RegexValidator
 from django.utils.html import mark_safe
+from django_recaptcha.fields import ReCaptchaField
 
 from profiles.models import Profile
 
@@ -20,6 +21,7 @@ class ProfileSignupForm(BaseSignupForm):
         ],
     )
     newsletter_opt_in = forms.BooleanField(required=False)
+    captcha = ReCaptchaField()
 
     field_order = [
         "first_name",
@@ -30,6 +32,7 @@ class ProfileSignupForm(BaseSignupForm):
         "newsletter_opt_in",
         "password1",
         "password2",
+        "captcha",
     ]
 
     def save(self, request):

@@ -6,6 +6,7 @@ django-allauth[mfa]
 django-dotenv
 django-email-log
 django-environ
+django-recaptcha
 mailchimp3
 psycopg2-binary
 whitenoise
