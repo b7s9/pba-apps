@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     "email_log",
     # Our apps
     "pbaabp",
+    "profiles",
     "events",
 ]
 
