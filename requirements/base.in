@@ -2,6 +2,7 @@ Celery[redis]
 Django
 channels[daphne]
 discord-py-interactions==5.11.0
+dj-stripe
 django-allauth[mfa]
 django-dotenv
 django-email-log
