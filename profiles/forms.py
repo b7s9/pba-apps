@@ -1,7 +1,47 @@
+from allauth.account.forms import SignupForm as BaseSignupForm
 from django import forms
+from django.core.validators import RegexValidator
 from django.utils.html import mark_safe
 
 from profiles.models import Profile
+
+
+class ProfileSignupForm(BaseSignupForm):
+    first_name = forms.CharField(required=True)
+    last_name = forms.CharField(required=True)
+    council_district = forms.ChoiceField(choices=Profile.District.choices)
+    zip_code = forms.CharField(
+        max_length=10,
+        validators=[
+            RegexValidator(
+                regex=r"^(^[0-9]{5}(?:-[0-9]{4})?$|^$)",
+                message="Must be a valid zipcode in formats 19107 or 19107-3200",
+            )
+        ],
+    )
+    newsletter_opt_in = forms.BooleanField(required=False)
+
+    field_order = [
+        "first_name",
+        "last_name",
+        "council_district",
+        "zip_code",
+        "email",
+        "newsletter_opt_in",
+        "password1",
+        "password2",
+    ]
+
+    def save(self, request):
+        user = super().save(request)
+        profile = Profile(
+            user=user,
+            council_district=self.cleaned_data["council_district"],
+            zip_code=self.cleaned_data["zip_code"],
+            newsletter_opt_in=self.cleaned_data["newsletter_opt_in"],
+        )
+        profile.save()
+        return user
 
 
 class ProfileUpdateForm(forms.ModelForm):
