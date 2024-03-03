@@ -1,7 +1,7 @@
 from django.contrib import admin
 from ordered_model.admin import OrderedModelAdmin
 
-from membership.models import DonationConfiguration, DonationTier, Membership
+from membership.models import DonationTier, Membership
 
 
 class MembershipAdmin(admin.ModelAdmin):
@@ -24,10 +24,5 @@ class DonationTierAdmin(OrderedModelAdmin):
             )
 
 
-class DonationConfigurationAdmin(admin.ModelAdmin):
-    pass
-
-
 admin.site.register(Membership, MembershipAdmin)
 admin.site.register(DonationTier, DonationTierAdmin)
-admin.site.register(DonationConfiguration, DonationConfigurationAdmin)

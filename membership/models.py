@@ -2,7 +2,7 @@ import uuid
 
 from django.contrib.auth.models import User
 from django.db import models, transaction
-from djstripe.models import Price, Subscription
+from djstripe.models import Price
 from ordered_model.models import OrderedModel
 
 from membership.tasks import sync_donation_tier_to_stripe
@@ -40,18 +40,6 @@ class DonationTier(OrderedModel):
 
     def __str__(self):
         return f"${self.cost}/{self.get_recurrence_display()}"
-
-
-class DonationConfiguration(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    stripe_subscription = models.ForeignKey(
-        Subscription, blank=True, null=True, on_delete=models.SET_NULL
-    )
-
-    tier = models.ForeignKey(DonationTier, on_delete=models.CASCADE)
 
 
 class Membership(models.Model):
