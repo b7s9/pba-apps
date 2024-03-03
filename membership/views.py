@@ -1,5 +1,6 @@
 import stripe
 from django.conf import settings
+from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.template.response import TemplateResponse
@@ -12,6 +13,7 @@ from membership.models import DonationTier
 
 
 @csrf_exempt
+@login_required
 def create_checkout_session(request, price_id=None):
     if request.method == "POST":
         stripe.api_key = settings.STRIPE_SECRET_KEY
@@ -31,6 +33,7 @@ def create_checkout_session(request, price_id=None):
         return TemplateResponse(request, "checkout_session.html", context)
 
 
+@login_required
 def complete_checkout_session(request):
     checkout_session_id = request.session.pop("_stripe_checkout_session_id", default=None)
     stripe.api_key = settings.STRIPE_SECRET_KEY
@@ -47,6 +50,7 @@ def complete_checkout_session(request):
     return redirect("profile")
 
 
+@login_required
 def card_remove(request, payment_method_id):
     method = PaymentMethod.objects.filter(id=payment_method_id).first()
     if method is not None:
@@ -54,6 +58,7 @@ def card_remove(request, payment_method_id):
     return redirect("profile")
 
 
+@login_required
 def card_make_default(request, payment_method_id):
     method = PaymentMethod.objects.filter(id=payment_method_id).first()
     if method is not None:
@@ -61,6 +66,7 @@ def card_make_default(request, payment_method_id):
     return redirect("profile")
 
 
+@login_required
 def setup_recurring_donation(request, donation_tier_id=None):
     if request.method == "POST":
         form = RecurringDonationSetupForm(request.POST)
