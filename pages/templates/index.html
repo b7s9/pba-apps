@@ -12,11 +12,20 @@
   <div class="button-holder">
     <a class="submit-button" href="{% url 'create_one_time_donation_checkout_session' %}">Donate Now</a>
   </div>
+  {% with request.user.djstripe_customers.first as customer %}
+  {% if customer.active_subscriptions.all %}
+  <div class="button-holder">
+    <a class="submit-button" href="{% url 'profile' %}">Manage your recurring donation</a>
+  </div>
+  {% else %}
   <p>OR</p>
   <div class="button-holder">
     <a class="submit-button" href="{% url 'setup_recurring_donation' %}">Donate Monthly</a>
   </div>
   <p>Setup a monthly recurring donation as low as $5/mo</p>
+  <p><small><a href="{% url 'account_login' %}">Login</a> to manage your existing recurring donation.</small></p>
+  {% endif %}
+  {% endwith %}
   <p>
       Philly Bike Action is a registered charity in The Commonwealth of Pennsylvania.
       Contributions to Philly Bike Action are not deductible as charitable contributions for federal income tax purposes.
