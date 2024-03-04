@@ -24,6 +24,8 @@ class BaseProfileSignupForm(BaseSignupForm):
 
     def save(self, request):
         user = super().save(request)
+        user.username = user.email
+        user.save()
         profile = Profile(
             user=user,
             council_district=self.cleaned_data["council_district"],
