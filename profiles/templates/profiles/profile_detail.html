@@ -57,6 +57,8 @@
     </tr>
     {% endfor %}
   </table>
+  <p><b>Note:</b> changing from a monthly to yearly, or yearly to monthly donation will <i>immediately</i> charge you the new amount.</p>
+  <p>Changing the amount you donate alone will charge you the new amount the next time you are charged.<p>
   {% else %}
   <div class="button-holder">
     <a class="submit-button" href="{% url 'setup_recurring_donation' %}">Setup a recurring donation</a>
