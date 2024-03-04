@@ -7,7 +7,7 @@ from django_recaptcha.fields import ReCaptchaField
 from profiles.models import Profile
 
 
-class ProfileSignupForm(BaseSignupForm):
+class BaseProfileSignupForm(BaseSignupForm):
     first_name = forms.CharField(required=True)
     last_name = forms.CharField(required=True)
     council_district = forms.ChoiceField(choices=Profile.District.choices)
@@ -21,6 +21,20 @@ class ProfileSignupForm(BaseSignupForm):
         ],
     )
     newsletter_opt_in = forms.BooleanField(required=False)
+
+    def save(self, request):
+        user = super().save(request)
+        profile = Profile(
+            user=user,
+            council_district=self.cleaned_data["council_district"],
+            zip_code=self.cleaned_data["zip_code"],
+            newsletter_opt_in=self.cleaned_data["newsletter_opt_in"],
+        )
+        profile.save()
+        return user
+
+
+class ProfileSignupForm(BaseProfileSignupForm):
     captcha = ReCaptchaField()
 
     field_order = [
@@ -34,17 +48,6 @@ class ProfileSignupForm(BaseSignupForm):
         "password2",
         "captcha",
     ]
-
-    def save(self, request):
-        user = super().save(request)
-        profile = Profile(
-            user=user,
-            council_district=self.cleaned_data["council_district"],
-            zip_code=self.cleaned_data["zip_code"],
-            newsletter_opt_in=self.cleaned_data["newsletter_opt_in"],
-        )
-        profile.save()
-        return user
 
 
 class ProfileUpdateForm(forms.ModelForm):

@@ -1,58 +1,18 @@
-<html>
-  <head>
-    <meta name=viewport content="width=device-width, initial-scale=1">
-    <style>
-      form {
-        width: 100%;
-        padding: 1em;
+{% extends 'base.html' %}
+{% block content %}
+<div class="form-header">
+  <img src="https://bikeaction.org/wp-content/uploads/2023/07/Sticker_Print_Green.svg">
+  <h1>Thanks for signing in to Philly Bike Action {{ event.title }}!</h1>
+  <p>Page will reload in <span id="countdown">5</span>...</p>
+</div>
+<script>
+  var time = 4;
+  setInterval(function() {
+      document.getElementById("countdown").innerHTML = time;
+      time--;
+      if (time == 0) {
+          window.location.href = "{% url 'event_signin' event_slug_or_id=event.wordpress_slug %}?kiosk=1";
       }
-      .form-container {
-        width: 50%;
-        margin: auto;
-        border: 1px solid;
-        border-radius: 5px;
-      }
-      .form-header {
-        width: 50%;
-        margin: auto;
-        border: 1px solid;
-        border-radius: 5px;
-        margin-bottom: 1em;
-        text-align: center;
-      }
-      .form-header img {
-        padding: 1em;
-        width: 50%;
-      }
-      form div {
-        padding-bottom: 1em;
-      }
-      form label {
-        margin-bottom: .25em;
-      }
-      form div .helptext {
-        font-size: smaller;
-        padding-left: 1em;
-        padding-right: 1em;
-        color: #333333;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="form-header">
-      <img src="https://bikeaction.org/wp-content/uploads/2023/07/Sticker_Print_Green.svg">
-      <h1>Thanks for signing in to Philly Bike Action {{ event.title }}!</h1>
-      <p>Page will reload in <span id="countdown">5</span>...</p>
-    </div>
-  </body>
-  <script>
-    var time = 4;
-    setInterval(function() {
-        document.getElementById("countdown").innerHTML = time;
-        time--;
-        if (time == 0) {
-            window.location.href = "{% url 'event_signin' event_slug_or_id=event.wordpress_slug %}?kiosk=1";
-        }
-    }, 1000);
-  </script>
-</html>
+  }, 1000);
+</script>
+{% endblock %}

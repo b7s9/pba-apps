@@ -1,153 +1,107 @@
-<html>
-  <head>
-    <meta name=viewport content="width=device-width, initial-scale=1">
-    <style>
-      form {
-        width: 100%;
-        padding: 1em;
-      }
-      .form-container {
-        width: 95%;
-        max-width: 40rem;
-        margin: auto;
-        border: 1px solid;
-        border-radius: 5px;
-      }
-      .form-header {
-        width: 95%;
-        max-width: 40rem;
-        margin: auto;
-        border: 1px solid;
-        border-radius: 5px;
-        margin-bottom: 1em;
-        text-align: center;
-      }
-      .form-header img {
-        padding: 1em;
-        width: 50%;
-      }
-      form div {
-        padding-bottom: 1em;
-      }
-      form label {
-        margin-bottom: .25em;
-      }
-      form div .helptext {
-        font-size: smaller;
-        padding-left: 1em;
-        padding-right: 1em;
-        color: #333333;
-      }
-      .button-holder {
-        text-align: center;
-      }
-      .submit-button {
-        background-color: #83BD56;
-        color: white;
-        border: none;
-        font-size: 2em;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="form-header">
-      <h1>Welcome to Philly Bike Action, {{ profile.user.first_name }}</h1>
-      <table>
-          <tr>
-            <td>First Name</td>
-            <td>{{ profile.user.first_name }}</td>
-          </tr>
-          <tr>
-            <td>Last Name</td>
-            <td>{{ profile.user.last_name }}</td>
-          </tr>
-          <tr>
-            <td>Email</td>
-            <td>{{ profile.user.email }}</td>
-          </tr>
+{% extends 'base.html' %}
+{% block content %}
+<div class="form-header">
+  <h1>Welcome to Philly Bike Action, {{ profile.user.first_name }}</h1>
+  <table>
+      <tr>
+        <td>First Name</td>
+        <td>{{ profile.user.first_name }}</td>
+      </tr>
+      <tr>
+        <td>Last Name</td>
+        <td>{{ profile.user.last_name }}</td>
+      </tr>
+      <tr>
+        <td>Email</td>
+        <td>{{ profile.user.email }}</td>
+      </tr>
 
-          <tr>
-            <td>Council District</td>
-            <td>{{ profile.council_district }}</td>
-          </tr>
-          <tr>
-            <td>Zip Code</td>
-            <td>{{ profile.zip_code }}</td>
-          </tr>
-          <tr>
-            <td>Newsletter</td>
-            <td>{% if profile.newsletter_opt_in %}Subscribed{% else %}Not Subscribed{% endif %}</td>
-          </tr>
-      </table>
+      <tr>
+        <td>Council District</td>
+        <td>{{ profile.council_district }}</td>
+      </tr>
+      <tr>
+        <td>Zip Code</td>
+        <td>{{ profile.zip_code }}</td>
+      </tr>
+      <tr>
+        <td>Newsletter</td>
+        <td>{% if profile.newsletter_opt_in %}Subscribed{% else %}Not Subscribed{% endif %}</td>
+      </tr>
+  </table>
 
-      <p>Need to update any of the above? <a href="{% url 'profile_update' %}">Click Here!</a></p>
-    </div>
-    <div class="form-header">
-      <h2>Donations</h2>
-      {% with request.user.djstripe_customers.first as customer %}
-      {% if customer %}
-      <h3>Subscriptions</h3>
-      {% if customer.active_subscriptions.all %}
-      <table>
-        <tr>
-          <th>Subscription</th>
-          <th>Status</th>
-          <th>Actions</th>
-        </tr>
-        {% for subscription in customer.active_subscriptions.all %}
-        <tr>
-          <td>{{ subscription.plan }}</td>
-          <td>{{ subscription.status }}</td>
-          <td>
-            {% if subscription.status == "active" %}
-            <a href="{% url 'cancel_recurring_donation' subscription_id=subscription.id %}">cancel</a>,
-            <a href="{% url 'change_recurring_donation' subscription_id=subscription.id %}">change</a>
-            {% endif %}
-          </td>
-        </tr>
-        {% endfor %}
-      </table>
-      {% else %}
-      <p><a href="{% url 'setup_recurring_donation' %}">Setup a recurring donation</a></p>
-      {% endif %}
-      {% if customer.payment_methods.all %}
-      <h3>Stored Payment Methods</h3>
-      <table>
-        <tr>
-          <th>Method</th>
-          <th>Details</th>
-          <th>Default</th>
-          <th>Actions</th>
-        </tr>
-        {% for method in customer.payment_methods.all %}
-        <tr>
-          <td>{{ method.type }}</td>
-          <td>{{ method.card.display_brand }} - {{ method.card.last4 }}</td>
-          <td>
-            {% if customer.default_payment_method.id == method.id %}
-              *
-            {% endif %}
-          </td>
-          <td>
-            {% if customer.default_payment_method.id == method.id %}
-              {% if not customer.has_any_active_subscription %}
-                <a href="{% url 'remove_payment_method' payment_method_id=method.id %}">remove</a>
-              {% endif %}
-              <small></small>
-            {% else %}
-              <a href="{% url 'make_default_payment_method' payment_method_id=method.id %}">make default</a>,
-              <a href="{% url 'remove_payment_method' payment_method_id=method.id %}">remove</a>
-            {% endif %}
-          </td>
-        </tr>
-        {% endfor %}
-      </table>
-      <p><a href="{% url 'create_checkout_session' %}">Add new payment method</a></p>
-      {% endif %}
-      {% else %}
-      <p><a href="{% url 'setup_recurring_donation' %}">Setup a recurring donation</a></p>
-      {% endif %}
-      {% endwith %}
-    </div>
-  </body>
-</html>
+  <p>Need to update any of the above? <a href="{% url 'profile_update' %}">Click Here!</a></p>
+</div>
+<div class="form-header">
+  <h2>Donations</h2>
+  {% with request.user.djstripe_customers.first as customer %}
+  {% if customer %}
+  <h3>Subscriptions</h3>
+  {% if customer.active_subscriptions.all %}
+  <table>
+    <tr>
+      <th>Subscription</th>
+      <th>Status</th>
+      <th>Actions</th>
+    </tr>
+    {% for subscription in customer.active_subscriptions.all %}
+    <tr>
+      <td>{{ subscription.plan }}</td>
+      <td>{{ subscription.status }}</td>
+      <td>
+        {% if subscription.status == "active" %}
+        <a href="{% url 'cancel_recurring_donation' subscription_id=subscription.id %}">cancel</a>,
+        <a href="{% url 'change_recurring_donation' subscription_id=subscription.id %}">change</a>
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% else %}
+  <p><a href="{% url 'setup_recurring_donation' %}">Setup a recurring donation</a></p>
+  {% endif %}
+  {% if customer.payment_methods.all %}
+  <h3>Stored Payment Methods</h3>
+  <table>
+    <tr>
+      <th>Method</th>
+      <th>Details</th>
+      <th>Default</th>
+      <th>Actions</th>
+    </tr>
+    {% for method in customer.payment_methods.all %}
+    <tr>
+      <td>{{ method.type }}</td>
+      <td>{{ method.card.display_brand }} - {{ method.card.last4 }}</td>
+      <td>
+        {% if customer.default_payment_method.id == method.id %}
+          *
+        {% endif %}
+      </td>
+      <td>
+        {% if customer.default_payment_method.id == method.id %}
+          {% if not customer.has_any_active_subscription %}
+            <a href="{% url 'remove_payment_method' payment_method_id=method.id %}">remove</a>
+          {% endif %}
+          <small></small>
+        {% else %}
+          <a href="{% url 'make_default_payment_method' payment_method_id=method.id %}">make default</a>,
+          <a href="{% url 'remove_payment_method' payment_method_id=method.id %}">remove</a>
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+  <p><a href="{% url 'create_setup_session' %}">Add new payment method</a></p>
+  {% endif %}
+  {% else %}
+  <p><a href="{% url 'setup_recurring_donation' %}">Setup a recurring donation</a></p>
+  {% endif %}
+  <p><a href="{% url 'create_one_time_donation_checkout_session' %}">Make a one-time donation</a></p>
+  <p>
+      Philly Bike Action is a registered charity in The Commonwealth of Pennsylvania.
+      Contributions to Philly Bike Action are not deductible as charitable contributions for federal income tax purposes.
+  </p>
+  {% endwith %}
+</div>
+{% endblock %}

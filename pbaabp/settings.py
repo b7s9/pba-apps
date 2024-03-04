@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     "ordered_model",
     # Our apps
     "pbaabp",
+    "pages",
     "membership",
     "profiles",
     "events",
@@ -82,7 +83,9 @@ ROOT_URLCONF = "pbaabp.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [
+            BASE_DIR / "templates",
+        ],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [

@@ -2,7 +2,7 @@
 
 {% block extra_js %}
 <script src="https://js.stripe.com/v3/"></script>
-{% endblock %} 
+{% endblock %}
 
 {% block content %}
 <div id="checkout">
@@ -23,7 +23,7 @@
   
   // Fetch Checkout Session and retrieve the client secret
   async function initialize() {
-    const response = await fetch("{% if price_id %}{% url 'create_subscription_checkout_session' price_id=price_id %}{% else %}{% url 'create_one_time_donation_checkout_session' %}{% endif %}", {
+    const response = await fetch("{% url 'create_setup_session' %}", {
       method: "POST",
     });
     const { clientSecret } = await response.json();

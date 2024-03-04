@@ -76,7 +76,7 @@ django==4.2.9
     #   django-allauth
     #   django-email-log
     #   django-recaptcha
-django-allauth[mfa]==0.60.1
+django-allauth[mfa]==0.61.1
     # via -r requirements/base.in
 django-dotenv==1.4.2
     # via -r requirements/base.in

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name=viewport content="width=device-width, initial-scale=1">
+    <style>
+      .content-container {
+        width: 80%;
+        margin: auto;
+      }
+      form {
+        width: 100%;
+        padding: 1em;
+      }
+      .form-container {
+        width: 95%;
+        max-width: 40rem;
+        margin: auto;
+        border: 1px solid;
+        border-radius: 5px;
+      }
+      .form-header {
+        width: 95%;
+        max-width: 40rem;
+        margin: auto;
+        border: 1px solid;
+        border-radius: 5px;
+        margin-bottom: 1em;
+        text-align: center;
+      }
+      .form-header img {
+        padding: 1em;
+        width: 50%;
+      }
+      form div {
+        padding-bottom: 1em;
+      }
+      form label {
+        margin-bottom: .25em;
+      }
+      form div .helptext {
+        font-size: smaller;
+        padding-left: 1em;
+        padding-right: 1em;
+        color: #333333;
+      }
+      .button-holder {
+        text-align: center;
+      }
+      .submit-button {
+        background-color: #83BD56;
+        color: white;
+        border: none;
+        font-size: 2em;
+      }
+    </style>
+    {% block extra_js %}
+    {% endblock %}
+  </head>
+  <body>
+  <div class="content-container">
+  {% block content %}
+  {% endblock %}
+  </div>
+  </body>
+</html>

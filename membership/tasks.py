@@ -11,14 +11,21 @@ def sync_donation_tier_to_stripe(donationtier_id):
     donation_tier = DonationTier.objects.get(id=donationtier_id)
 
     stripe.api_key = settings.STRIPE_SECRET_KEY
-    stripe_product_search = stripe.Product.search(query="active:'true' AND name:'Donation'")
+    stripe_product_search = stripe.Product.search(
+        query="active:'true' AND name:'Recurring Donation'"
+    )
     if len(stripe_product_search["data"]) > 1:
         raise LookupError("Incorrect number of stripe products found")
     if len(stripe_product_search["data"]) < 1:
         stripe_product = stripe.Product.create(
             name="Recurring Donation",
             active=True,
-            description="Recurring donation to Philly Bike Action",
+            description=(
+                "Recurring Donation to Philly Bike Action, "
+                "a registered charity in The Commonwealth of Pennsylvania. "
+                "Contributions to Philly Bike Action are not deductible "
+                "as charitable contributions for federal income tax purposes."
+            ),
             shippable=False,
             statement_descriptor="Philly Bike Action",
         )

@@ -3,14 +3,24 @@ from django.urls import path
 from membership import views
 
 urlpatterns = [
-    path("add_card", views.create_checkout_session, name="create_checkout_session"),
+    path("add_card", views.create_setup_session, name="create_setup_session"),
+    path(
+        "checkout/one_time",
+        views.create_one_time_donation_checkout_session,
+        name="create_one_time_donation_checkout_session",
+    ),
+    path(
+        "checkout/complete_one_time",
+        views.complete_one_time_donation_checkout_session,
+        name="complete_one_time_donation_checkout_session",
+    ),
     path(
         "checkout/<str:price_id>",
         views.create_checkout_session,
         name="create_subscription_checkout_session",
     ),
     path(
-        "complete_card",
+        "complete_checkout_session",
         views.complete_checkout_session,
         name="complete_checkout_session",
     ),
