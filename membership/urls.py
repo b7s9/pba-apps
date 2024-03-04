@@ -23,4 +23,14 @@ urlpatterns = [
     path(
         "setup_recurring_donation", views.setup_recurring_donation, name="setup_recurring_donation"
     ),
+    path(
+        "cancel_recurring_donation/<str:subscription_id>",
+        views.cancel_recurring_donation,
+        name="cancel_recurring_donation",
+    ),
+    path(
+        "change_recurring_donation/<str:subscription_id>",
+        views.change_recurring_donation,
+        name="change_recurring_donation",
+    ),
 ]

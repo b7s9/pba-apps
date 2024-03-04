@@ -34,9 +34,9 @@ SECRET_KEY = "django-insecure-l+*3%+le)@z#dwiv5x7(kw#hp&qqa$tkzf)gdm%%e)m^02c5w6
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool("DEBUG", default=False)
 
-ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=["localhost", "831416cc3ed4.ngrok.app"])
+ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=["localhost", "ccd9004d8448.ngrok.app"])
 CSRF_TRUSTED_ORIGINS = env.list(
-    "DJANGO_CSRF_TRUSTED_ORIGINS", default=["http://localhost", "https://831416cc3ed4.ngrok.app"]
+    "DJANGO_CSRF_TRUSTED_ORIGINS", default=["http://localhost", "https://ccd9004d8448.ngrok.app"]
 )
 
 # Application definition

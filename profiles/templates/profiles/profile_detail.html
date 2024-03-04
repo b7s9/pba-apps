@@ -100,8 +100,8 @@
           <td>{{ subscription.status }}</td>
           <td>
             {% if subscription.status == "active" %}
-            <a href="">cancel</a>,
-            <a href="">change</a>
+            <a href="{% url 'cancel_recurring_donation' subscription_id=subscription.id %}">cancel</a>,
+            <a href="{% url 'change_recurring_donation' subscription_id=subscription.id %}">change</a>
             {% endif %}
           </td>
         </tr>

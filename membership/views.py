@@ -79,3 +79,35 @@ def setup_recurring_donation(request, donation_tier_id=None):
         form = RecurringDonationSetupForm()
         context = {"form": form}
         return TemplateResponse(request, "setup_recurring_donation.html", context)
+
+
+@login_required
+def cancel_recurring_donation(request, subscription_id=None):
+    subscription = Subscription.objects.filter(id=subscription_id).first()
+    if subscription is not None:
+        subscription.cancel()
+    return redirect("profile")
+
+
+@login_required
+def change_recurring_donation(request, subscription_id=None):
+    subscription = Subscription.objects.filter(id=subscription_id).first()
+    if request.method == "POST":
+        if subscription is not None:
+            form = RecurringDonationSetupForm(request.POST)
+            if form.is_valid():
+                donation_tier = DonationTier.objects.get(id=form.cleaned_data["donation_tier"])
+            stripe.api_key = settings.STRIPE_SECRET_KEY
+            stripe_subscription = stripe.Subscription.retrieve(subscription.id)
+            stripe.SubscriptionItem.modify(
+                stripe_subscription["items"]["data"][0]["id"],
+                price=donation_tier.stripe_price.id,
+                proration_behavior="none",
+            )
+            stripe_subscription = stripe.Subscription.retrieve(subscription.id)
+            subscription = Subscription.sync_from_stripe_data(stripe_subscription)
+            return redirect("profile")
+    else:
+        form = RecurringDonationSetupForm()
+        context = {"form": form}
+        return TemplateResponse(request, "change_recurring_donation.html", context)
