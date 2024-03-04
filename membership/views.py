@@ -210,8 +210,8 @@ def complete_one_time_donation_checkout_session(request):
     stripe.api_key = settings.STRIPE_SECRET_KEY
     session = stripe.checkout.Session.retrieve(checkout_session_id)
     if session["status"] == "complete":
-        return JsonResponse({"data": "thanks bud!"})
-    return redirect("profile")
+        return redirect("index")
+    return redirect("index")
 
 
 @login_required

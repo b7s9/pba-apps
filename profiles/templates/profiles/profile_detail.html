@@ -58,7 +58,9 @@
     {% endfor %}
   </table>
   {% else %}
-  <p><a href="{% url 'setup_recurring_donation' %}">Setup a recurring donation</a></p>
+  <div class="button-holder">
+    <a class="submit-button" href="{% url 'setup_recurring_donation' %}">Setup a recurring donation</a>
+  </div>
   {% endif %}
   {% if customer.payment_methods.all %}
   <h3>Stored Payment Methods</h3>
@@ -95,9 +97,13 @@
   <p><a href="{% url 'create_setup_session' %}">Add new payment method</a></p>
   {% endif %}
   {% else %}
-  <p><a href="{% url 'setup_recurring_donation' %}">Setup a recurring donation</a></p>
+  <div class="button-holder">
+    <p><a class="submit-button" href="{% url 'setup_recurring_donation' %}">Setup a recurring donation</a></p>
+  </div>
   {% endif %}
-  <p><a href="{% url 'create_one_time_donation_checkout_session' %}">Make a one-time donation</a></p>
+  <div class="button-holder">
+    <p><a class="submit-button" href="{% url 'create_one_time_donation_checkout_session' %}">Make a one-time donation</a></p>
+  </div>
   <p>
       Philly Bike Action is a registered charity in The Commonwealth of Pennsylvania.
       Contributions to Philly Bike Action are not deductible as charitable contributions for federal income tax purposes.
