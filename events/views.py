@@ -1,7 +1,9 @@
+import datetime
 import uuid
 
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
+from django.utils import timezone
 
 from events.forms import EventSignInForm
 from events.models import EventSignIn, ScheduledEvent
@@ -59,6 +61,8 @@ def event_signin(request, event_slug_or_id):
                 )
             else:
                 return HttpResponseRedirect("https://bikeaction.org")
+    elif timezone.now() > event.start_datetime + datetime.timedelta(days=1):
+        return HttpResponseRedirect("https://bikeaction.org")
     else:
         form = EventSignInForm()
 
