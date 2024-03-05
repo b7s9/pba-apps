@@ -9,7 +9,7 @@
       }
       @media screen and (max-width: 40rem) {
         .content-container {
-          width: 100%;
+          width: 90%;
         }
       }
       form {
@@ -62,6 +62,11 @@
         margin-top: 1em;
         text-decoration: none;
       }
+      @media screen and (max-width: 40rem) {
+        .submit-button {
+          font-size: 1.5em;
+        }
+      }
       body {
         font-family: "Ubuntu";
       }
@@ -87,8 +92,13 @@
           margin: 0 auto;
           border-collapse: collapse;
           font-size: 0.9em;
-          min-width: 400px;
           text-align: left;
+          min-width: 38em;
+      }
+      @media screen and (max-width: 40rem) {
+        .table-container table {
+          min-width: 80vw;
+        }
       }
       .table-container th {
           background-color: #83BD56;
@@ -106,6 +116,16 @@
       }
       .table-container tbody tr:last-of-type {
           border-bottom: 2px solid #83BD56;
+      }
+      .table-container .smol-button {
+        display: inline-block;
+        color: white;
+        border: none;
+        padding: .15em;
+        background-color: grey;
+        border-radius: .15em;
+        text-decoration: none;
+        margin: .2em;
       }
     </style>
     <link rel="preconnect" href="https://fonts.googleapis.com">
