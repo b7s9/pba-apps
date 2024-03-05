@@ -29,8 +29,13 @@
         <td>{% if profile.newsletter_opt_in %}Subscribed{% else %}Not Subscribed{% endif %}</td>
       </tr>
   </table>
-
   <p>Need to update any of the above? <a href="{% url 'profile_update' %}">Click Here!</a></p>
+  {% if request.user.has_usable_password %}
+  <p>Change your password <a href="{% url 'account_change_password' %}">here</a>.</p>
+  {% else %}
+  <p style="color: darkred;"><b>Your account does not have a password set.</b></p>
+  <p><b>Set a password for your account <a href="{% url 'account_set_password' %}">here</a>.</b></p>
+  {% endif %}
 </div>
 <div class="form-header">
   <h2>Donations</h2>

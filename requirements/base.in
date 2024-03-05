@@ -9,6 +9,7 @@ django-email-log
 django-environ
 django-ordered-model
 django-recaptcha
+django-sesame
 mailchimp3
 psycopg2-binary
 whitenoise

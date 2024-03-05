@@ -109,6 +109,7 @@ DATABASES = {"default": env.db("DATABASE_URL")}
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
     "allauth.account.auth_backends.AuthenticationBackend",
+    "sesame.backends.ModelBackend",
 ]
 
 
@@ -209,6 +210,9 @@ ACCOUNT_FORMS = {
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = "email"
+
+# django-sesame
+SESAME_MAX_AGE = 300
 
 # django-recaptcha
 if DEBUG:
