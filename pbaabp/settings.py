@@ -177,6 +177,7 @@ CELERY_BEAT_SCHEDULE = {}
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-subject-prefix
 EMAIL_SUBJECT_PREFIX = env("DJANGO_EMAIL_SUBJECT_PREFIX", default="[Philly Bike Action]")
 
+EMAIL_BACKEND = 'email_log.backends.EmailBackend'
 EMAIL_LOG_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = env("DJANGO_EMAIL_HOST", default="smtp.mailgun.org")
 EMAIL_PORT = env.int("DJANGO_EMAIL_PORT", default=587)
