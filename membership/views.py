@@ -1,6 +1,7 @@
 import sesame.utils
 import stripe
 from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
@@ -274,12 +275,22 @@ def cancel_recurring_donation(request, subscription_id=None):
 
 @login_required
 def change_recurring_donation(request, subscription_id=None):
+    existing_subscription = request.user.djstripe_customers.first().active_subscriptions.first()
+    existing_tier = DonationTier.objects.filter(
+        stripe_price__id=existing_subscription.plan.id
+    ).first()
+
     subscription = Subscription.objects.filter(id=subscription_id).first()
     if request.method == "POST":
         if subscription is not None:
             form = RecurringDonationSetupForm(request.POST)
             if form.is_valid():
                 donation_tier = DonationTier.objects.get(id=form.cleaned_data["donation_tier"])
+                if donation_tier == existing_tier:
+                    messages.add_message(
+                        request, messages.INFO, "You are already subscribed to that donation tier"
+                    )
+                    return redirect("change_recurring_donation", subscription_id=subscription_id)
             stripe.api_key = settings.STRIPE_SECRET_KEY
             stripe_subscription = stripe.Subscription.retrieve(subscription.id)
             stripe.SubscriptionItem.modify(
@@ -291,6 +302,6 @@ def change_recurring_donation(request, subscription_id=None):
             subscription = Subscription.sync_from_stripe_data(stripe_subscription)
             return redirect("profile")
     else:
-        form = RecurringDonationSetupForm()
+        form = RecurringDonationSetupForm(tier_id=existing_tier.id if existing_tier else None)
         context = {"form": form}
         return TemplateResponse(request, "change_recurring_donation.html", context)
