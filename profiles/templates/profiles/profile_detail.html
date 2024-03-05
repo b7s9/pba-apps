@@ -1,34 +1,37 @@
 {% extends 'base.html' %}
 {% block content %}
+<hr>
 <div class="form-header">
   <h1>Welcome to Philly Bike Action, {{ profile.user.first_name }}</h1>
-  <table>
-      <tr>
-        <td>First Name</td>
-        <td>{{ profile.user.first_name }}</td>
-      </tr>
-      <tr>
-        <td>Last Name</td>
-        <td>{{ profile.user.last_name }}</td>
-      </tr>
-      <tr>
-        <td>Email</td>
-        <td>{{ profile.user.email }}</td>
-      </tr>
+  <div class="table-container">
+    <table>
+        <tr>
+          <th>First Name</th>
+          <td>{{ profile.user.first_name }}</td>
+        </tr>
+        <tr>
+          <th>Last Name</th>
+          <td>{{ profile.user.last_name }}</td>
+        </tr>
+        <tr>
+          <th>Email</th>
+          <td>{{ profile.user.email }}</td>
+        </tr>
 
-      <tr>
-        <td>Council District</td>
-        <td>{{ profile.council_district }}</td>
-      </tr>
-      <tr>
-        <td>Zip Code</td>
-        <td>{{ profile.zip_code }}</td>
-      </tr>
-      <tr>
-        <td>Newsletter</td>
-        <td>{% if profile.newsletter_opt_in %}Subscribed{% else %}Not Subscribed{% endif %}</td>
-      </tr>
-  </table>
+        <tr>
+          <th>Council District</th>
+          <td>{{ profile.council_district }}</td>
+        </tr>
+        <tr>
+          <th>Zip Code</th>
+          <td>{{ profile.zip_code }}</td>
+        </tr>
+        <tr>
+          <th>Newsletter</th>
+          <td>{% if profile.newsletter_opt_in %}Subscribed{% else %}Not Subscribed{% endif %}</td>
+        </tr>
+    </table>
+  </div>
   <p>Need to update any of the above? <a href="{% url 'profile_update' %}">Click Here!</a></p>
   {% if request.user.has_usable_password %}
   <p>Change your password <a href="{% url 'account_change_password' %}">here</a>.</p>
@@ -37,31 +40,34 @@
   <p><b>Set a password for your account <a href="{% url 'account_set_password' %}">here</a>.</b></p>
   {% endif %}
 </div>
+<hr>
 <div class="form-header">
   <h2>Donations</h2>
   {% with request.user.djstripe_customers.first as customer %}
   {% if customer %}
   <h3>Subscriptions</h3>
   {% if customer.active_subscriptions.all %}
-  <table>
-    <tr>
-      <th>Subscription</th>
-      <th>Status</th>
-      <th>Actions</th>
-    </tr>
-    {% for subscription in customer.active_subscriptions.all %}
-    <tr>
-      <td>{{ subscription.plan }}</td>
-      <td>{{ subscription.status }}</td>
-      <td>
-        {% if subscription.status == "active" %}
-        <a href="{% url 'cancel_recurring_donation' subscription_id=subscription.id %}">cancel</a>,
-        <a href="{% url 'change_recurring_donation' subscription_id=subscription.id %}">change</a>
-        {% endif %}
-      </td>
-    </tr>
-    {% endfor %}
-  </table>
+  <div class="table-container">
+    <table>
+      <tr>
+        <th>Subscription</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+      {% for subscription in customer.active_subscriptions.all %}
+      <tr>
+        <td>{{ subscription.plan }}</td>
+        <td>{{ subscription.status }}</td>
+        <td>
+          {% if subscription.status == "active" %}
+          <a href="{% url 'cancel_recurring_donation' subscription_id=subscription.id %}">cancel</a>,
+          <a href="{% url 'change_recurring_donation' subscription_id=subscription.id %}">change</a>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
   <p><b>Note:</b> changing from a monthly to yearly, or yearly to monthly donation will <i>immediately</i> charge you the new amount.</p>
   <p>Changing the amount you donate alone will charge you the new amount the next time you are charged.<p>
   {% else %}
@@ -71,36 +77,38 @@
   {% endif %}
   {% if customer.payment_methods.all %}
   <h3>Stored Payment Methods</h3>
-  <table>
-    <tr>
-      <th>Method</th>
-      <th>Details</th>
-      <th>Default</th>
-      <th>Actions</th>
-    </tr>
-    {% for method in customer.payment_methods.all %}
-    <tr>
-      <td>{{ method.type }}</td>
-      <td>{{ method.card.display_brand }} - {{ method.card.last4 }}</td>
-      <td>
-        {% if customer.default_payment_method.id == method.id %}
-          *
-        {% endif %}
-      </td>
-      <td>
-        {% if customer.default_payment_method.id == method.id %}
-          {% if not customer.has_any_active_subscription %}
+  <div class="table-container">
+    <table>
+      <tr>
+        <th>Method</th>
+        <th>Details</th>
+        <th>Default</th>
+        <th>Actions</th>
+      </tr>
+      {% for method in customer.payment_methods.all %}
+      <tr>
+        <td>{{ method.type }}</td>
+        <td>{{ method.card.display_brand }} - {{ method.card.last4 }}</td>
+        <td>
+          {% if customer.default_payment_method.id == method.id %}
+            *
+          {% endif %}
+        </td>
+        <td>
+          {% if customer.default_payment_method.id == method.id %}
+            {% if not customer.has_any_active_subscription %}
+              <a href="{% url 'remove_payment_method' payment_method_id=method.id %}">remove</a>
+            {% endif %}
+            <small></small>
+          {% else %}
+            <a href="{% url 'make_default_payment_method' payment_method_id=method.id %}">make default</a>,
             <a href="{% url 'remove_payment_method' payment_method_id=method.id %}">remove</a>
           {% endif %}
-          <small></small>
-        {% else %}
-          <a href="{% url 'make_default_payment_method' payment_method_id=method.id %}">make default</a>,
-          <a href="{% url 'remove_payment_method' payment_method_id=method.id %}">remove</a>
-        {% endif %}
-      </td>
-    </tr>
-    {% endfor %}
-  </table>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
   <p><a href="{% url 'create_setup_session' %}">Add new payment method</a></p>
   {% endif %}
   {% else %}
@@ -117,4 +125,5 @@
   </p>
   {% endwith %}
 </div>
+<hr>
 {% endblock %}

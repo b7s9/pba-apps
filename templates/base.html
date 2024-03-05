@@ -7,6 +7,11 @@
         width: 80%;
         margin: auto;
       }
+      @media screen and (max-width: 40rem) {
+        .content-container {
+          width: 100%;
+        }
+      }
       form {
         width: 100%;
         padding: 1em;
@@ -15,14 +20,12 @@
         width: 95%;
         max-width: 40rem;
         margin: auto;
-        border: 1px solid;
         border-radius: 5px;
       }
       .form-header {
         width: 95%;
         max-width: 40rem;
         margin: auto;
-        border: 1px solid;
         border-radius: 5px;
         margin-bottom: 1em;
         text-align: center;
@@ -75,6 +78,34 @@
         background-color: lightgrey;
         border-radius: .25em;
         text-decoration: none;
+      }
+
+      .table-container {
+        width: 100%;
+      }
+      .table-container table {
+          margin: 0 auto;
+          border-collapse: collapse;
+          font-size: 0.9em;
+          min-width: 400px;
+          text-align: left;
+      }
+      .table-container th {
+          background-color: #83BD56;
+          color: #ffffff;
+      } 
+      .table-container th,
+      .table-container td {
+          padding: .25em 1em;
+      }
+      .table-container tbody tr {
+          border-bottom: 1px solid #dddddd;
+      }
+      .table-container tbody tr:nth-of-type(even) {
+          background-color: #f3f3f3;
+      }
+      .table-container tbody tr:last-of-type {
+          border-bottom: 2px solid #83BD56;
       }
     </style>
     <link rel="preconnect" href="https://fonts.googleapis.com">
