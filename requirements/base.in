@@ -12,4 +12,5 @@ django-recaptcha
 django-sesame
 mailchimp3
 psycopg2-binary
+sentry-sdk[django]
 whitenoise
