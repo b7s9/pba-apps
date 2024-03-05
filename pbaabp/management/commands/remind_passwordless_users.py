@@ -25,7 +25,11 @@ We created an account on apps.bikeaction.org so that you can manage your
 new recurring donation to Philly Bike Action. Follow the link below to
 set a password for your account.
 
+Sorry about the first one! It was only good for 5 minutes!
+
     {link}
+
+NOTE: This link will expire in 7 days!
 
 Thank you for being a part of the action!
 """,

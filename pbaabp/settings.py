@@ -226,7 +226,7 @@ ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = "email"
 
 # django-sesame
-SESAME_MAX_AGE = 300
+SESAME_MAX_AGE = 7*24*3600
 
 # django-recaptcha
 if DEBUG:

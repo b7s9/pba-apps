@@ -138,6 +138,8 @@ set a password for your account.
 
     {link}
 
+NOTE: This link will expire in 7 days!
+
 Thank you for being a part of the action!
 """,
                     )
