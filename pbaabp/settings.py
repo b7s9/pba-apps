@@ -13,7 +13,6 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 
 import environ
-import sentry_sdk
 
 env = environ.Env()
 
@@ -190,7 +189,7 @@ CELERY_BEAT_SCHEDULE = {}
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-subject-prefix
 EMAIL_SUBJECT_PREFIX = env("DJANGO_EMAIL_SUBJECT_PREFIX", default="[Philly Bike Action]")
 
-EMAIL_BACKEND = 'email_log.backends.EmailBackend'
+EMAIL_BACKEND = "email_log.backends.EmailBackend"
 EMAIL_LOG_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = env("DJANGO_EMAIL_HOST", default="smtp.mailgun.org")
 EMAIL_PORT = env.int("DJANGO_EMAIL_PORT", default=587)
@@ -226,7 +225,7 @@ ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = "email"
 
 # django-sesame
-SESAME_MAX_AGE = 7*24*3600
+SESAME_MAX_AGE = 7 * 24 * 3600
 
 # django-recaptcha
 if DEBUG:
