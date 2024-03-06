@@ -167,7 +167,8 @@ def create_one_time_donation_checkout_session(request):
                 active=True,
                 description=(
                     "One-Time Donation to Philly Bike Action, "
-                    "a social welfare organization incorporated in the Commonwealth of Pennsylvania. "
+                    "a social welfare organization incorporated in the "
+                    "Commonwealth of Pennsylvania. "
                     "Contributions to Philly Bike Action are not deductible "
                     "as charitable contributions for federal income tax purposes."
                 ),
@@ -310,4 +311,4 @@ def change_recurring_donation(request, subscription_id=None):
 @login_required
 def charge_history(request):
     charges = request.user.djstripe_customers.first().charges.order_by("-created").all()
-    return render(request, 'donation_history.html', {"charges": charges})
+    return render(request, "donation_history.html", {"charges": charges})
