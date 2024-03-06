@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="form-header">
+  <h2>Donation History</h2>
+  <div class="table-container">
+    <table>
+      <tr>
+        <th>Amount</th>
+        <th>Status</th>
+        <th>Source</th>
+        <th>Date</th>
+      </tr>
+      {% for charge in charges.all %}
+      <tr>
+        <td>
+          ${{ charge.amount }}
+        </td>
+        <td>
+          {{ charge.status }}
+        </td>
+        <td>
+          {{ charge.payment_method.card.display_brand }} {{ charge.payment_method.card.last4 }}
+        </td>
+        <td>
+          {{ charge.created }}
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+</div>
+{% endblock %}

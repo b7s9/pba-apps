@@ -43,4 +43,9 @@ urlpatterns = [
         views.change_recurring_donation,
         name="change_recurring_donation",
     ),
+    path(
+        "history",
+        views.charge_history,
+        name="donation_history",
+    ),
 ]

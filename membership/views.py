@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.template.response import TemplateResponse
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
@@ -305,3 +305,9 @@ def change_recurring_donation(request, subscription_id=None):
         form = RecurringDonationSetupForm(tier_id=existing_tier.id if existing_tier else None)
         context = {"form": form}
         return TemplateResponse(request, "change_recurring_donation.html", context)
+
+
+@login_required
+def charge_history(request):
+    charges = request.user.djstripe_customers.first().charges.order_by("-created").all()
+    return render(request, 'donation_history.html', {"charges": charges})
