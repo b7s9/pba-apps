@@ -310,5 +310,14 @@ def change_recurring_donation(request, subscription_id=None):
 
 @login_required
 def charge_history(request):
-    charges = request.user.djstripe_customers.first().charges.order_by("-created").all()
+    customer = request.user.djstripe_customers.first()
+    if customer:
+        try:
+            customer._sync_subscriptions()
+            customer._sync_charges()
+        except Exception:
+            pass
+        charges = customer.charges.order_by("-created").all()
+    else:
+        charges = []
     return render(request, "donation_history.html", {"charges": charges})
