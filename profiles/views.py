@@ -1,6 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
 from django.views.generic import DetailView, UpdateView
+from djstripe.models import Customer
 
 from profiles.forms import ProfileUpdateForm
 from profiles.models import Profile
@@ -10,6 +11,14 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
     model = Profile
 
     def get_object(self, queryset=None):
+        try:
+            customer = Customer.objects.filter(subscriber=self.request.user).first()
+            if customer:
+                customer.api_retrieve()
+                customer._sync_subscriptions()
+                customer._sync_charges()
+        except Exception:
+            pass
         return self.request.user.profile
 
 
