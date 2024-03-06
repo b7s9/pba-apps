@@ -43,8 +43,49 @@
 <hr>
 <div class="form-header">
   <h2>Donations</h2>
+  <div class="button-holder">
+    <p><a class="submit-button" href="{% url 'create_one_time_donation_checkout_session' %}">Make a one-time donation</a></p>
+  </div>
+  <p><small>
+    Philly Bike Action is a social welfare organization incorporated in the Commonwealth of Pennsylvania.
+    Contributions to Philly Bike Action are not deductible as charitable contributions for federal income tax purposes.
+  </small></p>
   {% with request.user.djstripe_customers.first as customer %}
   {% if customer %}
+  {% if customer.charges.all %}
+  <h3>Recent Donations</h3>
+  <div class="table-container">
+    <table>
+      <tr>
+        <th>Amount</th>
+        <th>Status</th>
+        <th>Kind</th>
+        <th>Source</th>
+        <th>Date</th>
+      </tr>
+      {% for charge in customer.charges.all|dictsortreversed:"created"|slice:":5" %}
+      <tr>
+        <td>
+          ${{ charge.amount }}
+        </td>
+        <td>
+          {{ charge.status }}
+        </td>
+        <td>
+          {% if charge.invoice %}recurring{% else %}one-time{% endif %}
+        </td>
+        <td>
+          {{ charge.payment_method.card.display_brand }} {{ charge.payment_method.card.last4 }}
+        </td>
+        <td>
+          {{ charge.created }}
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+    <p>View full donation history <a href="{% url 'donation_history' %}">here</a>.</p>
+  </div>
+  {% endif %}
   <h3>Subscriptions</h3>
   {% if customer.active_subscriptions.all %}
   <div class="table-container">
@@ -116,13 +157,6 @@
     <p><a class="submit-button" href="{% url 'setup_recurring_donation' %}">Setup a recurring donation</a></p>
   </div>
   {% endif %}
-  <div class="button-holder">
-    <p><a class="submit-button" href="{% url 'create_one_time_donation_checkout_session' %}">Make a one-time donation</a></p>
-  </div>
-  <p>
-    Philly Bike Action is a social welfare organization incorporated in the Commonwealth of Pennsylvania.
-    Contributions to Philly Bike Action are not deductible as charitable contributions for federal income tax purposes.
-  </p>
   {% endwith %}
 </div>
 <hr>

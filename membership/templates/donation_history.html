@@ -7,6 +7,7 @@
       <tr>
         <th>Amount</th>
         <th>Status</th>
+        <th>Kind</th>
         <th>Source</th>
         <th>Date</th>
       </tr>
@@ -19,6 +20,9 @@
           {{ charge.status }}
         </td>
         <td>
+          {% if charge.invoice %}recurring{% else %}one-time{% endif %}
+        </td>
+        <td>
           {{ charge.payment_method.card.display_brand }} {{ charge.payment_method.card.last4 }}
         </td>
         <td>
@@ -28,5 +32,6 @@
       {% endfor %}
     </table>
   </div>
+  <p><a href="{% url 'profile' %}">⬅️ Back</a></p>
 </div>
 {% endblock %}
