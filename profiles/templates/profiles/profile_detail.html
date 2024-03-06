@@ -83,7 +83,9 @@
       </tr>
       {% endfor %}
     </table>
+    {% if customer.charges.all|dictsortreversed:"created"|slice:"5:" %}
     <p>View full donation history <a href="{% url 'donation_history' %}">here</a>.</p>
+    {% endif %}
   </div>
   {% endif %}
   <h3>Subscriptions</h3>
