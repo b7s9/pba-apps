@@ -167,7 +167,7 @@ def create_one_time_donation_checkout_session(request):
                 active=True,
                 description=(
                     "One-Time Donation to Philly Bike Action, "
-                    "a registered charity in The Commonwealth of Pennsylvania. "
+                    "a social welfare organization incorporated in the Commonwealth of Pennsylvania. "
                     "Contributions to Philly Bike Action are not deductible "
                     "as charitable contributions for federal income tax purposes."
                 ),

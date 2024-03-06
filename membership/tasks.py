@@ -22,7 +22,7 @@ def sync_donation_tier_to_stripe(donationtier_id):
             active=True,
             description=(
                 "Recurring Donation to Philly Bike Action, "
-                "a registered charity in The Commonwealth of Pennsylvania. "
+                "a social welfare organization incorporated in the Commonwealth of Pennsylvania. "
                 "Contributions to Philly Bike Action are not deductible "
                 "as charitable contributions for federal income tax purposes."
             ),
