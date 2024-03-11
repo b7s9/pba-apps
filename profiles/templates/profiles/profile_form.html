@@ -15,19 +15,17 @@
   {% endfor %}
 
   {% for field in form.visible_fields %}
-    <div>
+    <p>
       {{ field.label_tag }}
       {{ field.errors }}
       {{ field }}
-      <p class="helptext">{{ field.help_text }}</p>
-    </div>
+      <span class="helptext">{{ field.help_text }}</span>
+    </p>
   {% endfor %}
 
-  Change your password <a href="{% url 'account_change_password' %}">here</a>.
+  <p><small>Change your password <a href="{% url 'account_change_password' %}">here</a>.</small></p>
 
-  <div class="button-holder">
-    <input class="submit-button" type="submit" value="Submit!">
-  </div>
+  <button type="submit" value="Submit!">Submit</button>
   </form>
 </div>
 {% endblock %}

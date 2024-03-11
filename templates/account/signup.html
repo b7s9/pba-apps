@@ -2,20 +2,20 @@
 {% load allauth i18n %}
 {% load allauth account %}
 {% block head_title %}
-    {% trans "Sign In" %}
+    {% trans "Sign Up" %}
 {% endblock head_title %}
 {% block content %}
 <div class="form-header">
     {% element h1 %}
-        {% trans "Sign In" %}
+        {% trans "Sign Up" %}
     {% endelement %}
     <p>
-        {% blocktrans %}If you have not created an account yet, then please <a href="{{ signup_url }}">sign up</a> first.{% endblocktrans %}
+        {% blocktrans %}Already have an account? Then please <a href="{{ login_url }}">sign in</a>.{% endblocktrans %}
     </p>
 </div>
 <div class="form-container">
-    {% url 'account_login' as login_url %}
-    {% element form form=form method="post" action=login_url tags="entrance,login" %}
+    {% url 'account_signup' as action_url %}
+    {% element form form=form method="post" action=action_url tags="entrance,signup" %}
         {% slot body %}
             {% csrf_token %}
             {% element fields form=form unlabeled=True %}
@@ -27,8 +27,8 @@
             {% endif %}
         {% endslot %}
         {% slot actions %}
-            {% element button type="submit" tags="prominent,login" %}
-                {% trans "Sign In" %}
+            {% element button tags="prominent,signup" type="submit" %}
+                {% trans "Sign Up" %}
             {% endelement %}
         {% endslot %}
     {% endelement %}
@@ -38,7 +38,6 @@
     {% endif %}
     {% endcomment %}
 </div>
-<div class="form-header">
-    <p>You can also login by having a link sent to your email <a href="{% url 'email_login' %}">here</a>.</p>
+<div class="form-header"
 </div>
 {% endblock content %}
