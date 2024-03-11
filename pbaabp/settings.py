@@ -63,6 +63,8 @@ INSTALLED_APPS = [
     "allauth",
     "allauth.account",
     "allauth.mfa",
+    "allauth.socialaccount",
+    "allauth.socialaccount.providers.discord",
     "django_recaptcha",
     "djstripe",
     "email_log",
@@ -223,6 +225,19 @@ ACCOUNT_FORMS = {
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = "email"
+ACCOUNT_DEFAULT_HTTP_PROTOCOL = "http" if DEBUG else "https"
+SOCIALACCOUNT_ADAPTER = "profiles.adapters.SocialAccountAdapter"
+SOCIALACCOUNT_PROVIDERS = {
+    "discord": {
+        "APPS": [
+            {
+                "client_id": env("DISCORD_OAUTH_CLIENT_ID"),
+                "secret": env("DISCORD_OAUTH_CLIENT_SECRET"),
+                "key": "",
+            }
+        ],
+    }
+}
 
 # django-sesame
 SESAME_MAX_AGE = 7 * 24 * 3600

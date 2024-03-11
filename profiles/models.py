@@ -39,5 +39,9 @@ class Profile(models.Model):
     )
     newsletter_opt_in = models.BooleanField(blank=False, default=False)
 
+    @property
+    def discord(self):
+        return self.user.socialaccount_set.filter(provider="discord").first()
+
     def __str__(self):
         return f"{self.user.first_name} {self.user.last_name} - {self.user.email}"

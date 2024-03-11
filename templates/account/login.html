@@ -30,8 +30,10 @@
             {% endelement %}
         {% endslot %}
     {% endelement %}
+    {% comment %}
     {% if SOCIALACCOUNT_ENABLED %}
         {% include "socialaccount/snippets/login.html" with page_layout="entrance" %}
     {% endif %}
+    {% endcomment %}
     <p>You can also login by having a link sent to your email <a href="{% url 'email_login' %}">here</a>.</p>
 {% endblock content %}
