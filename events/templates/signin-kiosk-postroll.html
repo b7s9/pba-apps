@@ -1,4 +1,9 @@
 {% extends 'base.html' %}
+{% block header %}
+{% comment %}
+Do not show the header on signin page.
+{% endcomment %}
+{% endblock %}
 {% block content %}
 <div class="form-header">
   <img src="https://bikeaction.org/wp-content/uploads/2023/07/Sticker_Print_Green.svg">

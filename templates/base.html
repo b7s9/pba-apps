@@ -178,6 +178,7 @@
     {% endblock %}
   </head>
   <body>
+    {% block header %}
     <div class="header">
       <a class="nav-button" href="{% url 'index' %}">Home</a>
       {% if request.user.is_authenticated %}
@@ -191,6 +192,7 @@
       <a class="nav-button" href="{% url 'account_signup' %}">Sign up</a>
       {% endif %}
     </div>
+    {% endblock %}
     <div class="messages">
       <ul class="messages">
         {% for message in messages %}
