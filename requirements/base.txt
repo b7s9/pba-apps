@@ -12,6 +12,7 @@ amqp==5.2.0
     # via kombu
 asgiref==3.7.2
     # via
+    #   -r requirements/base.in
     #   channels
     #   daphne
     #   django
