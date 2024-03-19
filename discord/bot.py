@@ -45,7 +45,11 @@ class PBADiscordBot(Client):
             discord_id=event.scheduled_event.id,
             defaults={
                 "title": event.scheduled_event.name,
-                "description": event.scheduled_event.description,
+                "description": (
+                    event.scheduled_event.description
+                    if event.scheduled_event.description
+                    else "No details provided."
+                ),
                 "start_datetime": datetime.datetime.fromtimestamp(
                     event.scheduled_event.start_time.timestamp(),
                     tz=datetime.timezone.utc,
@@ -77,7 +81,9 @@ class PBADiscordBot(Client):
             discord_id=event.after.id,
             defaults={
                 "title": event.after.name,
-                "description": event.after.description,
+                "description": (
+                    event.after.description if event.after.description else "No details provided."
+                ),
                 "start_datetime": datetime.datetime.fromtimestamp(
                     event.after.start_time.timestamp(),
                     tz=datetime.timezone.utc,
@@ -89,7 +95,7 @@ class PBADiscordBot(Client):
                     )
                     if event.after.end_time
                     else datetime.datetime.fromtimestamp(
-                        event.scheduled_event.start_time.timestamp(),
+                        event.after.start_time.timestamp(),
                         tz=datetime.timezone.utc,
                     )
                 ),
@@ -105,9 +111,11 @@ class PBADiscordBot(Client):
 
     @listen(GuildScheduledEventDelete)
     async def on_scheduled_event_delete(self, event):
-        await ScheduledEvent.objects.filter(discord_id=event.scheduled_event.id).aupdate(
-            status=ScheduledEvent.Status.DELETED,
-        )
+        event = await ScheduledEvent.objects.filter(discord_id=event.scheduled_event.id).afirst()
+        if event:
+            event.discord_id = None
+            event.status = ScheduledEvent.Status.DELETED
+            await event.asave()
 
     def run(self, token):
         self.start(token)

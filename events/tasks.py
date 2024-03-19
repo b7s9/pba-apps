@@ -14,7 +14,12 @@ def sync_to_wordpress(scheduled_event_id):
 
     event = ScheduledEvent.objects.get(id=scheduled_event_id)
 
-    if event.wordpress_id:
+    if event.discord_id is None:
+        wordpress.delete_event(event.wordpress_id)
+        event.wordpress_id = None
+        event.wordpress_slug = None
+        event.save()
+    elif event.wordpress_id:
         _event = wordpress.update_event(
             event_id=event.wordpress_id,
             title=event.title,

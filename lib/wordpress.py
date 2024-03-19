@@ -131,3 +131,10 @@ class WordPressAPI:
             data=data,
         )
         return r.json()
+
+    def delete_event(self, event_id):
+        r = requests.delete(
+            f"{self.url}/wp-json/tribe/events/v1/events/{event_id}",
+            headers={"Authorization": f"Bearer {self.token}"},
+        )
+        return r.json()
