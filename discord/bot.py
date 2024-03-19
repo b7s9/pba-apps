@@ -1,6 +1,7 @@
 import datetime
 import pathlib
 import pkgutil
+import sys
 
 from interactions import Client, Intents, listen
 from interactions.api.events import (
@@ -129,13 +130,13 @@ bot = PBADiscordBot(
 prefixed_commands.setup(bot, default_prefix="!")
 
 for _, name, _ in pkgutil.walk_packages(
-    [pathlib.Path(__file__).parent.resolve() / pathlib.Path("/commands")],
-    prefix=__name__ + ".commands.",
+    [pathlib.Path(__file__).parent.resolve() / "commands"],
+    prefix=sys.modules[__name__].__package__ + ".commands.",
 ):
     bot.load_extension(name)
 
 for _, name, _ in pkgutil.walk_packages(
-    [pathlib.Path(__file__).parent.resolve() / pathlib.Path("/components")],
-    prefix=__name__ + ".components.",
+    [pathlib.Path(__file__).parent.resolve() / "components"],
+    prefix=sys.modules[__name__].__package__ + ".components.",
 ):
     bot.load_extension(name)
