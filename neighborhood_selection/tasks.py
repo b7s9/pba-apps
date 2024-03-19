@@ -23,7 +23,7 @@ async def aupdate_neighborhood_role_and_channel(neighborhood_id):
     roles = guild.roles
 
     role_name = f"neighborhood-{neighborhood.name.lower().replace(' ', '-')}"
-    channel_name = f"neighborhood-{neighborhood.name.lower().replace(' ', '-')}"
+    channel_name = f"{neighborhood.name.lower().replace(' ', '-')}"
 
     if neighborhood.discord_role_id is None:
         if role_name not in [r.name for r in roles]:
