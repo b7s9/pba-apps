@@ -11,6 +11,14 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
     model = Profile
 
     def get_object(self, queryset=None):
+        return self.request.user.profile
+
+
+class ProfileDonationsPartial(LoginRequiredMixin, DetailView):
+    model = Profile
+    template_name = "profiles/_donations_partial.html"
+
+    def get_object(self, queryset=None):
         try:
             customer = Customer.objects.filter(subscriber=self.request.user).first()
             if customer:

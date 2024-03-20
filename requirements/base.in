@@ -8,6 +8,7 @@ django-allauth[mfa]
 django-dotenv
 django-email-log
 django-environ
+django-htmx
 django-ordered-model
 django-recaptcha
 django-sesame

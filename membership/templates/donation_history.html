@@ -4,32 +4,16 @@
   <h2>Donation History</h2>
   <div class="table-container">
     <table>
-      <tr>
+      <tr id="donations-header">
         <th>Amount</th>
         <th>Status</th>
         <th>Kind</th>
         <th>Source</th>
         <th>Date</th>
       </tr>
-      {% for charge in charges.all %}
-      <tr>
-        <td>
-          ${{ charge.amount }}
-        </td>
-        <td>
-          {{ charge.status }}
-        </td>
-        <td>
-          {% if charge.invoice %}recurring{% else %}one-time{% endif %}
-        </td>
-        <td>
-          {{ charge.payment_method.card.display_brand }} {{ charge.payment_method.card.last4 }}
-        </td>
-        <td>
-          {{ charge.created }}
-        </td>
+      <tr hx-get="_partials/donations" hx-swap="outerHTML" hx-trigger="load">
+        <td colspan=5>Loading your donations data...</td>
       </tr>
-      {% endfor %}
     </table>
   </div>
   <p><a href="{% url 'profile' %}">⬅️ Back</a></p>

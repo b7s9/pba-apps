@@ -16,6 +16,7 @@ asgiref==3.7.2
     #   channels
     #   daphne
     #   django
+    #   django-htmx
 attrs==23.2.0
     # via
     #   aiohttp
@@ -78,6 +79,7 @@ django==4.2.9
     #   dj-stripe
     #   django-allauth
     #   django-email-log
+    #   django-htmx
     #   django-recaptcha
     #   django-sesame
     #   sentry-sdk
@@ -88,6 +90,8 @@ django-dotenv==1.4.2
 django-email-log==1.4.0
     # via -r requirements/base.in
 django-environ==0.11.2
+    # via -r requirements/base.in
+django-htmx==1.17.3
     # via -r requirements/base.in
 django-ordered-model==3.7.4
     # via -r requirements/base.in
