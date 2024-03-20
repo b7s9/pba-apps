@@ -86,8 +86,8 @@ class NeighborhoodSelection(Extension):
             title=EMBED_TITLE,
             description=EMBED_DESCRIPTION,
         )
-        messages = bot.get_channel(selection_channel).history()
-        async for message in messages:
+        channel = await bot.fetch_channel(selection_channel)
+        async for message in channel.history():
             if len(message.embeds) == 1 and message.embeds[0].title == EMBED_TITLE:
                 print("updating embed...")
                 await message.edit(content=None, embeds=[embed], components=components)
