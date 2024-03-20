@@ -1,0 +1,19 @@
+      {% for charge in charges.all %}
+      <tr>
+        <td>
+          ${{ charge.amount }}
+        </td>
+        <td>
+          {{ charge.status }}
+        </td>
+        <td>
+          {% if charge.invoice %}recurring{% else %}one-time{% endif %}
+        </td>
+        <td>
+          {{ charge.payment_method.card.display_brand }} {{ charge.payment_method.card.last4 }}
+        </td>
+        <td>
+          {{ charge.created }}
+        </td>
+      </tr>
+      {% endfor %}

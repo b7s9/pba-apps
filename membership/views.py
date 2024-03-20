@@ -309,7 +309,7 @@ def change_recurring_donation(request, subscription_id=None):
 
 
 @login_required
-def charge_history(request):
+def charge_history_partial(request):
     customer = request.user.djstripe_customers.first()
     if customer:
         try:
@@ -320,4 +320,9 @@ def charge_history(request):
         charges = customer.charges.order_by("-created").all()
     else:
         charges = []
-    return render(request, "donation_history.html", {"charges": charges})
+    return render(request, "_donation_history_partial.html", {"charges": charges})
+
+
+@login_required
+def charge_history(request):
+    return render(request, "donation_history.html")

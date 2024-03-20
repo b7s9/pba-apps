@@ -69,6 +69,7 @@ INSTALLED_APPS = [
     "djstripe",
     "email_log",
     "ordered_model",
+    "django_htmx",
     # Our apps
     "pbaabp",
     "pages",
@@ -88,6 +89,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "allauth.account.middleware.AccountMiddleware",
+    "django_htmx.middleware.HtmxMiddleware",
     "pbaabp.middleware.TimezoneMiddleware",
 ]
 

@@ -48,4 +48,9 @@ urlpatterns = [
         views.charge_history,
         name="donation_history",
     ),
+    path(
+        "_partials/donations",
+        views.charge_history_partial,
+        name="donation_history_partial",
+    ),
 ]
