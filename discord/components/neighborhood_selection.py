@@ -7,8 +7,12 @@ from interactions import (
     ButtonStyle,
     Embed,
     Extension,
+    OptionType,
+    SlashContext,
     component_callback,
     listen,
+    slash_command,
+    slash_option,
     spread_to_rows,
 )
 from interactions.api.events import Startup
@@ -28,6 +32,36 @@ class NeighborhoodSelection(Extension):
         self.bot = bot
         self.components = None
         self.NEIGHBORHOODS = {}
+
+    @slash_command(name="neighborhood", description="Request a neighborhood channel")
+    @slash_option(
+        name="neighborhood_name",
+        description="The name of the neighborhood you are requesting",
+        required=True,
+        opt_type=OptionType.STRING,
+    )
+    async def request_neighborhood(self, ctx: SlashContext, neighborhood_name: str):
+        from neighborhood_selection.models import Neighborhood
+
+        neighborhood, _ = await Neighborhood.objects.aget_or_create(
+            defaults={"name": neighborhood_name},
+            name__iexact=neighborhood_name,
+        )
+        if neighborhood.approved:
+            await ctx.send(
+                (
+                    f"{neighborhood.name} channel already exists, "
+                    "use the button in #neighborhood-selection to join!"
+                ),
+                ephemeral=True,
+            )
+            return
+        neighborhood.requests += 1
+        await neighborhood.asave()
+        msg = f"Neighborhood request for {neighborhood_name} recorded!"
+        if neighborhood.requests > 1:
+            msg += f" You and {neighborhood.requests - 1} users are waiting for it to be approved."
+        await ctx.send(msg, ephemeral=True)
 
     @staticmethod
     async def update_buttons(bot, selection_channel, components):

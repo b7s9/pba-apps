@@ -70,10 +70,14 @@ def update_neighborhood_role_and_channel(neighborhood_id):
 async def adelete_neighborhood_role_and_channel(discord_role_id, discord_channel_id):
     await bot.login(settings.DISCORD_BOT_TOKEN)
     guild = await bot.fetch_guild(settings.NEIGHBORHOOD_SELECTION_DISCORD_GUILD_ID)
-    channel = await guild.fetch_channel(discord_channel_id)
-    role = await guild.fetch_role(discord_role_id)
-    await channel.delete()
-    await role.delete()
+
+    if discord_channel_id is not None:
+        channel = await guild.fetch_channel(discord_channel_id)
+        await channel.delete()
+
+    if discord_role_id is not None:
+        role = await guild.fetch_role(discord_role_id)
+        await role.delete()
 
     await NeighborhoodSelection.update_buttons(
         bot, settings.NEIGHBORHOOD_SELECTION_DISCORD_CHANNEL_ID, None
