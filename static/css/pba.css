@@ -273,3 +273,11 @@ body {
 .nav-header li ul li:hover {
   background-color: #70bf44;
 }
+
+.nav-header li:has(a.current_branch) {
+  background-color: #d8107d;
+}
+
+.nav-header li ul li:has(a.current_item) {
+  background-color: #70bf44;
+}
