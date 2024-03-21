@@ -99,6 +99,8 @@ django-recaptcha==4.0.0
     # via -r requirements/base.in
 django-sesame==3.2.2
     # via -r requirements/base.in
+django-sitetree==1.18.0
+    # via -r requirements/base.in
 emoji==2.10.0
     # via discord-py-interactions
 frozenlist==1.4.1

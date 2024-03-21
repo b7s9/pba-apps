@@ -1,0 +1,311 @@
+[
+{
+    "model": "sitetree.tree",
+    "pk": 1,
+    "fields": {
+        "title": "Header",
+        "alias": "header"
+    }
+},
+{
+    "model": "sitetree.tree",
+    "pk": 2,
+    "fields": {
+        "title": "Footer",
+        "alias": "footer"
+    }
+},
+{
+    "model": "sitetree.treeitem",
+    "pk": 1,
+    "fields": {
+        "title": "Home",
+        "hint": "",
+        "url": "/",
+        "urlaspattern": false,
+        "tree": 1,
+        "hidden": false,
+        "alias": null,
+        "description": "",
+        "inmenu": true,
+        "inbreadcrumbs": true,
+        "insitetree": true,
+        "access_loggedin": false,
+        "access_guest": false,
+        "access_restricted": false,
+        "access_perm_type": 1,
+        "parent": null,
+        "sort_order": 1,
+        "access_permissions": []
+    }
+},
+{
+    "model": "sitetree.treeitem",
+    "pk": 2,
+    "fields": {
+        "title": "Events",
+        "hint": "",
+        "url": "/events/",
+        "urlaspattern": false,
+        "tree": 1,
+        "hidden": true,
+        "alias": null,
+        "description": "",
+        "inmenu": true,
+        "inbreadcrumbs": true,
+        "insitetree": true,
+        "access_loggedin": false,
+        "access_guest": false,
+        "access_restricted": false,
+        "access_perm_type": 1,
+        "parent": null,
+        "sort_order": 2,
+        "access_permissions": []
+    }
+},
+{
+    "model": "sitetree.treeitem",
+    "pk": 3,
+    "fields": {
+        "title": "Resources",
+        "hint": "",
+        "url": "/resources/",
+        "urlaspattern": false,
+        "tree": 1,
+        "hidden": true,
+        "alias": null,
+        "description": "",
+        "inmenu": true,
+        "inbreadcrumbs": true,
+        "insitetree": true,
+        "access_loggedin": false,
+        "access_guest": false,
+        "access_restricted": false,
+        "access_perm_type": 1,
+        "parent": null,
+        "sort_order": 3,
+        "access_permissions": []
+    }
+},
+{
+    "model": "sitetree.treeitem",
+    "pk": 4,
+    "fields": {
+        "title": "Contact Us",
+        "hint": "",
+        "url": "/contact-us/",
+        "urlaspattern": false,
+        "tree": 1,
+        "hidden": true,
+        "alias": null,
+        "description": "",
+        "inmenu": true,
+        "inbreadcrumbs": true,
+        "insitetree": true,
+        "access_loggedin": false,
+        "access_guest": false,
+        "access_restricted": false,
+        "access_perm_type": 1,
+        "parent": null,
+        "sort_order": 4,
+        "access_permissions": []
+    }
+},
+{
+    "model": "sitetree.treeitem",
+    "pk": 5,
+    "fields": {
+        "title": "Report",
+        "hint": "",
+        "url": "/report/",
+        "urlaspattern": false,
+        "tree": 1,
+        "hidden": true,
+        "alias": null,
+        "description": "",
+        "inmenu": true,
+        "inbreadcrumbs": true,
+        "insitetree": true,
+        "access_loggedin": false,
+        "access_guest": false,
+        "access_restricted": false,
+        "access_perm_type": 1,
+        "parent": null,
+        "sort_order": 5,
+        "access_permissions": []
+    }
+},
+{
+    "model": "sitetree.treeitem",
+    "pk": 6,
+    "fields": {
+        "title": "Donate",
+        "hint": "",
+        "url": "/donate/",
+        "urlaspattern": false,
+        "tree": 1,
+        "hidden": true,
+        "alias": null,
+        "description": "",
+        "inmenu": true,
+        "inbreadcrumbs": true,
+        "insitetree": true,
+        "access_loggedin": false,
+        "access_guest": false,
+        "access_restricted": false,
+        "access_perm_type": 1,
+        "parent": null,
+        "sort_order": 6,
+        "access_permissions": []
+    }
+},
+{
+    "model": "sitetree.treeitem",
+    "pk": 7,
+    "fields": {
+        "title": "Log In",
+        "hint": "",
+        "url": "/accounts/login/",
+        "urlaspattern": false,
+        "tree": 1,
+        "hidden": false,
+        "alias": null,
+        "description": "",
+        "inmenu": true,
+        "inbreadcrumbs": true,
+        "insitetree": true,
+        "access_loggedin": false,
+        "access_guest": true,
+        "access_restricted": false,
+        "access_perm_type": 1,
+        "parent": 9,
+        "sort_order": 7,
+        "access_permissions": []
+    }
+},
+{
+    "model": "sitetree.treeitem",
+    "pk": 8,
+    "fields": {
+        "title": "Sign up",
+        "hint": "",
+        "url": "/accounts/signup/",
+        "urlaspattern": false,
+        "tree": 1,
+        "hidden": false,
+        "alias": null,
+        "description": "",
+        "inmenu": true,
+        "inbreadcrumbs": true,
+        "insitetree": true,
+        "access_loggedin": false,
+        "access_guest": true,
+        "access_restricted": false,
+        "access_perm_type": 1,
+        "parent": 9,
+        "sort_order": 8,
+        "access_permissions": []
+    }
+},
+{
+    "model": "sitetree.treeitem",
+    "pk": 9,
+    "fields": {
+        "title": "Account",
+        "hint": "",
+        "url": "#",
+        "urlaspattern": false,
+        "tree": 1,
+        "hidden": false,
+        "alias": null,
+        "description": "",
+        "inmenu": true,
+        "inbreadcrumbs": true,
+        "insitetree": true,
+        "access_loggedin": false,
+        "access_guest": false,
+        "access_restricted": false,
+        "access_perm_type": 1,
+        "parent": null,
+        "sort_order": 9,
+        "access_permissions": []
+    }
+},
+{
+    "model": "sitetree.treeitem",
+    "pk": 10,
+    "fields": {
+        "title": "Profile",
+        "hint": "",
+        "url": "/accounts/profile/",
+        "urlaspattern": false,
+        "tree": 1,
+        "hidden": false,
+        "alias": null,
+        "description": "",
+        "inmenu": true,
+        "inbreadcrumbs": true,
+        "insitetree": true,
+        "access_loggedin": true,
+        "access_guest": false,
+        "access_restricted": false,
+        "access_perm_type": 1,
+        "parent": 9,
+        "sort_order": 10,
+        "access_permissions": []
+    }
+},
+{
+    "model": "sitetree.treeitem",
+    "pk": 11,
+    "fields": {
+        "title": "Log out",
+        "hint": "",
+        "url": "/accounts/logout/",
+        "urlaspattern": false,
+        "tree": 1,
+        "hidden": false,
+        "alias": null,
+        "description": "",
+        "inmenu": true,
+        "inbreadcrumbs": true,
+        "insitetree": true,
+        "access_loggedin": true,
+        "access_guest": false,
+        "access_restricted": false,
+        "access_perm_type": 1,
+        "parent": 9,
+        "sort_order": 11,
+        "access_permissions": []
+    }
+},
+{
+    "model": "sitetree.treeitem",
+    "pk": 12,
+    "fields": {
+        "title": "Admin",
+        "hint": "",
+        "url": "/admin",
+        "urlaspattern": false,
+        "tree": 1,
+        "hidden": false,
+        "alias": null,
+        "description": "",
+        "inmenu": true,
+        "inbreadcrumbs": true,
+        "insitetree": true,
+        "access_loggedin": false,
+        "access_guest": false,
+        "access_restricted": true,
+        "access_perm_type": 1,
+        "parent": null,
+        "sort_order": 12,
+        "access_permissions": [
+            297,
+            298,
+            299,
+            300
+        ]
+    }
+}
+]

@@ -12,6 +12,7 @@ django-htmx
 django-ordered-model
 django-recaptcha
 django-sesame
+django-sitetree
 mailchimp3
 psycopg2-binary
 sentry-sdk[django]

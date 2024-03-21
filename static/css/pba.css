@@ -98,21 +98,6 @@ form button {
 body {
   font-family: "Ubuntu";
 }
-.header {
-  width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  padding-bottom: .5em;
-  padding-top: .5em;
-}
-.nav-button {
-  color: black;
-  border: none;
-  padding: .25em;
-  background-color: lightgrey;
-  border-radius: .25em;
-  text-decoration: none;
-}
 
 .table-container {
   width: 100%;
@@ -162,4 +147,137 @@ body {
 }
 .copyable + p {
   display: inline;
+}
+
+.header {
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
+  background-color: #70bf44;
+  height: 6em;
+  font-family: "Big Shoulders Display";
+  position: relative;
+}
+
+.img-header {
+  display: inline-block;
+  float: left;
+  height: 5em;
+  padding: 1em;
+}
+
+.img-header img {
+  height: 4em;
+}
+
+.nav-header {
+  float: left;
+  overflow: hidden;
+}
+
+.nav-header img:first-child {
+  display: inline-block;
+  height: 5em;
+  padding-left: 2em;
+  padding-top: 2em;
+  padding-bottom: 2em;
+}
+
+@media only screen and (max-width: 600px) {
+  .header {
+    height: 4em;
+  }
+  .img-header {
+    height: 3em;
+  }
+
+  .img-header img {
+    height: 2em;
+  }
+
+  .nav-header img:first-child {
+    height: 1em;
+    padding-left: 1em;
+    padding-top: 1em;
+    padding-bottom: 1em;
+  }
+}
+
+.nav-header ul {
+  margin: 0;
+  padding: 0;
+  display: inline-block;
+}
+
+.nav-header ul:first-child {
+  position: absolute;
+  bottom: 0;
+}
+
+.nav-header li {
+  list-style-type: none;
+  padding: .75em;
+  margin: 0;
+  text-align: center;
+  display: inline-block;
+  
+}
+
+.nav-header a {
+  color: white;
+  text-decoration: none;
+  font-size: 2em;
+}
+
+@media only screen and (max-width: 600px) {
+  .nav-header a {
+    font-size: 1.5em;
+  }
+}
+
+.nav-header li ul {
+  display: none;
+  position: absolute;
+  z-index: 1;
+  margin-left: -.75em;
+  background-color: #d8107d;
+}
+
+.nav-header li ul li {
+  display: list-item;
+}
+
+.nav-header li ul li:first-child {
+  margin-top: .75em;
+}
+
+.nav-header li:hover {
+  background-color: #d8107d;
+}
+
+.nav-header li:has(ul)::after {
+    content: '⌄';
+    position: relative;
+    bottom: .25em;
+    color: white;
+}
+
+.nav-header li:hover ul {
+  display: block;
+}
+
+.nav-header li ul:hover {
+  display: block;
+}
+
+.nav-header li ul li:hover {
+  background-color: #70bf44;
+}
+
+.nav-header li:has(a.current_branch) {
+  background-color: #d8107d;
+}
+
+.nav-header li ul li:has(a.current_item) {
+  background-color: #70bf44;
 }
