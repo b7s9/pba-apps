@@ -73,6 +73,7 @@ INSTALLED_APPS = [
     "email_log",
     "ordered_model",
     "django_htmx",
+    "sitetree",
     # Our apps
     "pbaabp",
     "pages",
