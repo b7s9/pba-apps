@@ -2,6 +2,7 @@ import re
 
 from asgiref.sync import sync_to_async
 from django.conf import settings
+from django.urls import reverse
 from interactions import (
     Button,
     ButtonStyle,
@@ -61,6 +62,23 @@ class NeighborhoodSelection(Extension):
         msg = f"Neighborhood request for {neighborhood_name} recorded!"
         if neighborhood.requests > 1:
             msg += f" You and {neighborhood.requests - 1} users are waiting for it to be approved."
+        if settings.NEIGHBORHOOD_SELECTION_NOTIFICATION_DISCORD_CHANNEL_ID:
+            approval_path = reverse(
+                "admin:%s_%s_change"
+                % (neighborhood._meta.app_label, neighborhood._meta.model_name),
+                args=[neighborhood.id],
+            )
+            approval_url = f"{settings.SITE_URL}{approval_path}"
+            await self.bot.get_channel(
+                settings.NEIGHBORHOOD_SELECTION_NOTIFICATION_DISCORD_CHANNEL_ID
+            ).send(
+                (
+                    f"Neighborhood request for `{neighborhood.name}` received! "
+                    f"A total of {neighborhood.requests} people have requested it! "
+                    "\n"
+                    f"Go to {approval_url} when you're ready to approve it."
+                )
+            )
         await ctx.send(msg, ephemeral=True)
 
     @staticmethod
@@ -72,7 +90,7 @@ class NeighborhoodSelection(Extension):
 
         guild = await bot.fetch_guild(settings.NEIGHBORHOOD_SELECTION_DISCORD_GUILD_ID)
         BUTTONS = []
-        for neighborhood in await sync_to_async(list)(Neighborhood.objects.all()):
+        for neighborhood in await sync_to_async(list)(Neighborhood.objects.filter(approved=True)):
             role = await guild.fetch_role(neighborhood.discord_role_id, force=True)
             label = neighborhood.name
             if len(role.members) == 1:
