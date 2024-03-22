@@ -70,12 +70,19 @@ class NeighborhoodSelection(Extension):
         if not selection_channel:
             print("No selection channel, bailing!")
 
+        guild = await bot.fetch_guild(settings.NEIGHBORHOOD_SELECTION_DISCORD_GUILD_ID)
         BUTTONS = []
         for neighborhood in await sync_to_async(list)(Neighborhood.objects.all()):
+            role = await guild.fetch_role(neighborhood.discord_role_id, force=True)
+            label = neighborhood.name
+            if len(role.members) == 1:
+                label = f"{neighborhood.name} ({len(role.members)} 👤)"
+            elif len(role.members) > 1:
+                label = f"{neighborhood.name} ({len(role.members)} 👥)"
             BUTTONS.append(
                 Button(
                     style=ButtonStyle.PRIMARY,
-                    label=neighborhood.name,
+                    label=label,
                     custom_id=f"neighborhood_selection_{neighborhood.id}",
                 )
             )
@@ -115,10 +122,12 @@ class NeighborhoodSelection(Extension):
         if role not in ctx.member.roles:
             await ctx.member.add_role(neighborhood.discord_role_id)
             await ctx.send(f"Added {neighborhood.name} role!", ephemeral=True)
+            await self.update_buttons(self.bot, self.SELECTION_CHANNEL, self.components)
             return
         else:
             await ctx.member.remove_role(neighborhood.discord_role_id)
             await ctx.send(f"Removed {neighborhood.name} role.", ephemeral=True)
+            await self.update_buttons(self.bot, self.SELECTION_CHANNEL, self.components)
             return
 
 
