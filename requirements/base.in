@@ -3,6 +3,7 @@ Django
 asgiref
 channels[daphne]
 cmarkgfm
+cmarkgfm
 discord-py-interactions==5.11.0
 dj-stripe
 django-allauth[mfa]
