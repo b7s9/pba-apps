@@ -91,6 +91,7 @@ django==4.2.9
     #   django-email-log
     #   django-htmx
     #   django-markdownfield
+    #   django-multi-email-field
     #   django-recaptcha
     #   django-sesame
     #   django-tuieditor
@@ -106,6 +107,8 @@ django-environ==0.11.2
 django-htmx==1.17.3
     # via -r requirements/base.in
 django-markdownfield==0.11.0
+    # via -r requirements/base.in
+django-multi-email-field==0.7.0
     # via -r requirements/base.in
 django-ordered-model==3.7.4
     # via -r requirements/base.in

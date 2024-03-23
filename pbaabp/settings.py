@@ -74,6 +74,7 @@ INSTALLED_APPS = [
     "djstripe",
     "email_log",
     "markdownfield",
+    "multi_email_field",
     "ordered_model",
     "sitetree",
     "django_tuieditor",

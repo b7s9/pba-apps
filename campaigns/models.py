@@ -1,12 +1,14 @@
 import uuid
 
+from django.core.validators import RegexValidator
 from django.db import models, transaction
 from django.utils.text import slugify
 from markdownfield.models import RenderedMarkdownField
 from markdownfield.validators import VALIDATOR_NULL
+from multi_email_field.fields import MultiEmailField
 
 from campaigns.tasks import sync_to_wordpress
-from pbaabp.models import MarkdownField
+from pbaabp.models import ChoiceArrayField, MarkdownField
 
 
 class Campaign(models.Model):
@@ -62,3 +64,78 @@ class Campaign(models.Model):
         else:
             transaction.on_commit(lambda: sync_to_wordpress.delay(self.id))
         super(Campaign, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return self.title
+
+
+class Petition(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    title = models.CharField(max_length=512)
+    letter = models.TextField()
+
+    send_email = models.BooleanField(default=False, blank=False)
+    email_to = MultiEmailField(blank=True, null=True)
+    email_cc = MultiEmailField(blank=True, null=True)
+
+    campaign = models.ForeignKey(
+        Campaign,
+        null=True,
+        blank=True,
+        to_field="id",
+        on_delete=models.CASCADE,
+        related_name="petitions",
+    )
+
+    class PetitionSignatureChoices(models.TextChoices):
+        COMMENT = "comment", "Comment"
+        FIRST_NAME = "first_name", "First Name"
+        LAST_NAME = "last_name", "Last Name"
+        EMAIL = "email", "E-mail"
+        ADDRESS_LINE_1 = "postal_address_line_1", "Address Line 1"
+        ADDRESS_LINE_2 = "postal_address_line_2", "Address Line 2"
+        CITY = "city", "City"
+        STATE = "state", "State"
+        ZIP_CODE = "zip_code", "Zip Code"
+
+    signature_fields = ChoiceArrayField(
+        models.CharField(
+            max_length=128, null=True, blank=True, choices=PetitionSignatureChoices.choices
+        ),
+        blank=True,
+        null=True,
+    )
+
+    def __str__(self):
+        return self.title
+
+
+class PetitionSignature(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    petition = models.ForeignKey(
+        Petition, to_field="id", on_delete=models.CASCADE, related_name="signatures"
+    )
+
+    comment = models.TextField(null=True, blank=True)
+    first_name = models.CharField(max_length=64, null=True, blank=True)
+    last_name = models.CharField(max_length=64, null=True, blank=True)
+    email = models.EmailField(null=True, blank=True)
+    postal_address_line_1 = models.CharField(
+        verbose_name="Address line 1", max_length=128, null=True, blank=True
+    )
+    postal_address_line_2 = models.CharField(
+        verbose_name="Address line 2", max_length=128, null=True, blank=True
+    )
+    city = models.CharField(verbose_name="City", max_length=64, null=True, blank=True)
+    state = models.CharField(verbose_name="State", max_length=64, null=True, blank=True)
+    zip_code = models.CharField(
+        max_length=10,
+        validators=[
+            RegexValidator(
+                regex=r"^(^[0-9]{5}(?:-[0-9]{4})?$|^$)",
+                message="Must be a valid zipcode in formats 19107 or 19107-3200",
+            )
+        ],
+        null=True,
+        blank=True,
+    )
