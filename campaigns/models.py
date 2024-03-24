@@ -47,7 +47,7 @@ class Campaign(models.Model):
 
     def save(self, *args, **kwargs):
         if self.slug is None:
-            self.slug = slugify(self.title)
+            self.slug = slugify(self.title)[:49]
         if not self._state.adding:
             old_model = Campaign.objects.get(pk=self.pk)
             change_fields = [
@@ -72,6 +72,7 @@ class Campaign(models.Model):
 class Petition(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=512)
+    slug = models.SlugField(null=True, blank=True)
     letter = models.TextField()
 
     send_email = models.BooleanField(default=False, blank=False)
@@ -88,7 +89,6 @@ class Petition(models.Model):
     )
 
     class PetitionSignatureChoices(models.TextChoices):
-        COMMENT = "comment", "Comment"
         FIRST_NAME = "first_name", "First Name"
         LAST_NAME = "last_name", "Last Name"
         EMAIL = "email", "E-mail"
@@ -97,6 +97,7 @@ class Petition(models.Model):
         CITY = "city", "City"
         STATE = "state", "State"
         ZIP_CODE = "zip_code", "Zip Code"
+        COMMENT = "comment", "Comment"
 
     signature_fields = ChoiceArrayField(
         models.CharField(
@@ -105,6 +106,17 @@ class Petition(models.Model):
         blank=True,
         null=True,
     )
+
+    def save(self, *args, **kwargs):
+        if self.slug is None:
+            self.slug = slugify(self.title)[:49]
+        super(Petition, self).save(*args, **kwargs)
+
+    def form(self):
+        from campaigns.forms import PetitionSignatureForm
+
+        form = PetitionSignatureForm(required_fields=self.signature_fields, petition=self)
+        return form
 
     def __str__(self):
         return self.title
@@ -139,3 +151,6 @@ class PetitionSignature(models.Model):
         null=True,
         blank=True,
     )
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name} - {self.email}"

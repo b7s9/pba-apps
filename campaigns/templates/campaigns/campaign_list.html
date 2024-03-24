@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="campaigns-container">
+{% for campaign in object_list %}
+  <div class="campaign-card">
+    <a href="{% url 'campaign' slug=campaign.slug %}">
+      <h2>{{ campaign.title }}</h2>
+      <img class="campaign-card-img" src="{{ campaign.cover }}">
+      <p>{{ campaign.description }}</p>
+    </a>
+  </div>
+{% endfor %}
+</div>
+{% endblock %}

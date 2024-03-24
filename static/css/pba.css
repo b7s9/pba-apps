@@ -260,6 +260,9 @@ form {
   max-width: 40rem;
   margin: auto;
   border-radius: 5px;
+  border-radius: 1em;
+  border: 1px solid black;
+  padding: 1em;
 }
 .form-header {
   width: 95%;
@@ -277,7 +280,14 @@ form div {
   padding-bottom: 1em;
 }
 form label {
+  width: 9em;
   margin-bottom: .25em;
+  display: block;
+  float: left;
+}
+form textarea {
+  max-width: 20em;
+  width: 90%;
 }
 form label[for=id_captcha] {
   display: none;
@@ -429,4 +439,21 @@ body {
   padding-left: 1em;
   padding-right: 1em;
   opacity: 1;
+}
+
+.campaigns-container {
+  display: flex;
+}
+
+.campaign-card {
+  width: 45%;
+}
+
+.campaign-card a {
+  color: black;
+  text-decoration: none;
+}
+
+.campaign-card img {
+  width: 100%;
 }

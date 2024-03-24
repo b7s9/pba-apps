@@ -14,6 +14,21 @@
     <h1>{{ campaign.title }}</h1>
 </div>
 <div class="campaign-container">
+{% if campaign.petitions.all %}
+  <div class="button-holder">
+    <a href="#petitions" class="submit-button" >Take Action Now!</a>
+  </div>
+{% endif %}
 {{ campaign.content_rendered|safe }}
+{% if campaign.petitions %}
+  <div id="petitions">
+  <h2>Take Action Now!</h2>
+  {% for petition in campaign.petitions.all %}
+    <div class="petition">
+      {% include 'petition/form.html' with petition=petition form=petition.form %}
+    </div>
+  {% endfor %}
+  </div>
+{% endif %}
 </div>
 {% endblock %}
