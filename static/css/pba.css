@@ -303,9 +303,6 @@ form {
   padding: 1em;
   width: 50%;
 }
-form div {
-  padding-bottom: 1em;
-}
 form label {
   width: 9em;
   margin-bottom: .25em;
@@ -346,40 +343,71 @@ form ul {
 form .g-recaptcha {
   padding-bottom: 0em;
 }
-form button {
-  background-color: #83BD56;
-  color: white;
-  border: none;
-  font-size: 1.25em;
-  font-family: "Big Shoulders Display";
-  font-weight: bold;
-  padding: .25em;
-  border-radius: .25em;
-  margin-top: .5em;
-  text-decoration: none;
-  margin: .5em auto;
-}
 
 .button-holder {
   text-align: center;
   padding: 1em;
 }
-.submit-button {
+
+/* CSS */
+.submit-button, button {
+  appearance: button;
   background-color: #83BD56;
-  color: white;
-  border: none;
+  background-image: none;
+  border: 1px solid #000;
+  border-radius: 4px;
+  box-shadow: #fff 4px 4px 0 0,#000 4px 4px 0 1px;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  display: inline-block;
   font-size: 2em;
   font-family: "Big Shoulders Display";
   font-weight: bold;
-  padding: .25em;
-  border-radius: .25em;
+  line-height: 20px;
+  margin: 0 5px 10px 0;
+  overflow: visible;
+  padding: 12px 40px;
+  text-align: center;
+  text-decoration: none;
+  text-transform: none;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.submit-button:focus, button:focus {
   text-decoration: none;
 }
+
+.submit-button:focus, button:hover {
+  text-decoration: none;
+}
+
+.submit-button:focus, button:active {
+  box-shadow: rgba(0, 0, 0, .125) 0 3px 5px inset;
+  outline: 0;
+}
+
+.submit-button:not([disabled]):active, button:not([disabled]):active {
+  box-shadow: #fff 2px 2px 0 0, #000 2px 2px 0 1px;
+  transform: translate(2px, 2px);
+}
+
+@media (min-width: 768px) {
+  .submit-button, button {
+    padding: 12px 50px;
+  }
+}
+
 @media screen and (max-width: 40rem) {
-  .submit-button {
+  .submit-button, button {
     font-size: 1.5em;
   }
 }
+
 body {
   font-family: "Ubuntu";
   margin: 0;
@@ -452,6 +480,7 @@ body {
   background-color: rgba(216,16,125,0.75);
   overflow: hidden;
   position: relative;
+  margin-bottom: 1em;
 }
 
 .campaign-header-img {

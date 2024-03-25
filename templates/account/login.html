@@ -27,9 +27,11 @@
             {% endif %}
         {% endslot %}
         {% slot actions %}
+            <div class="button-holder">
             {% element button type="submit" tags="prominent,login" %}
                 {% trans "Sign In" %}
             {% endelement %}
+            </div>
         {% endslot %}
     {% endelement %}
     {% comment %}
