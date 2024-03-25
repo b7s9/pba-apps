@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block header %}
+{% comment %}
+Do not show the header on signature page.
+{% endcomment %}
+{% endblock %}
+{% block content %}
+<div class="form-header">
+  <p>Sign this petition!</p>
+</div>
+{% include 'petition/form.html' %}
+{% endblock %}

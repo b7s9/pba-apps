@@ -1,7 +1,9 @@
-asgiref
 Celery[redis]
 Django
+asgiref
 channels[daphne]
+cmarkgfm
+cmarkgfm
 discord-py-interactions==5.11.0
 dj-stripe
 django-allauth[mfa]
@@ -9,10 +11,13 @@ django-dotenv
 django-email-log
 django-environ
 django-htmx
+django-markdownfield
+django-multi-email-field
 django-ordered-model
 django-recaptcha
 django-sesame
 django-sitetree
+django-tuieditor
 mailchimp3
 psycopg2-binary
 sentry-sdk[django]

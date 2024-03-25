@@ -138,3 +138,40 @@ class WordPressAPI:
             headers={"Authorization": f"Bearer {self.token}"},
         )
         return r.json()
+
+    def fetch_page(self, page_id):
+        r = requests.get(
+            f"{self.url}/wp-json/wp/v2/pages/{page_id}",
+            headers={"Authorization": f"Bearer {self.token}"},
+        )
+        return r.json()
+
+    def create_page(self, slug, parent_id, title, content, excerpt, status):
+        r = requests.post(
+            f"{self.url}/wp-json/wp/v2/pages",
+            headers={"Authorization": f"Bearer {self.token}"},
+            data={
+                "slug": slug,
+                "parent": parent_id,
+                "title": title,
+                "content": content,
+                "excerpt": excerpt,
+                "status": status,
+            },
+        )
+        return r.json()
+
+    def update_page(self, page_id, slug, parent_id, title, content, excerpt, status):
+        r = requests.post(
+            f"{self.url}/wp-json/wp/v2/pages/{page_id}",
+            headers={"Authorization": f"Bearer {self.token}"},
+            data={
+                "slug": slug,
+                "parent": parent_id,
+                "title": title,
+                "content": content,
+                "excerpt": excerpt,
+                "status": status,
+            },
+        )
+        return r.json()
