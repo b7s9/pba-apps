@@ -524,6 +524,10 @@ body {
   width: 100%;
 }
 
+.events-container {
+  text-align: center;
+}
+
 .petition-letter {
   border: 1px solid lightgrey;
   border-radius: 1em;
