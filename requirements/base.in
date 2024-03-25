@@ -9,10 +9,13 @@ django-dotenv
 django-email-log
 django-environ
 django-htmx
+django-markdownfield
 django-ordered-model
 django-recaptcha
 django-sesame
 django-sitetree
+django-tuieditor
+cmarkgfm
 mailchimp3
 psycopg2-binary
 sentry-sdk[django]

@@ -396,3 +396,37 @@ body {
 .copyable + p {
   display: inline;
 }
+
+.campaign-container {
+  width: 100%;
+  max-width: 60em;
+  margin: 0 auto;
+}
+
+.campaign-header {
+  width: 100%;
+  margin: 0 auto;
+  max-width: 60em;
+  background-color: rgba(216,16,125,0.75);
+  overflow: hidden;
+  position: relative;
+}
+
+.campaign-header-img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+.campaign-header h1 {
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  color: white;
+  font-size: 3em;
+  padding-left: 1em;
+  padding-right: 1em;
+  opacity: 1;
+}

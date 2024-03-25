@@ -69,12 +69,14 @@ INSTALLED_APPS = [
     "allauth.mfa",
     "allauth.socialaccount",
     "allauth.socialaccount.providers.discord",
+    "django_htmx",
     "django_recaptcha",
     "djstripe",
     "email_log",
+    "markdownfield",
     "ordered_model",
-    "django_htmx",
     "sitetree",
+    "django_tuieditor",
     # Our apps
     "pbaabp",
     "pages",
@@ -82,6 +84,7 @@ INSTALLED_APPS = [
     "profiles",
     "events",
     "neighborhood_selection",
+    "campaigns",
 ]
 
 MIDDLEWARE = [
@@ -224,6 +227,7 @@ DISCORD_BOT_TOKEN = env("DISCORD_BOT_TOKEN")
 WP_URL = env("WP_URL", default="https://bikeaction.org")
 WP_LOGIN_EMAIL = env("WP_LOGIN_EMAIL")
 WP_LOGIN_PASS = env("WP_LOGIN_PASS")
+WP_CAMPAIGN_PAGE_ID = env("WP_CAMPAIGN_PAGE_ID", default=5877)
 
 # Mailchimp
 MAILCHIMP_API_KEY = env("MAILCHIMP_API_KEY")

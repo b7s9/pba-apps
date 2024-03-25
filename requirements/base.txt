@@ -30,6 +30,10 @@ automat==22.10.0
     # via twisted
 billiard==4.2.0
     # via celery
+bleach[css]==6.1.0
+    # via
+    #   bleach
+    #   django-markdownfield
 celery[redis]==5.3.6
     # via -r requirements/base.in
 certifi==2023.11.17
@@ -37,7 +41,9 @@ certifi==2023.11.17
     #   requests
     #   sentry-sdk
 cffi==1.16.0
-    # via cryptography
+    # via
+    #   cmarkgfm
+    #   cryptography
 channels[daphne]==4.0.0
     # via -r requirements/base.in
 charset-normalizer==3.3.2
@@ -54,6 +60,10 @@ click-plugins==1.1.1
     # via celery
 click-repl==0.3.0
     # via celery
+cmarkgfm==2024.1.14
+    # via
+    #   -r requirements/base.in
+    #   django-tuieditor
 constantly==23.10.4
     # via twisted
 cryptography==42.0.1
@@ -80,8 +90,10 @@ django==4.2.9
     #   django-allauth
     #   django-email-log
     #   django-htmx
+    #   django-markdownfield
     #   django-recaptcha
     #   django-sesame
+    #   django-tuieditor
     #   sentry-sdk
 django-allauth[mfa]==0.61.1
     # via -r requirements/base.in
@@ -93,6 +105,8 @@ django-environ==0.11.2
     # via -r requirements/base.in
 django-htmx==1.17.3
     # via -r requirements/base.in
+django-markdownfield==0.11.0
+    # via -r requirements/base.in
 django-ordered-model==3.7.4
     # via -r requirements/base.in
 django-recaptcha==4.0.0
@@ -100,6 +114,8 @@ django-recaptcha==4.0.0
 django-sesame==3.2.2
     # via -r requirements/base.in
 django-sitetree==1.18.0
+    # via -r requirements/base.in
+django-tuieditor==0.2.0
     # via -r requirements/base.in
 emoji==2.10.0
     # via discord-py-interactions
@@ -123,6 +139,8 @@ kombu==5.3.5
     # via celery
 mailchimp3==3.0.21
     # via -r requirements/base.in
+markdown==3.6
+    # via django-markdownfield
 multidict==6.0.4
     # via
     #   aiohttp
@@ -169,14 +187,19 @@ sentry-sdk[django]==1.40.6
     # via -r requirements/base.in
 service-identity==24.1.0
     # via twisted
+shortuuid==1.0.13
+    # via django-markdownfield
 six==1.16.0
     # via
     #   automat
+    #   bleach
     #   python-dateutil
 sqlparse==0.4.4
     # via django
 stripe==4.2.0
     # via dj-stripe
+tinycss2==1.2.1
+    # via bleach
 tomli==2.0.1
     # via discord-py-interactions
 twisted[tls]==23.10.0
@@ -203,6 +226,10 @@ vine==5.1.0
     #   kombu
 wcwidth==0.2.13
     # via prompt-toolkit
+webencodings==0.5.1
+    # via
+    #   bleach
+    #   tinycss2
 whitenoise==6.6.0
     # via -r requirements/base.in
 yarl==1.9.4

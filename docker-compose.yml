@@ -41,7 +41,7 @@ services:
         condition: service_healthy
   worker:
     image: pbaabp-web:docker-compose
-    command: hupper -m celery -A pbaabp worker --beat -l INFO
+    command: hupper -m celery -A pbaabp worker --beat -l DEBUG
     volumes:
       - .:/code
     environment:
