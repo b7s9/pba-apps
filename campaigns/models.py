@@ -76,8 +76,11 @@ class Petition(models.Model):
     letter = models.TextField()
 
     send_email = models.BooleanField(default=False, blank=False)
+    email_subject = models.CharField(max_length=988, blank=True, null=True)
+    email_body = models.TextField(null=True, blank=True)
     email_to = MultiEmailField(blank=True, null=True)
     email_cc = MultiEmailField(blank=True, null=True)
+    email_include_comment = models.BooleanField(default=False)
 
     campaign = models.ForeignKey(
         Campaign,
@@ -115,8 +118,18 @@ class Petition(models.Model):
     def form(self):
         from campaigns.forms import PetitionSignatureForm
 
-        form = PetitionSignatureForm(required_fields=self.signature_fields, petition=self)
+        form = PetitionSignatureForm(petition=self)
         return form
+
+    def signatures_with_comment(self):
+        return self.signatures.filter(comment__isnull=False).exclude(comment="").all()
+
+    def distinct_signatures_with_comment(self):
+        return self.signatures.distinct("email").filter(comment__isnull=False).exclude(comment="").all()
+
+    @property
+    def comments(self):
+        return self.signatures.filter(comment__isnull=False).exclude(comment="").count()
 
     def __str__(self):
         return self.title
@@ -127,6 +140,9 @@ class PetitionSignature(models.Model):
     petition = models.ForeignKey(
         Petition, to_field="id", on_delete=models.CASCADE, related_name="signatures"
     )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    featured = models.BooleanField(default=False)
 
     comment = models.TextField(null=True, blank=True)
     first_name = models.CharField(max_length=64, null=True, blank=True)

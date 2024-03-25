@@ -169,7 +169,7 @@
     position: absolute;
     right: 0em;
     top: 4em;
-
+    z-index: 5;
   }
 
   .mobile-nav-header ul li {
@@ -209,6 +209,32 @@
   .mobile-nav-header ul li ul li:has(a.current_item) {
     background-color: #d8107d;
   }
+}
+
+/* Messages */
+.messages {
+  background: #d8107d;
+  margin: 0 auto;
+  width: 100%;
+  color: #E8E8E8;
+  text-align: center;
+}
+
+.messages box-icon {
+  position:relative;
+  float: left;
+  display: block;
+  top: -.25em;
+}
+
+.messages .alert {
+  margin: 0 auto;
+  padding: .5em;
+  display: block;
+}
+
+.messages .alert span {
+  margin: 0 auto;
 }
 
 /* Page Content */
@@ -254,7 +280,6 @@
 /* Forms */
 
 form {
-  width: 100%;
   padding: 1em;
 }
 .form-container {
@@ -298,7 +323,7 @@ form .helptext {
   padding-top: .5em;
   display: block;
   font-size: smaller;
-  color: #333333;
+  color: #404040;
 }
 form p {
   margin-block-start: 0em;
@@ -330,6 +355,7 @@ form button {
   text-decoration: none;
   margin: .5em auto;
 }
+
 .button-holder {
   text-align: center;
   padding: 1em;
@@ -458,4 +484,49 @@ body {
 
 .campaign-card img {
   width: 100%;
+}
+
+.petition-letter {
+  border: 1px solid lightgrey;
+  border-radius: 1em;
+  padding-left: 1em;
+  padding-right: 1em;
+  background-color: #F8F8F8;
+}
+
+.signature-card {
+  border: 1px solid grey;
+  border-radius: 1em;
+  background-color: #eeeeee;
+}
+
+.signature-card footer {
+  font-size: smaller;
+}
+
+.signature-card + .signature-card {
+  margin-top: 1em;
+}
+
+.signature-card:last-child {
+  margin-bottom: 1em;
+}
+
+.petition-preview-email table {
+  border-radius: 1em;
+  border: 1px solid black;
+  margin-left: 1em;
+  margin-right: 1em;
+  padding: 1em;
+  background: repeating-linear-gradient(
+    45deg,
+    #F8F8F8,
+    #F8F8F8 10px,
+    #FFFFFF 10px,
+    #FFFFFF 20px
+  );
+}
+
+.petition-preview-email .user-input {
+  background: rgba(216,16,125,.25);
 }

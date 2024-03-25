@@ -37,14 +37,14 @@
     </div>
     {% endblock %}
     <div class="messages">
-      <ul class="messages">
+      <div class="messages">
         {% for message in messages %}
-        <li{% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>
-          <span class="icon-remove alert-close" onclick="closeAlert(this)"></span>
-          <p>{{ message }}</p>
-        </li>
+        <div {% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>
+          <box-icon name='x-circle' color="#E8E8E8" class="icon-remove alert-close" onclick="closeAlert(this)"></box-icon>
+          <span>{{ message }}</span>
+        </div>
         {% endfor %}
-      </ul>
+      </div>
     </div>
     <div class="content-container">
     {% block content %}

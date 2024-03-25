@@ -1,4 +1,6 @@
 <div class="form-container">
+  <h2>Add your signature to the following message</h2>
+  <div class="petition-letter">{{ form.petition.letter|linebreaks }}</div>
   <form method="post" action="{% url 'sign_petition' petition_slug_or_id=petition.slug %}">
   {% csrf_token %}
 
@@ -23,5 +25,59 @@
   <div class="button-holder">
     <input class="submit-button" type="submit" value="Sign the petition!">
   </div>
+
+  <div class="petition-preview-email">
+    <p>This is a preview of the email that will be sent when you submit:</p><br>
+    <table>
+      <tr><td>Subject:</td><td><b>{{ petition.email_subject }}</b></td></tr>
+      <tr><td>To:</td><td>{{ petition.email_to|join:', ' }}</td></tr>
+      {% if petition.email_cc %}<tr><td>Cc:</td><td>{{ petition.email_cc|join:', ' }}</td></tr>{% endif %}
+      <tr><td>From:</td><td><span class="user-input"><span id="previewFromFirstName"></span> <span id="previewFromLastName"></span></span> &lt;noreply@bikeaction.org&gt;</td></tr>
+      <tr><td>Reply-To:</td><td><span class="user-input" id="previewEmail"></span>, info@bikeaction.org</td></tr>
+      <tr></tr>
+      <tr></tr>
+      <tr>
+        <td colspan=2>
+          {{ petition.email_body }}<br><br>
+          {% if petition.email_include_comment %}<span id="previewCommentOuter"><span id="previewComment" class="user-input"></span><br><br></span>{% endif %}
+          - <span class="user-input"><span id="previewFirstName"></span> <span id="previewLastName"></span></span>
+        </td>
+      </tr>
+    </table>
+  </div>
   </form>
+
+  <script>
+    function modifyElement(elementId, targetElementId) {
+        document.getElementById(targetElementId).innerHTML = document.getElementById(elementId).value;
+    }
+    function updateForm() {
+        if (document.getElementById("id_send_email").checked) {
+            document.querySelectorAll(".petition-preview-email").forEach(function(elem){elem.style.display = 'block';})
+        } else {
+            document.querySelectorAll(".petition-preview-email").forEach(function(elem){elem.style.display = 'none';})
+        }
+        modifyElement("id_first_name", "previewFirstName");
+        modifyElement("id_first_name", "previewFromFirstName");
+        modifyElement("id_last_name", "previewLastName");
+        modifyElement("id_last_name", "previewFromLastName");
+        modifyElement("id_email", "previewEmail");
+        {% if petition.email_include_comment %}
+        modifyElement("id_comment", "previewComment");
+        if (document.getElementById("previewComment").innerHTML != "") {
+            document.getElementById("previewCommentOuter").style.display = 'block';
+        } else {
+            document.getElementById("previewCommentOuter").style.display = 'none';
+        }
+        {% endif %}
+    }
+    window.onload=function() {
+        document.getElementById("id_first_name").oninput= function () {updateForm()}.bind();
+        document.getElementById("id_last_name").oninput= function () {updateForm()}.bind();
+        document.getElementById("id_email").onkeyup = function () {updateForm();}.bind();
+        document.getElementById("id_send_email").onchange = function () {updateForm();}.bind();
+        updateForm();
+        setInterval(function() {updateForm();}, 1000);
+    }
+  </script>
 </div>

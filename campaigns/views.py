@@ -1,9 +1,10 @@
 import uuid
 
 from django.conf import settings
+from django.contrib import messages
 from django.core.mail import EmailMessage
-from django.http import Http404, HttpResponseRedirect
-from django.shortcuts import render
+from django.http import Http404
+from django.shortcuts import redirect, render
 from django.views.generic import DetailView, ListView
 
 from campaigns.forms import PetitionSignatureForm
@@ -38,9 +39,7 @@ def sign_petition(request, petition_slug_or_id):
     if petition is None:
         raise Http404
     if request.method == "POST":
-        form = PetitionSignatureForm(
-            request.POST, required_fields=petition.signature_fields, petition=petition
-        )
+        form = PetitionSignatureForm(request.POST, petition=petition)
         if form.is_valid():
             # Check for existing signature
             existing_signature = PetitionSignature.objects.filter(
@@ -48,12 +47,15 @@ def sign_petition(request, petition_slug_or_id):
             ).first()
             form.instance.petition = petition
             form.save()
-            print(form.cleaned_data)
             if petition.send_email and form.cleaned_data.get("send_email", False):
                 if not existing_signature:
+                    email_body = petition.email_body + "\n\n"
+                    if petition.email_include_comment and form.instance.comment:
+                        email_body += form.instance.comment + "\n\n"
+                    email_body += f"- {form.instance.first_name} {form.instance.last_name}"
                     email = EmailMessage(
-                        subject=petition.title,
-                        body=petition.letter + "\n\n" + form.instance.comment,
+                        subject=petition.email_subject,
+                        body=email_body,
                         from_email=(
                             f"{form.instance.first_name} {form.instance.last_name} "
                             f"<{settings.DEFAULT_FROM_EMAIL}>"
@@ -63,8 +65,15 @@ def sign_petition(request, petition_slug_or_id):
                         reply_to=[form.instance.email],
                     )
                     email.send()
-            return HttpResponseRedirect("https://bikeaction.org")
+            message = "Signature captured!"
+            if petition.send_email and form.cleaned_data.get("send_email", False):
+                message += " E-Mail sent!"
+            messages.add_message(request, messages.SUCCESS, message)
+            if petition.campaign:
+                return redirect("campaign", slug=petition.campaign.slug)
+            else:
+                return redirect("index")
     else:
-        form = PetitionSignatureForm(required_fields=petition.signature_fields, petition=petition)
+        form = PetitionSignatureForm(petition=petition)
 
     return render(request, "petition/sign.html", context={"petition": petition, "form": form})
