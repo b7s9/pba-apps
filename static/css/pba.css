@@ -151,6 +151,7 @@
     color: white;
     text-decoration: none;
     font-size: 1.75em;
+    display: block;
   }
 
   #menu-icon {
@@ -174,6 +175,9 @@
   .mobile-nav-header ul li {
     padding-bottom: 0;
   }
+  .mobile-nav-header ul li:last-child {
+    padding-bottom: .25em;
+  }
 
   .mobile-nav-header ul li ul li {
     width: 9em;
@@ -185,7 +189,6 @@
     text-align: left;
     background-color: #70bf44;
     padding-left: 1em;
-    padding-right: 1em;
   }
 
   .mobile-nav-header li ul {
