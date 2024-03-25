@@ -98,6 +98,9 @@ body {
   font-family: "Ubuntu";
   margin: 0;
   width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .table-container {
@@ -221,7 +224,7 @@ body {
   margin: 0;
   text-align: center;
   display: inline-block;
-  
+  float: left;
 }
 
 .nav-header a {
@@ -245,6 +248,7 @@ body {
 }
 
 .nav-header li ul li {
+  float: none;
   display: list-item;
 }
 
@@ -259,7 +263,7 @@ body {
 .nav-header li:has(ul)::after {
     content: '⌄';
     position: relative;
-    bottom: .25em;
+    bottom: .4em;
     color: white;
 }
 
@@ -289,7 +293,7 @@ body {
   text-align: center;
   background-color: black;
   color: white;
-  margin-top: 2em;
+  margin-top: auto;
 }
 
 .footer .footer-row {
