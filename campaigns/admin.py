@@ -11,6 +11,7 @@ class CampaignAdmin(admin.ModelAdmin):
 
     readonly_fields = ["wordpress_id"]
     formfield_overrides = {MarkdownField: {"widget": MarkdownEditorWidget}}
+    autocomplete_fields = ["events"]
 
 
 class PetitionAdmin(admin.ModelAdmin):

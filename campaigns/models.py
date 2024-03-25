@@ -8,6 +8,7 @@ from markdownfield.validators import VALIDATOR_NULL
 from multi_email_field.fields import MultiEmailField
 
 from campaigns.tasks import sync_to_wordpress
+from events.models import ScheduledEvent
 from pbaabp.models import ChoiceArrayField, MarkdownField
 
 
@@ -44,6 +45,8 @@ class Campaign(models.Model):
     content_rendered = RenderedMarkdownField()
 
     wordpress_id = models.CharField(max_length=64, null=True, blank=True)
+
+    events = models.ManyToManyField(ScheduledEvent, blank=True, null=True)
 
     def save(self, *args, **kwargs):
         if self.slug is None:

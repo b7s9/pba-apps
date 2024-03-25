@@ -220,6 +220,11 @@
   text-align: center;
 }
 
+box-icon {
+  position: relative;
+  top: .25em;
+}
+
 .messages box-icon {
   position:relative;
   float: left;

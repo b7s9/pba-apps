@@ -21,8 +21,19 @@
   </div>
 {% endif %}
 {{ campaign.content_rendered|safe }}
-{% if campaign.petitions.all %}<h2>Take Action Now!</h2>{% endif %}
+{% if campaign.petitions.all or campaign.events.all %}<h2>Take Action Now!</h2>{% endif %}
+{% if campaign.events.all %}
+  <h3>Attend an event</h3>
+  <div id="events">
+    {% for event in campaign.events.all %}
+    <div class="event">
+      <a href="https://bikeaction.org/events/{% if event.wordpress_slug %}{{ event.wordpress_slug }}{% else %}{% endif %}"><box-icon name='calendar-event'></box-icon> {{ event.title }} - {{ event.start_datetime|date }}</a>
+    </div>
+    {% endfor %}
+  </div>
+{% endif %}
 {% if campaign.petitions.all %}
+  <h3>Sign {% if campaign.petitions.all|length > 1 %}a{% else %}the{% endif %} petition</h3>
   <div id="petitions">
   {% for petition in campaign.petitions.all %}
     <div class="petition">

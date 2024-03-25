@@ -7,6 +7,7 @@ class ScheduledEventAdmin(admin.ModelAdmin):
     list_display = ["title", "start_datetime", "status"]
     list_filter = ["status"]
     ordering = ["-status", "start_datetime"]
+    search_fields = ["title"]
 
 
 class EventSignInAdmin(admin.ModelAdmin):
