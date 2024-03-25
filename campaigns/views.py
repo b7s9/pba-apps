@@ -26,6 +26,7 @@ def _fetch_petition_by_slug_or_id(petition_slug_or_id):
     else:
         return None
 
+
 class CampaignDetailView(DetailView):
     model = Campaign
 

@@ -325,6 +325,10 @@ form .helptext {
   font-size: smaller;
   color: #404040;
 }
+form .errorlist {
+  list-style: none;
+  color: red;
+}
 form p {
   margin-block-start: 0em;
   margin-block-end: 0em;

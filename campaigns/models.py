@@ -125,7 +125,12 @@ class Petition(models.Model):
         return self.signatures.filter(comment__isnull=False).exclude(comment="").all()
 
     def distinct_signatures_with_comment(self):
-        return self.signatures.distinct("email").filter(comment__isnull=False).exclude(comment="").all()
+        return (
+            self.signatures.distinct("email")
+            .filter(comment__isnull=False)
+            .exclude(comment="")
+            .all()
+        )
 
     @property
     def comments(self):
