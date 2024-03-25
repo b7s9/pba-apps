@@ -87,7 +87,6 @@ form button {
   font-weight: bold;
   padding: .25em;
   border-radius: .25em;
-  margin-top: 1em;
   text-decoration: none;
 }
 @media screen and (max-width: 40rem) {
@@ -97,6 +96,8 @@ form button {
 }
 body {
   font-family: "Ubuntu";
+  margin: 0;
+  width: 100vw;
 }
 
 .table-container {
@@ -279,5 +280,31 @@ body {
 }
 
 .nav-header li ul li:has(a.current_item) {
+  background-color: #70bf44;
+}
+
+.footer {
+  width: 100vw;
+  margin: 0 auto;
+  text-align: center;
+  background-color: black;
+  color: white;
+  margin-top: 2em;
+}
+
+.footer .footer-row {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+}
+
+.footer .footer-row .footer-column {
+  margin: 1em;
+  min-width: 10em;
+  width: 25%;
+}
+
+.footer .copyright {
+  padding: 1em;
   background-color: #70bf44;
 }
