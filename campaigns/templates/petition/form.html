@@ -38,7 +38,7 @@
       <tr></tr>
       <tr>
         <td colspan=2>
-          {{ petition.email_body }}<br><br>
+          {{ petition.email_body|linebreaks }}<br><br>
           {% if petition.email_include_comment %}<span id="previewCommentOuter"><span id="previewComment" class="user-input"></span><br><br></span>{% endif %}
           - <span class="user-input"><span id="previewFirstName"></span> <span id="previewLastName"></span></span>
         </td>
