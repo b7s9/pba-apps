@@ -428,13 +428,16 @@ body {
 .table-container table {
     margin: 0 auto;
     border-collapse: collapse;
-    font-size: 0.9em;
+    font-size: .9em;
     text-align: left;
-    min-width: 38em;
+    min-width: 35em;
+    table-layout:fixed;
+    width:90%;
 }
 @media screen and (max-width: 40rem) {
   .table-container table {
     min-width: 80vw;
+    font-size: 3vw;
   }
 }
 .table-container th {
