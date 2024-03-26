@@ -288,9 +288,9 @@ form {
   padding: 1em;
 }
 .form-container {
-  width: 95%;
+  width: 90%;
   max-width: 40rem;
-  margin: auto;
+  margin: 0 auto;
   border-radius: 5px;
   border-radius: 1em;
   border: 1px solid black;
@@ -507,6 +507,12 @@ body {
   opacity: 1;
 }
 
+@media only screen and (max-width: 600px) {
+  .campaign-header h1 {
+    font-size: 1.75em;
+  }
+}
+
 .campaigns-container {
   display: flex;
 }
@@ -553,9 +559,10 @@ body {
 .petition-preview-email table {
   border-radius: 1em;
   border: 1px solid black;
-  margin-left: 1em;
-  margin-right: 1em;
+  margin-left: 0;
+  margin-right: 0;
   padding: 1em;
+  width: 100%;
   background: repeating-linear-gradient(
     45deg,
     #F8F8F8,
@@ -564,6 +571,13 @@ body {
     #FFFFFF 20px
   );
 }
+
+@media only screen and (max-width: 600px) {
+  .petition-preview-email table {
+    font-size: .8em;
+  }
+}
+
 
 .petition-preview-email .user-input {
   background: rgba(216,16,125,.25);
