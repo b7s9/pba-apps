@@ -77,6 +77,9 @@ class Petition(models.Model):
     title = models.CharField(max_length=512)
     slug = models.SlugField(null=True, blank=True)
     letter = models.TextField()
+    call_to_action = models.CharField(
+        max_length=64, null=True, blank=True, default="Add your signature to the following message"
+    )
 
     send_email = models.BooleanField(default=False, blank=False)
     email_subject = models.CharField(max_length=988, blank=True, null=True)

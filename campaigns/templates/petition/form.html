@@ -1,5 +1,5 @@
 <div class="form-container">
-  <h2>Add your signature to the following message</h2>
+  <h3>{{ petition.call_to_action }}</h3>
   <div class="petition-letter">{{ form.petition.letter|linebreaks }}</div>
   <form method="post" action="{% url 'sign_petition' petition_slug_or_id=petition.slug %}">
   {% csrf_token %}
