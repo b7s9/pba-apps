@@ -15,13 +15,18 @@
     <h1>{{ campaign.title }}</h1>
 </div>
 <div class="campaign-container">
-{% if campaign.petitions.all %}
+{% if campaign.petitions.all or campaign.events.all %}
   <div class="button-holder">
-    <a href="#petitions" class="cta-button submit-button" >Take Action Now!</a>
+    <a href="#action" class="cta-button submit-button" >Take Action Now!</a>
   </div>
 {% endif %}
+
 {{ campaign.content_rendered|safe }}
-{% if campaign.petitions.all or campaign.events.all %}<h2>Take Action Now!</h2>{% endif %}
+
+{% if campaign.petitions.all or campaign.events.all %}
+<span id="action"></span>
+<h2>Take Action Now!</h2>
+{% endif %}
 {% if campaign.events.all %}
   <h3>Attend an event</h3>
   <div id="events">
@@ -72,4 +77,14 @@
   </div>
 {% endif %}
 </div>
+<script>
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            document.querySelector(this.getAttribute('href')).scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+    });
+</script>
 {% endblock %}
