@@ -1,0 +1,31 @@
+{% load humanize %}
+
+{% if petition.signatures.all %}
+<div class="signatures">
+  <h2>{{ petition.signatures.count }} Signatures So Far!</h2>
+  {% if petition.signatures_with_comment %}
+  <h3>{{ petition.comments }} Comments</h3>
+  <p>Recent comments...</p>
+  {% for signature in petition.distinct_signatures_with_comment|dictsortreversed:"created_at" %}
+  {% if signature.comment and signature.featured and signature.visible %}
+  <div class="signature-card feature featuredd">
+    <blockquote>
+      <p>"{{ signature.comment }}"</p>
+      <footer>-{{ signature.first_name }} {{ signature.last_name|make_list|slice:':1'|join:'' }}. <i>{{ signature.created_at|naturaltime }}</i></footer>
+    </blockquote>
+  </div>
+  {% endif %}
+  {% endfor %}
+  {% for signature in petition.distinct_signatures_with_comment.all|dictsortreversed:"created_at" %}
+  {% if signature.comment and not signature.featured and signature.visible %}
+  <div class="signature-card">
+    <blockquote>
+      <p>"{{ signature.comment }}"</p>
+      <footer>-{{ signature.first_name }} {{ signature.last_name|make_list|slice:':1'|join:'' }}. <i>{{ signature.created_at|naturaltime }}</i></footer>
+    </blockquote>
+  </div>
+  {% endif %}
+  {% endfor %}
+  {% endif %}
+</div>
+{% endif %}

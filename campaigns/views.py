@@ -35,6 +35,13 @@ class CampaignListView(ListView):
     model = Campaign
 
 
+def petition_signatures(request, petition_slug_or_id):
+    petition = _fetch_petition_by_slug_or_id(petition_slug_or_id)
+    if petition is None:
+        raise Http404
+    return render(request, "campaigns/_partial_signatures.html", {"petition": petition})
+
+
 def sign_petition(request, petition_slug_or_id):
     petition = _fetch_petition_by_slug_or_id(petition_slug_or_id)
     if petition is None:
