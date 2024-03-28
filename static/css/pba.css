@@ -410,6 +410,14 @@ form .g-recaptcha {
 @media screen and (max-width: 40rem) {
   .submit-button, button {
     font-size: 1.5em;
+    padding: 10px 30px;
+  }
+}
+
+@media screen and (max-width: 20rem) {
+  .submit-button, button {
+    font-size: 1.25em;
+    padding: 7px 25px;
   }
 }
 
