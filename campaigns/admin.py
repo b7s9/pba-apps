@@ -19,9 +19,38 @@ class PetitionAdmin(admin.ModelAdmin):
 
 
 class PetitionSignatureAdmin(admin.ModelAdmin):
-    list_display = ["__str__", "petition"]
-    list_filter = ["petition"]
-    pass
+    list_display = ["get_name", "email", "created_at", "has_comment", "visible", "get_petition"]
+    list_filter = ["petition", "visible"]
+    ordering = ["-created_at"]
+    search_fields = ["first_name", "last_name", "comment", "email"]
+    readonly_fields = [
+        "first_name",
+        "last_name",
+        "email",
+        "postal_address_line_1",
+        "postal_address_line_2",
+        "city",
+        "state",
+        "zip_code",
+        "comment",
+        "petition",
+        "created_at",
+    ]
+
+    def get_name(self, obj):
+        return f"{obj.first_name} {obj.last_name}"
+
+    get_name.short_description = "Name"
+
+    def get_petition(self, obj):
+        return str(obj.petition)[:37] + "..." if len(str(obj.petition)) > 37 else ""
+
+    get_petition.short_description = "Petition"
+
+    def has_comment(self, obj):
+        return bool(obj.comment)
+
+    has_comment.boolean = True
 
 
 admin.site.register(Campaign, CampaignAdmin)

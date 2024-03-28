@@ -54,7 +54,7 @@
       <h3>{{ petition.comments }} Comments</h3>
       <p>Recent comments...</p>
       {% for signature in petition.distinct_signatures_with_comment|dictsortreversed:"created_at" %}
-      {% if signature.comment and signature.featured %}
+      {% if signature.comment and signature.featured and signature.visible %}
       <div class="signature-card feature featuredd">
         <blockquote>
           <p>"{{ signature.comment }}"</p>
@@ -64,7 +64,7 @@
       {% endif %}
       {% endfor %}
       {% for signature in petition.distinct_signatures_with_comment.all|dictsortreversed:"created_at" %}
-      {% if signature.comment and not signature.featured %}
+      {% if signature.comment and not signature.featured and signature.visible %}
       <div class="signature-card">
         <blockquote>
           <p>"{{ signature.comment }}"</p>

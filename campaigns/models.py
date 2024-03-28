@@ -142,6 +142,7 @@ class PetitionSignature(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     featured = models.BooleanField(default=False)
+    visible = models.BooleanField(default=True)
 
     comment = models.TextField(null=True, blank=True)
     first_name = models.CharField(max_length=64, null=True, blank=True)
