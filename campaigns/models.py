@@ -1,14 +1,13 @@
 import uuid
 
 from django.core.validators import RegexValidator
-from django.db import models, transaction
+from django.db import models
 from django.utils import timezone
 from django.utils.text import slugify
 from markdownfield.models import RenderedMarkdownField
 from markdownfield.validators import VALIDATOR_NULL
 from multi_email_field.fields import MultiEmailField
 
-from campaigns.tasks import sync_to_wordpress
 from events.models import ScheduledEvent
 from pbaabp.models import ChoiceArrayField, MarkdownField
 
@@ -55,21 +54,6 @@ class Campaign(models.Model):
     def save(self, *args, **kwargs):
         if self.slug is None:
             self.slug = slugify(self.title)[:49]
-        if not self._state.adding:
-            old_model = Campaign.objects.get(pk=self.pk)
-            change_fields = [
-                f.name
-                for f in Campaign._meta._get_fields()
-                if f.name not in ["id", "wordpress_id"]
-            ]
-            modified = False
-            for i in change_fields:
-                if getattr(old_model, i, None) != getattr(self, i, None):
-                    modified = True
-            if modified:
-                transaction.on_commit(lambda: sync_to_wordpress.delay(self.id))
-        else:
-            transaction.on_commit(lambda: sync_to_wordpress.delay(self.id))
         super(Campaign, self).save(*args, **kwargs)
 
     def __str__(self):
