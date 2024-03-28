@@ -2,6 +2,7 @@ import uuid
 
 from django.core.validators import RegexValidator
 from django.db import models, transaction
+from django.utils import timezone
 from django.utils.text import slugify
 from markdownfield.models import RenderedMarkdownField
 from markdownfield.validators import VALIDATOR_NULL
@@ -47,6 +48,9 @@ class Campaign(models.Model):
     wordpress_id = models.CharField(max_length=64, null=True, blank=True)
 
     events = models.ManyToManyField(ScheduledEvent, blank=True, null=True)
+
+    def future_events(self):
+        return self.events.filter(start_datetime__gt=timezone.now())
 
     def save(self, *args, **kwargs):
         if self.slug is None:
