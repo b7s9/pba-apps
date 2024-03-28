@@ -86,7 +86,7 @@ discord-typings==0.7.0
     # via discord-py-interactions
 dj-stripe==2.8.3
     # via -r base.in
-django==4.2.9
+django==4.2.11
     # via
     #   -r base.in
     #   channels
