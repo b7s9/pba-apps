@@ -1,5 +1,5 @@
 <div class="form-container">
-  <h2>Add your signature to the following message</h2>
+  <h3>{{ petition.call_to_action }}</h3>
   <div class="petition-letter">{{ form.petition.letter|linebreaks }}</div>
   <form method="post" action="{% url 'sign_petition' petition_slug_or_id=petition.slug %}">
   {% csrf_token %}
@@ -23,7 +23,7 @@
   </div>
 
   <div class="button-holder">
-    <input class="submit-button" type="submit" value="Sign the petition!">
+    <input class="submit-button" type="submit" value="Add your signature!">
   </div>
 
   <div class="petition-preview-email">
@@ -38,7 +38,7 @@
       <tr></tr>
       <tr>
         <td colspan=2>
-          {{ petition.email_body }}<br><br>
+          {{ petition.email_body|linebreaks }}<br><br>
           {% if petition.email_include_comment %}<span id="previewCommentOuter"><span id="previewComment" class="user-input"></span><br><br></span>{% endif %}
           - <span class="user-input"><span id="previewFirstName"></span> <span id="previewLastName"></span></span>
         </td>

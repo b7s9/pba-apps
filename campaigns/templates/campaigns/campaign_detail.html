@@ -5,27 +5,35 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="{{ campaign.title }}">
 <meta property="og:url" content="https://bikeaction.org/campaigns/{{ campaign.slug }}">
-<meta property="og:image" content="{{ campaign.cover }}">
+<meta property="og:image" content="{{ campaign.cover.url }}">
 <meta property="og:description" content="{{ campaign.description }}">
 {% endblock %}
 
 {% block content %}
 <div class="campaign-header">
-    <div class="campaign-header-img" style="background: url({{ campaign.cover }}); background-repeat: no-repeat; background-size: cover; background-position: center;"></div>
-    <h1>{{ campaign.title }}</h1>
+    <div class="campaign-overlay"></div>
+    <div class="campaign-header-img" style="background: url({{ campaign.cover.url }}); background-repeat: no-repeat; background-size: cover; background-position: center;"></div>
+    <div class="campaign-title">
+      <h1>{{ campaign.title }}</h1>
+    </div>
 </div>
 <div class="campaign-container">
-{% if campaign.petitions.all %}
+{% if campaign.petitions.all or campaign.events.all %}
   <div class="button-holder">
-    <a href="#petitions" class="cta-button submit-button" >Take Action Now!</a>
+    <a href="#action" class="cta-button submit-button" >Take Action Now!</a>
   </div>
 {% endif %}
+
 {{ campaign.content_rendered|safe }}
-{% if campaign.petitions.all or campaign.events.all %}<h2>Take Action Now!</h2>{% endif %}
-{% if campaign.future_events.all %}
+
+{% if campaign.petitions.all or campaign.events.all %}
+<span id="action"></span>
+<h2>Take Action Now!</h2>
+{% endif %}
+{% if campaign.events.all %}
   <h3>Attend an event</h3>
-  <div class="events-container" id="events">
-    {% for event in campaign.future_events.all %}
+  <div id="events">
+    {% for event in campaign.future_events.all|dictsort:"start_datetime" %}
     <div class="event">
       <a href="https://bikeaction.org/events/{% if event.wordpress_slug %}{{ event.wordpress_slug }}{% else %}{% endif %}"><box-icon name='calendar-event'></box-icon> {{ event.title }} - {{ event.start_datetime|date }}</a>
     </div>
@@ -72,4 +80,14 @@
   </div>
 {% endif %}
 </div>
+<script>
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            document.querySelector(this.getAttribute('href')).scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+    });
+</script>
 {% endblock %}
