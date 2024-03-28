@@ -29,7 +29,7 @@ class ScheduledEvent(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     discord_id = models.CharField(max_length=64, null=True, blank=True)
     wordpress_id = models.CharField(max_length=64, null=True, blank=True)
-    wordpress_slug = models.SlugField(null=True, blank=True)
+    wordpress_slug = models.SlugField(max_length=512, null=True, blank=True)
 
     title = models.CharField(max_length=512)
     status = models.CharField(max_length=16, choices=Status.choices)
