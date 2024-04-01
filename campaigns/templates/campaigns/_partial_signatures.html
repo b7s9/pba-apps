@@ -3,6 +3,13 @@
 {% if petition.signatures.all %}
 <div class="signatures">
   <h2>{{ petition.signatures.count }} Signatures So Far!</h2>
+  {% if petition.signature_goal %}
+  <div class="progress-bar-container">
+    <div class="progress-bar" style="height: 2em; width: {{ petition.progress }}%">
+    </div>
+    <span class="progress-goal">{{ petition.signature_goal }}</span>
+  </div>
+  {% endif %}
   {% if petition.signatures_with_comment %}
   <h3>{{ petition.comments }} Comments</h3>
   <p>Recent comments...</p>

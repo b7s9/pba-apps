@@ -68,6 +68,7 @@ class Petition(models.Model):
     call_to_action = models.CharField(
         max_length=64, null=True, blank=True, default="Add your signature to the following message"
     )
+    signature_goal = models.IntegerField(default=None, null=True, blank=True)
 
     send_email = models.BooleanField(default=False, blank=False)
     email_subject = models.CharField(max_length=988, blank=True, null=True)
@@ -129,6 +130,12 @@ class Petition(models.Model):
     @property
     def comments(self):
         return self.signatures.filter(comment__isnull=False).exclude(comment="").count()
+
+    @property
+    def progress(self):
+        if self.signature_goal:
+            return int(100 * (self.signatures.count() / self.signature_goal))
+        return 100
 
     def __str__(self):
         return self.title
