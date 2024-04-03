@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
 
-from profiles.models import Profile
+from profiles.models import Profile, ShirtInterest
 
 
 class ProfileAdmin(admin.ModelAdmin):
@@ -25,6 +25,13 @@ class ProfileAdmin(admin.ModelAdmin):
             )
 
 
+class ShirtInterestAdmin(admin.ModelAdmin):
+    list_display = ["user", "fit", "size", "print_color"]
+    list_filter = ["fit", "size", "print_color"]
+    search_fields = ["user__first_name", "user__last_name", "user__email"]
+    autocomplete_fields = ("user",)
+
+
 admin.site.register(Profile, ProfileAdmin)
 
 
@@ -34,3 +41,4 @@ class UserAdmin(BaseUserAdmin):
 
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
+admin.site.register(ShirtInterest, ShirtInterestAdmin)
