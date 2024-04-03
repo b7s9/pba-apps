@@ -1,10 +1,12 @@
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponseRedirect
 from django.urls import reverse
-from django.views.generic import DetailView, UpdateView
+from django.views.generic import CreateView, DeleteView, DetailView, UpdateView
 from djstripe.models import Customer
 
 from profiles.forms import ProfileUpdateForm
-from profiles.models import Profile
+from profiles.models import Profile, ShirtInterest
 
 
 class ProfileDetailView(LoginRequiredMixin, DetailView):
@@ -39,3 +41,26 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_object(self):
         return Profile.objects.get(user=self.request.user)
+
+
+class ShirtInterestView(LoginRequiredMixin, CreateView):
+    model = ShirtInterest
+    fields = ["fit", "print_color", "size"]
+
+    def form_valid(self, form):
+        obj = form.save(commit=False)
+        obj.user = self.request.user
+        obj.save()
+        messages.add_message(self.request, messages.INFO, "T-Shirt interest recorded!")
+        return HttpResponseRedirect(self.get_success_url())
+
+    def get_success_url(self):
+        return reverse("profile")
+
+
+class ShirtInterestDeleteView(LoginRequiredMixin, DeleteView):
+    model = ShirtInterest
+
+    def get_success_url(self):
+        messages.add_message(self.request, messages.INFO, "T-Shirt interest deleted.")
+        return reverse("profile")
