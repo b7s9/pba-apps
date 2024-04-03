@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="form-header">
+  <h1>I want a shirt!</h1>
+</div>
+<div class="form-header">
+  <p>Sweet! Consider and select your options below</p>
+  <div class="display: flex;">
+    <div style="border: 1px solid grey; border-radius: 1em; margin: 0.5em;">
+      <h3>Alternative Apparel "Go-To T-Shirt"</h3>
+      <h4>Unisex Classic Fit</h4>
+      <img style="max-width: 30%;" src="{% static 'images/tshirts/pink-unisex.jpg' %}">
+      <img style="max-width: 30%;" src="{% static 'images/tshirts/green-unisex.jpg' %}">
+      <p>This is more or less a standard straight cut T-Shirt</p>
+      <div class="table-container">
+        <table style="margin: .5em auto;">
+          <tr><td></td><th>XS</th><th>S</th><th>M</th><th>L</th><th>XL</th><th>2XL</th></tr>
+          <tr><th>Chest</th><td>35-37"</td><td>38-40"</td><td>41-43"</td><td>44-46"</td><td>47-49"</td><td>50-52"</td></tr>
+          <tr><th>Waist</th><td>28-30"</td><td>31-33"</td><td>34-36"</td><td>37-39"</td><td>40-42"</td><td>43-45"</td></tr>
+          <tr><th>Hip</th><td>35-37"</td><td>38-40"</td><td>41-43"</td><td>44-46"</td><td>47-49"</td><td>50-52"</td></tr>
+        </table>
+      </div>
+    </div>
+    <div style="border: 1px solid grey; border-radius: 1em; margin: 0.5em;">
+      <h3>Alternative Apparel "Women's Go-To Headliner Cropped Tee"</h3>
+      <h4>Women's Relaxed Fit</h4>
+      <img style="max-width: 30%;" src="{% static 'images/tshirts/green-crop.jpg' %}">
+      <img style="max-width: 30%;" src="{% static 'images/tshirts/pink-crop.jpg' %}">
+      <p>This is more or less a standard straight cut T-Shirt</p>
+      <div class="table-container">
+        <table style="margin: .5em auto;">
+          <tr><td></td><th>XS</th><th>S</th><th>M</th><th>L</th><th>XL</th><th>2XL</th></tr>
+          <tr><th>Chest</th><td>30-31"</td><td>32-33"</td><td>34-35"</td><td>36-37"</td><td>38-39"</td><td>40-41"</td></tr>
+          <tr><th>Waist</th><td>23-25"</td><td>25-27"</td><td>27-29"</td><td>29-31"</td><td>31-33"</td><td>33-35"</td></tr>
+          <tr><th>Hip</th><td>34-36"</td><td>36-38"</td><td>38-40"</td><td>40-41"</td><td>42-43"</td><td>43-44"</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="form-container">
+  <form method="post">
+  {% csrf_token %}
+
+  {{ form.non_field_errors }}
+
+  {% for hidden_field in form.hidden_fields %}
+    {{ hidden_field.errors }}
+    {{ hidden_field }}
+  {% endfor %}
+
+  {% for field in form.visible_fields %}
+    <p>
+      {{ field.label_tag }}
+      {{ field.errors }}
+      {{ field }}
+      <span class="helptext">{{ field.help_text }}</span>
+    </p>
+  {% endfor %}
+
+  <div id="shirtPreview" style="width: 100%; text-align: center;">
+    <p><img style="display: none; margin: 1em auto; border-radius: 1em; max-width: 30%;" id="shirtPreviewImg" src=""></img></p>
+  </div>
+
+  <div class="button-holder">
+    <button class="submit-button" type="submit" value="Submit!">Submit</button>
+  </div>
+
+  </form>
+
+  <script>
+    function modifyElement(elementId, targetElementId) {
+        document.getElementById(targetElementId).innerHTML = document.getElementById(elementId).value;
+    }
+    function updateForm() {
+        var fit = document.getElementById("id_fit").value;
+        var printColor =  document.getElementById("id_print_color").value;
+        if ( fit === "1" && printColor === "0" ) {
+            document.getElementById("shirtPreviewImg").src = "{% static "images/tshirts/pink-crop.jpg" %}";
+            document.getElementById("shirtPreviewImg").style.display = "block";
+        }
+        else if ( fit === "1" && printColor === "1" ) {
+            document.getElementById("shirtPreviewImg").src = "{% static "images/tshirts/green-crop.jpg" %}";
+            document.getElementById("shirtPreviewImg").style.display = "block";
+        }
+        else if ( fit === "0" && printColor === "0" ) {
+            document.getElementById("shirtPreviewImg").src = "{% static "images/tshirts/pink-unisex.jpg" %}";
+            document.getElementById("shirtPreviewImg").style.display = "block";
+        }
+        else if ( fit === "0" && printColor === "1" ) {
+            document.getElementById("shirtPreviewImg").src = "{% static "images/tshirts/green-unisex.jpg" %}";
+            document.getElementById("shirtPreviewImg").style.display = "block";
+        }
+        else {
+            document.getElementById("shirtPreviewImg").src = "";
+            document.getElementById("shirtPreviewImg").style.display = "none";
+        }
+    }
+    window.onload=function() {
+        document.getElementById("id_fit").oninput = function () {updateForm()}.bind();
+        document.getElementById("id_print_color").oninput = function () {updateForm();}.bind();
+        updateForm();
+        setInterval(function() {updateForm();}, 1000);
+    }
+  </script>
+</div>
+{% endblock %}

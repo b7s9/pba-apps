@@ -72,4 +72,27 @@
   {% endif %}
 </div>
 <hr>
+<div class="form-header">
+  <h2>T-Shirts</h2>
+  {% if request.user.tshirt_requests.all %}
+  <p>Your T-Shirt requests</p>
+  <div class="table-container">
+    <table>
+      <tr><th>Fit</th><th>Size</th><th>Print Color</th><th>Action</th></tr>
+      {% for tshirt_request in request.user.tshirt_requests.all %}
+      <tr>
+        <td>{% if tshirt_request.fit == 0 %}Unisex{% elif tshirt_request.fit == 1 %}Crop{% else %}?{% endif %}</td>
+        <td>{{ tshirt_request.get_size_display }}</td>
+        <td>{{ tshirt_request.get_print_color_display }}</td>
+        <td><a href="{% url 'shirt_interest_delete' pk=tshirt_request.id %}">Delete</a></td>
+      </tr>
+      {% endfor %}
+    </table>
+    <p><a class="submit-button" href="{% url 'shirt_interest' %}">Request another</a></p>
+  </div>
+  {% else %}
+  <p>Interested in a PBA T-Shirt?</p>
+  <p><a class="submit-button" href="{% url 'shirt_interest' %}">Let us know!</a></p>
+  {% endif %}
+</div>
 {% endblock %}

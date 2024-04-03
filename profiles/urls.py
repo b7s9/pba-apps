@@ -10,4 +10,8 @@ urlpatterns = [
         name="profile_donations_partial",
     ),
     path("edit", views.ProfileUpdateView.as_view(), name="profile_update"),
+    path("tshirt", views.ShirtInterestView.as_view(), name="shirt_interest"),
+    path(
+        "tshirt/<pk>/delete", views.ShirtInterestDeleteView.as_view(), name="shirt_interest_delete"
+    ),
 ]
