@@ -63,7 +63,7 @@
   </small></p>
   {% if request.user.djstripe_customers.first %}
   <div hx-get="_partials/donations" hx-trigger="load" hx-swap="outerHTML">
-    <p>Loading your donations data...</p>
+    {% include 'profiles/_donations_partial.html' with first_load=True %}
   </div>
   {% else %}
   <div class="button-holder">

@@ -1,3 +1,8 @@
+  {% if first_load %}
+  <div style="position: relative; width: 100%;">
+    <small style="position: absolute; left: 0;">Updating...</small>
+  </div>
+  {% endif %}
   {% with request.user.djstripe_customers.first as customer %}
   {% if customer %}
   {% if customer.charges.all %}
