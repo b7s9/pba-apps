@@ -1,3 +1,4 @@
+from csvexport.actions import csvexport
 from django.contrib import admin
 
 from events.models import EventSignIn, ScheduledEvent
@@ -11,9 +12,20 @@ class ScheduledEventAdmin(admin.ModelAdmin):
 
 
 class EventSignInAdmin(admin.ModelAdmin):
+    actions = [csvexport]
     list_display = ["get_name", "get_event", "council_district", "newsletter_opt_in"]
-    list_filter = ["event__title"]
+    list_filter = ["event__title", "council_district", "zip_code"]
+    search_fields = ["first_name", "last_name", "email", "zip_code"]
     ordering = ["-updated_at"]
+
+    csvexport_selected_fields = [
+        "first_name",
+        "last_name",
+        "email",
+        "get_council_district_display",
+        "zip_code",
+        "event.title",
+    ]
 
     def get_name(self, obj):
         return f"{obj.first_name} {obj.last_name}"

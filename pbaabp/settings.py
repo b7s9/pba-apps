@@ -79,6 +79,7 @@ INSTALLED_APPS = [
     "ordered_model",
     "sitetree",
     "django_tuieditor",
+    "csvexport",
     # Our apps
     "pbaabp",
     "pages",

@@ -7,6 +7,7 @@ cmarkgfm
 cmarkgfm
 discord-py-interactions==5.11.0
 dj-stripe
+django-admin-csvexport
 django-allauth[mfa]
 django-dotenv
 django-email-log
