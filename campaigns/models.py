@@ -134,6 +134,8 @@ class Petition(models.Model):
     @property
     def progress(self):
         if self.signature_goal:
+            if self.signatures.count() > self.signature_goal:
+                return 100
             return int(100 * (self.signatures.count() / self.signature_goal))
         return 100
 
