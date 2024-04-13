@@ -30,7 +30,7 @@ class PetitionSignatureAdmin(admin.ModelAdmin):
         "visible",
         "get_petition",
     ]
-    list_filter = ["petition", "visible", "zip_code"]
+    list_filter = ["petition", "visible"]
     ordering = ["-created_at"]
     search_fields = ["first_name", "last_name", "comment", "email", "zip_code"]
     readonly_fields = [
