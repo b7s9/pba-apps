@@ -7,7 +7,10 @@
   background-color: #70bf44;
   height: 6em;
   font-family: "Big Shoulders Display";
-  position: relative;
+  position: sticky;
+  position: -webkit-sticky;
+  z-index: 100;
+  top: 0;
 }
 
 .img-header {
@@ -112,6 +115,9 @@
   display: none;
   float: right;
   padding: 0;
+  position: sticky;
+  position: -webkit-sticky;
+  z-index: 100;
 }
 
 @media only screen and (max-width: 600px) {
