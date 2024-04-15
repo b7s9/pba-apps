@@ -2,7 +2,9 @@ import uuid
 
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
-from django.db import models
+from django.db import models, transaction
+
+from profiles.tasks import create_mailchimp_subscriber, sync_to_mailchimp
 
 
 class Profile(models.Model):
@@ -43,8 +45,42 @@ class Profile(models.Model):
     def discord(self):
         return self.user.socialaccount_set.filter(provider="discord").first()
 
+    def save(self, *args, **kwargs):
+        if not self._state.adding:
+            old_model = Profile.objects.get(pk=self.pk)
+            change_fields = [
+                f.name for f in Profile._meta._get_fields() if f.name in ["newsletter_opt_in"]
+            ]
+            modified = False
+            for i in change_fields:
+                if getattr(old_model, i, None) != getattr(self, i, None):
+                    modified = True
+            if modified:
+                transaction.on_commit(lambda: sync_to_mailchimp.delay(self.id))
+        else:
+            transaction.on_commit(lambda: sync_to_mailchimp.delay(self.id))
+        super(Profile, self).save(*args, **kwargs)
+
     def __str__(self):
         return f"{self.user.first_name} {self.user.last_name} - {self.user.email}"
+
+
+class NewsletterSignup(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    mailchimp_contact_id = models.CharField(max_length=64, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    first_name = models.CharField("first name", max_length=150, blank=True)
+    last_name = models.CharField("last name", max_length=150, blank=True)
+    email = models.EmailField("email address", blank=True)
+
+    def save(self, *args, **kwargs):
+        if self._state.adding:
+            transaction.on_commit(lambda: create_mailchimp_subscriber.delay(self.id))
+        super(NewsletterSignup, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name} - {self.email}"
 
 
 class ShirtInterest(models.Model):
