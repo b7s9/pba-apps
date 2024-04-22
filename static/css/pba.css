@@ -317,6 +317,7 @@ form {
 form label {
   width: 9em;
   margin-bottom: .25em;
+  margin-right: 1em;
   display: block;
   float: left;
 }
@@ -332,7 +333,7 @@ form .helptext {
   display: block;
   font-size: smaller;
   color: #404040;
-  margin-left: 11em;
+  clear: both;
 }
 form .errorlist {
   list-style: none;
@@ -354,6 +355,12 @@ form ul {
 }
 form .g-recaptcha {
   padding-bottom: 0em;
+}
+form select {
+  max-width: 11em;
+}
+form input[type=checkbox] {
+  margin-right: 10em;
 }
 
 .button-holder {
