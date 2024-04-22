@@ -252,7 +252,7 @@ box-icon {
 
 .content-container {
   width: 80%;
-  margin: auto;
+  margin: 0 auto;
   margin-bottom: 1em;
 }
 @media screen and (max-width: 40rem) {
@@ -332,6 +332,7 @@ form .helptext {
   display: block;
   font-size: smaller;
   color: #404040;
+  margin-left: 11em;
 }
 form .errorlist {
   list-style: none;

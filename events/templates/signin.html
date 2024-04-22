@@ -4,6 +4,11 @@
 Do not show the header on signin page.
 {% endcomment %}
 {% endblock %}
+{% block footer %}
+{% comment %}
+Do not show the footer on signin page.
+{% endcomment %}
+{% endblock %}
 {% block content %}
 <div class="form-header">
   <img src="https://bikeaction.org/wp-content/uploads/2023/07/Sticker_Print_Green.svg">
@@ -27,7 +32,7 @@ Do not show the header on signin page.
       {{ field.label_tag }}
       {{ field.errors }}
       {{ field }}
-      <span class="helptext">{{ field.help_text }}</span>
+      <p class="helptext">{{ field.help_text }}</p>
     </p>
   {% endfor %}
   </div>

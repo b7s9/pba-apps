@@ -50,8 +50,8 @@
     {% block content %}
     {% endblock %}
     </div>
-    {% block footer %}
     <div class="footer">
+    {% block footer %}
         <div class="footer-row">
           <div class="footer-column">
             <div>
@@ -97,8 +97,8 @@
           </div>
         </div>
         <div class="copyright"><span>©️ 2024 Philly Bike Action. All rights reserved.</span></div>
-    </div>
     {% endblock %}
+    </div>
     <script src="{% static 'js/htmx.min.js' %}" defer></script>
     {% django_htmx_script %}
     <script>
