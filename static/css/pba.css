@@ -363,6 +363,12 @@ form input[type=checkbox] {
   margin-right: 10em;
 }
 
+form #id_donation_tier, div {
+  display: block;
+  clear: both;
+  padding-left: 1em;
+}
+
 .button-holder {
   text-align: center;
   padding: 1em;
