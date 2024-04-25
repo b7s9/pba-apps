@@ -363,7 +363,7 @@ form input[type=checkbox] {
   margin-right: 10em;
 }
 
-form #id_donation_tier, div {
+form #id_donation_tier > div {
   display: block;
   clear: both;
   padding-left: 1em;
