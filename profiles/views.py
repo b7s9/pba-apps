@@ -43,7 +43,14 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
         return Profile.objects.get(user=self.request.user)
 
 
-class ShirtInterestView(LoginRequiredMixin, CreateView):
+class ShirtsAreDoneMixin:
+
+    def dispatch(self, request, *args, **kwargs):
+        messages.add_message(self.request, messages.INFO, "T-Shirt orders are closed")
+        return HttpResponseRedirect(reverse("profile"))
+
+
+class ShirtInterestView(ShirtsAreDoneMixin, LoginRequiredMixin, CreateView):
     model = ShirtInterest
     fields = ["fit", "print_color", "size"]
 

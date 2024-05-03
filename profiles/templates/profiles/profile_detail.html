@@ -70,10 +70,10 @@
   </div>
   {% endif %}
 </div>
+{% if request.user.tshirt_requests.all %}
 <hr>
 <div class="form-header">
   <h2>T-Shirts</h2>
-  {% if request.user.tshirt_requests.all %}
   <p>Your T-Shirt requests</p>
   <div class="table-container">
     <table>
@@ -87,16 +87,12 @@
       </tr>
       {% endfor %}
     </table>
-    <p><a class="submit-button" href="{% url 'shirt_interest' %}">Request another</a></p>
   </div>
-  {% else %}
-  <p>Interested in a PBA T-Shirt?</p>
-  <p><a class="submit-button" href="{% url 'shirt_interest' %}">Let us know!</a></p>
-  {% endif %}
   <div style="font-size: smaller;">
     <p>We anticipate that shirts will cost $20-$30 depending on our final order size.</p>
     <p>This will include covering the cost of printing and a small fundraiser for PBA.</p>
-    <p>We will confirm your order and collect payment before placing the order.</p>
+    <p>We will confirm your order and collect payment after placing the order.</p>
   </div>
 </div>
+{% endif %}
 {% endblock %}
