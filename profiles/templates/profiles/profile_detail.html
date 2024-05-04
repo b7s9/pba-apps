@@ -83,7 +83,7 @@
         <td>{% if tshirt_request.fit == 0 %}Unisex{% elif tshirt_request.fit == 1 %}Crop{% else %}?{% endif %}</td>
         <td>{{ tshirt_request.get_size_display }}</td>
         <td>{{ tshirt_request.get_print_color_display }}</td>
-        <td><a href="{% url 'shirt_interest_delete' pk=tshirt_request.id %}">Delete</a></td>
+        <td>{% if not tshirt_request.paid %}<a href="{% url 'shirt_pay' shirt_id=tshirt_request.id %}">Pay</a>{% else %}<span style="color: #83BD56;">Paid</span>{% endif %}</td>
       </tr>
       {% endfor %}
     </table>
