@@ -45,6 +45,7 @@ SECRET_KEY = env(
     "DJANGO_SECRET_KEY",
     default="django-insecure-l+*3%+le)@z#dwiv5x7(kw#hp&qqa$tkzf)gdm%%e)m^02c5w6",
 )
+SECRET_KEY_FALLBACKS = env.list("DJANGO_SECRET_KEY_FALLBACKS", default=[])
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool("DEBUG", default=False)
