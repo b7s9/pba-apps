@@ -20,9 +20,9 @@ from interactions.api.events import Startup
 
 EMBED_TITLE = "Neighborhood Selection"
 EMBED_DESCRIPTION = """
-Use the buttons below to join or leave neighborhood channels!
+This is the Neighborhood Selection Panel. Click on each neighborhood button to enter its chat channel. There is no limit to the amount of neighborhood chat channels you can join.
 
-To request a neighborhood, use the `/neighborhood` command!
+If you don’t see your neighborhood here and want to start the channel, use the `/neighborhood` command to request a new one!
 """
 
 
