@@ -19,11 +19,14 @@ from interactions import (
 from interactions.api.events import Startup
 
 EMBED_TITLE = "Neighborhood Selection"
-EMBED_DESCRIPTION = """
-This is the Neighborhood Selection Panel. Click on each neighborhood button to enter its chat channel. There is no limit to the amount of neighborhood chat channels you can join.
-
-If you don’t see your neighborhood here and want to start the channel, use the `/neighborhood` command to request a new one!
-"""
+EMBED_DESCRIPTION = (
+    "This is the Neighborhood Selection Panel. "
+    "Click on each neighborhood button to enter its chat channel. "
+    "There is no limit to the amount of neighborhood chat channels you can join."
+    "\n"
+    "If you don’t see your neighborhood here and want to start the channel, "
+    "use the `/neighborhood` command to request a new one!"
+)
 
 
 class NeighborhoodSelection(Extension):
@@ -90,7 +93,9 @@ class NeighborhoodSelection(Extension):
 
         guild = await bot.fetch_guild(settings.NEIGHBORHOOD_SELECTION_DISCORD_GUILD_ID)
         BUTTONS = []
-        for neighborhood in await sync_to_async(list)(Neighborhood.objects.filter(approved=True)):
+        for neighborhood in await sync_to_async(list)(
+            Neighborhood.objects.filter(approved=True).order_by("-featured")
+        ):
             role = await guild.fetch_role(neighborhood.discord_role_id, force=True)
             label = neighborhood.name
             if len(role.members) == 1:
@@ -99,7 +104,7 @@ class NeighborhoodSelection(Extension):
                 label = f"{neighborhood.name} ({len(role.members)} 👥)"
             BUTTONS.append(
                 Button(
-                    style=ButtonStyle.PRIMARY,
+                    style=ButtonStyle.PRIMARY if neighborhood.featured else ButtonStyle.SECONDARY,
                     label=label,
                     custom_id=f"neighborhood_selection_{neighborhood.id}",
                 )

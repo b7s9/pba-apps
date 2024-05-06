@@ -4,8 +4,8 @@ from neighborhood_selection.models import Neighborhood
 
 
 class NeighborhoodAdmin(admin.ModelAdmin):
-    list_display = ["name", "approved"]
-    list_filter = ["approved"]
+    list_display = ["name", "approved", "featured"]
+    list_filter = ["approved", "featured"]
     ordering = ["approved", "name"]
 
     def get_readonly_fields(self, request, obj=None):

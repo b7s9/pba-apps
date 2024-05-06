@@ -12,6 +12,7 @@ class Neighborhood(models.Model):
     discord_channel_id = models.CharField(max_length=64, null=True, blank=True)
     requests = models.IntegerField(blank=False, default=0)
     approved = models.BooleanField(blank=False, default=False)
+    featured = models.BooleanField(blank=False, default=False)
 
     name = models.CharField(max_length=512)
 
