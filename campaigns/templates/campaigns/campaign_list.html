@@ -3,6 +3,17 @@
 {% block content %}
 <div class="campaigns-container">
 {% for campaign in object_list %}
+  {% if campaign.status == "draft" %}
+  {% if request.user.is_staff %}
+  <div class="campaign-card">
+    <a href="{% url 'campaign' slug=campaign.slug %}">
+      <h2>{{ campaign.title }} - <span style="color: red;"><b>DRAFT</b></span></h2>
+      <img class="campaign-card-img" src="{{ campaign.cover.url }}">
+      <p>{{ campaign.description }}</p>
+    </a>
+  </div>
+  {% endif %}
+  {% else %}
   <div class="campaign-card">
     <a href="{% url 'campaign' slug=campaign.slug %}">
       <h2>{{ campaign.title }}</h2>
@@ -10,6 +21,7 @@
       <p>{{ campaign.description }}</p>
     </a>
   </div>
+  {% endif %}
 {% endfor %}
 </div>
 {% endblock %}

@@ -14,6 +14,7 @@ from pbaabp.models import ChoiceArrayField, MarkdownField
 
 class Campaign(models.Model):
     class Status(models.TextChoices):
+        DRAFT = "draft"
         ACTIVE = "active"
         COMPLETED = "completed"
         CANCELED = "canceled"
