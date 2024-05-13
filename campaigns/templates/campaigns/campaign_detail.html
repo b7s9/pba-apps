@@ -18,7 +18,7 @@
     </div>
 </div>
 <div class="campaign-container">
-{% if campaign.petitions.all or campaign.events.all %}
+{% if campaign.has_actions %}
   <div class="button-holder">
     <a href="#action" class="cta-button submit-button" >Take Action Now!</a>
   </div>
@@ -26,9 +26,30 @@
 
 {{ campaign.content_rendered|safe }}
 
-{% if campaign.petitions.all or campaign.events.all %}
+{% if campaign.has_actions %}
 <span id="action"></span>
 <h2>Take Action Now!</h2>
+{% endif %}
+{% if campaign.donation_action %}
+  <div id="donation" class="button-holder">
+    <h2>Make a donation</h2>
+    <a href="{% url 'create_one_time_donation_checkout_session' %}" class="cta-button submit-button">Donate Now!</a>
+  </div>
+{% endif %}
+{% if campaign.subscription_action %}
+  {% with request.user.djstripe_customers.first as customer %}
+  {% if customer.active_subscriptions.all %}
+  <div id="subscription" class="button-holder">
+    <h2>🎉 Thank you for being a supporter 🎉</h2>
+    <a class="submit-button" href="{% url 'profile' %}">Manage your recurring donation</a>
+  </div>
+  {% else %}
+  <div id="subscription" class="button-holder">
+    <h2>Become a monthly supporter</h2>
+    <a href="{% url 'setup_recurring_donation' %}" class="cta-button submit-button">Become a Supporter!</a>
+  </div>
+  {% endif %}
+  {% endwith %}
 {% endif %}
 {% if campaign.events.all %}
   <h3>Attend an event</h3>

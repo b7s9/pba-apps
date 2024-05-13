@@ -42,12 +42,24 @@ class Campaign(models.Model):
     description = models.TextField(null=True, blank=True)
     cover = models.ImageField(upload_to="campaigns", null=True, blank=True)
 
+    donation_action = models.BooleanField(default=False)
+    subscription_action = models.BooleanField(default=False)
+
     content = MarkdownField(rendered_field="content_rendered", validator=VALIDATOR_NULL)
     content_rendered = RenderedMarkdownField()
 
     wordpress_id = models.CharField(max_length=64, null=True, blank=True)
 
     events = models.ManyToManyField(ScheduledEvent, blank=True, null=True)
+
+    @property
+    def has_actions(self):
+        return (
+            self.petitions.count()
+            or self.events.count()
+            or self.donation_action
+            or self.subscription_action
+        )
 
     def future_events(self):
         return self.events.filter(start_datetime__gt=timezone.now())

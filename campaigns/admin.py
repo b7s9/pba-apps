@@ -14,6 +14,14 @@ class CampaignAdmin(admin.ModelAdmin):
     formfield_overrides = {MarkdownField: {"widget": MarkdownEditorWidget}}
     autocomplete_fields = ["events"]
 
+    def get_form(self, *args, **kwargs):
+        help_texts = {
+            "donation_action": "Encourage one-time donation",
+            "subscription_action": "Encourage recurring donation",
+        }
+        kwargs.update({"help_texts": help_texts})
+        return super().get_form(*args, **kwargs)
+
 
 class PetitionAdmin(admin.ModelAdmin):
     pass
