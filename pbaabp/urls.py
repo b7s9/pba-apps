@@ -9,6 +9,7 @@ urlpatterns = [
     path("accounts/", include("allauth.urls")),
     path("accounts/profile/", include("profiles.urls")),
     path("events/", include("events.urls")),
+    path("release/", include("release.urls")),
     path("donations/", include("membership.urls")),
     path("campaigns/", include("campaigns.urls")),
     path("stripe/", include("djstripe.urls", namespace="djstripe")),

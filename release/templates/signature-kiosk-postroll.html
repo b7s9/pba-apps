@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block header %}
+{% comment %}
+Do not show the header on signature page.
+{% endcomment %}
+{% endblock %}
+{% block footer %}
+{% comment %}
+Do not show the footer on signin page.
+{% endcomment %}
+{% endblock %}
+{% block content %}
+<div class="form-header">
+  <img src="https://bikeaction.org/wp-content/uploads/2023/07/Sticker_Print_Green.svg">
+  <h1>Thank you for signing {{ release.title }}!</h1>
+  <p>Page will reload in <span id="countdown">5</span>...</p>
+</div>
+<script>
+  var time = 4;
+  setInterval(function() {
+      document.getElementById("countdown").innerHTML = time;
+      time--;
+      if (time == 0) {
+          window.location.href = "{% url 'release_signature' release_slug_or_id=release.slug %}?kiosk=1";
+      }
+  }, 1000);
+</script>
+{% endblock %}

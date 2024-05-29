@@ -89,6 +89,7 @@ INSTALLED_APPS = [
     "events",
     "neighborhood_selection",
     "campaigns",
+    "release",
 ]
 
 MIDDLEWARE = [
@@ -132,6 +133,7 @@ ASGI_APPLICATION = "pbaabp.asgi.application"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {"default": env.db("DATABASE_URL")}
+DATABASES["default"]["ATOMIC_REQUESTS"] = True
 
 
 # Authentication

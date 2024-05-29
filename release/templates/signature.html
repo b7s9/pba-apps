@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block header %}
+{% comment %}
+Do not show the header on signin page.
+{% endcomment %}
+{% endblock %}
+{% block footer %}
+{% comment %}
+Do not show the footer on signin page.
+{% endcomment %}
+{% endblock %}
+{% block content %}
+<div class="form-header">
+  <img src="https://bikeaction.org/wp-content/uploads/2023/07/Sticker_Print_Green.svg">
+  <h1>{{ release.title }}</h1>
+  <div class="release-text">
+    {{ release.release_rendered|safe }}
+  </div>
+</div>
+<div class="form-container">
+  <form method="post">
+  {% csrf_token %}
+
+  {{ form.non_field_errors }}
+
+  {% for hidden_field in form.hidden_fields %}
+    {{ hidden_field.errors }}
+    {{ hidden_field }}
+  {% endfor %}
+
+  <div class="form-fields">
+  {% for field in form.visible_fields %}
+    <p>
+      {{ field.label_tag }}
+      {{ field.errors }}
+      {{ field }}
+      <p class="helptext">{{ field.help_text }}</p>
+    </p>
+  {% endfor %}
+  </div>
+
+  <div class="button-holder">
+    <input class="submit-button" type="submit" value="Sign Release">
+  </div>
+  </form>
+</div>
+{% endblock %}
