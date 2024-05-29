@@ -1,8 +1,10 @@
 import uuid
 
+from django.db import transaction
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 
+from pbaabp.tasks import subscribe_to_newsletter
 from release.forms import ReleaseSignatureForm
 from release.models import Release
 
@@ -38,6 +40,13 @@ def release_signature(request, release_slug_or_id):
     if request.method == "POST":
         form = ReleaseSignatureForm(request.POST)
         if form.is_valid():
+            if form.cleaned_data["newsletter_opt_in"]:
+                transaction.on_commit(
+                    lambda: subscribe_to_newsletter.delay(
+                        form.instance.email, tags=["release-signature", f"release-{release.slug}"]
+                    )
+                )
+
             form.instance.release = release
             form.save()
 

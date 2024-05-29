@@ -1,10 +1,18 @@
-from django.forms import ModelForm
+from django.forms import BooleanField, ModelForm
 from django.forms.widgets import DateInput
 
 from release.models import ReleaseSignature
 
 
 class ReleaseSignatureForm(ModelForm):
+
+    newsletter_opt_in = BooleanField(
+        required=False,
+        help_text="Check this box to receive our bi-weekly newsletter",
+        label="Subscribe to PBA newsletter",
+        initial=True,
+    )
+
     class Meta:
         model = ReleaseSignature
         fields = [
@@ -12,6 +20,7 @@ class ReleaseSignatureForm(ModelForm):
             "nickname",
             "dob",
             "email",
+            "newsletter_opt_in",
         ]
         labels = {
             "dob": "Date of birth",

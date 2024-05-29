@@ -13,6 +13,7 @@ Do not show the footer on signin page.
 <div class="form-header">
   <img src="https://bikeaction.org/wp-content/uploads/2023/07/Sticker_Print_Green.svg">
   <h1>{{ release.title }}</h1>
+  <h2>Release</h2>
   <div class="release-text">
     {{ release.release_rendered|safe }}
   </div>
@@ -37,6 +38,11 @@ Do not show the footer on signin page.
       <p class="helptext">{{ field.help_text }}</p>
     </p>
   {% endfor %}
+  </div>
+
+  <div>
+    <br>
+    <p style="width: 100%; text-align: center;">By submitting this form you agree to the above release</p>
   </div>
 
   <div class="button-holder">
