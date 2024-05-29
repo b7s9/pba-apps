@@ -662,3 +662,15 @@ body {
   -webkit-transition-duration: 1s;
   -webkit-transition-property: opacity;
 }
+
+
+.release-text {
+  font-family: monospace;
+  font-size: 1.25em;
+  text-align: justify;
+  line-height: 1.5em;
+  padding: 1em;
+  border-radius: 1em;
+  border: 1px solid black;
+  background-color: #efefef;
+}
