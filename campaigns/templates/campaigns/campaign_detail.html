@@ -23,6 +23,9 @@
     <a href="#action" class="cta-button submit-button" >Take Action Now!</a>
   </div>
 {% endif %}
+{% if campaign.status == "completed" %}
+<p style="font-size: smaller; color: grey; width: 100%; text-align: center;">This campaign has been completed.</p>
+{% endif %}
 
 {{ campaign.content_rendered|safe }}
 

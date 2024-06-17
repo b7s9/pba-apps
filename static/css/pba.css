@@ -567,6 +567,7 @@ body {
 
 .campaign-card {
   flex: 1 1 18em;
+  max-width: 30em;
   padding: 1em;
   border: 1px solid black;
   border-radius: 1em;
