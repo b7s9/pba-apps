@@ -251,13 +251,13 @@ box-icon {
 /* Page Content */
 
 .content-container {
-  width: 80%;
+  width: 90%;
   margin: 0 auto;
   margin-bottom: 1em;
 }
 @media screen and (max-width: 40rem) {
   .content-container {
-    width: 90%;
+    width: 95%;
   }
 }
 
@@ -559,14 +559,20 @@ body {
 
 .campaigns-container {
   display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  margin-top: 1em;
 }
 
 .campaign-card {
-  width: 45%;
+  flex: 1 1 18em;
   padding: 1em;
   border: 1px solid black;
   border-radius: 1em;
-  margin: .5em;
+  margin-bottom: 1em;
+  margin-left: .5em;
+  margin-right: .5em;
 }
 
 .campaign-card a {
@@ -576,6 +582,10 @@ body {
 
 .campaign-card img {
   width: 100%;
+}
+
+.campaign-content, img {
+  max-width: 100%;
 }
 
 .events-container {

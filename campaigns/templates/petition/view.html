@@ -1,0 +1,22 @@
+<div class="">
+  <h3>Petition</h3>
+
+  <div class="petition-preview-email">
+    <table>
+      <tr><td>Subject:</td><td><b>{{ petition.email_subject }}</b></td></tr>
+      <tr><td>To:</td><td>{{ petition.email_to|join:', ' }}</td></tr>
+      {% if petition.email_cc %}<tr><td>Cc:</td><td>{{ petition.email_cc|join:', ' }}</td></tr>{% endif %}
+      <tr><td>From:</td><td><span><span id="previewFromFirstName">Petition</span> <span id="previewFromLastName">Signer</span></span> &lt;noreply@bikeaction.org&gt;</td></tr>
+      <tr><td>Reply-To:</td><td><span id="previewEmail">signer@example.com</span>, info@bikeaction.org</td></tr>
+      <tr></tr>
+      <tr></tr>
+      <tr>
+        <td colspan=2>
+          {{ petition.email_body|linebreaks }}<br>
+          - <span><span id="previewFirstName">Petition</span> <span id="previewLastName">Signer</span></span>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+</div>

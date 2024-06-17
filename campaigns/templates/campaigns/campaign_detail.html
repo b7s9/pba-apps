@@ -18,7 +18,7 @@
     </div>
 </div>
 <div class="campaign-container">
-{% if campaign.has_actions %}
+{% if campaign.has_actions and not campaign.status == "completed" %}
   <div class="button-holder">
     <a href="#action" class="cta-button submit-button" >Take Action Now!</a>
   </div>
@@ -26,7 +26,7 @@
 
 {{ campaign.content_rendered|safe }}
 
-{% if campaign.has_actions %}
+{% if campaign.has_actions and not campaign.status == "completed" %}
 <span id="action"></span>
 <h2>Take Action Now!</h2>
 {% endif %}
@@ -36,7 +36,7 @@
     <a href="{% url 'create_one_time_donation_checkout_session' %}" class="cta-button submit-button">Donate Now!</a>
   </div>
 {% endif %}
-{% if campaign.subscription_action %}
+{% if campaign.subscription_action and not campaign.status == "completed" %}
   {% with request.user.djstripe_customers.first as customer %}
   {% if customer.active_subscriptions.all %}
   <div id="subscription" class="button-holder">
@@ -51,7 +51,7 @@
   {% endif %}
   {% endwith %}
 {% endif %}
-{% if campaign.events.all %}
+{% if campaign.events.all and not campaign.status == "completed" %}
   <h3>Attend an event</h3>
   <div id="events">
     {% for event in campaign.future_events.all|dictsort:"start_datetime" %}
@@ -61,7 +61,7 @@
     {% endfor %}
   </div>
 {% endif %}
-{% if campaign.petitions.all %}
+{% if campaign.petitions.all and not campaign.status == "completed" %}
   <h3>Sign {% if campaign.petitions.all|length > 1 %}a{% else %}the{% endif %} petition</h3>
   <div id="petitions">
   {% for petition in campaign.petitions.all %}
@@ -70,7 +70,20 @@
     </div>
     {% if petition.signatures.all %}
     <div class="fade-transition" hx-get="{% url 'petition_signatures' petition_slug_or_id=petition.id %}" hx-trigger="every 5s" hx-swap="innerHTML transition:true">
-    {% include 'campaigns/_partial_signatures.html' %}
+      {% include 'campaigns/_partial_signatures.html' %}
+    </div>
+    {% endif %}
+  {% endfor %}
+  </div>
+{% elif campaign.petitions.all and campaign.status == "completed" %}
+  <div id="petitions">
+  {% for petition in campaign.petitions.all %}
+    <div class="petition">
+      {% include 'petition/view.html' with petition=petition form=petition.form %}
+    </div>
+    {% if petition.signatures.all %}
+    <div>
+      {% include 'campaigns/_partial_signatures.html' %}
     </div>
     {% endif %}
   {% endfor %}
