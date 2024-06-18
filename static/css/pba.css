@@ -269,6 +269,11 @@ box-icon {
   background-color: black;
   color: white;
   margin-top: auto;
+  text-shadow:
+    -1px -1px 0 #555,
+    1px -1px 0 #555,
+    -1px 1px 0 #555,
+    1px 1px 0 #555;
 }
 
 .footer .footer-row {
@@ -379,9 +384,9 @@ form #id_donation_tier > div {
   appearance: button;
   background-color: #83BD56;
   background-image: none;
-  border: 1px solid #000;
+  border: 1px solid #555;
   border-radius: 4px;
-  box-shadow: #fff 4px 4px 0 0,#000 4px 4px 0 1px;
+  box-shadow: #fff 4px 4px 0 0,#555 4px 4px 0 1px;
   box-sizing: border-box;
   color: #fff;
   cursor: pointer;
@@ -401,6 +406,11 @@ form #id_donation_tier > div {
   -webkit-user-select: none;
   vertical-align: middle;
   white-space: nowrap;
+  text-shadow:
+    -1px -1px 0 #555,
+    1px -1px 0 #555,
+    -1px 1px 0 #555,
+    1px 1px 0 #555;
 }
 
 .submit-button:focus, button:focus {
@@ -417,7 +427,7 @@ form #id_donation_tier > div {
 }
 
 .submit-button:not([disabled]):active, button:not([disabled]):active {
-  box-shadow: #fff 2px 2px 0 0, #000 2px 2px 0 1px;
+  box-shadow: #fff 2px 2px 0 0, #555 2px 2px 0 1px;
   transform: translate(2px, 2px);
 }
 
