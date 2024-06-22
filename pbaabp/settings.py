@@ -65,6 +65,20 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # Wagtail
+    "wagtail.contrib.forms",
+    "wagtail.contrib.redirects",
+    "wagtail.embeds",
+    "wagtail.sites",
+    "wagtail.users",
+    "wagtail.snippets",
+    "wagtail.documents",
+    "wagtail.images",
+    "wagtail.search",
+    "wagtail.admin",
+    "wagtail",
+    "modelcluster",
+    "taggit",
     # Addons
     "allauth",
     "allauth.account",
@@ -90,6 +104,7 @@ INSTALLED_APPS = [
     "neighborhood_selection",
     "campaigns",
     "release",
+    "cms",
 ]
 
 MIDDLEWARE = [
@@ -103,6 +118,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "allauth.account.middleware.AccountMiddleware",
     "django_htmx.middleware.HtmxMiddleware",
+    "wagtail.contrib.redirects.middleware.RedirectMiddleware",
     "pbaabp.middleware.TimezoneMiddleware",
 ]
 
@@ -184,6 +200,9 @@ STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
 
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
+
 STORAGES = {
     "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
     "staticfiles": {
@@ -237,6 +256,9 @@ DEFAULT_FROM_EMAIL = env(
 )
 # https://docs.djangoproject.com/en/dev/ref/settings/#server-email
 SERVER_EMAIL = env("DJANGO_SERVER_EMAIL", default=DEFAULT_FROM_EMAIL)
+
+# Wagtail
+WAGTAIL_SITE_NAME = "Philly Bike Action!"
 
 # Discord
 DISCORD_BOT_TOKEN = env("DISCORD_BOT_TOKEN")
