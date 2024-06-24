@@ -327,6 +327,8 @@ NEIGHBORHOOD_SELECTION_NOTIFICATION_DISCORD_CHANNEL_ID = env(
 )
 
 # django-admin-csvexport
+# https://github.com/thomst/django-admin-csvexport/issues/3
+DATA_UPLOAD_MAX_NUMBER_FIELDS = None
 CSV_EXPORT_FORMAT_FORM = False
 CSV_EXPORT_DELIMITER = ","
 CSV_EXPORT_ESCAPECHAR = '"'
