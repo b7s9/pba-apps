@@ -72,6 +72,7 @@ class ShirtInterest(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="tshirt_requests")
     paid = models.BooleanField(default=False)
+    fulfilled = models.BooleanField(default=False)
 
     fit = models.IntegerField(null=False, blank=False, choices=Fit.choices)
     size = models.IntegerField(null=False, blank=False, choices=Size.choices)

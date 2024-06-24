@@ -25,11 +25,17 @@ class ProfileAdmin(admin.ModelAdmin):
             )
 
 
+@admin.action(description="Mark selected shirts as fulfilled")
+def make_fulfilled(modeladmin, request, queryset):
+    queryset.update(fulfilled=True)
+
+
 class ShirtInterestAdmin(admin.ModelAdmin):
-    list_display = ["user", "paid", "fit", "size", "print_color"]
-    list_filter = ["paid", "fit", "size", "print_color"]
+    list_display = ["user", "paid", "fulfilled", "fit", "size", "print_color"]
+    list_filter = ["paid", "fulfilled", "fit", "size", "print_color"]
     search_fields = ["user__first_name", "user__last_name", "user__email"]
     autocomplete_fields = ("user",)
+    actions = [make_fulfilled]
 
 
 admin.site.register(Profile, ProfileAdmin)
