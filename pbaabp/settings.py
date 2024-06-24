@@ -66,6 +66,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     # Wagtail
+    "wagtail_localize",
+    "wagtail_localize.locales",
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
     "wagtail.embeds",
@@ -118,6 +120,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "allauth.account.middleware.AccountMiddleware",
     "django_htmx.middleware.HtmxMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
     "wagtail.contrib.redirects.middleware.RedirectMiddleware",
     "pbaabp.middleware.TimezoneMiddleware",
 ]
@@ -187,6 +190,12 @@ LANGUAGE_CODE = "en-us"
 TIME_ZONE = "America/New_York"
 
 USE_I18N = True
+
+WAGTAIL_I18N_ENABLED = True
+WAGTAIL_CONTENT_LANGUAGES = LANGUAGES = [
+    ("en", "English"),
+    ("es", "Spanish"),
+]
 
 USE_TZ = True
 

@@ -37,7 +37,9 @@ beautifulsoup4==4.12.3
 billiard==4.2.0
     # via celery
 bleach[css]==6.1.0
-    # via django-markdownfield
+    # via
+    #   bleach
+    #   django-markdownfield
 boto3==1.34.130
     # via django-storages
 botocore==1.34.130
@@ -116,6 +118,7 @@ django==4.2.13
     #   laces
     #   sentry-sdk
     #   wagtail
+    #   wagtail-localize
 django-admin-csvexport==2.2
     # via -r requirements/base.in
 django-allauth[mfa]==0.63.3
@@ -209,6 +212,8 @@ pillow==10.3.0
     #   wagtail
 pillow-heif==0.16.0
     # via willow
+polib==1.2.0
+    # via wagtail-localize
 prompt-toolkit==3.0.47
     # via click-repl
 psycopg2-binary==2.9.9
@@ -270,7 +275,9 @@ tinycss2==1.2.1
 tomli==2.0.1
     # via discord-py-interactions
 twisted[tls]==24.3.0
-    # via daphne
+    # via
+    #   daphne
+    #   twisted
 txaio==23.1.1
     # via autobahn
 typing-extensions==4.12.2
@@ -279,6 +286,7 @@ typing-extensions==4.12.2
     #   emoji
     #   qrcode
     #   twisted
+    #   wagtail-localize
 tzdata==2024.1
     # via celery
 urllib3==2.2.2
@@ -292,6 +300,10 @@ vine==5.1.0
     #   celery
     #   kombu
 wagtail==6.1.2
+    # via
+    #   -r requirements/base.in
+    #   wagtail-localize
+wagtail-localize==1.9
     # via -r requirements/base.in
 wcwidth==0.2.13
     # via prompt-toolkit
