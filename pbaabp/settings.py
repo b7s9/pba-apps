@@ -104,6 +104,7 @@ INSTALLED_APPS = [
     "neighborhood_selection",
     "campaigns",
     "release",
+    "maillinks",
     "cms",
 ]
 
