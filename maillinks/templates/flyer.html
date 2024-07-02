@@ -169,8 +169,8 @@ pre:lang(email) {
 </head>
 <body>
 <h1>{{ maillink.title }}</h1>
-{% if maillink.call_to_action %}
-<p>{{ maillink.call_to_action }}</p>
+{% if maillink.description%}
+<p style="font-size: larger;">{{ maillink.description }}</p>
 {% endif %}
 <div class="email-container">
 <div class="email">
