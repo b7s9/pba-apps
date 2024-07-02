@@ -2,6 +2,7 @@ import uuid
 from urllib.parse import quote, urlencode
 
 from django.db import models
+from django.urls import reverse
 from django.utils.text import slugify
 
 
@@ -26,6 +27,12 @@ class MailLink(models.Model):
         if self.slug is None:
             self.slug = slugify(self.title)[:49]
         super(MailLink, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return self.title
+
+    def get_absolute_url(self):
+        return reverse("maillink_view", kwargs={"slug": self.slug})
 
     @property
     def link(self):
