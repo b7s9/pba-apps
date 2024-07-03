@@ -109,7 +109,7 @@ class NeighborhoodSelection(Extension):
                     custom_id=f"neighborhood_selection_{neighborhood.id}",
                 )
             )
-        BUTTON_LIMIT = 5
+        BUTTON_LIMIT = 4
         button_groups = [
             BUTTONS[i : (i + BUTTON_LIMIT)]  # noqa: E203
             for i in range(0, len(BUTTONS), BUTTON_LIMIT)
