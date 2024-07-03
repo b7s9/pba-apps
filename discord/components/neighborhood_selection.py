@@ -1,4 +1,3 @@
-import asyncio
 import re
 
 from asgiref.sync import sync_to_async
@@ -15,6 +14,7 @@ from interactions import (
     listen,
     slash_command,
     slash_option,
+    spread_to_rows,
 )
 from interactions.api.events import Startup
 
@@ -109,9 +109,9 @@ class NeighborhoodSelection(Extension):
                     custom_id=f"neighborhood_selection_{neighborhood.id}",
                 )
             )
-        BUTTON_LIMIT = 4
+        BUTTON_LIMIT = 24
         button_groups = [
-            BUTTONS[i : (i + BUTTON_LIMIT)]  # noqa: E203
+            spread_to_rows(*BUTTONS[i : (i + BUTTON_LIMIT)], max_in_row=4)  # noqa: E203
             for i in range(0, len(BUTTONS), BUTTON_LIMIT)
         ]
 
