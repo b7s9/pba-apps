@@ -1,3 +1,4 @@
+import asyncio
 import re
 
 from asgiref.sync import sync_to_async
@@ -14,7 +15,6 @@ from interactions import (
     listen,
     slash_command,
     slash_option,
-    spread_to_rows,
 )
 from interactions.api.events import Startup
 
@@ -94,7 +94,7 @@ class NeighborhoodSelection(Extension):
         guild = await bot.fetch_guild(settings.NEIGHBORHOOD_SELECTION_DISCORD_GUILD_ID)
         BUTTONS = []
         for neighborhood in await sync_to_async(list)(
-            Neighborhood.objects.filter(approved=True).order_by("-featured")
+            Neighborhood.objects.filter(approved=True).order_by("-featured", "name")
         ):
             role = await guild.fetch_role(neighborhood.discord_role_id, force=True)
             label = neighborhood.name
@@ -109,20 +109,36 @@ class NeighborhoodSelection(Extension):
                     custom_id=f"neighborhood_selection_{neighborhood.id}",
                 )
             )
-        if BUTTONS:
-            components = spread_to_rows(*BUTTONS)
+        BUTTON_LIMIT = 5
+        button_groups = [
+            BUTTONS[i : (i + BUTTON_LIMIT)]  # noqa: E203
+            for i in range(0, len(BUTTONS), BUTTON_LIMIT)
+        ]
 
         embed = Embed(
             title=EMBED_TITLE,
             description=EMBED_DESCRIPTION,
         )
         channel = await bot.fetch_channel(selection_channel)
-        async for message in channel.history():
+        intro_exists = False
+        button_groups_i = iter(button_groups)
+        button_groups_exist = [False for bg in button_groups]
+        bg_i = 0
+        history = await channel.history().flatten()
+        for message in reversed(history):
             if len(message.embeds) == 1 and message.embeds[0].title == EMBED_TITLE:
                 print("updating embed...")
-                await message.edit(content=None, embeds=[embed], components=components)
-                return
-        await bot.get_channel(selection_channel).send(None, embeds=[embed], components=components)
+                await message.edit(content=None, embeds=[embed])
+                intro_exists = True
+            elif len(message.embeds) == 0 and len(message.components) > 0:
+                await message.edit(content=None, components=next(button_groups_i))
+                button_groups_exist[bg_i] = True
+                bg_i += 1
+        if not intro_exists:
+            await bot.get_channel(selection_channel).send(None, embeds=[embed])
+        for i, button_group in enumerate(button_groups):
+            if not button_groups_exist[i]:
+                await bot.get_channel(selection_channel).send(None, components=button_groups[i])
 
     @listen(Startup)
     async def startup(self):
