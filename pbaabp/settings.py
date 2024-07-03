@@ -327,6 +327,10 @@ NEIGHBORHOOD_SELECTION_NOTIFICATION_DISCORD_CHANNEL_ID = env(
     "NEIGHBORHOOD_SELECTION_NOTIFICATION_DISCORD_CHANNEL_ID", default=None
 )
 
+# Discord Connected
+DISCORD_CONNECTED_GUILD_ID = env("DISCORD_CONNECTED_GUILD_ID", default=None)
+DISCORD_CONNECTED_ROLE_ID = env("DISCORD_CONNECTED_ROLE_ID", default=None)
+
 # django-admin-csvexport
 # https://github.com/thomst/django-admin-csvexport/issues/3
 DATA_UPLOAD_MAX_NUMBER_FIELDS = None
