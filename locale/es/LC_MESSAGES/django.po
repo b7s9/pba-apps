@@ -3,129 +3,131 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-03 10:07-0400\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"PO-Revision-Date: 2024-07-03 14:35+0000\n"
+"Last-Translator: Weblate Admin <admin@example.com>\n"
+"Language-Team: Spanish <http://weblate.example.com/projects/"
+"philly-bike-action/apps-django-strings/es/>\n"
+"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.6.2\n"
 
 #: campaigns/templates/campaigns/_partial_signatures.html:14
 #, python-format
 msgid "%(petition.comments)s Comments"
-msgstr ""
+msgstr "%(petition.comments)s Comentarios"
 
 #: campaigns/templates/campaigns/_partial_signatures.html:15
 msgid "Recent comments..."
-msgstr ""
+msgstr "Comentarios recientes…"
 
 #: campaigns/templates/campaigns/campaign_detail.html:23
 #: campaigns/templates/campaigns/campaign_detail.html:34
 msgid "Take Action Now!"
-msgstr ""
+msgstr "¡Tomar medidas ahora!"
 
 #: campaigns/templates/campaigns/campaign_detail.html:27
 msgid "This campaign has been completed."
-msgstr ""
+msgstr "Esta campaña ha sido completada."
 
 #: campaigns/templates/campaigns/campaign_detail.html:38
 msgid "Make a donation"
-msgstr ""
+msgstr "Haz una donación"
 
 #: campaigns/templates/campaigns/campaign_detail.html:39
 msgid "Donate Now!"
-msgstr ""
+msgstr "¡Done ahora!"
 
 #: campaigns/templates/campaigns/campaign_detail.html:46
 msgid "🎉 Thank you for being a supporter 🎉"
-msgstr ""
+msgstr "🎉 Gracias por ser una partidaria 🎉"
 
 #: campaigns/templates/campaigns/campaign_detail.html:47
 msgid "Manage your recurring donation"
-msgstr ""
+msgstr "Gestiona tu donación recurrente"
 
 #: campaigns/templates/campaigns/campaign_detail.html:51
 msgid "Become a monthly supporter"
-msgstr ""
+msgstr "Conviértete en una partidaria mensual"
 
 #: campaigns/templates/campaigns/campaign_detail.html:52
 msgid "Become a Supporter!"
-msgstr ""
+msgstr "¡Conviértete en un seguidor!"
 
 #: campaigns/templates/campaigns/campaign_detail.html:58
 msgid "Attend an event"
-msgstr ""
+msgstr "Asistir a un evento"
 
 #: campaigns/templates/campaigns/campaign_detail.html:68
 msgid "Sign the petition"
 msgid_plural "Sign a petition"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Firma la petición"
+msgstr[1] "Firmar una petición"
 
 #: campaigns/templates/campaigns/campaign_list.html:21
 msgid "DRAFT"
-msgstr ""
+msgstr "BORRADOR"
 
 #: campaigns/templates/petition/form.html:31
 msgid "This is a preview of the email that will be sent when you submit:"
 msgstr ""
+"Esta es una vista previa del correo electrónico que se enviará cuando envíe:"
 
 #: campaigns/templates/petition/sign.html:10
 msgid "Sign this petition!"
-msgstr ""
+msgstr "¡Firma esta peticion!"
 
 #: campaigns/templates/petition/view.html:3
 msgid "Petition"
-msgstr ""
+msgstr "Petición"
 
 #: events/templates/signin-kiosk-postroll.html:10
 #, python-format
 msgid "Thanks for signing in to Philly Bike Action %(event.title)s!"
-msgstr ""
+msgstr "¡Gracias por iniciar sesión en Philly Bike Action %(event.title)s!"
 
 #: events/templates/signin-kiosk-postroll.html:13
 msgid "Page will reload in"
-msgstr ""
+msgstr "La página se recargará en"
 
 #: events/templates/signin.html:15
 #, python-format
 msgid "Welcome to Philly Bike Action %(event.title)s"
-msgstr ""
+msgstr "Bienvenido a Philly Bike Action %(event.title)s"
 
 #: events/templates/signin.html:16
 msgid "Sign in to let us know a little more about you!"
-msgstr ""
+msgstr "¡Inicia sesión para contarnos un poco más sobre ti!"
 
 #: events/templates/signin.html:41
 msgid "Sign me in!"
-msgstr ""
+msgstr "¡Apuntame dentro!"
 
 #: membership/templates/_donation_history_partial.html:11
 #: profiles/templates/profiles/_donations_partial.html:29
 msgid "recurring"
-msgstr ""
+msgstr "periódica"
 
 #: membership/templates/_donation_history_partial.html:11
 #: profiles/templates/profiles/_donations_partial.html:29
 msgid "one-time"
-msgstr ""
+msgstr "una vez"
 
 #: membership/templates/change_recurring_donation.html:5
 msgid "Change Recurring Donation"
-msgstr ""
+msgstr "Cambiar donación recurrente"
 
 #: membership/templates/change_recurring_donation.html:28
 #: membership/templates/setup_recurring_donation.html:29
 msgid "Submit!"
-msgstr ""
+msgstr "¡Entregar!"
 
 #: membership/templates/checkout_session.html:14
 #: membership/templates/checkout_session.html:16
@@ -135,177 +137,184 @@ msgstr ""
 #: profiles/templates/tshirt_checkout_session.html:14
 #: profiles/templates/tshirt_checkout_session.html:16
 msgid "⬅️ Go Back"
-msgstr ""
+msgstr "⬅️ Volver"
 
 #: membership/templates/donation_history.html:9
 #: profiles/templates/profiles/_donations_partial.html:14
 msgid "Amount"
-msgstr ""
+msgstr "Cantidad"
 
 #: membership/templates/donation_history.html:10
 #: profiles/templates/profiles/_donations_partial.html:15
 #: profiles/templates/profiles/_donations_partial.html:52
 msgid "Status"
-msgstr ""
+msgstr "Estado"
 
 #: membership/templates/donation_history.html:11
 #: profiles/templates/profiles/_donations_partial.html:16
 msgid "Kind"
-msgstr ""
+msgstr "Amable"
 
 #: membership/templates/donation_history.html:12
 #: profiles/templates/profiles/_donations_partial.html:17
 msgid "Source"
-msgstr ""
+msgstr "Fuente"
 
 #: membership/templates/donation_history.html:13
 #: profiles/templates/profiles/_donations_partial.html:18
 msgid "Date"
-msgstr ""
+msgstr "Fecha"
 
 #: membership/templates/donation_history.html:16
 msgid "Loading your donations data..."
-msgstr ""
+msgstr "Cargando datos de tus donaciones..."
 
 #: membership/templates/setup_recurring_donation.html:6
 msgid "Recurring Donation Setup"
-msgstr ""
+msgstr "Configuración de donaciones recurrentes"
 
 #: pbaabp/templates/email_login.html:5
 #, python-format
 msgid "You are already logged in as %(request.user.email)s."
-msgstr ""
+msgstr "Ya has iniciado sesión como %(request.user.email)s."
 
 #: pbaabp/templates/email_login.html:11
 msgid "Send log in link"
-msgstr ""
+msgstr "Enviar enlace de inicio de sesión"
 
 #: pbaabp/templates/email_login_success.html:4
 msgid "We sent a log in link. Check your email."
 msgstr ""
+"Le enviamos un enlace de inicio de sesión. Consultar su correo electrónico."
 
 #: profiles/templates/profiles/_donations_partial.html:10
 msgid "Recent Donations"
-msgstr ""
+msgstr "Donaciones recientes"
 
 #: profiles/templates/profiles/_donations_partial.html:42
 #, python-format
 msgid ""
 "View full donation history <a href=\"%(donation_history_url)s\">here</a>."
 msgstr ""
+"Vea el historial de donaciones completo <a href=\"%(donation_history_url)s\""
+">aquí</a>."
 
 #: profiles/templates/profiles/_donations_partial.html:46
 msgid "Subscriptions"
-msgstr ""
+msgstr "Suscripciones"
 
 #: profiles/templates/profiles/_donations_partial.html:51
 msgid "Subscription"
-msgstr ""
+msgstr "Suscripción"
 
 #: profiles/templates/profiles/_donations_partial.html:53
 #: profiles/templates/profiles/_donations_partial.html:84
 msgid "Actions"
-msgstr ""
+msgstr "Comportamiento"
 
 #: profiles/templates/profiles/_donations_partial.html:61
 msgid "change"
-msgstr ""
+msgstr "cambiar"
 
 #: profiles/templates/profiles/_donations_partial.html:62
 msgid "cancel"
-msgstr ""
+msgstr "cancelar"
 
 #: profiles/templates/profiles/_donations_partial.html:69
 msgid ""
 "<b>Note:</b> changing from a monthly to yearly, or yearly to monthly "
 "donation will <i>immediately</i> charge you the new amount."
 msgstr ""
+"<b>Nota:</b> al cambiar de una donación mensual a anual, o de una donación "
+"anual a mensual, se le cobrará <i>inmediatamente</i> el nuevo monto."
 
 #: profiles/templates/profiles/_donations_partial.html:70
 msgid ""
 "Changing the amount you donate alone will charge you the new amount the next "
 "time you are charged."
 msgstr ""
+"Cambiar solo la cantidad que donas te cobrará la nueva cantidad la próxima "
+"vez que te cobren."
 
 #: profiles/templates/profiles/_donations_partial.html:73
 #: profiles/templates/profiles/_donations_partial.html:114
 #: profiles/templates/profiles/profile_detail.html:73
 msgid "Setup a recurring donation"
-msgstr ""
+msgstr "Configurar una donación recurrente"
 
 #: profiles/templates/profiles/_donations_partial.html:77
 msgid "Stored Payment Methods"
-msgstr ""
+msgstr "Métodos de pago almacenados"
 
 #: profiles/templates/profiles/_donations_partial.html:81
 msgid "Method"
-msgstr ""
+msgstr "Método"
 
 #: profiles/templates/profiles/_donations_partial.html:82
 msgid "Details"
-msgstr ""
+msgstr "Detalles"
 
 #: profiles/templates/profiles/_donations_partial.html:83
 msgid "Default"
-msgstr ""
+msgstr "Por defecto"
 
 #: profiles/templates/profiles/_donations_partial.html:98
 #: profiles/templates/profiles/_donations_partial.html:103
 msgid "remove"
-msgstr ""
+msgstr "eliminar"
 
 #: profiles/templates/profiles/_donations_partial.html:102
 msgid "make default"
-msgstr ""
+msgstr "hacer por defecto"
 
 #: profiles/templates/profiles/_donations_partial.html:110
 msgid "Add new payment method"
-msgstr ""
+msgstr "Agregar nuevo método de pago"
 
 #: profiles/templates/profiles/profile_detail.html:6
 #, python-format
 msgid "Welcome to Philly Bike Action, %(profile.user.first_name)s"
-msgstr ""
+msgstr "Bienvenido a Philly Bike Action, %(profile.user.first_name)s"
 
 #: profiles/templates/profiles/profile_detail.html:10
 msgid "First Name"
-msgstr ""
+msgstr "Nombre de pila"
 
 #: profiles/templates/profiles/profile_detail.html:14
 msgid "Last Name"
-msgstr ""
+msgstr "Apellido"
 
 #: profiles/templates/profiles/profile_detail.html:18
 msgid "Email"
-msgstr ""
+msgstr "Correo electrónico"
 
 #: profiles/templates/profiles/profile_detail.html:23
 msgid "Council District"
-msgstr ""
+msgstr "Distrito del consejo"
 
 #: profiles/templates/profiles/profile_detail.html:27
 msgid "Zip Code"
-msgstr ""
+msgstr "Código postal"
 
 #: profiles/templates/profiles/profile_detail.html:31
 msgid "Newsletter"
-msgstr ""
+msgstr "Boletin informativo"
 
 #: profiles/templates/profiles/profile_detail.html:32
 msgid "Subscribed"
-msgstr ""
+msgstr "Suscrita"
 
 #: profiles/templates/profiles/profile_detail.html:32
 msgid "Not Subscribed"
-msgstr ""
+msgstr "No suscrita"
 
 #: profiles/templates/profiles/profile_detail.html:35
 msgid "Discord"
-msgstr ""
+msgstr "Discord"
 
 #: profiles/templates/profiles/profile_detail.html:40
 msgid "Connect your discord account"
-msgstr ""
+msgstr "Conecta tu cuenta de discord"
 
 #: profiles/templates/profiles/profile_detail.html:47
 #, python-format
@@ -313,72 +322,80 @@ msgid ""
 "Need to update any of the above? <a href=\"%(profile_update_url)s\">Click "
 "Here!</a>"
 msgstr ""
+"¿Necesita actualizar alguno de los anteriores? <a href=\""
+"%(profile_update_url)s\">¡Haga clic aquí!</a>"
 
 #: profiles/templates/profiles/profile_detail.html:50
 #, python-format
 msgid "Change your password <a href=\"%(change_password_url)s\">here</a>."
-msgstr ""
+msgstr "Cambie su contraseña <a href=\"%(change_password_url)s\">aquí</a>."
 
 #: profiles/templates/profiles/profile_detail.html:52
 msgid "Your account does not have a password set."
-msgstr ""
+msgstr "Su cuenta no tiene una contraseña establecida."
 
 #: profiles/templates/profiles/profile_detail.html:54
 #, python-format
 msgid ""
 "Set a password for your account <a href=\"%(set_password_url)s\">here</a>."
 msgstr ""
+"Establezca una contraseña para su cuenta <a href=\"%(set_password_url)s\""
+">aquí</a>."
 
 #: profiles/templates/profiles/profile_detail.html:59
 msgid "Donations"
-msgstr ""
+msgstr "Donaciones"
 
 #: profiles/templates/profiles/profile_detail.html:61
 msgid "Make a one-time donation"
-msgstr ""
+msgstr "Haz una donación única"
 
 #: profiles/templates/profiles/profile_detail.html:64
 msgid ""
 "Philly Bike Action is a social welfare organization incorporated in the "
 "Commonwealth of Pennsylvania."
 msgstr ""
+"Philly Bike Action es una organización de bienestar social constituida en la "
+"Commonwealth de Pensilvania."
 
 #: profiles/templates/profiles/profile_detail.html:65
 msgid ""
 "Contributions to Philly Bike Action are not deductible as charitable "
 "contributions for federal income tax purposes."
 msgstr ""
+"Las contribuciones a Philly Bike Action no son deducibles como "
+"contribuciones caritativas a efectos del impuesto federal sobre la renta."
 
 #: profiles/templates/profiles/profile_form.html:5
 #, python-format
 msgid "Updating profile for %(profile.user.first_name)s"
-msgstr ""
+msgstr "Actualizando perfil para %(profile.user.first_name)s"
 
 #: profiles/templates/profiles/profile_form.html:28
 #, python-format
 msgid "Change your password <a href=\"%(change_password_url)s\">here</a>"
-msgstr ""
+msgstr "Cambia tu contraseña <a href=\"%(change_password_url)s\">aquí</a>"
 
 #: profiles/templates/profiles/profile_form.html:31
 msgid "Submit"
-msgstr ""
+msgstr "Entregar"
 
 #: profiles/templates/profiles/shirtinterest_confirm_delete.html:5
 msgid "Are you sure?"
-msgstr ""
+msgstr "¿Estas segura?"
 
 #: profiles/templates/profiles/shirtinterest_confirm_delete.html:28
 msgid "Yes"
-msgstr ""
+msgstr "Sí"
 
 #: profiles/templates/profiles/shirtinterest_confirm_delete.html:29
 msgid "No"
-msgstr ""
+msgstr "No"
 
 #: templates/account/login.html:5 templates/account/login.html:10
 #: templates/account/login.html:32
 msgid "Sign In"
-msgstr ""
+msgstr "Iniciar sesión"
 
 #: templates/account/login.html:13
 #, python-format
@@ -386,6 +403,8 @@ msgid ""
 "If you have not created an account yet, then please <a href=\"%(signup_url)s"
 "\">sign up</a> first."
 msgstr ""
+"Si aún no ha creado una cuenta, <a href=\"%(signup_url)s\">regístrese</a> "
+"primero."
 
 #: templates/account/login.html:46
 #, python-format
@@ -393,60 +412,65 @@ msgid ""
 "You can also login by having a link sent to your email <a href="
 "\"%(email_login_url)s\">here</a>."
 msgstr ""
+"También puede iniciar sesión enviando un enlace a su correo electrónico <a "
+"href=\"%(email_login_url)s\">aquí</a>."
 
 #: templates/account/logout.html:4 templates/account/logout.html:8
 #: templates/account/logout.html:24
 msgid "Sign Out"
-msgstr ""
+msgstr "Desconectar"
 
 #: templates/account/logout.html:10
 msgid "Are you sure you want to sign out?"
-msgstr ""
+msgstr "¿Estás segura de que quieres cerrar sesión?"
 
 #: templates/account/signup.html:5 templates/account/signup.html:10
 #: templates/account/signup.html:32
 msgid "Sign Up"
-msgstr ""
+msgstr "Inscribirse"
 
 #: templates/account/signup.html:13
 #, python-format
 msgid ""
 "Already have an account? Then please <a href=\"%(login_url)s\">sign in</a>."
 msgstr ""
+"¿Ya tienes una cuenta? Entonces <a href=\"%(login_url)s\">inicie sesión</a>."
 
 #: templates/base.html:14 templates/base.html:27 templates/base.html:61
 msgid "Philly Bike Action!"
-msgstr ""
+msgstr "Philly Bike Action!"
 
 #: templates/base.html:27
 msgid "Philly Bike Action! Home"
-msgstr ""
+msgstr "Philly Bike Action! Hogar"
 
 #: templates/base.html:62
 msgid ""
 "Safe, usable, protected, interconnected bike infrastructure for Philadelphia."
 msgstr ""
+"Infraestructura para bicicletas segura, utilizable, protegida e "
+"interconectada para Philadelphia."
 
 #: templates/base.html:94
 msgid "Find us on Social Media"
-msgstr ""
+msgstr "Encuéntranos en las Redes Sociales"
 
 #: templates/base.html:95
 msgid "@phlbikeaction on twitter"
-msgstr ""
+msgstr "@phlbikeaction en twitter"
 
 #: templates/base.html:96
 msgid "@phlbikeaction on instagram"
-msgstr ""
+msgstr "@phlbikeaction en instagram"
 
 #: templates/base.html:97 templates/base.html:99
 msgid "Philly Bike Action Discord"
-msgstr ""
+msgstr "Philly Bike Action Discord"
 
 #: templates/base.html:98
 msgid "Join our Discord"
-msgstr ""
+msgstr "Únase a nuestra Discord"
 
 #: templates/base.html:102
 msgid "©️ 2024 Philly Bike Action. All rights reserved."
-msgstr ""
+msgstr "©️ 2024 Philly Bike Action. Reservados todos los derechos."
