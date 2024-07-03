@@ -12,8 +12,8 @@ Do not show the footer on signin page.
 {% block content %}
 <div class="form-header">
   <img src="https://bikeaction.org/wp-content/uploads/2023/07/Sticker_Print_Green.svg">
-  <h1>Welcome to Philly Bike Action {{ event.title }}</h1>
-  <p>Sign in to let us know a little more about you!</p>
+  <h1>{% blocktrans %}Welcome to Philly Bike Action {{ event.title }}{% endblocktrans %}</h1>
+  <p>{% translate "Sign in to let us know a little more about you!" %}</p>
 </div>
 <div class="form-container">
   <form method="post">
@@ -38,7 +38,7 @@ Do not show the footer on signin page.
   </div>
 
   <div class="button-holder">
-    <input class="submit-button" type="submit" value="Sign me in!">
+    <input class="submit-button" type="submit" value="{% translate "Sign me in!" %}">
   </div>
   </form>
 </div>

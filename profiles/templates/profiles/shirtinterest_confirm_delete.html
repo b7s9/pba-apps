@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
+{% load i18n %}
 {% block content %}
 <div class="form-header">
-  <h1>Are you sure?</h1>
+  <h1>{% translate "Are you sure?" %}</h1>
 </div>
 <div class="form-container">
   <form method="post">
@@ -24,8 +25,8 @@
   {% endfor %}
 
   <div class="button-holder">
-    <button class="submit-button" type="submit" value="Yes">Yes</button>
-    <a href="{% url 'profile' %}" class="submit-button" value="No">No</a>
+    <button class="submit-button" type="submit" value="Yes">{% translate "Yes" %}</button>
+    <a href="{% url 'profile' %}" class="submit-button" value="No">{% translate "No" %}</a>
   </div>
 
   </form>
