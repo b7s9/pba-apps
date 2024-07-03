@@ -67,6 +67,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # Wagtail
     "wagtail_localize",
+    "wagtail_localize_git",
     "wagtail_localize.locales",
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
@@ -199,6 +200,8 @@ WAGTAIL_CONTENT_LANGUAGES = LANGUAGES = [
     ("en", "English"),
     ("es", "Spanish"),
 ]
+WAGTAILLOCALIZE_GIT_URL = "git@github.com:PhillyBikeAction/apps-bikeaction-org-content-pos.git"
+WAGTAILLOCALIZE_GIT_CLONE_DIR = "/tmp/wagtail-content-pos.git"
 
 USE_TZ = True
 

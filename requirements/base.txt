@@ -56,6 +56,7 @@ cffi==1.16.0
     # via
     #   cmarkgfm
     #   cryptography
+    #   pygit2
 channels[daphne]==4.1.0
     # via -r requirements/base.in
 charset-normalizer==3.3.2
@@ -119,6 +120,7 @@ django==4.2.13
     #   sentry-sdk
     #   wagtail
     #   wagtail-localize
+    #   wagtail-localize-git
 django-admin-csvexport==2.2
     # via -r requirements/base.in
 django-allauth[mfa]==0.63.3
@@ -173,6 +175,10 @@ frozenlist==1.4.1
     # via
     #   aiohttp
     #   aiosignal
+gitdb==4.0.11
+    # via gitpython
+gitpython==3.1.43
+    # via wagtail-localize-git
 hyperlink==21.0.0
     # via
     #   autobahn
@@ -226,6 +232,10 @@ pyasn1-modules==0.4.0
     # via service-identity
 pycparser==2.22
     # via cffi
+pygit2==1.14.1
+    # via
+    #   -r requirements/base.in
+    #   wagtail-localize-git
 pyopenssl==24.1.0
     # via twisted
 pypng==0.20220715.0
@@ -262,6 +272,8 @@ six==1.16.0
     #   bleach
     #   l18n
     #   python-dateutil
+smmap==5.0.1
+    # via gitdb
 soupsieve==2.5
     # via beautifulsoup4
 sqlparse==0.5.0
@@ -272,6 +284,8 @@ telepath==0.3.1
     # via wagtail
 tinycss2==1.2.1
     # via bleach
+toml==0.10.2
+    # via wagtail-localize-git
 tomli==2.0.1
     # via discord-py-interactions
 twisted[tls]==24.3.0
@@ -303,7 +317,12 @@ wagtail==6.1.2
     # via
     #   -r requirements/base.in
     #   wagtail-localize
+    #   wagtail-localize-git
 wagtail-localize==1.9
+    # via
+    #   -r requirements/base.in
+    #   wagtail-localize-git
+wagtail-localize-git==0.14.1
     # via -r requirements/base.in
 wcwidth==0.2.13
     # via prompt-toolkit

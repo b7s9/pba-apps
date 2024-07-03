@@ -1,4 +1,5 @@
 {% load django_htmx sitetree static i18n %}
+{% get_current_language as LANGUAGE_CODE %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -27,14 +28,22 @@
         <a href="https://bikeaction.org/" aria-label="{% translate "Philly Bike Action! Home" %}"><img alt="{% translate "Philly Bike Action!" %}" src="{% static 'images/pba-letters.svg' %}"></img></a>
       </div>
       <div class="nav-header">
+        {% if LANGUAGE_CODE == "es" %}
+        {% sitetree_menu from "header-es" include "trunk,topmenu" %}
+        {% else %}
         {% sitetree_menu from "header" include "trunk,topmenu" %}
+        {% endif %}
       </div>
       <div class="mobile-nav-header">
         <a href="javascript:void(0);" aria-label="Toggle navigation" onclick="toggleNav()">
           <box-icon id="menu-icon" name='menu' color="white" size="md"></box-icon>
         </a>
         <div id="mobileNavTree">
+          {% if LANGUAGE_CODE == "es" %}
+          {% sitetree_menu from "header-es" include "trunk,topmenu" %}
+          {% else %}
           {% sitetree_menu from "header" include "trunk,topmenu" %}
+          {% endif %}
         </div>
       </div>
     </div>
