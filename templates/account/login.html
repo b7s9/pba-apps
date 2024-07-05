@@ -41,6 +41,7 @@
     {% endcomment %}
 </div>
 <div class="form-header">
-    <p>You can also login by having a link sent to your email <a href="{% url 'email_login' %}">here</a>.</p>
+    {% url 'email_login' as email_login_url %}
+    <p>{% blocktrans %}You can also login by having a link sent to your email <a href="{{ email_login_url }}">here</a>.{% endblocktrans %}</p>
 </div>
 {% endblock content %}

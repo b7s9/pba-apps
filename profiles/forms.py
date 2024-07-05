@@ -2,15 +2,18 @@ from allauth.account.forms import SignupForm as BaseSignupForm
 from django import forms
 from django.core.validators import RegexValidator
 from django.utils.html import mark_safe
+from django.utils.translation import gettext_lazy as _
 from django_recaptcha.fields import ReCaptchaField
 
 from profiles.models import Profile
 
 
 class BaseProfileSignupForm(BaseSignupForm):
-    first_name = forms.CharField(required=True)
-    last_name = forms.CharField(required=True)
-    council_district = forms.ChoiceField(choices=Profile.District.choices)
+    first_name = forms.CharField(required=True, label=_("First Name"))
+    last_name = forms.CharField(required=True, label=_("Last Name"))
+    council_district = forms.ChoiceField(
+        choices=Profile.District.choices, label=_("Council District")
+    )
     zip_code = forms.CharField(
         max_length=10,
         validators=[
@@ -19,8 +22,9 @@ class BaseProfileSignupForm(BaseSignupForm):
                 message="Must be a valid zipcode in formats 19107 or 19107-3200",
             )
         ],
+        label=_("Zip Code"),
     )
-    newsletter_opt_in = forms.BooleanField(required=False)
+    newsletter_opt_in = forms.BooleanField(required=False, label=_("Newsletter Opt-In"))
 
     def save(self, request):
         user = super().save(request)
@@ -80,10 +84,11 @@ class ProfileUpdateForm(forms.ModelForm):
             profile.user.save()
         return profile
 
-    first_name = forms.CharField(required=True)
-    last_name = forms.CharField(required=True)
+    first_name = forms.CharField(required=True, label=_("First Name"))
+    last_name = forms.CharField(required=True, label=_("Last Name"))
     email = forms.EmailField(
         disabled=True,
         required=True,
         help_text=mark_safe('Update your email address <a href="/accounts/email/">here</a>'),
+        label=_("Email"),
     )

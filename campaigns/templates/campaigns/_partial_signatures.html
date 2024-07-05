@@ -1,4 +1,4 @@
-{% load humanize %}
+{% load humanize i18n %}
 
 {% if petition.signatures.all %}
 <div class="signatures">
@@ -11,8 +11,8 @@
   </div>
   {% endif %}
   {% if petition.signatures_with_comment %}
-  <h3>{{ petition.comments }} Comments</h3>
-  <p>Recent comments...</p>
+  <h3>{% blocktrans %}{{ petition.comments }} Comments{% endblocktrans %}</h3>
+  <p>{% translate "Recent comments..." %}</p>
   {% for signature in petition.distinct_signatures_with_comment|dictsortreversed:"created_at" %}
   {% if signature.comment and signature.featured and signature.visible %}
   <div class="signature-card feature featuredd">

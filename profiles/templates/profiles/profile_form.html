@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
+{% load i18n %}
 {% block content %}
 <div class="form-header">
-  <h1>Updating profile for {{ profile.user.first_name }}</h1>
+  <h1>{% blocktranslate %}Updating profile for {{ profile.user.first_name }}{% endblocktranslate %}</h1>
 </div>
 <div class="form-container">
   <form method="post">
@@ -23,10 +24,11 @@
     </p>
   {% endfor %}
 
-  <p><small>Change your password <a href="{% url 'account_change_password' %}">here</a>.</small></p>
+  {% url 'account_change_password' as change_password_url %}
+  <p><small>{% blocktranslate %}Change your password <a href="{{ change_password_url }}">here</a>{% endblocktranslate %}.</small></p>
 
   <div class="button-holder">
-    <button class="submit-button" type="submit" value="Submit!">Submit</button>
+    <button class="submit-button" type="submit" value="Submit!">{% translate "Submit" %}</button>
   </div>
 
   </form>

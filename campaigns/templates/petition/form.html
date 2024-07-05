@@ -1,3 +1,4 @@
+{% load i18n %}
 <div class="form-container">
   <h3>{{ petition.call_to_action }}</h3>
   <div class="petition-letter">{{ form.petition.letter|linebreaks }}</div>
@@ -27,7 +28,7 @@
   </div>
 
   <div class="petition-preview-email">
-    <p>This is a preview of the email that will be sent when you submit:</p><br>
+    <p>{% translate "This is a preview of the email that will be sent when you submit:" %}</p><br>
     <table>
       <tr><td>Subject:</td><td><b>{{ petition.email_subject }}</b></td></tr>
       <tr><td>To:</td><td>{{ petition.email_to|join:', ' }}</td></tr>

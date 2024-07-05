@@ -66,6 +66,9 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     # Wagtail
+    "wagtail_localize",
+    "wagtail_localize_git",
+    "wagtail_localize.locales",
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
     "wagtail.embeds",
@@ -112,6 +115,7 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -188,6 +192,19 @@ LANGUAGE_CODE = "en-us"
 TIME_ZONE = "America/New_York"
 
 USE_I18N = True
+LOCALE_PATHS = [
+    "locale",
+]
+
+WAGTAIL_I18N_ENABLED = True
+WAGTAIL_CONTENT_LANGUAGES = LANGUAGES = [
+    ("en", "English"),
+    ("es", "Spanish"),
+]
+
+if not DEBUG:
+    WAGTAILLOCALIZE_GIT_URL = "git@github.com:PhillyBikeAction/apps-bikeaction-org-content-pos.git"
+    WAGTAILLOCALIZE_GIT_CLONE_DIR = "/tmp/wagtail-content-pos.git"
 
 USE_TZ = True
 

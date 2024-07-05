@@ -1,21 +1,22 @@
 {% extends 'base.html' %}
+{% load i18n %}
 {% block content %}
 <div class="form-header">
   <h2>Donation History</h2>
   <div class="table-container">
     <table>
       <tr id="donations-header">
-        <th>Amount</th>
-        <th>Status</th>
-        <th>Kind</th>
-        <th>Source</th>
-        <th>Date</th>
+        <th>{% translate "Amount" %}</th>
+        <th>{% translate "Status" %}</th>
+        <th>{% translate "Kind" %}</th>
+        <th>{% translate "Source" %}</th>
+        <th>{% translate "Date" %}</th>
       </tr>
       <tr hx-get="_partials/donations" hx-swap="outerHTML" hx-trigger="load">
-        <td colspan=5>Loading your donations data...</td>
+        <td colspan=5>{% translate "Loading your donations data..." %}</td>
       </tr>
     </table>
   </div>
-  <p><a href="{% url 'profile' %}">⬅️ Back</a></p>
+  <p><a href="{% url 'profile' %}">{% translate "⬅️ Go Back" %}</a></p>
 </div>
 {% endblock %}

@@ -1,3 +1,4 @@
+{% load i18n %}
   {% if first_load %}
   <div style="position: relative; width: 100%;">
     <small style="position: absolute; left: 0;">Updating...</small>
@@ -6,15 +7,15 @@
   {% with request.user.djstripe_customers.first as customer %}
   {% if customer %}
   {% if customer.charges.all %}
-  <h3>Recent Donations</h3>
+  <h3>{% translate "Recent Donations" %}</h3>
   <div class="table-container">
     <table>
       <tr>
-        <th>Amount</th>
-        <th>Status</th>
-        <th>Kind</th>
-        <th>Source</th>
-        <th>Date</th>
+        <th>{% translate "Amount" %}</th>
+        <th>{% translate "Status" %}</th>
+        <th>{% translate "Kind" %}</th>
+        <th>{% translate "Source" %}</th>
+        <th>{% translate "Date" %}</th>
       </tr>
       {% for charge in customer.charges.all|dictsortreversed:"created"|slice:":5" %}
       <tr>
@@ -25,7 +26,7 @@
           {{ charge.status }}
         </td>
         <td>
-          {% if charge.invoice %}recurring{% else %}one-time{% endif %}
+          {% if charge.invoice %}{% translate "recurring" %}{% else %}{% translate "one-time" %}{% endif %}
         </td>
         <td>
           {{ charge.payment_method.card.display_brand }} {{ charge.payment_method.card.last4 }}
@@ -37,18 +38,19 @@
       {% endfor %}
     </table>
     {% if customer.charges.all|dictsortreversed:"created"|slice:"5:" %}
-    <p>View full donation history <a href="{% url 'donation_history' %}">here</a>.</p>
+    {% url 'donation_history' as donation_history_url %}
+    <p>{% blocktranslate %}View full donation history <a href="{{ donation_history_url }}">here</a>.{% endblocktranslate %}</p>
     {% endif %}
   </div>
   {% endif %}
-  <h3>Subscriptions</h3>
+  <h3>{% translate "Subscriptions" %}</h3>
   {% if customer.active_subscriptions.all %}
   <div class="table-container">
     <table>
       <tr>
-        <th>Subscription</th>
-        <th>Status</th>
-        <th>Actions</th>
+        <th>{% translate "Subscription" %}</th>
+        <th>{% translate "Status" %}</th>
+        <th>{% translate "Actions" %}</th>
       </tr>
       {% for subscription in customer.active_subscriptions.all %}
       <tr>
@@ -56,30 +58,30 @@
         <td>{{ subscription.status }}</td>
         <td>
           {% if subscription.status == "active" %}
-          <a class="smol-button" href="{% url 'change_recurring_donation' subscription_id=subscription.id %}">change</a>
-          <a class="smol-button" href="{% url 'cancel_recurring_donation' subscription_id=subscription.id %}">cancel</a>
+          <a class="smol-button" href="{% url 'change_recurring_donation' subscription_id=subscription.id %}">{% translate "change" %}</a>
+          <a class="smol-button" href="{% url 'cancel_recurring_donation' subscription_id=subscription.id %}">{% translate "cancel" %}</a>
           {% endif %}
         </td>
       </tr>
       {% endfor %}
     </table>
   </div>
-  <p><b>Note:</b> changing from a monthly to yearly, or yearly to monthly donation will <i>immediately</i> charge you the new amount.</p>
-  <p>Changing the amount you donate alone will charge you the new amount the next time you are charged.<p>
+  <p>{% translate "<b>Note:</b> changing from a monthly to yearly, or yearly to monthly donation will <i>immediately</i> charge you the new amount." %}</p>
+  <p>{% translate "Changing the amount you donate alone will charge you the new amount the next time you are charged." %}<p>
   {% else %}
   <div class="button-holder">
-    <a class="submit-button" href="{% url 'setup_recurring_donation' %}">Setup a recurring donation</a>
+    <a class="submit-button" href="{% url 'setup_recurring_donation' %}">{% translate "Setup a recurring donation" %}</a>
   </div>
   {% endif %}
   {% if customer.payment_methods.all %}
-  <h3>Stored Payment Methods</h3>
+  <h3>{% translate "Stored Payment Methods" %}</h3>
   <div class="table-container">
     <table>
       <tr>
-        <th>Method</th>
-        <th>Details</th>
-        <th>Default</th>
-        <th>Actions</th>
+        <th>{% translate "Method" %}</th>
+        <th>{% translate "Details" %}</th>
+        <th>{% translate "Default" %}</th>
+        <th>{% translate "Actions" %}</th>
       </tr>
       {% for method in customer.payment_methods.all %}
       <tr>
@@ -93,23 +95,23 @@
         <td>
           {% if customer.default_payment_method.id == method.id %}
             {% if not customer.has_any_active_subscription %}
-              <a class="smol-button" href="{% url 'remove_payment_method' payment_method_id=method.id %}">remove</a>
+              <a class="smol-button" href="{% url 'remove_payment_method' payment_method_id=method.id %}">{% translate "remove" %}</a>
             {% endif %}
             <small></small>
           {% else %}
-            <a class="smol-button" href="{% url 'make_default_payment_method' payment_method_id=method.id %}">make default</a>
-            <a class="smol-button" href="{% url 'remove_payment_method' payment_method_id=method.id %}">remove</a>
+            <a class="smol-button" href="{% url 'make_default_payment_method' payment_method_id=method.id %}">{% translate "make default" %}</a>
+            <a class="smol-button" href="{% url 'remove_payment_method' payment_method_id=method.id %}">{% translate "remove" %}</a>
           {% endif %}
         </td>
       </tr>
       {% endfor %}
     </table>
   </div>
-  <p><a href="{% url 'create_setup_session' %}">Add new payment method</a></p>
+  <p><a href="{% url 'create_setup_session' %}">{% translate "Add new payment method" %}</a></p>
   {% endif %}
   {% else %}
   <div class="button-holder">
-    <p><a class="submit-button" href="{% url 'setup_recurring_donation' %}">Setup a recurring donation</a></p>
+    <p><a class="submit-button" href="{% url 'setup_recurring_donation' %}">{% translate "Setup a recurring donation" %}</a></p>
   </div>
   {% endif %}
   {% endwith %}

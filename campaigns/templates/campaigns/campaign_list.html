@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
 {% block content %}
 {% regroup object_list|dictsort:"status" by status as campaigns_by_status %}
@@ -17,7 +18,7 @@
   {% if request.user.is_staff %}
   <div class="campaign-card">
     <a href="{% url 'campaign' slug=campaign.slug %}">
-      <h2>{{ campaign.title }} - <span style="color: red;"><b>DRAFT</b></span></h2>
+      <h2>{{ campaign.title }} - <span style="color: red;"><b>{% translate "DRAFT" %}</b></span></h2>
       <img class="campaign-card-img" src="{{ campaign.cover.url }}">
       <p>{{ campaign.description }}</p>
     </a>

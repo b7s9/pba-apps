@@ -3,21 +3,22 @@ import uuid
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 
 class Profile(models.Model):
     class District(models.IntegerChoices):
-        NO_DISTRICT = 0, "N/A - I do not live in Philadelphia"
-        DISTRICT_1 = 1, "District 1"
-        DISTRICT_2 = 2, "District 2"
-        DISTRICT_3 = 3, "District 3"
-        DISTRICT_4 = 4, "District 4"
-        DISTRICT_5 = 5, "District 5"
-        DISTRICT_6 = 6, "District 6"
-        DISTRICT_7 = 7, "District 7"
-        DISTRICT_8 = 8, "District 8"
-        DISTRICT_9 = 9, "District 9"
-        DISTRICT_10 = 10, "District 10"
+        NO_DISTRICT = 0, _("N/A - I do not live in Philadelphia")
+        DISTRICT_1 = 1, _("District 1")
+        DISTRICT_2 = 2, _("District 2")
+        DISTRICT_3 = 3, _("District 3")
+        DISTRICT_4 = 4, _("District 4")
+        DISTRICT_5 = 5, _("District 5")
+        DISTRICT_6 = 6, _("District 6")
+        DISTRICT_7 = 7, _("District 7")
+        DISTRICT_8 = 8, _("District 8")
+        DISTRICT_9 = 9, _("District 9")
+        DISTRICT_10 = 10, _("District 10")
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     mailchimp_contact_id = models.CharField(max_length=64, null=True, blank=True)
@@ -25,7 +26,9 @@ class Profile(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
-    council_district = models.IntegerField(null=False, blank=False, choices=District.choices)
+    council_district = models.IntegerField(
+        null=False, blank=False, choices=District.choices, verbose_name=_("Council District")
+    )
     zip_code = models.CharField(
         max_length=10,
         validators=[
@@ -36,8 +39,11 @@ class Profile(models.Model):
         ],
         null=True,
         blank=True,
+        verbose_name=_("Zip Code"),
     )
-    newsletter_opt_in = models.BooleanField(blank=False, default=False)
+    newsletter_opt_in = models.BooleanField(
+        blank=False, default=False, verbose_name=_("Newsletter Opt-In")
+    )
 
     @property
     def discord(self):

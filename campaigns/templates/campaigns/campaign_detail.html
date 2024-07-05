@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load humanize %}
+{% load humanize i18n %}
 
 {% block extra_head %}
 <meta property="og:type" content="article">
@@ -20,42 +20,42 @@
 <div class="campaign-container">
 {% if campaign.has_actions and not campaign.status == "completed" %}
   <div class="button-holder">
-    <a href="#action" class="cta-button submit-button" >Take Action Now!</a>
+    <a href="#action" class="cta-button submit-button" >{% translate "Take Action Now!" %}</a>
   </div>
 {% endif %}
 {% if campaign.status == "completed" %}
-<p style="font-size: smaller; color: grey; width: 100%; text-align: center;">This campaign has been completed.</p>
+<p style="font-size: smaller; color: grey; width: 100%; text-align: center;">{% translate "This campaign has been completed." %}</p>
 {% endif %}
 
 {{ campaign.content_rendered|safe }}
 
 {% if campaign.has_actions and not campaign.status == "completed" %}
 <span id="action"></span>
-<h2>Take Action Now!</h2>
+<h2>{% translate "Take Action Now!" %}</h2>
 {% endif %}
 {% if campaign.donation_action %}
   <div id="donation" class="button-holder">
-    <h2>Make a donation</h2>
-    <a href="{% url 'create_one_time_donation_checkout_session' %}" class="cta-button submit-button">Donate Now!</a>
+    <h2>{% translate "Make a donation" %}</h2>
+    <a href="{% url 'create_one_time_donation_checkout_session' %}" class="cta-button submit-button">{% translate "Donate Now!" %}</a>
   </div>
 {% endif %}
 {% if campaign.subscription_action and not campaign.status == "completed" %}
   {% with request.user.djstripe_customers.first as customer %}
   {% if customer.active_subscriptions.all %}
   <div id="subscription" class="button-holder">
-    <h2>🎉 Thank you for being a supporter 🎉</h2>
-    <a class="submit-button" href="{% url 'profile' %}">Manage your recurring donation</a>
+    <h2>{% translate "🎉 Thank you for being a supporter 🎉" %}</h2>
+    <a class="submit-button" href="{% url 'profile' %}">{% translate "Manage your recurring donation" %}</a>
   </div>
   {% else %}
   <div id="subscription" class="button-holder">
-    <h2>Become a monthly supporter</h2>
-    <a href="{% url 'setup_recurring_donation' %}" class="cta-button submit-button">Become a Supporter!</a>
+    <h2>{% translate "Become a monthly supporter" %}</h2>
+    <a href="{% url 'setup_recurring_donation' %}" class="cta-button submit-button">{% translate "Become a Supporter!" %}</a>
   </div>
   {% endif %}
   {% endwith %}
 {% endif %}
 {% if campaign.events.all and not campaign.status == "completed" %}
-  <h3>Attend an event</h3>
+  <h3>{% translate "Attend an event" %}</h3>
   <div id="events">
     {% for event in campaign.future_events.all|dictsort:"start_datetime" %}
     <div class="event">
@@ -65,7 +65,7 @@
   </div>
 {% endif %}
 {% if campaign.petitions.all and not campaign.status == "completed" %}
-  <h3>Sign {% if campaign.petitions.all|length > 1 %}a{% else %}the{% endif %} petition</h3>
+  <h3>{% blocktranslate count counter=campaign.petitions.all|length %}Sign the petition{% plural %}Sign a petition{% endblocktranslate %}</h3>
   <div id="petitions">
   {% for petition in campaign.petitions.all %}
     <div class="petition">

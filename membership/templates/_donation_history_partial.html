@@ -1,3 +1,4 @@
+{% load i18n %}
       {% for charge in charges.all %}
       <tr>
         <td>
@@ -7,7 +8,7 @@
           {{ charge.status }}
         </td>
         <td>
-          {% if charge.invoice %}recurring{% else %}one-time{% endif %}
+          {% if charge.invoice %}{% translate "recurring" %}{% else %}{% translate "one-time" %}{% endif %}
         </td>
         <td>
           {{ charge.payment_method.card.display_brand }} {{ charge.payment_method.card.last4 }}
