@@ -1,13 +1,5 @@
 {% extends 'base.html' %}
 {% load i18n %}
-{% block header %}
-{% comment %}
-Do not show the header on signature page.
-{% endcomment %}
-{% endblock %}
 {% block content %}
-<div class="form-header">
-  <p>{% translate "Sign this petition!" %}</p>
-</div>
 {% include 'petition/form.html' %}
 {% endblock %}

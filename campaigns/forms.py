@@ -48,7 +48,7 @@ class PetitionSignatureForm(forms.ModelForm):
             del self.fields[field]
         for field in self.fields.keys():
             if field in required_fields and (
-                field not in ["postal_address_line_2", "comment", "send_email"]
+                field not in ["postal_address_line_2", "phone_number", "comment", "send_email"]
             ):
                 self.fields[field].required = True
 

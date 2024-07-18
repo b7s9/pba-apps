@@ -41,6 +41,7 @@ class Campaign(models.Model):
     status = models.CharField(max_length=16, choices=Status.choices)
     description = models.TextField(null=True, blank=True)
     cover = models.ImageField(upload_to="campaigns", null=True, blank=True)
+    call_to_action = models.CharField(max_length=64, null=True, blank=True)
 
     donation_action = models.BooleanField(default=False)
     subscription_action = models.BooleanField(default=False)
@@ -55,7 +56,7 @@ class Campaign(models.Model):
     @property
     def has_actions(self):
         return (
-            self.petitions.count()
+            self.petitions.filter(display_on_campaign_page=True).count()
             or self.events.count()
             or self.donation_action
             or self.subscription_action
@@ -81,8 +82,10 @@ class Petition(models.Model):
     call_to_action = models.CharField(
         max_length=64, null=True, blank=True, default="Add your signature to the following message"
     )
+    display_on_campaign_page = models.BooleanField(default=True, blank=False)
     signature_goal = models.IntegerField(default=None, null=True, blank=True)
 
+    mailto_send = models.BooleanField(default=False, blank=False)
     send_email = models.BooleanField(default=False, blank=False)
     email_subject = models.CharField(max_length=988, blank=True, null=True)
     email_body = models.TextField(null=True, blank=True)
@@ -103,6 +106,7 @@ class Petition(models.Model):
         FIRST_NAME = "first_name", "First Name"
         LAST_NAME = "last_name", "Last Name"
         EMAIL = "email", "E-mail"
+        PHONE = "phone_number", "Phone Number"
         ADDRESS_LINE_1 = "postal_address_line_1", "Address Line 1"
         ADDRESS_LINE_2 = "postal_address_line_2", "Address Line 2"
         CITY = "city", "City"
@@ -170,6 +174,20 @@ class PetitionSignature(models.Model):
     first_name = models.CharField(max_length=64, null=True, blank=True)
     last_name = models.CharField(max_length=64, null=True, blank=True)
     email = models.EmailField(null=True, blank=True)
+    phone_number = models.CharField(
+        max_length=17,
+        validators=[
+            RegexValidator(
+                regex=r"^\+?1?\d{9,15}$",
+                message=(
+                    "Phone number must be entered in the format: "
+                    "'+999999999'. Up to 15 digits allowed."
+                ),
+            )
+        ],
+        null=True,
+        blank=True,
+    )
     postal_address_line_1 = models.CharField(
         verbose_name="Address line 1", max_length=128, null=True, blank=True
     )
