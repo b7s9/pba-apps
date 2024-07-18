@@ -5,9 +5,11 @@ from ordered_model.admin import OrderedModelAdmin
 from campaigns.models import Campaign, Petition, PetitionSignature
 
 
-class CampaignAdmin(admin.ModelAdmin):
+class CampaignAdmin(OrderedModelAdmin):
     readonly_fields = ["wordpress_id"]
     autocomplete_fields = ["events"]
+    list_display = ("__str__", "status", "move_up_down_links")
+    ordering = ("status", "order")
 
     def get_form(self, *args, **kwargs):
         help_texts = {
