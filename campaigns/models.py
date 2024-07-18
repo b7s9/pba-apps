@@ -4,6 +4,7 @@ from django.core.validators import RegexValidator
 from django.db import models
 from django.utils import timezone
 from django.utils.text import slugify
+from django.utils.translation import gettext_lazy as _
 from markdownfield.models import RenderedMarkdownField
 from markdownfield.validators import VALIDATOR_NULL
 from multi_email_field.fields import MultiEmailField
@@ -207,6 +208,10 @@ class PetitionSignature(models.Model):
         ],
         null=True,
         blank=True,
+    )
+
+    newsletter_opt_in = models.BooleanField(
+        blank=False, default=True, verbose_name=_("Newsletter Opt-In")
     )
 
     def __str__(self):

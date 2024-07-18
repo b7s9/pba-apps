@@ -10,9 +10,10 @@ from campaigns.models import Petition, PetitionSignature
 class PetitionSignatureForm(forms.ModelForm):
     class Meta:
         model = PetitionSignature
-        fields = Petition.PetitionSignatureChoices.values
+        fields = Petition.PetitionSignatureChoices.values + ["newsletter_opt_in"]
         help_texts = {
             "comment": "Your comment, which will be displayed on the campaign page",
+            "newsletter_opt_in": "Check this box to recieve our bi-weekly newsletter",
         }
 
     send_email = forms.BooleanField(
@@ -45,7 +46,8 @@ class PetitionSignatureForm(forms.ModelForm):
                 to_remove.remove("email")
         to_remove.remove("captcha")
         for field in to_remove:
-            del self.fields[field]
+            if field not in ["newsletter_opt_in"]:
+                del self.fields[field]
         for field in self.fields.keys():
             if field in required_fields and (
                 field not in ["postal_address_line_2", "phone_number", "comment", "send_email"]
