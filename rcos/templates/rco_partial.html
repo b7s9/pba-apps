@@ -1,0 +1,9 @@
+<ul>
+{% for rco in RCOS %}
+  <li>{{ rco.ORGANIZATION_NAME }}</li>
+{% endfor %}
+</ul>
+
+{% if RCOS|length > 1 %}
+<p>You have multiple RCOs! Most <i>often</i> the first listed RCO is the primary one for your address</p>
+{% endif %}

@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div>
+  <h1>Find your Registered Community Organization(s)</h1>
+  
+  <p>Enter your <i>full</i> street address and press "Search"</p> 
+  
+  <small>
+    <p>Examples:</p>
+    <ul>
+      <li>1400 John F Kennedy Blvd</li>
+      <li>1356 N Front St</li>
+      <li>1501 E Passyunk Ave</li>
+    </ul>
+  </small>
+  
+  <form
+    hx-target="#result"
+    hx-post="{% url 'rco_search' %}"
+    hx-ext="json-enc"
+    hx-indicator="#indicator"
+  >
+    <input type="text" name="street_address" placeholder="Your Street Address" required>
+    <br><br>
+    <button type="submit">Search</button>
+    <img id="indicator" class="htmx-indicator" src="{% static 'images/spinner.gif' %}" style="height: 2em; padding-left: 1em;">
+  </form>
+  
+  <div>
+    <div id="result">
+    </div>
+  </div>
+
+</div>
+{% endblock %}
