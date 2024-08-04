@@ -41,8 +41,9 @@ def query_address(request):
 
     results = []
     for feature in RCOS["features"]:
-        polygon = shape(feature["geometry"])
-        if polygon.contains(point):
-            results.append(feature["properties"])
+        if feature["properties"]["ORG_TYPE"] != "Ward":
+            polygon = shape(feature["geometry"])
+            if polygon.contains(point):
+                results.append(feature["properties"])
 
     return render(request, "rco_partial.html", context={"RCOS": results})
