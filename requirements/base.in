@@ -1,7 +1,6 @@
 Celery[redis]
 Django
 asgiref
-django-storages[s3]
 channels[daphne]
 cmarkgfm
 cmarkgfm
@@ -19,12 +18,15 @@ django-ordered-model
 django-recaptcha
 django-sesame
 django-sitetree
+django-storages[s3]
 django-tuieditor
+geopy
 mailchimp3
 pillow
 psycopg2-binary
 pygit2<=1.14.1
 sentry-sdk[django]
+shapely
 wagtail
 wagtail-localize
 wagtail-localize-git
