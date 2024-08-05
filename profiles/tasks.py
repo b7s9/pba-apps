@@ -38,32 +38,33 @@ def sync_to_mailchimp(profile_id):
 
     profile = Profile.objects.get(id=profile_id)
 
-    if profile.newsletter_opt_in:
-        mailchimp = MailChimp(mc_api=settings.MAILCHIMP_API_KEY)
-        if profile.mailchimp_contact_id is None:
-            print("creating contact...")
-            response = mailchimp.lists.members.create_or_update(
-                settings.MAILCHIMP_AUDIENCE_ID,
-                helpers.get_subscriber_hash(profile.user.email),
-                {
-                    "email_address": profile.user.email,
-                    "status_if_new": "subscribed",
-                    "merge_fields": {
-                        "FNAME": profile.user.first_name,
-                        "LNAME": profile.user.last_name,
-                    },
-                },
-            )
-            profile.mailchimp_contact_id = response["id"]
-            profile.save()
+    status = "subscribed" if profile.newsletter_opt_in else "unsubscribed"
 
-        print("updating tags...")
-        mailchimp.lists.members.tags.update(
-            settings.MAILCHIMP_AUDIENCE_ID,
-            helpers.get_subscriber_hash(profile.user.email),
-            data={
-                "tags": [
-                    {"name": "apps", "status": "active"},
-                ]
+    mailchimp = MailChimp(mc_api=settings.MAILCHIMP_API_KEY)
+    print("updating contact...")
+    response = mailchimp.lists.members.create_or_update(
+        settings.MAILCHIMP_AUDIENCE_ID,
+        helpers.get_subscriber_hash(profile.user.email),
+        {
+            "email_address": profile.user.email,
+            "status": status,
+            "status_if_new": status,
+            "merge_fields": {
+                "FNAME": profile.user.first_name,
+                "LNAME": profile.user.last_name,
             },
-        )
+        },
+    )
+    profile.mailchimp_contact_id = response["id"]
+    profile.save()
+
+    print("updating tags...")
+    mailchimp.lists.members.tags.update(
+        settings.MAILCHIMP_AUDIENCE_ID,
+        helpers.get_subscriber_hash(profile.user.email),
+        data={
+            "tags": [
+                {"name": "apps", "status": "active"},
+            ]
+        },
+    )
