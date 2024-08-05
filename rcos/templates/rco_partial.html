@@ -1,6 +1,12 @@
 <p>Address: {{ address }}</p>
 
+{% if DISTRICT %}
 <hr>
+
+<h2>You are in <u>District {{ DISTRICT }}</u></h2>
+
+<hr>
+{% endif %}
 
 <h2>Your RCO{% if RCOS|length > 1 %}s{% endif %}</h2>
 

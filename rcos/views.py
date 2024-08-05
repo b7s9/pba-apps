@@ -13,6 +13,9 @@ from shapely.geometry import Point, shape
 with open(pathlib.Path(__file__).parent / "data" / "Zoning_RCO-2.geojson") as f:
     RCOS = json.load(f)
 
+with open(pathlib.Path(__file__).parent / "data" / "Council_Districts_2024.geojson") as f:
+    DISTRICTS = json.load(f)
+
 UA = "apps.bikeaction.org Geopy"
 
 
@@ -63,10 +66,17 @@ async def query_address(request):
             else:
                 rcos.append(feature["properties"])
 
+    district = None
+    for feature in DISTRICTS["features"]:
+        polygon = shape(feature["geometry"])
+        if polygon.contains(point):
+            district = feature["properties"]["DISTRICT"]
+
     return render(
         request,
         "rco_partial.html",
         context={
+            "DISTRICT": district,
             "RCOS": rcos,
             "OTHER": other,
             "WARDS": wards,
