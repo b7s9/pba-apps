@@ -3,9 +3,10 @@ import pathlib
 
 import sentry_sdk
 from django.conf import settings
+from django.db import transaction
 from django.http import HttpResponse
 from django.shortcuts import render
-from django.views.decorators.csrf import csrf_exempt
+from geopy.adapters import AioHTTPAdapter
 from geopy.geocoders import GoogleV3, Nominatim
 from shapely.geometry import Point, shape
 
@@ -19,18 +20,20 @@ def index(request):
     return render(request, "rcosearch.html")
 
 
-@csrf_exempt
-def query_address(request):
+@transaction.non_atomic_requests
+async def query_address(request):
     submission = request.POST.get("street_address")
     search_address = f"{submission} Philadelphia, PA"
 
     try:
         if settings.GOOGLE_MAPS_API_KEY is not None:
-            address = GoogleV3(api_key=settings.GOOGLE_MAPS_API_KEY, user_agent=UA).geocode(
-                search_address
-            )
+            async with GoogleV3(
+                api_key=settings.GOOGLE_MAPS_API_KEY, user_agent=UA, adapter_factory=AioHTTPAdapter
+            ) as geolocator:
+                address = await geolocator.geocode(search_address)
         else:
-            address = Nominatim(user_agent=UA).geocode(search_address)
+            async with Nominatim(user_agent=UA, adapter_factory=AioHTTPAdapter) as geolocator:
+                address = await geolocator.geocode(search_address)
     except Exception as err:
         error = "Backend API failure, try again?"
         sentry_sdk.capture_exception(err)
@@ -52,4 +55,12 @@ def query_address(request):
             if polygon.contains(point):
                 results.append(feature["properties"])
 
-    return render(request, "rco_partial.html", context={"RCOS": results, "address": address})
+    return render(
+        request,
+        "rco_partial.html",
+        context={
+            "RCOS": results,
+            "address": address,
+            "GOOGLE": settings.GOOGLE_MAPS_API_KEY is not None,
+        },
+    )

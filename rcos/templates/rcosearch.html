@@ -4,9 +4,11 @@
 {% block content %}
 <div>
   <h1>Find your Registered Community Organization(s)</h1>
-  
-  <p>Enter your <i>full</i> street address and press "Search"</p> 
-  
+
+  {% if GOOGLE %}
+  <p>Enter your street address and press "Search"</p>
+  {% else %}
+  <p>Enter your <i>full</i> street address and press "Search"</p>
   <small>
     <p>Examples:</p>
     <ul>
@@ -15,6 +17,7 @@
       <li>1501 E Passyunk Ave</li>
     </ul>
   </small>
+  {% endif %}
   
   <form
     hx-target="#result"
@@ -22,6 +25,7 @@
     hx-ext="json-enc"
     hx-indicator="#indicator"
   >
+    {% csrf_token %}
     <input type="text" name="street_address" placeholder="Your Street Address" required>
     <br><br>
     <button type="submit">Search</button>
