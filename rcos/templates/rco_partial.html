@@ -1,5 +1,9 @@
 <p>Address: {{ address }}</p>
 
+<hr>
+
+<h2>Your RCO{% if RCOS|length > 1 %}s{% endif %}</h2>
+
 <ul>
 {% for rco in RCOS %}
   <li>{{ rco.ORGANIZATION_NAME }}</li>
@@ -7,5 +11,27 @@
 </ul>
 
 {% if RCOS|length > 1 %}
-<p>You have multiple RCOs! Most <i>often</i> the first listed RCO is the primary one for your address</p>
+<p><small><i>You have multiple RCOs! Most <i>often</i> the first listed RCO is the primary one for your address</i></small></p>
+{% endif %}
+
+{% if OTHER|length > 0 or WARDS|length > 0 %}
+<hr>
+{% endif %}
+
+{% if OTHER|length > 0 %}
+<p>Other entities registered as RCOs:</p>
+<ul>
+{% for rco in OTHER %}
+  <li>{{ rco.ORGANIZATION_NAME }} (<i>{{ rco.ORG_TYPE }} </i>)</li>
+{% endfor %}
+</ul>
+{% endif %}
+
+{% if WARDS|length > 0 %}
+<p>Partisan political wards registered as RCOs:</p>
+<ul>
+{% for rco in WARDS %}
+  <li>{{ rco.ORGANIZATION_NAME }} (<i>{{ rco.ORG_TYPE }} </i>)</li>
+{% endfor %}
+</ul>
 {% endif %}

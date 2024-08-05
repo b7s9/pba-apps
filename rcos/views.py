@@ -17,7 +17,9 @@ UA = "apps.bikeaction.org Geopy"
 
 
 def index(request):
-    return render(request, "rcosearch.html")
+    return render(
+        request, "rcosearch.html", context={"GOOGLE": settings.GOOGLE_MAPS_API_KEY is not None}
+    )
 
 
 @transaction.non_atomic_requests
@@ -48,19 +50,26 @@ async def query_address(request):
 
     point = Point(address.longitude, address.latitude)
 
-    results = []
+    rcos = []
+    other = []
+    wards = []
     for feature in RCOS["features"]:
-        if feature["properties"]["ORG_TYPE"] != "Ward":
-            polygon = shape(feature["geometry"])
-            if polygon.contains(point):
-                results.append(feature["properties"])
+        polygon = shape(feature["geometry"])
+        if polygon.contains(point):
+            if feature["properties"]["ORG_TYPE"] == "Ward":
+                wards.append(feature["properties"])
+            elif feature["properties"]["ORG_TYPE"] in ["NID", "SSD", None]:
+                other.append(feature["properties"])
+            else:
+                rcos.append(feature["properties"])
 
     return render(
         request,
         "rco_partial.html",
         context={
-            "RCOS": results,
+            "RCOS": rcos,
+            "OTHER": other,
+            "WARDS": wards,
             "address": address,
-            "GOOGLE": settings.GOOGLE_MAPS_API_KEY is not None,
         },
     )
