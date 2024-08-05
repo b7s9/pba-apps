@@ -1,6 +1,7 @@
 from asgiref.sync import async_to_sync
 from celery import shared_task
 from django.conf import settings
+from mailchimp3 import MailChimp, helpers
 
 from discord.bot import bot
 
@@ -29,3 +30,40 @@ async def _remove_user_from_connected_role(uid):
 @shared_task
 def remove_user_from_connected_role(uid):
     async_to_sync(_remove_user_from_connected_role)(uid)
+
+
+@shared_task
+def sync_to_mailchimp(profile_id):
+    from profiles.models import Profile
+
+    profile = Profile.objects.get(id=profile_id)
+
+    if profile.newsletter_opt_in:
+        mailchimp = MailChimp(mc_api=settings.MAILCHIMP_API_KEY)
+        if profile.mailchimp_contact_id is None:
+            print("creating contact...")
+            response = mailchimp.lists.members.create_or_update(
+                settings.MAILCHIMP_AUDIENCE_ID,
+                helpers.get_subscriber_hash(profile.user.email),
+                {
+                    "email_address": profile.user.email,
+                    "status_if_new": "subscribed",
+                    "merge_fields": {
+                        "FNAME": profile.user.first_name,
+                        "LNAME": profile.user.last_name,
+                    },
+                },
+            )
+            profile.mailchimp_contact_id = response["id"]
+            profile.save()
+
+        print("updating tags...")
+        mailchimp.lists.members.tags.update(
+            settings.MAILCHIMP_AUDIENCE_ID,
+            helpers.get_subscriber_hash(profile.user.email),
+            data={
+                "tags": [
+                    {"name": "apps", "status": "active"},
+                ]
+            },
+        )
