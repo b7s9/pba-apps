@@ -52,4 +52,4 @@ def query_address(request):
             if polygon.contains(point):
                 results.append(feature["properties"])
 
-    return render(request, "rco_partial.html", context={"RCOS": results})
+    return render(request, "rco_partial.html", context={"RCOS": results, "address": address})
