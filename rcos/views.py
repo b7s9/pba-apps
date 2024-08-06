@@ -16,6 +16,12 @@ with open(pathlib.Path(__file__).parent / "data" / "Zoning_RCO-2.geojson") as f:
 with open(pathlib.Path(__file__).parent / "data" / "Council_Districts_2024.geojson") as f:
     DISTRICTS = json.load(f)
 
+with open(pathlib.Path(__file__).parent / "data" / "Political_Divisions.geojson") as f:
+    DIVISIONS = json.load(f)
+
+with open(pathlib.Path(__file__).parent / "data" / "polling_places.geojson") as f:
+    POLLING_PLACES = json.load(f)
+
 UA = "apps.bikeaction.org Geopy"
 
 
@@ -71,6 +77,23 @@ async def query_address(request):
         polygon = shape(feature["geometry"])
         if polygon.contains(point):
             district = feature["properties"]["DISTRICT"]
+            break
+
+    ward, division = None, None
+    for feature in DIVISIONS["features"]:
+        polygon = shape(feature["geometry"])
+        if polygon.contains(point):
+            dn = feature["properties"]["DIVISION_NUM"]
+            ward, division = [int(dn[i : i + 2]) for i in range(0, len(dn), 2)]
+            break
+
+    polling_place = None
+    for feature in POLLING_PLACES["features"]:
+        if feature["properties"]["ward"] == ward and feature["properties"]["division"] == division:
+            polling_place = (
+                f"{feature['properties']['placename']} - {feature['properties']['street_address']}"
+            )
+            break
 
     return render(
         request,
@@ -80,6 +103,9 @@ async def query_address(request):
             "RCOS": rcos,
             "OTHER": other,
             "WARDS": wards,
+            "WARD": ward,
+            "DIVISION": division,
+            "POLLING_PLACE": polling_place,
             "address": address,
         },
     )

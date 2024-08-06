@@ -1,12 +1,6 @@
 <p>Address: {{ address }}</p>
 
-{% if DISTRICT %}
 <hr>
-
-<h2>You are in <u>District {{ DISTRICT }}</u></h2>
-
-<hr>
-{% endif %}
 
 <h2>Your RCO{% if RCOS|length > 1 %}s{% endif %}</h2>
 
@@ -40,4 +34,16 @@
   <li>{{ rco.ORGANIZATION_NAME }} (<i>{{ rco.ORG_TYPE }} </i>)</li>
 {% endfor %}
 </ul>
+{% endif %}
+
+{% if DISTRICT %}
+<hr>
+
+<h2>You are in <u>District {{ DISTRICT }}</u></h2>
+
+{% endif %}
+{% if POLLING_PLACE %}
+<p><b>You are in Ward {{ WARD }} Division {{ DIVISION }}</b></p>
+
+<small>Your Polling Place for voting is: {{ POLLING_PLACE }}</small>
 {% endif %}
