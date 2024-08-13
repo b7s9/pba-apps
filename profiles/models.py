@@ -31,6 +31,13 @@ class Profile(models.Model):
     council_district = models.IntegerField(
         null=False, blank=False, choices=District.choices, verbose_name=_("Council District")
     )
+    street_address = models.CharField(
+        max_length=256,
+        null=True,
+        blank=True,
+        verbose_name=_("Street Address"),
+        help_text=_("Your Philadelphia Street Address"),
+    )
     zip_code = models.CharField(
         max_length=10,
         validators=[
@@ -40,7 +47,7 @@ class Profile(models.Model):
             )
         ],
         null=True,
-        blank=True,
+        blank=False,
         verbose_name=_("Zip Code"),
     )
     newsletter_opt_in = models.BooleanField(

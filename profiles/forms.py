@@ -14,6 +14,7 @@ class BaseProfileSignupForm(BaseSignupForm):
     council_district = forms.ChoiceField(
         choices=Profile.District.choices, label=_("Council District")
     )
+    street_address = forms.CharField(max_length=256, required=True, label=_("Street Addresss"))
     zip_code = forms.CharField(
         max_length=10,
         validators=[
@@ -47,6 +48,7 @@ class ProfileSignupForm(BaseProfileSignupForm):
         "first_name",
         "last_name",
         "council_district",
+        "street_address",
         "zip_code",
         "email",
         "newsletter_opt_in",
@@ -54,6 +56,11 @@ class ProfileSignupForm(BaseProfileSignupForm):
         "password2",
         "captcha",
     ]
+
+    class Meta:
+        help_texts = {
+            "street_address": "Your Philadelphia Street Address",
+        }
 
 
 class ProfileUpdateForm(forms.ModelForm):
@@ -64,9 +71,13 @@ class ProfileUpdateForm(forms.ModelForm):
             "last_name",
             "email",
             "council_district",
+            "street_address",
             "zip_code",
             "newsletter_opt_in",
         ]
+        help_texts = {
+            "street_address": "Your Philadelphia Street Address",
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
