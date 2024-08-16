@@ -27,6 +27,7 @@
     <input class="submit-button" type="submit" value="{% if petition.call_to_action %}{{ petition.call_to_action }}{% else %}Add your signature!{% endif %}">
   </div>
 
+  {% if petition.mailto_send or petition.send_email %}
   <div class="petition-preview-email">
     <p>{% translate "This is a preview of the email that will be sent when you submit:" %}</p><br>
     <table>
@@ -51,8 +52,10 @@
       </tr>
     </table>
   </div>
+  {% endif %}
   </form>
 
+  {% if petition.mailto_send or petition.send_email %}
   <script>
     function bindUpdate(elementId) {
         if ( document.getElementById(elementId) !== null ) {
@@ -113,4 +116,5 @@
         setInterval(function() {updateForm();}, 1000);
     }
   </script>
+  {% endif %}
 </div>
