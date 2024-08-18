@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Events</h1>
+{% regroup object_list|dictsort:"start_datetime" by start_datetime|date:"F Y" as events_by_month %}
+{% for month, events in events_by_month %}
+  <div class="event-month">
+    <div class="event-month-month">{{ month }}</div>
+    <div class="event-month-divider"></div>
+  </div>
+  {% for event in events %}
+  <div class="event-event">
+    <div class="event-header">
+      <div class="event-header-box">
+        <div class="event-header-box-day-of-week">
+          <span class="">{{ event.start_datetime|date:"D"|upper }}</span>
+        </div>
+        <div class="event-header-box-day-of-month">
+          <span class="">{{ event.start_datetime|date:"j" }}</span>
+        </div>
+      </div>
+    </div >
+    <div class="event-details">
+      <div class="event-date">{{ event.start_datetime|date:"F j @ g:i a" }}{% if event.end_datetime %} - {{ event.end_datetime|date:"g:i a" }}{% endif %}</div>
+      <div class="event-title">{{ event.title }}</div>
+      <div class="event-location"><i class="bx bxs-map"></i> {{ event.location }}</div>
+      {% if event.cover %}
+      <div class="event-cover"><img src="{{ event.cover }}"></div>
+      {% endif %}
+      <div class="event-description">{{ event.description|truncatechars:"300" }}</div>
+    </div>
+  </div>
+  {% endfor %}
+{% endfor %}
+
+<div class="pagination">
+  <div class="pagination-nav previous">
+    {% if page_obj.has_previous %}
+    <span><a href="?page=1"><i class='bx bx-chevrons-left'></i> First</a></span>
+    <span><a href="?page={{ page_obj.previous_page_number }}"><i class='bx bx-chevron-left'></i> Previous Events</a></span>
+    {% else %}
+    <!--<span><i class='bx bx-chevron-left'></i> Past Events</span>-->
+    {% endif %}
+  </div>
+  <div class="pagination-nav next">
+    {% if page_obj.has_next %}
+    <span><a href="?page={{ page_obj.next_page_number }}">Next Events <i class='bx bx-chevron-right'></i></a></span>
+    <span><a href="?page={{ page_obj.paginator.num_pages }}">Last <i class='bx bx-chevrons-right'></i></a></span>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

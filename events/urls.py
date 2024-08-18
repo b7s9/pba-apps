@@ -3,7 +3,8 @@ from django.urls import path
 from events import views
 
 urlpatterns = [
-    path("<slug:event_slug_or_id>", views.event_view),
+    path("", views.EventsListView.as_view()),
+    path("<slug:event_slug_or_id>", views.EventDetailView.as_view()),
     path("<slug:event_slug_or_id>/signin", views.event_signin, name="event_signin"),
     path(
         "<slug:event_slug_or_id>/kiosk-postroll",

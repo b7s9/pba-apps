@@ -4,6 +4,7 @@ import uuid
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.utils import timezone
+from django.views.generic import DetailView, ListView
 
 from events.forms import EventSignInForm
 from events.models import EventSignIn, ScheduledEvent
@@ -23,6 +24,40 @@ def _fetch_event_by_slug_or_id(event_slug_or_id):
         return event_by_slug
     else:
         return None
+
+
+class EventsListView(ListView):
+    model = ScheduledEvent
+    paginate_by = 10
+
+    def get_queryset(self):
+        queryset = ScheduledEvent.objects.all()
+        queryset = queryset.exclude(status=ScheduledEvent.Status.DELETED)
+        queryset = queryset.filter(
+            start_datetime__gte=datetime.datetime.now() - datetime.timedelta(hours=3)
+        )
+        queryset = queryset.order_by("start_datetime")
+
+        return queryset
+
+
+class PasEventsListView(ListView):
+    model = ScheduledEvent
+    paginate_by = 10
+
+    def get_queryset(self):
+        queryset = ScheduledEvent.objects.all()
+        queryset = queryset.exclude(status=ScheduledEvent.Status.DELETED)
+        queryset = queryset.filter(
+            start_datetime__lte=datetime.datetime.now() + datetime.timedelta(hours=3)
+        )
+        queryset = queryset.order_by("-start_datetime")
+
+        return queryset
+
+
+class EventDetailView(DetailView):
+    model = ScheduledEvent
 
 
 def event_view(request, event_slug_or_id):
