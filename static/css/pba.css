@@ -714,6 +714,10 @@ body {
   background-color: #efefef;
 }
 
+.event-nav-top {
+  margin-top: 1em;
+}
+
 .event-month {
   display: flex;
   flex-direction: row;
@@ -738,6 +742,7 @@ body {
   display: flex;
   flex-direction: row;
   margin-top: 1.5em;
+  width: 100%;
 }
 
 .event-header {
@@ -767,6 +772,7 @@ body {
 
 .event-details {
   display: inline-block;
+  width: 100%;
   max-width: 40em;
   margin-left: 1em;
   margin-right: 1em;
@@ -810,9 +816,8 @@ body {
   margin-top: 2em;
 }
 
-.pagination-nav a:visited {
+.pagination-nav a:visited,a {
   color: black;
-  text-decoration: none;
 }
 
 .pagination .pagination-nav {

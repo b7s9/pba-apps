@@ -58,6 +58,31 @@ class PasEventsListView(ListView):
 
 class EventDetailView(DetailView):
     model = ScheduledEvent
+    slug_field = "wordpress_slug"
+
+    def next_event(self, current_object):
+        return (
+            ScheduledEvent.objects.order_by("start_datetime")
+            .exclude(status=ScheduledEvent.Status.DELETED)
+            .exclude(pk=current_object.pk)
+            .filter(start_datetime__gte=current_object.start_datetime)
+            .first()
+        )
+
+    def previous_event(self, current_object):
+        return (
+            ScheduledEvent.objects.order_by("-start_datetime")
+            .exclude(status=ScheduledEvent.Status.DELETED)
+            .exclude(pk=current_object.pk)
+            .filter(start_datetime__lte=current_object.start_datetime)
+            .first()
+        )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["next_event"] = self.next_event(self.object)
+        context["previous_event"] = self.previous_event(self.object)
+        return context
 
 
 def event_view(request, event_slug_or_id):

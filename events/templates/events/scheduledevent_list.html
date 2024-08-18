@@ -22,7 +22,7 @@
     </div >
     <div class="event-details">
       <div class="event-date">{{ event.start_datetime|date:"F j @ g:i a" }}{% if event.end_datetime %} - {{ event.end_datetime|date:"g:i a" }}{% endif %}</div>
-      <div class="event-title">{{ event.title }}</div>
+      <div class="event-title"><a href="{% url 'event_detail' event.wordpress_slug %}">{{ event.title }}</a></div>
       <div class="event-location"><i class="bx bxs-map"></i> {{ event.location }}</div>
       {% if event.cover %}
       <div class="event-cover"><img src="{{ event.cover }}"></div>
