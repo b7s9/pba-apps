@@ -21,6 +21,7 @@
     <div class="event-date">{{ event.start_datetime|date:"F j @ g:i a" }}{% if event.end_datetime %} - {{ event.end_datetime|date:"g:i a" }}{% endif %}</div>
     <div class="event-title">{{ event.title }}</div>
     <div class="event-location"><i class="bx bxs-map"></i> {{ event.location }}</div>
+    {% if event.status != 'completed' %}
     <div class="button-holder">
       {% if request.user.is_authenticated %}
         {% if event in request.user.profile.events %}
@@ -33,6 +34,7 @@
         <a class="submit-button" href="{% url 'event_rsvp' event.wordpress_slug %}">RSVP</a>
       {% endif %}
     </div>
+    {% endif %}
     {% if event.cover %}
     <div class="event-cover"><img src="{{ event.cover }}"></div>
     {% endif %}
@@ -42,16 +44,15 @@
 {% endwith %}
 
 <div class="pagination">
-  <div class="pagination-nav previous">
-    {% if previous_event %}
-    <span><a href="{% url 'event_detail' previous_event.wordpress_slug %}"><i class='bx bx-chevron-left'></i> {{ previous_event.title }}</a></span>
-    {% endif %}
-  </div>
-  <br>
-  <br>
   <div class="pagination-nav next">
     {% if next_event %}
     <span><a href="{% url 'event_detail' next_event.wordpress_slug %}">{{ next_event.title }} <i class='bx bx-chevrons-right'></i></a></span>
+    {% endif %}
+  </div>
+  <br><br>
+  <div class="pagination-nav previous">
+    {% if previous_event %}
+    <span><a href="{% url 'event_detail' previous_event.wordpress_slug %}"><i class='bx bx-chevron-left'></i> {{ previous_event.title }}</a></span>
     {% endif %}
   </div>
 </div>

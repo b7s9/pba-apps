@@ -50,11 +50,16 @@ class PastEventsListView(ListView):
         queryset = ScheduledEvent.objects.all()
         queryset = queryset.exclude(status=ScheduledEvent.Status.DELETED)
         queryset = queryset.filter(
-            start_datetime__lte=datetime.datetime.now() + datetime.timedelta(hours=3)
+            start_datetime__lte=datetime.datetime.now() - datetime.timedelta(hours=3)
         )
         queryset = queryset.order_by("-start_datetime")
 
         return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["past"] = True
+        return context
 
 
 class EventDetailView(DetailView):

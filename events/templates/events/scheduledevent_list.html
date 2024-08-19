@@ -1,8 +1,12 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Events</h1>
+<h1>{% if past %}Past {% endif %}Events</h1>
+{% if past %}
+{% regroup object_list|dictsortreversed:"start_datetime" by start_datetime|date:"F Y" as events_by_month %}
+{% else %}
 {% regroup object_list|dictsort:"start_datetime" by start_datetime|date:"F Y" as events_by_month %}
+{% endif %}
 {% for month, events in events_by_month %}
   <div class="event-month">
     <div class="event-month-month">{{ month }}</div>
@@ -34,12 +38,25 @@
 {% endfor %}
 
 <div class="pagination">
+  {% if past %}
+  <div class="pagination-nav previous">
+    {% if page_obj.has_next %}
+    <span><a href="?page={{ page_obj.next_page_number }}"><i class='bx bx-chevron-left'></i> More Events</a></span>
+    {% endif %}
+  </div>
+  <div class="pagination-nav next">
+    {% if page_obj.has_previous %}
+    <span><a href="?page={{ page_obj.previous_page_number }}">More Events <i class='bx bx-chevron-right'></i></a></span>
+    {% endif %}
+  </div>
+  <div style="width: 100%; text-align: center;"><span><a href="{% url 'events_list' %}">Upcoming Events <i class='bx bx-chevrons-right'></i></a></span></div>
+  {% else %}
   <div class="pagination-nav previous">
     {% if page_obj.has_previous %}
     <span><a href="?page=1"><i class='bx bx-chevrons-left'></i> First</a></span>
     <span><a href="?page={{ page_obj.previous_page_number }}"><i class='bx bx-chevron-left'></i> Previous Events</a></span>
     {% else %}
-    <!--<span><i class='bx bx-chevron-left'></i> Past Events</span>-->
+    <span><a href="{% url 'events_past_list' %}"><i class='bx bx-chevrons-left'></i> Past Events</a></span>
     {% endif %}
   </div>
   <div class="pagination-nav next">
@@ -48,5 +65,6 @@
     <span><a href="?page={{ page_obj.paginator.num_pages }}">Last <i class='bx bx-chevrons-right'></i></a></span>
     {% endif %}
   </div>
+  {% endif %}
 </div>
 {% endblock %}
