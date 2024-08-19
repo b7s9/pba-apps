@@ -3,11 +3,12 @@ import uuid
 
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
+from django.urls import reverse
 from django.utils import timezone
 from django.views.generic import DetailView, ListView
 
-from events.forms import EventSignInForm
-from events.models import EventSignIn, ScheduledEvent
+from events.forms import EventRSVPForm, EventSignInForm
+from events.models import EventRSVP, EventSignIn, ScheduledEvent
 
 
 def _fetch_event_by_slug_or_id(event_slug_or_id):
@@ -41,7 +42,7 @@ class EventsListView(ListView):
         return queryset
 
 
-class PasEventsListView(ListView):
+class PastEventsListView(ListView):
     model = ScheduledEvent
     paginate_by = 10
 
@@ -91,6 +92,41 @@ def event_view(request, event_slug_or_id):
         raise Http404
     html = "<html><body>%s</body></html>" % str(event)
     return HttpResponse(html)
+
+
+def event_rsvp(request, event_slug_or_id):
+    event = _fetch_event_by_slug_or_id(event_slug_or_id)
+    if event is None:
+        raise Http404
+    if timezone.now() > event.start_datetime + datetime.timedelta(hours=6):
+        return HttpResponseRedirect(request.path_info)
+
+    if request.user.is_authenticated:
+        rsvp, created = EventRSVP.objects.update_or_create(event=event, user=request.user)
+        rsvp.save()
+        return HttpResponseRedirect(reverse("event_detail", kwargs={"slug": event.wordpress_slug}))
+
+    if request.method == "POST":
+        form = EventRSVPForm(request.POST)
+        if form.is_valid():
+            form.instance.event = event
+            form.save()
+            return HttpResponseRedirect(reverse("event_detail", kwargs={"slug": event.wordpress_slug}))
+    else:
+        form = EventRSVPForm()
+    return render(request, "form.html", context={"event": event, "form": form})
+
+
+def event_rsvp_cancel(request, event_slug_or_id):
+    event = _fetch_event_by_slug_or_id(event_slug_or_id)
+    if event is None:
+        raise Http404
+    if timezone.now() > event.start_datetime + datetime.timedelta(hours=6):
+        return HttpResponseRedirect(request.path_info)
+
+    if request.user.is_authenticated and event in request.user.profile.events:
+        EventRSVP.objects.filter(user=request.user, event=event).delete()
+        return HttpResponseRedirect(reverse("event_detail", kwargs={"slug": event.wordpress_slug}))
 
 
 def event_signin(request, event_slug_or_id):

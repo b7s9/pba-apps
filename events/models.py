@@ -1,5 +1,6 @@
 import uuid
 
+from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 from django.db import models, transaction
 from interactions.models.discord.enums import ScheduledEventStatus
@@ -59,6 +60,20 @@ class ScheduledEvent(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class EventRSVP(models.Model):
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    event = models.ForeignKey(ScheduledEvent, to_field="id", on_delete=models.CASCADE)
+
+    user = models.ForeignKey(
+        User, related_name="event_rsvps", blank=True, null=True, on_delete=models.CASCADE
+    )
+
+    first_name = models.CharField(max_length=64, null=True, blank=True)
+    last_name = models.CharField(max_length=64, null=True, blank=True)
+    email = models.EmailField(null=True, blank=True)
 
 
 class EventSignIn(models.Model):

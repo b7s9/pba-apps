@@ -54,6 +54,29 @@
   <p><b>{% blocktranslate %}Set a password for your account <a href="{{ set_password_url }}">here</a>.{% endblocktranslate %}</b></p>
   {% endif %}
 </div>
+{% if request.user.event_rsvps.all %}
+<hr>
+<div class="form-header">
+  <h2>{% translate "Your Upcoming Events" %}</h2>
+  <div class="table-container">
+    <table>
+      <tr>
+        <th>{% translate "Event" %}</th>
+        <th>{% translate "Actions" %}</th>
+      </tr>
+      {% for rsvp in request.user.event_rsvps.all %}
+      <tr>
+        <td><a href="{% url 'event_detail' rsvp.event.wordpress_slug %}">{{ rsvp.event.title }}</a></td>
+        <td>
+          <a class="smol-button" href="{% url 'event_detail' rsvp.event.wordpress_slug %}">View Event</a>
+          <a class="smol-button" href="{% url 'event_rsvp_cancel' rsvp.event.wordpress_slug %}">Cancel RSVP</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+</div>
+{% endif %}
 <hr>
 <div class="form-header">
   <h2>{% translate "Donations" %}</h2>

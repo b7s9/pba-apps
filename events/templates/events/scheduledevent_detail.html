@@ -22,7 +22,16 @@
     <div class="event-title">{{ event.title }}</div>
     <div class="event-location"><i class="bx bxs-map"></i> {{ event.location }}</div>
     <div class="button-holder">
-      <a class="submit-button" href="">RSVP</a>
+      {% if request.user.is_authenticated %}
+        {% if event in request.user.profile.events %}
+        <p>You are currently RSVP'd "Yes"!</p>
+        <a class="submit-button" href="{% url 'event_rsvp_cancel' event.wordpress_slug %}">Cancel RSVP</a>
+        {% else %}
+        <a class="submit-button" href="{% url 'event_rsvp' event.wordpress_slug %}">RSVP</a>
+        {% endif %}
+      {% else %}
+        <a class="submit-button" href="{% url 'event_rsvp' event.wordpress_slug %}">RSVP</a>
+      {% endif %}
     </div>
     {% if event.cover %}
     <div class="event-cover"><img src="{{ event.cover }}"></div>
