@@ -3,16 +3,19 @@ import pathlib
 import pkgutil
 import sys
 
+from allauth.socialaccount.models import SocialAccount
 from interactions import Client, Intents, listen
 from interactions.api.events import (
     GuildScheduledEventCreate,
     GuildScheduledEventDelete,
     GuildScheduledEventUpdate,
+    GuildScheduledEventUserAdd,
+    GuildScheduledEventUserRemove,
 )
 from interactions.ext import prefixed_commands
 
 from discord.handlers import OnMessage
-from events.models import ScheduledEvent
+from events.models import EventRSVP, ScheduledEvent
 
 
 class PBADiscordBot(Client):
@@ -39,6 +42,48 @@ class PBADiscordBot(Client):
                 await handler.on_message(event.message)
                 if handler.terminal:
                     break
+
+    @listen(GuildScheduledEventUserAdd)
+    async def on_scheduled_event_user_add(self, event):
+        scheduled_event = await ScheduledEvent.objects.filter(
+            discord_id=event.scheduled_event_id
+        ).afirst()
+        social_account = (
+            await SocialAccount.objects.filter(provider="discord")
+            .filter(uid=event.user_id)
+            .select_related("user")
+            .afirst()
+        )
+        if scheduled_event is None:
+            print("No event found!")
+        if social_account is None:
+            print("No social_account found!")
+        if scheduled_event is not None and social_account is not None:
+            rsvp, created = await EventRSVP.objects.aupdate_or_create(
+                event=scheduled_event,
+                user=social_account.user,
+            )
+
+    @listen(GuildScheduledEventUserRemove)
+    async def on_scheduled_event_user_remove(self, event):
+        scheduled_event = await ScheduledEvent.objects.filter(
+            discord_id=event.scheduled_event_id
+        ).afirst()
+        social_account = (
+            await SocialAccount.objects.filter(provider="discord")
+            .filter(uid=event.user_id)
+            .select_related("user")
+            .afirst()
+        )
+        if scheduled_event is None:
+            print("No event found!")
+        if social_account is None:
+            print("No social_account found!")
+        if scheduled_event is not None and social_account is not None:
+            await EventRSVP.objects.filter(
+                event=scheduled_event,
+                user=social_account.user,
+            ).adelete()
 
     @listen(GuildScheduledEventCreate)
     async def on_scheduled_event_create(self, event):

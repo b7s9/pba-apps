@@ -1,9 +1,22 @@
-from django.forms import ModelForm
+from django import forms
 
-from events.models import EventSignIn
+from events.models import EventRSVP, EventSignIn
 
 
-class EventSignInForm(ModelForm):
+class EventRSVPForm(forms.ModelForm):
+    class Meta:
+        model = EventRSVP
+        fields = [
+            "first_name",
+            "last_name",
+            "email",
+        ]
+
+    first_name = forms.CharField(required=True)
+    last_name = forms.CharField(required=True)
+    email = forms.EmailField(required=True, max_length=100)
+
+class EventSignInForm(forms.ModelForm):
     class Meta:
         model = EventSignIn
         fields = [

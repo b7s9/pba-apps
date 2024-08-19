@@ -74,6 +74,10 @@ class Profile(models.Model):
     def discord(self):
         return self.user.socialaccount_set.filter(provider="discord").first()
 
+    @property
+    def events(self):
+        return [rsvp.event for rsvp in self.user.event_rsvps.all()]
+
     def __str__(self):
         return f"{self.user.first_name} {self.user.last_name} - {self.user.email}"
 
