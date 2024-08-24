@@ -13,6 +13,7 @@ django-email-log
 django-environ
 django-htmx
 django-markdownfield
+django-markdownify
 django-multi-email-field
 django-ordered-model
 django-recaptcha

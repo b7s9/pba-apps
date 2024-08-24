@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load markdownify %}
 
 {% block content %}
 <div class="event-nav-top">
@@ -38,7 +39,11 @@
     {% if event.cover %}
     <div class="event-cover"><img src="{{ event.cover }}"></div>
     {% endif %}
-    <div class="event-description">{{ event.description }}</div>
+    <div class="event-description">
+    {% markdownify %}
+    {{ event.description|markdownify }}
+    {% endmarkdownify %}
+    </div>
   </div>
 </div>
 {% endwith %}

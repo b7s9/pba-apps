@@ -40,6 +40,7 @@ bleach[css]==6.1.0
     # via
     #   bleach
     #   django-markdownfield
+    #   django-markdownify
 boto3==1.34.130
     # via django-storages
 botocore==1.34.130
@@ -105,6 +106,7 @@ django==4.2.13
     #   django-filter
     #   django-htmx
     #   django-markdownfield
+    #   django-markdownify
     #   django-modelcluster
     #   django-modeltree
     #   django-multi-email-field
@@ -136,6 +138,8 @@ django-filter==24.2
 django-htmx==1.18.0
     # via -r requirements/base.in
 django-markdownfield==0.11.0
+    # via -r requirements/base.in
+django-markdownify==0.9.5
     # via -r requirements/base.in
 django-modelcluster==6.3
     # via wagtail
@@ -208,7 +212,9 @@ laces==0.1.1
 mailchimp3==3.0.21
     # via -r requirements/base.in
 markdown==3.6
-    # via django-markdownfield
+    # via
+    #   django-markdownfield
+    #   django-markdownify
 multidict==6.0.5
     # via
     #   aiohttp

@@ -98,6 +98,7 @@ INSTALLED_APPS = [
     "sitetree",
     "django_tuieditor",
     "csvexport",
+    "markdownify.apps.MarkdownifyConfig",
     # Our apps
     "pbaabp",
     "pages",
@@ -362,3 +363,27 @@ CSV_EXPORT_QUOTECHAR = '"'
 CSV_EXPORT_DOUBLEQUOTE = True
 CSV_EXPORT_LINETERMINATOR = r"\n"
 CSV_EXPORT_QUOTING = "QUOTE_ALL"
+
+MARKDOWNIFY = {
+    "default": {
+        "WHITELIST_TAGS": [
+            "a",
+            "abbr",
+            "acronym",
+            "b",
+            "blockquote",
+            "code",
+            "em",
+            "i",
+            "li",
+            "ol",
+            "strong",
+            "ul",
+            "p",
+        ],
+        "MARKDOWN_EXTENSIONS": [
+            "extra",
+            "nl2br",
+        ],
+    }
+}

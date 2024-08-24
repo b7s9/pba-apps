@@ -116,7 +116,9 @@ def event_rsvp(request, event_slug_or_id):
         if form.is_valid():
             form.instance.event = event
             form.save()
-            return HttpResponseRedirect(reverse("event_detail", kwargs={"slug": event.wordpress_slug}))
+            return HttpResponseRedirect(
+                reverse("event_detail", kwargs={"slug": event.wordpress_slug})
+            )
     else:
         form = EventRSVPForm()
     return render(request, "form.html", context={"event": event, "form": form})

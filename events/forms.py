@@ -16,6 +16,7 @@ class EventRSVPForm(forms.ModelForm):
     last_name = forms.CharField(required=True)
     email = forms.EmailField(required=True, max_length=100)
 
+
 class EventSignInForm(forms.ModelForm):
     class Meta:
         model = EventSignIn
