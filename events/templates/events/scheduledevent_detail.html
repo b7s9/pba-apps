@@ -1,6 +1,16 @@
 {% extends 'base.html' %}
 {% load markdownify %}
 
+{% block extra_head %}
+{% with event=object %}
+<meta property="og:type" content="article">
+<meta property="og:title" content="PBA Event - {{ event.title }}">
+<meta property="og:url" content="https://apps.bikeaction.org/events/{{ event.wordpress_slug }}">
+{% if event.cover %}<meta property="og:image" content="{{ event.cover }}">{% endif %}
+<meta property="og:description" content="{{ event.description|truncatechars:"300" }}">
+{% endwith %}
+{% endblock %}
+
 {% block content %}
 <div class="event-nav-top">
   <a href="{% url 'events_list' %}"><span><i class='bx bx-chevrons-left'></i> All Events</span></a>
