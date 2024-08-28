@@ -1,7 +1,7 @@
 from csvexport.actions import csvexport
 from django.contrib import admin
 
-from events.models import EventSignIn, ScheduledEvent
+from events.models import EventRSVP, EventSignIn, ScheduledEvent
 
 
 class ScheduledEventAdmin(admin.ModelAdmin):
@@ -34,5 +34,21 @@ class EventSignInAdmin(admin.ModelAdmin):
         return obj.event.title
 
 
+class EventRSVPAdmin(admin.ModelAdmin):
+    actions = [csvexport]
+    list_display = ["get_name", "get_event"]
+    list_filter = ["event__title"]
+    search_fields = ["first_name", "last_name", "email"]
+
+    def get_name(self, obj):
+        if obj.user is None:
+            return f"{obj.first_name} {obj.last_name}"
+        return f"{obj.user.first_name} {obj.user.last_name}"
+
+    def get_event(self, obj):
+        return obj.event.title
+
+
 admin.site.register(ScheduledEvent, ScheduledEventAdmin)
 admin.site.register(EventSignIn, EventSignInAdmin)
+admin.site.register(EventRSVP, EventRSVPAdmin)
