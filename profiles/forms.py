@@ -14,7 +14,16 @@ class BaseProfileSignupForm(BaseSignupForm):
     council_district = forms.ChoiceField(
         choices=Profile.District.choices, label=_("Council District")
     )
-    street_address = forms.CharField(max_length=256, required=True, label=_("Street Address"))
+    street_address = forms.CharField(
+        max_length=256,
+        required=True,
+        label=_("Street Address"),
+        help_text=(
+            "Your Philadelphia Street Address. "
+            "We use this to connect you with actions you can make "
+            "in your neighborhood."
+        ),
+    )
     zip_code = forms.CharField(
         max_length=10,
         validators=[
@@ -60,7 +69,7 @@ class ProfileSignupForm(BaseProfileSignupForm):
     class Meta:
         help_texts = {
             "street_address": (
-                "Your Philadelphia Street Address."
+                "Your Philadelphia Street Address. "
                 "We use this to connect you with actions you can make "
                 "in your neighborhood."
             ),
@@ -81,7 +90,7 @@ class ProfileUpdateForm(forms.ModelForm):
         ]
         help_texts = {
             "street_address": (
-                "Your Philadelphia Street Address."
+                "Your Philadelphia Street Address. "
                 "We use this to connect you with actions you can make "
                 "in your neighborhood."
             ),
