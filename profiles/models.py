@@ -36,7 +36,11 @@ class Profile(models.Model):
         null=True,
         blank=True,
         verbose_name=_("Street Address"),
-        help_text=_("Your Philadelphia Street Address"),
+        help_text=_(
+            "Your Philadelphia Street Address. "
+            "We use this to connect you with actions you can make "
+            "in your neighborhood."
+        ),
     )
     zip_code = models.CharField(
         max_length=10,
