@@ -80,7 +80,11 @@ class ProfileUpdateForm(forms.ModelForm):
             "newsletter_opt_in",
         ]
         help_texts = {
-            "street_address": "Your Philadelphia Street Address",
+            "street_address": (
+                "Your Philadelphia Street Address."
+                "We use this to connect you with actions you can make "
+                "in your neighborhood."
+            ),
         }
 
     def __init__(self, *args, **kwargs):
