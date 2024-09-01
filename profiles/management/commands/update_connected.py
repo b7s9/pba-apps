@@ -3,6 +3,8 @@ from django.core.management.base import BaseCommand
 
 from profiles.tasks import add_user_to_connected_role
 
+import time
+
 
 class Command(BaseCommand):
     help = "Update roles for all connected discord auths"
@@ -10,3 +12,4 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         for sa in SocialAccount.objects.filter(provider="discord"):
             add_user_to_connected_role.delay(sa.uid)
+            time.sleep(10)
