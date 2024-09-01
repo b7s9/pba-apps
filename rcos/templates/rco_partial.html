@@ -47,3 +47,22 @@
 
 <small>Your Polling Place for voting is: {{ POLLING_PLACE }}</small>
 {% endif %}
+
+<hr>
+
+{% if address_lat %}
+<div id="rcomap" style="height: 40vh; width: 100%; z-index: 1;">
+</div>
+<script>
+  var map = L.map('rcomap').setView([{{ address_lat }}, {{ address_long }}], 13);
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+  }).addTo(map);
+  var poppup = L.marker([{{ address_lat }}, {{ address_long }}]).addTo(map);
+  L.geoJSON({{ DISTRICT_GEOJSON }}, {style: {color: '#111111'}}).bindTooltip(function (layer) {return 'District ' + layer.feature.properties.DISTRICT}, {permanent: true, opacity: 0.7}).openTooltip().addTo(map);
+  {% for rco in RCOS_GEOJSON %}
+  L.geoJSON({{ rco }}).bindTooltip(function (layer) {return layer.feature.properties.ORGANIZATION_NAME}, {permanent: true, opacity: 0.7}).openTooltip().addTo(map);
+  {% endfor %}
+</script>
+{% endif %}

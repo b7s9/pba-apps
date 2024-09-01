@@ -5,6 +5,7 @@ import sentry_sdk
 from django.conf import settings
 from django.db import transaction
 from django.http import HttpResponse
+from django.utils.html import mark_safe
 from django.shortcuts import render
 from geopy.adapters import AioHTTPAdapter
 from geopy.geocoders import GoogleV3, Nominatim
@@ -60,11 +61,13 @@ async def query_address(request):
     point = Point(address.longitude, address.latitude)
 
     rcos = []
+    rcos_geojson = []
     other = []
     wards = []
     for feature in RCOS["features"]:
         polygon = shape(feature["geometry"])
         if polygon.contains(point):
+            rcos_geojson.append(mark_safe(json.dumps(feature)))
             if feature["properties"]["ORG_TYPE"] == "Ward":
                 wards.append(feature["properties"])
             elif feature["properties"]["ORG_TYPE"] in ["NID", "SSD", None]:
@@ -73,10 +76,12 @@ async def query_address(request):
                 rcos.append(feature["properties"])
 
     district = None
+    district_geojson = None
     for feature in DISTRICTS["features"]:
         polygon = shape(feature["geometry"])
         if polygon.contains(point):
             district = feature["properties"]["DISTRICT"]
+            district_geojson = mark_safe(json.dumps(feature))
             break
 
     ward, division = None, None
@@ -100,12 +105,16 @@ async def query_address(request):
         "rco_partial.html",
         context={
             "DISTRICT": district,
+            "DISTRICT_GEOJSON": district_geojson,
             "RCOS": rcos,
+            "RCOS_GEOJSON": rcos_geojson,
             "OTHER": other,
             "WARDS": wards,
             "WARD": ward,
             "DIVISION": division,
             "POLLING_PLACE": polling_place,
             "address": address,
+            "address_lat": address.latitude,
+            "address_long": address.longitude,
         },
     )
