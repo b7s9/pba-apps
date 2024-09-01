@@ -68,7 +68,7 @@
         <th>{% translate "Event" %}</th>
         <th>{% translate "Actions" %}</th>
       </tr>
-      {% for rsvp in request.user.event_rsvps.all %}
+      {% for rsvp in request.user.profile.upcoming_events %}
       <tr>
         <td><a href="{% url 'event_detail' rsvp.event.wordpress_slug %}">{{ rsvp.event.title }}</a></td>
         <td>

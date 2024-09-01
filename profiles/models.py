@@ -1,3 +1,4 @@
+import datetime
 import uuid
 
 from django.contrib.auth.models import User
@@ -81,6 +82,16 @@ class Profile(models.Model):
     @property
     def events(self):
         return [rsvp.event for rsvp in self.user.event_rsvps.all()]
+
+    @property
+    def upcoming_events(self):
+        return (
+            self.user.event_rsvps.filter(
+                event__start_datetime__gte=datetime.datetime.now() - datetime.timedelta(hours=3)
+            )
+            .order_by("event__start_datetime")
+            .all()
+        )
 
     def __str__(self):
         return f"{self.user.first_name} {self.user.last_name} - {self.user.email}"

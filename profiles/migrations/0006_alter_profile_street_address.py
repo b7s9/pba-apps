@@ -15,7 +15,11 @@ class Migration(migrations.Migration):
             name="street_address",
             field=models.CharField(
                 blank=True,
-                help_text="Your Street Address. We use this to connect you with actions you can make in your neighborhood.",
+                help_text=(
+                    "Your Street Address. "
+                    "We use this to connect you with actions "
+                    "you can make in your neighborhood."
+                ),
                 max_length=256,
                 null=True,
                 verbose_name="Street Address",
