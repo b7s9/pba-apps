@@ -1,12 +1,50 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
+from django.db.models import Count, Q
 
 from profiles.models import Profile, ShirtInterest
 
 
+class ProfileCompleteFilter(admin.SimpleListFilter):
+    title = "profile complete"
+    parameter_name = "profile_complete"
+
+    def lookups(self, request, model_admin):
+        return ((True, "Yes"), (False, "No"))
+
+    def queryset(self, request, queryset):
+        if self.value() == "True":
+            return queryset.filter(
+                street_address__isnull=False,
+                zip_code__isnull=False,
+                council_district__isnull=False,
+            )
+        return queryset.filter(
+            Q(street_address__isnull=True)
+            | Q(zip_code__isnull=True)
+            | Q(council_district__isnull=True)
+        )
+
+
+class AppsConnectedFilter(admin.SimpleListFilter):
+    title = "apps connected"
+    parameter_name = "apps_connected"
+
+    def lookups(self, request, model_admin):
+        return ((True, "Yes"), (False, "No"))
+
+    def queryset(self, request, queryset):
+        if self.value() == "True":
+            return queryset.annotate(connected=Count("user__socialaccount")).filter(
+                connected__gt=0
+            )
+        return queryset.annotate(connected=Count("user__socialaccount")).filter(connected=0)
+
+
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ["_user", "council_district"]
+    list_display = ["_name", "_user", "profile_complete", "apps_connected", "council_district"]
+    list_filter = [ProfileCompleteFilter, AppsConnectedFilter, "council_district"]
     search_fields = ["user__first_name", "user__last_name", "user__email"]
     autocomplete_fields = ("user",)
 
@@ -14,6 +52,31 @@ class ProfileAdmin(admin.ModelAdmin):
         if obj is None:
             return ""
         return obj.user.email
+
+    def _name(self, obj=None):
+        if obj is None:
+            return ""
+        return f"{obj.user.first_name} {obj.user.last_name}"
+
+    def profile_complete(self, obj=None):
+        if obj is None:
+            return False
+        return all(
+            [
+                obj.street_address is not None,
+                obj.zip_code is not None,
+                obj.council_district is not None,
+            ]
+        )
+
+    profile_complete.boolean = True
+
+    def apps_connected(self, obj=None):
+        if obj is None:
+            return False
+        return obj.discord is not None
+
+    apps_connected.boolean = True
 
     def get_readonly_fields(self, request, obj=None):
         if obj is None:
