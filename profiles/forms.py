@@ -19,7 +19,7 @@ class BaseProfileSignupForm(BaseSignupForm):
         required=True,
         label=_("Street Address"),
         help_text=(
-            "Your Philadelphia Street Address. "
+            "Your Street Address. "
             "We use this to connect you with actions you can make "
             "in your neighborhood."
         ),
@@ -69,7 +69,7 @@ class ProfileSignupForm(BaseProfileSignupForm):
     class Meta:
         help_texts = {
             "street_address": (
-                "Your Philadelphia Street Address. "
+                "Your Street Address. "
                 "We use this to connect you with actions you can make "
                 "in your neighborhood."
             ),
@@ -90,7 +90,7 @@ class ProfileUpdateForm(forms.ModelForm):
         ]
         help_texts = {
             "street_address": (
-                "Your Philadelphia Street Address. "
+                "Your Street Address. "
                 "We use this to connect you with actions you can make "
                 "in your neighborhood."
             ),

@@ -37,7 +37,7 @@ class Profile(models.Model):
         blank=True,
         verbose_name=_("Street Address"),
         help_text=_(
-            "Your Philadelphia Street Address. "
+            "Your Street Address. "
             "We use this to connect you with actions you can make "
             "in your neighborhood."
         ),
