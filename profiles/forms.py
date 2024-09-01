@@ -43,6 +43,7 @@ class BaseProfileSignupForm(BaseSignupForm):
         profile = Profile(
             user=user,
             council_district=self.cleaned_data["council_district"],
+            street_address=self.cleaned_data["street_address"],
             zip_code=self.cleaned_data["zip_code"],
             newsletter_opt_in=self.cleaned_data["newsletter_opt_in"],
         )
