@@ -12,7 +12,12 @@ class BaseProfileSignupForm(BaseSignupForm):
     first_name = forms.CharField(required=True, label=_("First Name"))
     last_name = forms.CharField(required=True, label=_("Last Name"))
     council_district = forms.ChoiceField(
-        choices=Profile.District.choices, label=_("Council District")
+        choices=Profile.District.choices,
+        label=_("Council District"),
+        help_text=(
+            "Unsure what Council District your are in? "
+            'Use our <a href="/rcos/find" target="_blank">RCO finder tool</a>'
+        ),
     )
     street_address = forms.CharField(
         max_length=256,
@@ -94,6 +99,10 @@ class ProfileUpdateForm(forms.ModelForm):
                 "Your Street Address. "
                 "We use this to connect you with actions you can make "
                 "in your neighborhood."
+            ),
+            "council_district": mark_safe(
+                "Unsure what Council District your are in? "
+                'Use our <a href="/rcos/find" target="_blank">RCO finder tool</a>'
             ),
         }
 
