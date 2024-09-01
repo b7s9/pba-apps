@@ -20,11 +20,13 @@ class ProfileCompleteFilter(admin.SimpleListFilter):
                 zip_code__isnull=False,
                 council_district__isnull=False,
             )
-        return queryset.filter(
-            Q(street_address__isnull=True)
-            | Q(zip_code__isnull=True)
-            | Q(council_district__isnull=True)
-        )
+        elif self.value() == "False":
+            return queryset.filter(
+                Q(street_address__isnull=True)
+                | Q(zip_code__isnull=True)
+                | Q(council_district__isnull=True)
+            )
+        return queryset
 
 
 class AppsConnectedFilter(admin.SimpleListFilter):
@@ -39,7 +41,9 @@ class AppsConnectedFilter(admin.SimpleListFilter):
             return queryset.annotate(connected=Count("user__socialaccount")).filter(
                 connected__gt=0
             )
-        return queryset.annotate(connected=Count("user__socialaccount")).filter(connected=0)
+        elif self.value() == "False":
+            return queryset.annotate(connected=Count("user__socialaccount")).filter(connected=0)
+        return queryset
 
 
 class ProfileAdmin(admin.ModelAdmin):
