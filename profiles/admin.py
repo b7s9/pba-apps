@@ -31,6 +31,23 @@ class ProfileCompleteFilter(admin.SimpleListFilter):
         return queryset
 
 
+class GeolocatedFilter(admin.SimpleListFilter):
+    title = "geolocated"
+    parameter_name = "geolocated"
+
+    def lookups(self, request, model_admin):
+        return ((True, "Yes"), (False, "No"))
+
+    def queryset(self, request, queryset):
+        if self.value() == "True":
+            return queryset.filter(
+                location__isnull=False,
+            )
+        elif self.value() == "False":
+            return queryset.filter(Q(location__isnull=True))
+        return queryset
+
+
 class AppsConnectedFilter(admin.SimpleListFilter):
     title = "apps connected"
     parameter_name = "apps_connected"
@@ -49,8 +66,20 @@ class AppsConnectedFilter(admin.SimpleListFilter):
 
 
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ["_name", "_user", "profile_complete", "apps_connected", "council_district"]
-    list_filter = [ProfileCompleteFilter, AppsConnectedFilter, "council_district"]
+    list_display = [
+        "_name",
+        "_user",
+        "profile_complete",
+        "apps_connected",
+        "geolocated",
+        "council_district",
+    ]
+    list_filter = [
+        ProfileCompleteFilter,
+        AppsConnectedFilter,
+        GeolocatedFilter,
+        "council_district",
+    ]
     search_fields = ["user__first_name", "user__last_name", "user__email"]
     autocomplete_fields = ("user",)
     formfield_overrides = {
@@ -66,6 +95,13 @@ class ProfileAdmin(admin.ModelAdmin):
         if obj is None:
             return ""
         return f"{obj.user.first_name} {obj.user.last_name}"
+
+    def geolocated(self, obj=None):
+        if obj is None:
+            return False
+        return not obj.location is None
+
+    geolocated.boolean = True
 
     def profile_complete(self, obj=None):
         if obj is None:
