@@ -38,6 +38,7 @@ services:
         condition: service_healthy
       postgres:
         condition: service_healthy
+
   worker:
     image: pbaabp-web:docker-compose
     command: hupper -m celery -A pbaabp worker --beat -l DEBUG
@@ -51,6 +52,7 @@ services:
         condition: service_healthy
       postgres:
         condition: service_healthy
+
   discord:
     image: pbaabp-web:docker-compose
     command: python manage.py run_dev_discord

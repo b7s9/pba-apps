@@ -5,8 +5,8 @@ import sentry_sdk
 from django.conf import settings
 from django.db import transaction
 from django.http import HttpResponse
-from django.utils.html import mark_safe
 from django.shortcuts import render
+from django.utils.html import mark_safe
 from geopy.adapters import AioHTTPAdapter
 from geopy.geocoders import GoogleV3, Nominatim
 from shapely.geometry import Point, shape

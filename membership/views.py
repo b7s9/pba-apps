@@ -13,6 +13,7 @@ from djstripe.models import Customer, PaymentMethod, Price, Product, Subscriptio
 
 from membership.forms import RecurringDonationSetupForm
 from membership.models import DonationTier
+from pbaabp.email import send_email_message
 from profiles.forms import BaseProfileSignupForm
 from profiles.models import Profile
 
@@ -128,21 +129,22 @@ def complete_checkout_session(request):
                     link = reverse("account_set_password")
                     link = request.build_absolute_uri(link)
                     link += sesame.utils.get_query_string(user)
-                    user.email_user(
-                        subject=f"Welcome! Create a password for {request.get_host()}",
-                        message=f"""\
+                    subject = f"Welcome! Create a password for {request.get_host()}"
+                    message = f"""\
 Hello {user.first_name},
 
 We created an account on {request.get_host()} so that you can manage your
 new recurring donation to Philly Bike Action. Follow the link below to
 set a password for your account.
 
-    {link}
+* [Create your password]({link})
 
 NOTE: This link will expire in 7 days!
 
 Thank you for being a part of the action!
-""",
+"""
+                    send_email_message(
+                        None, None, [user.email], None, message=message, subject=subject
                     )
                     login(request, user, backend=settings.AUTHENTICATION_BACKENDS[0])
             payment_method = subscription.default_payment_method

@@ -1,0 +1,60 @@
+
+html {
+    width: 100%;
+    max-width: 600px;
+}
+
+.content {
+    margin: 1rem;
+    margin-top: 0rem;
+    box-sizing: border-box;
+    font-family: sans-serif;
+    font-size: 1rem;
+    padding-top: 1rem;
+}
+
+.email-header {
+    width: 100%;
+    max-width: 600px;
+    height: 5rem;
+    background-color: #70bf44;
+    text-align: center;
+}
+
+.email-header-img {
+    max-height: 5rem;
+    max-width: 9rem;
+}
+
+.email-footer {
+    width: 100%;
+    max-width: 600px;
+}
+
+.content {
+  width: 100%;
+  max-width: 600px;
+}
+
+p + p {
+    text-indent: 1rem;
+}
+
+p {
+    line-height: 1.2rem;
+}
+
+.footer {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
+  background-color: black;
+  color: white;
+  margin-top: auto;
+}
+
+.footer-icon {
+   -webkit-filter: grayscale(1) invert(1);
+    filter: grayscale(1) invert(1);
+}

@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.views.generic import FormView
 
+from pbaabp.email import send_email_message
 from pbaabp.forms import EmailLoginForm
 
 
@@ -28,18 +29,17 @@ class EmailLoginView(FormView):
 
     def send_email(self, user, link):
         """Send an email with this login link to this user."""
-        user.email_user(
-            subject=f"Login link for {self.request.get_host()}",
-            message=f"""\
-Hello,
+        subject = f"Login link for {self.request.get_host()}"
+        message = f"""
+Hello {user.first_name},
 
 You requested that we send you a link to log in to our app:
 
-    {link}
+* [Login Now]({link})
 
 Thank you for being a part of the action!
-""",
-        )
+        """
+        send_email_message(None, None, [user.email], None, message=message, subject=subject)
 
     def email_submitted(self, email):
         user = self.get_user(email)

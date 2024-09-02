@@ -158,6 +158,11 @@ ASGI_APPLICATION = "pbaabp.asgi.application"
 DATABASES = {"default": env.db("DATABASE_URL")}
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
 
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.dummy.DummyCache",
+    }
+}
 
 # Authentication
 AUTHENTICATION_BACKENDS = [
@@ -297,6 +302,7 @@ MAILCHIMP_AUDIENCE_ID = env("MAILCHIMP_AUDIENCE_ID")
 ACCOUNT_FORMS = {
     "signup": "profiles.forms.ProfileSignupForm",
 }
+ACCOUNT_ADAPTER = "profiles.adapters.AccountAdapter"
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = "email"

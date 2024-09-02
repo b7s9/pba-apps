@@ -33,7 +33,10 @@ autobahn==23.6.2
 automat==22.10.0
     # via twisted
 beautifulsoup4==4.12.3
-    # via wagtail
+    # via
+    #   -r requirements/base.in
+    #   pynliner
+    #   wagtail
 billiard==4.2.0
     # via celery
 bleach[css]==6.1.0
@@ -85,6 +88,8 @@ cryptography==42.0.8
     #   autobahn
     #   pyopenssl
     #   service-identity
+cssutils==2.11.1
+    # via pynliner
 daphne==4.1.2
     # via channels
 defusedxml==0.7.1
@@ -102,6 +107,7 @@ django==4.2.13
     #   dj-stripe
     #   django-admin-csvexport
     #   django-allauth
+    #   django-anymail
     #   django-email-log
     #   django-filter
     #   django-htmx
@@ -126,6 +132,8 @@ django==4.2.13
 django-admin-csvexport==2.2
     # via -r requirements/base.in
 django-allauth[mfa]==0.63.3
+    # via -r requirements/base.in
+django-anymail[mailgun]==11.1
     # via -r requirements/base.in
 django-dotenv==1.4.2
     # via -r requirements/base.in
@@ -213,8 +221,11 @@ mailchimp3==3.0.21
     # via -r requirements/base.in
 markdown==3.6
     # via
+    #   -r requirements/base.in
     #   django-markdownfield
     #   django-markdownify
+more-itertools==10.4.0
+    # via cssutils
 multidict==6.0.5
     # via
     #   aiohttp
@@ -248,6 +259,8 @@ pygit2==1.14.1
     # via
     #   -r requirements/base.in
     #   wagtail-localize-git
+pynliner==0.8.0
+    # via -r requirements/base.in
 pyopenssl==24.1.0
     # via twisted
 pypng==0.20220715.0
@@ -266,6 +279,7 @@ redis==5.0.6
     # via celery
 requests==2.32.3
     # via
+    #   django-anymail
     #   mailchimp3
     #   stripe
     #   wagtail
@@ -320,6 +334,7 @@ tzdata==2024.1
 urllib3==2.2.2
     # via
     #   botocore
+    #   django-anymail
     #   requests
     #   sentry-sdk
 vine==5.1.0

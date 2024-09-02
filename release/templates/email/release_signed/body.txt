@@ -1,0 +1,14 @@
+Hello {{release_signature.nickname}},
+
+This is a confirmation that you signed the following release for
+"{{release_signature.release.title}}":
+
+```
+{{release_signature.release.release}}
+```
+
+* Legal Name: {{release_signature.legal_name}}
+* Date of Birth: {{release_signature.dob}}
+
+Thanks!  
+- Philly Bike Action
