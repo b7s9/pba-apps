@@ -20,7 +20,7 @@ urlpatterns = [
     path("sesame/login/", LoginView.as_view(), name="sesame_login"),
     path("email/login/", EmailLoginView.as_view(), name="email_login"),
     path("maillink/", include("maillinks.urls")),
-    path("rcos/", include("rcos.urls")),
+    path("rcos/", include("facets.urls")),
     path("", include("pages.urls")),
     path("admin/", admin.site.urls),
     path("cms/", include(wagtailadmin_urls)),

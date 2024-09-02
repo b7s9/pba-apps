@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class RcosConfig(AppConfig):
+class FacetsConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
-    name = "rcos"
+    name = "facets"

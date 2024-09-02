@@ -1,6 +1,6 @@
 from django.urls import path
 
-from rcos import views
+from facets import views
 
 urlpatterns = [
     path("find", views.index),

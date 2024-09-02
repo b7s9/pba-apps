@@ -109,7 +109,7 @@ INSTALLED_APPS = [
     "campaigns",
     "release",
     "maillinks",
-    "rcos",
+    "facets",
     "cms",
 ]
 
