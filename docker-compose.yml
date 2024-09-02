@@ -2,7 +2,10 @@ version: "3.9"
 
 services:
   postgres:
-    image: postgres:16-bookworm
+    image: postgis
+    build:
+      context: compose
+      dockerfile: Dockerfile.postgis
     ports:
       - "5433:5432"
     environment:

@@ -1,5 +1,5 @@
 FROM python:3.11-bullseye
-RUN apt-get update && apt-get install -y gettext
+RUN apt-get update && apt-get install -y gettext binutils libproj-dev gdal-bin
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
 ARG USER_ID
