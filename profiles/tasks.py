@@ -1,9 +1,11 @@
 from asgiref.sync import async_to_sync
 from celery import shared_task
 from django.conf import settings
+from django.contrib.gis.geos import Point
 from mailchimp3 import MailChimp, helpers
 
 from discord.bot import bot
+from facets.utils import geocode_address
 
 
 async def _add_user_to_connected_role(uid):
@@ -33,6 +35,25 @@ def remove_user_from_connected_role(uid):
 
 
 @shared_task
+def geocode_profile(profile_id):
+    from profiles.models import Profile
+
+    profile = Profile.objects.get(id=profile_id)
+
+    if profile.street_address is not None:
+        print(f"Geocoding {profile}")
+        address = async_to_sync(geocode_address)(profile.street_address + " " + profile.zip_code)
+        if address.address is not None and not address.address.startswith("Philadelphia"):
+            print(f"Address found {address}")
+            Profile.objects.filter(id=profile_id).update(
+                location=Point(address.longitude, address.latitude)
+            )
+        else:
+            print(f"No address found for {profile.street_address} {profile.zip_code}")
+            Profile.objects.filter(id=profile_id).update(location=None)
+
+
+@shared_task
 def sync_to_mailchimp(profile_id):
     from profiles.models import Profile
 
@@ -55,8 +76,7 @@ def sync_to_mailchimp(profile_id):
             },
         },
     )
-    profile.mailchimp_contact_id = response["id"]
-    profile.save()
+    Profile.objects.filter(id=profile_id).update(mailchimp_contact_id=response["id"])
 
     print("updating tags...")
     mailchimp.lists.members.tags.update(

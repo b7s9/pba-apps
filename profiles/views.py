@@ -20,6 +20,14 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
         return self.request.user.profile
 
 
+class ProfileDistrictAndRCOPartial(LoginRequiredMixin, DetailView):
+    model = Profile
+    template_name = "profiles/_rcos_partial.html"
+
+    def get_object(self, queryset=None):
+        return self.request.user.profile
+
+
 class ProfileDonationsPartial(LoginRequiredMixin, DetailView):
     model = Profile
     template_name = "profiles/_donations_partial.html"

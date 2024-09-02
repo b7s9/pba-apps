@@ -1,0 +1,32 @@
+{% load i18n %}
+  {% if first_load %}
+  <div style="position: relative; width: 100%;">
+    <small style="position: absolute; right: 50%; top: -1.5em;">Updating...</small>
+  </div>
+  {% endif %}
+{% if profile.location %}
+  <div class="table-container">
+    <table>
+      <tr>
+        <th>Your District</th>
+      </tr>
+      <tr><td>{{ profile.district }}</td></tr>
+    </table>
+    <br>
+    <table>
+      <tr>
+        <th>Your RCOs</th>
+      </tr>
+      {% for rco in profile.rcos %}
+      <tr><td>{{ rco }}</td></tr>
+      {% endfor %}
+    </table>
+  </div>
+  <p style="font-size: smaller; color: darkened;">Something not look quite right? Make sure your address is correct in your <a href="{{ profile_update_url }}">Profile!</a>!</p>
+{% else %}
+  {% if profile.street_address %}
+    <p>We weren't able to find your address. Make sure your address and zip code are correct in your <a href="{{ profile_update_url }}">Profile</a>, including all address parts like <code>1501 E Passyunk Ave</code>.</p>
+  {% else %}
+    <p>We don't have a location for you. Make sure you have added your address to your <a href="{{ profile_update_url }}">Profile</a></p>
+  {% endif %}
+{% endif %}

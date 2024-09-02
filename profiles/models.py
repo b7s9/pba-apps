@@ -2,11 +2,16 @@ import datetime
 import uuid
 
 from django.contrib.auth.models import User
+from django.contrib.gis.db import models
 from django.core.validators import RegexValidator
-from django.db import models, transaction
+from django.db import transaction
 from django.utils.translation import gettext_lazy as _
 
-from profiles.tasks import sync_to_mailchimp
+from facets.models import District as DistrictFacet
+from facets.models import (
+    RegisteredCommunityOrganization as RegisteredCommunityOrganizationFacet,
+)
+from profiles.tasks import geocode_profile, sync_to_mailchimp
 
 
 class Profile(models.Model):
@@ -59,11 +64,15 @@ class Profile(models.Model):
         blank=False, default=False, verbose_name=_("Newsletter Opt-In")
     )
 
+    location = models.PointField(blank=True, null=True, srid=4326)
+
     def save(self, *args, **kwargs):
         if not self._state.adding:
             old_model = Profile.objects.get(pk=self.pk)
             change_fields = [
-                f.name for f in Profile._meta._get_fields() if f.name in ["newsletter_opt_in"]
+                f.name
+                for f in Profile._meta._get_fields()
+                if f.name in ["newsletter_opt_in", "street_address"]
             ]
             modified = False
             for i in change_fields:
@@ -71,9 +80,29 @@ class Profile(models.Model):
                     modified = True
             if modified:
                 transaction.on_commit(lambda: sync_to_mailchimp.delay(self.id))
+                transaction.on_commit(lambda: geocode_profile.delay(self.id))
         else:
             transaction.on_commit(lambda: sync_to_mailchimp.delay(self.id))
+            transaction.on_commit(lambda: geocode_profile.delay(self.id))
         super(Profile, self).save(*args, **kwargs)
+
+    @property
+    def district(self):
+        if self.street_address is None:
+            return None
+        if self.location is None:
+            return None
+        return DistrictFacet.objects.filter(mpoly__contains=self.location).first()
+
+    @property
+    def rcos(self):
+        if self.street_address is None:
+            return None
+        if self.location is None:
+            return None
+        return RegisteredCommunityOrganizationFacet.objects.filter(
+            mpoly__contains=self.location
+        ).all()
 
     @property
     def discord(self):

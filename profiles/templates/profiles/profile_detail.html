@@ -58,6 +58,15 @@
   <p><b>{% blocktranslate %}Set a password for your account <a href="{{ set_password_url }}">here</a>.{% endblocktranslate %}</b></p>
   {% endif %}
 </div>
+
+<hr>
+<div class="form-header">
+  <h2>{% translate "Your District and RCOs" %}</h2>
+  <div hx-get="_partials/rcos" hx-trigger="load delay:1s" hx-swap="outerHTML">
+    {% include 'profiles/_rcos_partial.html' with first_load=True %}
+  </div>
+</div>
+
 {% if request.user.event_rsvps.all %}
 <hr>
 <div class="form-header">
