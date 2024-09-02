@@ -13,6 +13,7 @@
       </tr>
       <tr><td>{{ profile.district }}</td></tr>
     </table>
+    {% if profile.rcos %}
     <br>
     <table>
       <tr>
@@ -22,6 +23,32 @@
       <tr><td>{{ rco }}</td></tr>
       {% endfor %}
     </table>
+    {% endif %}
+
+    {% if profile.other_rcos %}
+    <br>
+    <table>
+      <tr>
+        <th>Other entities registered as RCOs</th>
+      </tr>
+      {% for rco in profile.other_rcos %}
+      <tr><td>{{ rco }} ({{ rco.properties.ORG_TYPE }})</td></tr>
+      {% endfor %}
+    </table>
+    {% endif %}
+
+    {% if profile.ward_rcos %}
+    <br>
+    <table>
+      <tr>
+        <th>Partisan political wards registered as RCOs</th>
+      </tr>
+      {% for rco in profile.ward_rcos %}
+      <tr><td>{{ rco }} ({{ rco.properties.ORG_TYPE }})</td></tr>
+      {% endfor %}
+    </table>
+    {% endif %}
+
   </div>
   <p style="font-size: smaller; color: darkened;">Something not look quite right? Make sure your address is correct in your <a href="{{ profile_update_url }}">Profile!</a>!</p>
 {% else %}

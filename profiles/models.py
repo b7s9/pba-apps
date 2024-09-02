@@ -100,9 +100,38 @@ class Profile(models.Model):
             return None
         if self.location is None:
             return None
-        return RegisteredCommunityOrganizationFacet.objects.filter(
-            mpoly__contains=self.location
-        ).all()
+        return (
+            RegisteredCommunityOrganizationFacet.objects.filter(mpoly__contains=self.location)
+            .filter(properties__ORG_TYPE="Other")
+            .order_by("properties__OBJECTID")
+            .all()
+        )
+
+    @property
+    def ward_rcos(self):
+        if self.street_address is None:
+            return None
+        if self.location is None:
+            return None
+        return (
+            RegisteredCommunityOrganizationFacet.objects.filter(mpoly__contains=self.location)
+            .filter(properties__ORG_TYPE="Ward")
+            .order_by("properties__OBJECTID")
+            .all()
+        )
+
+    @property
+    def other_rcos(self):
+        if self.street_address is None:
+            return None
+        if self.location is None:
+            return None
+        return (
+            RegisteredCommunityOrganizationFacet.objects.filter(mpoly__contains=self.location)
+            .filter(properties__ORG_TYPE__in=["NID", "SSD", None])
+            .order_by("properties__OBJECTID")
+            .all()
+        )
 
     @property
     def discord(self):
