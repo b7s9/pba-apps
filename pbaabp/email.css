@@ -53,8 +53,3 @@ p {
   color: white;
   margin-top: auto;
 }
-
-.footer-icon {
-   -webkit-filter: grayscale(1) invert(1);
-    filter: grayscale(1) invert(1);
-}
