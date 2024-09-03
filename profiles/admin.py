@@ -72,7 +72,8 @@ class ProfileAdmin(admin.ModelAdmin):
         "profile_complete",
         "apps_connected",
         "geolocated",
-        "council_district",
+        "council_district_display",
+        "council_district_validated",
     ]
     list_filter = [
         ProfileCompleteFilter,
@@ -123,6 +124,31 @@ class ProfileAdmin(admin.ModelAdmin):
 
     apps_connected.boolean = True
 
+    def council_district_calculated(self, obj=None):
+        return obj.district
+
+    council_district_calculated.short_description = "Calculated District"
+
+    def council_district_validated(self, obj=None):
+        if obj is None:
+            return False
+        if int(obj.council_district) == 0 and obj.district is None:
+            return True
+        if obj.location and obj.district is not None:
+            if obj.council_district:
+                return int(obj.district.name.split()[1]) == obj.council_district
+            return False
+        return False
+
+    council_district_validated.boolean = True
+
+    def council_district_display(self, obj=None):
+        if obj is None:
+            return None
+        return obj.council_district
+
+    council_district_display.short_description = "District"
+
     def get_readonly_fields(self, request, obj=None):
         if obj is None:
             return ()
@@ -130,6 +156,8 @@ class ProfileAdmin(admin.ModelAdmin):
             return (
                 "user",
                 "mailchimp_contact_id",
+                "council_district_calculated",
+                "council_district_validated",
             )
 
 
