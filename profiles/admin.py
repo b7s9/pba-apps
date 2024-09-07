@@ -5,6 +5,7 @@ from django.contrib.gis.db import models
 from django.contrib.gis.forms.widgets import OSMWidget
 from django.db.models import Count, Q
 
+from facets.models import District, RegisteredCommunityOrganization
 from profiles.models import Profile, ShirtInterest
 
 
@@ -65,6 +66,36 @@ class AppsConnectedFilter(admin.SimpleListFilter):
         return queryset
 
 
+class DistrictFilter(admin.SimpleListFilter):
+    title = "Council District (verified)"
+    parameter_name = "council_district_verified"
+
+    def lookups(self, request, model_amin):
+        return [(f.id, f.name) for f in District.objects.all() if f.targetable]
+
+    def queryset(self, request, queryset):
+        if self.value():
+            d = District.objects.get(id=self.value())
+            return queryset.filter(location__within=d.mpoly)
+        return queryset
+
+
+class RCOFilter(admin.SimpleListFilter):
+    title = "RCOs (verified)"
+    parameter_name = "rcos_verified"
+
+    def lookups(self, request, model_amin):
+        return [
+            (f.id, f.name) for f in RegisteredCommunityOrganization.objects.all() if f.targetable
+        ]
+
+    def queryset(self, request, queryset):
+        if self.value():
+            r = RegisteredCommunityOrganization.objects.get(id=self.value())
+            return queryset.filter(location__within=r.mpoly)
+        return queryset
+
+
 class ProfileAdmin(admin.ModelAdmin):
     list_display = [
         "_name",
@@ -79,6 +110,8 @@ class ProfileAdmin(admin.ModelAdmin):
         ProfileCompleteFilter,
         AppsConnectedFilter,
         GeolocatedFilter,
+        DistrictFilter,
+        RCOFilter,
         "council_district",
     ]
     search_fields = ["user__first_name", "user__last_name", "user__email"]
@@ -100,7 +133,7 @@ class ProfileAdmin(admin.ModelAdmin):
     def geolocated(self, obj=None):
         if obj is None:
             return False
-        return not obj.location is None
+        return obj.location is not None
 
     geolocated.boolean = True
 
