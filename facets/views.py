@@ -114,7 +114,5 @@ async def query_address(request):
 def report(request):
     districts = District.objects.annotate(Count("contained_profiles"))
     rcos = RegisteredCommunityOrganization.objects.annotate(Count("contained_profiles"))
-    for d in districts:
-        print(d.__dict__)
     context = {"districts": districts, "rcos": rcos}
     return render(request, "facets_report.html", context=context)
