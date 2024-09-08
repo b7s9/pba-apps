@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Facet Report</h1>
+
+<h2>Districts</h2>
+
+<div class="table-container">
+<table>
+  <tr><th>District</th><th>Count</th></tr>
+{% for district in districts|dictsortreversed:"contained_profiles__count" %}
+  {% if district.contained_profiles__count %}
+  <tr><td>{{ district }}</td><td>{{ district.contained_profiles__count }}</td></tr>
+  {% endif %}
+{% endfor %}
+</table>
+</div>
+
+<h2>RCOs</h2>
+
+<div class="table-container">
+<table>
+  <tr><th>RCO</th><th>Count</th></tr>
+{% for rco in rcos|dictsortreversed:"contained_profiles__count" %}
+  {% if rco.contained_profiles__count %}
+  <tr><td>{{ rco }}</td><td>{{ rco.contained_profiles__count }}</td></tr>
+  {% endif %}
+{% endfor %}
+</table>
+</div>
+
+{% endblock %}

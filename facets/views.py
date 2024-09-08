@@ -3,11 +3,13 @@ import pathlib
 
 from django.conf import settings
 from django.db import transaction
+from django.db.models import Count
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.utils.html import mark_safe
 from shapely.geometry import Point, shape
 
+from facets.models import District, RegisteredCommunityOrganization
 from facets.utils import geocode_address
 
 with open(pathlib.Path(__file__).parent / "data" / "Zoning_RCO-2.geojson") as f:
@@ -107,3 +109,12 @@ async def query_address(request):
             "address_long": address.longitude,
         },
     )
+
+
+def report(request):
+    districts = District.objects.annotate(Count("contained_profiles"))
+    rcos = RegisteredCommunityOrganization.objects.annotate(Count("contained_profiles"))
+    for d in districts:
+        print(d.__dict__)
+    context = {"districts": districts, "rcos": rcos}
+    return render(request, "facets_report.html", context=context)

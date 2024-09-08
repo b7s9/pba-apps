@@ -1,6 +1,8 @@
 import uuid
 
 from django.contrib.gis.db import models
+from django.db.models import Q
+from relativity.fields import L, Relationship
 
 
 class District(models.Model):
@@ -10,6 +12,9 @@ class District(models.Model):
     properties = models.JSONField()
 
     targetable = models.BooleanField(default=True)
+    contained_profiles = Relationship(
+        to="profiles.profile", predicate=Q(location__within=L("mpoly"))
+    )
 
     def __str__(self):
         return self.name
@@ -22,6 +27,9 @@ class RegisteredCommunityOrganization(models.Model):
     properties = models.JSONField()
 
     targetable = models.BooleanField(default=False)
+    contained_profiles = Relationship(
+        to="profiles.profile", predicate=Q(location__within=L("mpoly"))
+    )
 
     def __str__(self):
         return self.name

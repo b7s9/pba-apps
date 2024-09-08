@@ -100,6 +100,7 @@ class ProfileAdmin(admin.ModelAdmin):
     list_display = [
         "_name",
         "_user",
+        "discord_handle",
         "profile_complete",
         "apps_connected",
         "geolocated",
@@ -129,6 +130,11 @@ class ProfileAdmin(admin.ModelAdmin):
         if obj is None:
             return ""
         return f"{obj.user.first_name} {obj.user.last_name}"
+
+    def discord_handle(self, obj=None):
+        if obj is None or obj.discord is None:
+            return ""
+        return obj.discord.extra_data["username"]
 
     def geolocated(self, obj=None):
         if obj is None:
