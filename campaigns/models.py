@@ -41,6 +41,7 @@ class Campaign(OrderedModel):
     title = models.CharField(max_length=512)
     slug = models.SlugField(null=True, blank=True)
     status = models.CharField(max_length=16, choices=Status.choices)
+    visible = models.BooleanField(default=True)
     description = models.TextField(null=True, blank=True)
     cover = models.ImageField(upload_to="campaigns", null=True, blank=True)
     call_to_action = models.CharField(max_length=64, null=True, blank=True)

@@ -25,6 +25,7 @@
   </div>
   {% endif %}
   {% else %}
+  {% if campaign.visible %}
   <div class="campaign-card">
     <a href="{% url 'campaign' slug=campaign.slug %}">
       <h2>{{ campaign.title }}</h2>
@@ -32,6 +33,7 @@
       <p>{{ campaign.description }}</p>
     </a>
   </div>
+  {% endif %}
   {% endif %}
 {% endfor %}
 </div>
