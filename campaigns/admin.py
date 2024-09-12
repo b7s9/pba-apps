@@ -8,7 +8,8 @@ from campaigns.models import Campaign, Petition, PetitionSignature
 class CampaignAdmin(OrderedModelAdmin):
     readonly_fields = ["wordpress_id"]
     autocomplete_fields = ["events"]
-    list_display = ("__str__", "status", "move_up_down_links")
+    list_display = ("__str__", "status", "visible", "move_up_down_links")
+    list_filter = ["status", "visible"]
     ordering = ("status", "order")
 
     def get_form(self, *args, **kwargs):
