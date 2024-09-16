@@ -13,6 +13,7 @@ django-dotenv
 django-email-log
 django-environ
 django-htmx
+django-ical
 django-markdownfield
 django-markdownify
 django-multi-email-field

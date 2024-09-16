@@ -1,5 +1,6 @@
 import datetime
 import uuid
+from urllib.parse import quote_plus
 
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
@@ -41,6 +42,20 @@ class EventsListView(ListView):
 
         return queryset
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["feed_url"] = (
+            self.request.build_absolute_uri(reverse("events_feed_all"))
+            .replace("https://", "webcal://")
+            .replace("http://", "webcal://")
+        )
+        context["feed_url_encoded"] = quote_plus(
+            self.request.build_absolute_uri(reverse("events_feed_all"))
+            .replace("https://", "webcal://")
+            .replace("http://", "webcal://")
+        )
+        return context
+
 
 class PastEventsListView(ListView):
     model = ScheduledEvent
@@ -58,6 +73,16 @@ class PastEventsListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context["feed_url"] = (
+            self.request.build_absolute_uri(reverse("events_feed_all"))
+            .replace("https://", "webcal://")
+            .replace("http://", "webcal://")
+        )
+        context["feed_url_encoded"] = quote_plus(
+            self.request.build_absolute_uri(reverse("events_feed_all"))
+            .replace("https://", "webcal://")
+            .replace("http://", "webcal://")
+        )
         context["past"] = True
         return context
 

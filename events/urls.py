@@ -1,6 +1,6 @@
 from django.urls import path
 
-from events import views
+from events import feeds, views
 
 urlpatterns = [
     path("", views.EventsListView.as_view(), name="events_list"),
@@ -14,4 +14,5 @@ urlpatterns = [
         views.event_signin_kiosk_postroll,
         name="event_signin_kiosk_postroll",
     ),
+    path("calendar/all", feeds.AllEventsFeed(), name="events_feed_all"),
 ]

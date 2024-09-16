@@ -111,6 +111,7 @@ django==4.2.13
     #   django-email-log
     #   django-filter
     #   django-htmx
+    #   django-ical
     #   django-markdownfield
     #   django-markdownify
     #   django-modelcluster
@@ -118,6 +119,7 @@ django==4.2.13
     #   django-multi-email-field
     #   django-permissionedforms
     #   django-recaptcha
+    #   django-recurrence
     #   django-relativity
     #   django-sesame
     #   django-storages
@@ -146,6 +148,8 @@ django-filter==24.2
     # via wagtail
 django-htmx==1.18.0
     # via -r requirements/base.in
+django-ical==1.9.2
+    # via -r requirements/base.in
 django-markdownfield==0.11.0
     # via -r requirements/base.in
 django-markdownify==0.9.5
@@ -162,6 +166,8 @@ django-permissionedforms==0.1
     # via wagtail
 django-recaptcha==4.0.0
     # via -r requirements/base.in
+django-recurrence==1.11.1
+    # via django-ical
 django-relativity==0.2.6
     # via -r requirements/base.in
 django-sesame==3.2.2
@@ -202,6 +208,8 @@ hyperlink==21.0.0
     # via
     #   autobahn
     #   twisted
+icalendar==5.0.13
+    # via django-ical
 idna==3.7
     # via
     #   hyperlink
@@ -272,9 +280,12 @@ python-dateutil==2.9.0.post0
     # via
     #   botocore
     #   celery
+    #   django-recurrence
+    #   icalendar
 pytz==2024.1
     # via
     #   django-modelcluster
+    #   icalendar
     #   l18n
 qrcode==7.4.2
     # via django-allauth

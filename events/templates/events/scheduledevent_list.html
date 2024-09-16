@@ -68,4 +68,14 @@
   </div>
   {% endif %}
 </div>
+
+<div class="subscribe" style="text-align: center;">
+<hr>
+<br>
+<span>Subscribe to calendar:</span>
+&nbsp;&nbsp;&nbsp;<span><a target="_blank" href="https://www.google.com/calendar/render?cid={{ feed_url_encoded }}"><i class='bx bxl-google'></i> Google</a></span>
+&nbsp;&nbsp;&nbsp;<span><a target="_blank" href="https://outlook.live.com/owa?path=/calendar/action/compose&rru=addsubscription&url={{ feed_url_encoded }}&name=Philly+Bike+Action"><i class='bx bxl-microsoft'></i> Outlook 365</a></span>
+&nbsp;&nbsp;&nbsp;<span><a target="_blank" href="https://outlook.office.com/owa?path=/calendar/action/compose&rru=addsubscription&url={{ feed_url_encoded }}&name=Philly+Bike+Action"><i class='bx bxl-microsoft'></i> Outlook Live</a></span>
+&nbsp;&nbsp;&nbsp;<span><a target="_blank" href="{{ feed_url }}"><i class='bx bxl-apple'></i> Apple</a></span>
+</div>
 {% endblock %}
