@@ -9,6 +9,7 @@
 {% if event.cover %}<meta property="og:image" content="{{ event.cover }}">{% endif %}
 <meta property="og:description" content="{{ event.description|truncatechars:"300" }}">
 {% endwith %}
+<script src="https://cdn.jsdelivr.net/npm/add-to-calendar-button@2" async defer></script>
 {% endblock %}
 
 {% block content %}
@@ -55,6 +56,26 @@
     {% endmarkdownify %}
     </div>
   </div>
+</div>
+
+<div class="add-to-calendar" style="text-align: center;">
+<hr>
+<br>
+<add-to-calendar-button
+  name="{{ event.title }}"
+  startDate="{{ event.start_datetime|date:"Y-m-d" }}"
+  startTime="{{ event.start_datetime|date:"G:i" }}"
+  {% if event.end_datetime %}endTime="{{ event.end_datetime|date:"G:i" }}"{% endif %}
+  timeZone="{{ event.start_datetime.timezone }}"
+  location="{{ event.location }}"
+  description="{{ event.description }}"
+  lightMode="bodyScheme"
+  buttonStyle="flat"
+  hideCheckmark="True"
+  size="4|4|4"
+  options="'Google','Outlook.com','Microsoft365','Apple'"
+  hideBackground="True"
+></add-to-calendar-button>
 </div>
 {% endwith %}
 
