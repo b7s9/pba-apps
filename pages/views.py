@@ -13,15 +13,3 @@ def donate(request):
 
 def brand(request):
     return render(request, "brand-guidelines.html")
-
-
-def privacy(request):
-    with open("pages/templates/privacy-and-data-policy.md") as f:
-        markdown = f.read()
-    return render(request, "markdown.html", context={"markdown": markdown})
-
-
-def conduct(request):
-    with open("pages/templates/code-of-conduct.md") as f:
-        markdown = f.read()
-    return render(request, "markdown.html", context={"markdown": markdown})
