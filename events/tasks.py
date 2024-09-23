@@ -7,6 +7,9 @@ from lib.wordpress import WordPressAPI
 
 @shared_task
 def sync_to_wordpress(scheduled_event_id):
+    if settings.WP_LOGIN_PASS is None:
+        return
+
     from events.models import ScheduledEvent
 
     wordpress = WordPressAPI()

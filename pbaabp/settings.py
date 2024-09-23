@@ -292,8 +292,8 @@ DISCORD_BOT_TOKEN = env("DISCORD_BOT_TOKEN")
 
 # Wordpress
 WP_URL = env("WP_URL", default="https://bikeaction.org")
-WP_LOGIN_EMAIL = env("WP_LOGIN_EMAIL")
-WP_LOGIN_PASS = env("WP_LOGIN_PASS")
+WP_LOGIN_EMAIL = env("WP_LOGIN_EMAIL", default=None)
+WP_LOGIN_PASS = env("WP_LOGIN_PASS", default=None)
 WP_CAMPAIGN_PAGE_ID = env("WP_CAMPAIGN_PAGE_ID", default=5877)
 
 # Mailchimp
