@@ -66,7 +66,7 @@
   startDate="{{ event.start_datetime|date:"Y-m-d" }}"
   startTime="{{ event.start_datetime|date:"G:i" }}"
   {% if event.end_datetime %}endTime="{{ event.end_datetime|date:"G:i" }}"{% endif %}
-  timeZone="{{ event.start_datetime.timezone }}"
+  timeZone="America/New_York"
   location="{{ event.location }}"
   description="{{ event.description }}"
   lightMode="bodyScheme"
