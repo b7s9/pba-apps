@@ -112,6 +112,7 @@ django==4.2.13
     #   django-filter
     #   django-htmx
     #   django-ical
+    #   django-leaflet
     #   django-markdownfield
     #   django-markdownify
     #   django-modelcluster
@@ -149,6 +150,8 @@ django-filter==24.2
 django-htmx==1.18.0
     # via -r requirements/base.in
 django-ical==1.9.2
+    # via -r requirements/base.in
+django-leaflet==0.30.1
     # via -r requirements/base.in
 django-markdownfield==0.11.0
     # via -r requirements/base.in

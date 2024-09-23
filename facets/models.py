@@ -34,6 +34,14 @@ class RegisteredCommunityOrganization(models.Model):
         to="facets.zipcode", predicate=Q(mpoly__intersects=L("mpoly"))
     )
 
+    @property
+    def zips(self):
+        return [
+            z
+            for z in self.intersecting_zips.all()
+            if z.mpoly.intersection(self.mpoly).area / self.mpoly.area > 0.001
+        ]
+
     def __str__(self):
         return self.name
 

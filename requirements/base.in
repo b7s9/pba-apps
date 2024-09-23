@@ -14,6 +14,7 @@ django-email-log
 django-environ
 django-htmx
 django-ical
+django-leaflet
 django-markdownfield
 django-markdownify
 django-multi-email-field

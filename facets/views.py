@@ -116,3 +116,9 @@ def report(request):
     rcos = RegisteredCommunityOrganization.objects.annotate(Count("contained_profiles"))
     context = {"districts": districts, "rcos": rcos}
     return render(request, "facets_report.html", context=context)
+
+
+def rco(request, rco_id):
+    rco = RegisteredCommunityOrganization.objects.get(id=rco_id)
+    context = {"rco": rco}
+    return render(request, "facets_rco.html", context=context)

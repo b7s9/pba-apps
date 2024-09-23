@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load leaflet_tags %}
+
+{% block extra_head %}
+{% leaflet_js %}
+{% leaflet_css %}
+{% endblock %}
+
+{% block content %}
+<h1>{{ rco.name }}</h1>
+
+<script>
+function map_init (map, options) {
+  var rcoExtent = L.geoJSON({{ rco.mpoly.json|safe }});
+  var group = new L.featureGroup([rcoExtent]);
+  map.addLayer(group);
+  map.fitBounds(group.getBounds());
+
+  function zipStyle(feature) {
+    return {
+      weight: 2,
+      opacity: 1,
+      color: 'black',
+      fillColor: 'grey',
+      filOpacity: .25
+    };
+  }
+
+  {% for zip in rco.zips %}
+  var zip{{ zip.name }} = L.geoJSON({{ zip.mpoly.json|safe }}, {style: zipStyle});
+  zip{{ zip.name }}.bindTooltip("{{ zip.name }}", {permanent: true, direction: "center", className: "map-text-label", offset: [0, 0]});
+  map.addLayer(zip{{ zip.name }});
+  {% endfor %}
+}
+</script>
+
+{% leaflet_map "rco_boundaries" callback="window.map_init" %}
+
+{% endblock %}
