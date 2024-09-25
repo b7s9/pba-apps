@@ -152,7 +152,7 @@ def send_email_message(
         cid = attach_inline_image_file(mail, img["src"])
         img["src"] = "cid:" + cid
 
-    inliner = pynliner.Pynliner().from_string(soup.prettify())
+    inliner = pynliner.Pynliner().from_string(str(soup))
     with open(os.path.join(os.path.dirname(__file__), "email.css")) as css:
         inliner = inliner.with_cssString(css.read())
     html = inliner.run()
