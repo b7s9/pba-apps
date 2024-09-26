@@ -31,7 +31,9 @@ urlpatterns = [
         name="make_default_payment_method",
     ),
     path(
-        "setup_recurring_donation/", views.setup_recurring_donation, name="setup_recurring_donation"
+        "setup_recurring_donation/",
+        views.setup_recurring_donation,
+        name="setup_recurring_donation",
     ),
     path(
         "cancel_recurring_donation/<str:subscription_id>/",

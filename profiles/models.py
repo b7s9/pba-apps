@@ -35,7 +35,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     council_district = models.IntegerField(
-        null=False, blank=False, choices=District.choices, verbose_name=_("Council District")
+        null=True, blank=True, choices=District.choices, verbose_name=_("Council District")
     )
     street_address = models.CharField(
         max_length=256,
@@ -43,9 +43,9 @@ class Profile(models.Model):
         blank=True,
         verbose_name=_("Street Address"),
         help_text=_(
-            "Your Street Address. "
-            "We use this to connect you with actions you can make "
-            "in your neighborhood."
+            "Your street address will be used to determine your Philadelphia "
+            "City Council District and connect you with actions "
+            "you can take in your specific neighborhood."
         ),
     )
     zip_code = models.CharField(
@@ -61,7 +61,10 @@ class Profile(models.Model):
         verbose_name=_("Zip Code"),
     )
     newsletter_opt_in = models.BooleanField(
-        blank=False, default=False, verbose_name=_("Newsletter Opt-In")
+        blank=False,
+        default=False,
+        verbose_name=_("Newsletter"),
+        help_text=_("Subscribe to Philly Bike Actions monthly newsletter."),
     )
 
     location = models.PointField(blank=True, null=True, srid=4326)

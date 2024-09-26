@@ -1,33 +1,28 @@
 from allauth.account.forms import SignupForm as BaseSignupForm
 from django import forms
+from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.utils.html import mark_safe
 from django.utils.translation import gettext_lazy as _
 from django_recaptcha.fields import ReCaptchaField
+from django_recaptcha.widgets import ReCaptchaV2Invisible
 
 from profiles.models import Profile
+
+
+def validate_is_checked(value):
+    if not value:
+        raise ValidationError(_("Please read, acknowledge, and confirm by clicking the box"))
 
 
 class BaseProfileSignupForm(BaseSignupForm):
     first_name = forms.CharField(required=True, label=_("First Name"))
     last_name = forms.CharField(required=True, label=_("Last Name"))
-    council_district = forms.ChoiceField(
-        choices=Profile.District.choices,
-        label=_("Council District"),
-        help_text=(
-            "Unsure what Council District your are in? "
-            'Use our <a href="/rcos/find" target="_blank">RCO finder tool</a>'
-        ),
-    )
     street_address = forms.CharField(
         max_length=256,
         required=True,
         label=_("Street Address"),
-        help_text=(
-            "Your Street Address. "
-            "We use this to connect you with actions you can make "
-            "in your neighborhood."
-        ),
+        help_text=Profile._meta.get_field("street_address").help_text,
     )
     zip_code = forms.CharField(
         max_length=10,
@@ -39,7 +34,11 @@ class BaseProfileSignupForm(BaseSignupForm):
         ],
         label=_("Zip Code"),
     )
-    newsletter_opt_in = forms.BooleanField(required=False, label=_("Newsletter Opt-In"))
+    newsletter_opt_in = forms.BooleanField(
+        required=False,
+        initial=True,
+        help_text=Profile._meta.get_field("newsletter_opt_in").help_text,
+    )
 
     def save(self, request):
         user = super().save(request)
@@ -47,7 +46,6 @@ class BaseProfileSignupForm(BaseSignupForm):
         user.save()
         profile = Profile(
             user=user,
-            council_district=self.cleaned_data["council_district"],
             street_address=self.cleaned_data["street_address"],
             zip_code=self.cleaned_data["zip_code"],
             newsletter_opt_in=self.cleaned_data["newsletter_opt_in"],
@@ -57,12 +55,33 @@ class BaseProfileSignupForm(BaseSignupForm):
 
 
 class ProfileSignupForm(BaseProfileSignupForm):
-    captcha = ReCaptchaField()
+    captcha = ReCaptchaField(widget=ReCaptchaV2Invisible)
+
+    code_of_conduct = forms.BooleanField(
+        label="Code of Conduct",
+        help_text=(
+            'I have read the <a target="_blank" '
+            'href="https://apps.bikeaction.org/policies/code-of-conduct/">'
+            "Philly Bike Action Code of Conduct</a>."
+        ),
+        required=True,
+        validators=[validate_is_checked],
+    )
+
+    privacy_and_data = forms.BooleanField(
+        label="Privacy and Data",
+        help_text=(
+            'I have read the <a target="_blank" '
+            'href="https://apps.bikeaction.org/policies/privacy-and-data/">'
+            "Privacy and Data Statement</a>."
+        ),
+        required=True,
+        validators=[validate_is_checked],
+    )
 
     field_order = [
         "first_name",
         "last_name",
-        "council_district",
         "street_address",
         "zip_code",
         "email",
@@ -73,13 +92,7 @@ class ProfileSignupForm(BaseProfileSignupForm):
     ]
 
     class Meta:
-        help_texts = {
-            "street_address": (
-                "Your Street Address. "
-                "We use this to connect you with actions you can make "
-                "in your neighborhood."
-            ),
-        }
+        help_texts = {}
 
 
 class ProfileUpdateForm(forms.ModelForm):
@@ -89,22 +102,11 @@ class ProfileUpdateForm(forms.ModelForm):
             "first_name",
             "last_name",
             "email",
-            "council_district",
             "street_address",
             "zip_code",
             "newsletter_opt_in",
         ]
-        help_texts = {
-            "street_address": (
-                "Your Street Address. "
-                "We use this to connect you with actions you can make "
-                "in your neighborhood."
-            ),
-            "council_district": mark_safe(
-                "Unsure what Council District your are in? "
-                'Use our <a href="/rcos/find" target="_blank">RCO finder tool</a>'
-            ),
-        }
+        help_texts = {}
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
