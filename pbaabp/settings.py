@@ -47,6 +47,8 @@ SECRET_KEY = env(
 )
 SECRET_KEY_FALLBACKS = env.list("DJANGO_SECRET_KEY_FALLBACKS", default=[])
 
+APPEND_SLASH = True
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool("DEBUG", default=False)
 
