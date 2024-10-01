@@ -171,6 +171,8 @@ class ProfileAdmin(admin.ModelAdmin):
     def council_district_validated(self, obj=None):
         if obj is None:
             return False
+        if obj.council_district is None:
+            return False
         if int(obj.council_district) == 0 and obj.district is None:
             return True
         if obj.location and obj.district is not None:
