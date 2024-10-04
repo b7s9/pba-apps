@@ -35,5 +35,17 @@ function map_init (map, options) {
 </script>
 
 {% leaflet_map "rco_boundaries" callback="window.map_init" %}
+<br>
+<br>
+<div class="table-container">
+  <table>
+    {% for prop, value in rco.properties.items %}
+    <tr>
+      <th>{{ prop }}</th>
+      <td><pre>{{ value }}</pre></td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
 
 {% endblock %}
