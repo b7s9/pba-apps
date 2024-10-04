@@ -102,6 +102,7 @@ INSTALLED_APPS = [
     "django_tuieditor",
     "csvexport",
     "markdownify.apps.MarkdownifyConfig",
+    "leaflet",
     # Our apps
     "pbaabp",
     "pages",

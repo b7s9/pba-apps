@@ -836,3 +836,13 @@ body {
   float: right;
 
 }
+
+/* Maps */
+
+.map-text-label {
+  font-size: smaller;
+}
+
+#rco_boundaries {
+  height: 50vh;
+}

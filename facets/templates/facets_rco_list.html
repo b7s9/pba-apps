@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Philly RCOs</h1>
+
+<ul>
+  {% for rco in rcos|dictsort:"name" %}
+  {% if rco.properties.ORG_TYPE == "Other" %}
+  <li><a target="_blank" href="{% url 'rco_detail' rco.id %}">{{ rco }}</a></li>
+  {% endif %}
+  {% endfor %}
+</ul>
+
+<h2>Improvement/Development Districts</h2>
+
+<ul>
+  {% for rco in rcos|dictsort:"name" %}
+  {% if rco.properties.ORG_TYPE == "NID" or rco.properties.ORG_TYPE == "SSD" or rco.properties.ORG_TYPE == None %}
+  <li><a target="_blank" href="{% url 'rco_detail' rco.id %}">{{ rco }}</a></li>
+  {% endif %}
+  {% endfor %}
+</ul>
+
+<h2>Philly Partisan Wards</h2>
+
+<ul>
+  {% for rco in rcos|dictsort:"name" %}
+  {% if rco.properties.ORG_TYPE == "Ward" %}
+  <li><a target="_blank" href="{% url 'rco_detail' rco.id %}">{{ rco }}</a></li>
+  {% endif %}
+  {% endfor %}
+</ul>
+
+{% endblock %}
