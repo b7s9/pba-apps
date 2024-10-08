@@ -2,7 +2,13 @@ from django.contrib.gis import admin
 from django.contrib.gis.db import models
 from django.contrib.gis.forms.widgets import OSMWidget
 
-from facets.models import District, RegisteredCommunityOrganization, ZipCode
+from facets.models import (
+    District,
+    RegisteredCommunityOrganization,
+    StateHouseDistrict,
+    StateSenateDistrict,
+    ZipCode,
+)
 
 
 class DistrictAdmin(admin.ModelAdmin):
@@ -45,6 +51,24 @@ class ZipCodeAdmin(admin.ModelAdmin):
     }
 
 
+class StateHouseDistrictAdmin(admin.ModelAdmin):
+    list_display = ["name"]
+    search_fields = ["name"]
+    formfield_overrides = {
+        models.MultiPolygonField: {"widget": OSMWidget},
+    }
+
+
+class StateSenateDistrictAdmin(admin.ModelAdmin):
+    list_display = ["name"]
+    search_fields = ["name"]
+    formfield_overrides = {
+        models.MultiPolygonField: {"widget": OSMWidget},
+    }
+
+
 admin.site.register(District, DistrictAdmin)
 admin.site.register(RegisteredCommunityOrganization, RegisteredCommunityOrganizationAdmin)
 admin.site.register(ZipCode, ZipCodeAdmin)
+admin.site.register(StateHouseDistrict, StateHouseDistrictAdmin)
+admin.site.register(StateSenateDistrict, StateSenateDistrictAdmin)
