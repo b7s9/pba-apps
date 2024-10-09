@@ -146,7 +146,19 @@ def event_rsvp(request, event_slug_or_id):
             )
     else:
         form = EventRSVPForm()
-    return render(request, "form.html", context={"event": event, "form": form, "form_title": f"RSVP for {event}"})
+    return render(
+        request,
+        "form.html",
+        context={
+            "event": event,
+            "form": form,
+            "form_title": f"RSVP for {event}",
+            "form_footer": (
+                "After RSVPing, you may be contacted by PBA with info "
+                "specifically related to this event."
+            ),
+        },
+    )
 
 
 def event_rsvp_cancel(request, event_slug_or_id):

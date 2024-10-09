@@ -344,6 +344,10 @@ form {
   padding: 1em;
   width: 50%;
 }
+.form-footer {
+  font-size: smaller;
+  color: grey;
+}
 form label {
   width: 9em;
   margin-bottom: .25em;
