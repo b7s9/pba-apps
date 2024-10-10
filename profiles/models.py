@@ -40,7 +40,7 @@ class Profile(models.Model):
     street_address = models.CharField(
         max_length=256,
         null=True,
-        blank=True,
+        blank=False,
         verbose_name=_("Street Address"),
         help_text=_(
             "Your street address will be used to determine your Philadelphia "

@@ -1,0 +1,24 @@
+Hi {{ profile.user.first_name }},
+
+Philly Bike Action has updated our profiles on apps.bikeaction.org to include
+some new fields since you created your account.
+
+These new fields are used to determine your Philadelphia City Council District
+and relevant Registered Community Organizations. We'll use the resulting
+location data to connect you with actions you can take in your specific
+neighborhood.
+
+Can you take a moment to return to your profile and fill this data in?
+
+[Click here to login and submit an update]({{ sesame_url }})
+
+If you have any questions, don't hesitate to reply to this message or email
+[apps@bikeaction.org](mailto:apps@bikeaction.org).
+
+Thank you!  
+Philly Bike Action
+  
+
+P.S. Sorry if you _did_ provide this information when you signed up.
+A misconfiguration caused a handful of signups to not actually save to our
+database.

@@ -21,14 +21,9 @@ class ProfileCompleteFilter(admin.SimpleListFilter):
             return queryset.filter(
                 street_address__isnull=False,
                 zip_code__isnull=False,
-                council_district__isnull=False,
             )
         elif self.value() == "False":
-            return queryset.filter(
-                Q(street_address__isnull=True)
-                | Q(zip_code__isnull=True)
-                | Q(council_district__isnull=True)
-            )
+            return queryset.filter(Q(street_address__isnull=True) | Q(zip_code__isnull=True))
         return queryset
 
 
