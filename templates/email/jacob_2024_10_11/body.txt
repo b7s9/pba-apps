@@ -1,0 +1,13 @@
+Hello {{ profile.user.first_name }},
+
+_You are receiving this email because you have a Philly Bike Action account and you live within the RCO boundaries of South of South Neighborhood Association (SOSNA)._ 
+
+**Jacob Pritchett**, a co-founder of PBA, is running for the Board of [SOSNA](https://www.sosnaphilly.org) with the aim of making sure that the RCO is doing what they can to make getting where you’re going on a bike as safe and convenient as possible.
+
+Jacob is running on a slate with these other [candidates](https://www.sosnaphilly.org/2024boardnominations): José J. Hernandez, Stephen Rodriguez, and Morgan Rodriguez. 
+
+As a resident of this neighborhood, you can vote in the SOSNA election by clicking [this link](https://forms.gle/aZcLNzsB4QqErrGs8) by 11:59 PM **tonight**.
+
+RCOs have considerable power in local politics, so consider voting!
+
+**Philly Bike Action**
