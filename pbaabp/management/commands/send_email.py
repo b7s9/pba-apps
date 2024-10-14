@@ -1,9 +1,11 @@
 from django.conf import settings
 from django.core.management.base import BaseCommand
 
+from profiles.models import Profile
 from pbaabp.email import send_email_message
 
 TO = ["bikes@durbin.ee"]
+profiles = Profile.objects.filter(user__email__in=TO)
 
 
 class Command(BaseCommand):
@@ -13,10 +15,11 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         settings.EMAIL_SUBJECT_PREFIX = ""
-        for email_address in TO:
+        for profile in profiles:
             send_email_message(
                 options["email_template"],
                 "Philly Bike Action <noreply@bikeaction.org>",
-                [email_address],
-                {},
+                [profile.user.email],
+                {"profile": profile},
+                reply_to=["info@bikeaction.org"],
             )
