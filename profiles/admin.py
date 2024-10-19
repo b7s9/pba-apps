@@ -145,7 +145,6 @@ class ProfileAdmin(admin.ModelAdmin):
             [
                 obj.street_address is not None,
                 obj.zip_code is not None,
-                obj.council_district is not None,
             ]
         )
 
