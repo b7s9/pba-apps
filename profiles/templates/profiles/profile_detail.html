@@ -36,8 +36,10 @@
           <td>
             {% if profile.discord %}
             {{ profile.discord.extra_data.username }}
-            {% else %}
+            {% elif profile.street_address %}
             <a class="smol-button" href="{% provider_login_url "discord" process="connect" %}">{% translate "Connect your discord account" %}</a>
+            {% else %}
+            <span>Please <a href="{% url 'profile_update' %}">complete your profile</a> to connect with discord.</span>
             {% endif %}
           </td>
         </tr>
