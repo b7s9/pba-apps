@@ -11,7 +11,19 @@ from facets.models import (
 )
 
 
-class DistrictAdmin(admin.ModelAdmin):
+class FacetAdmin(admin.ModelAdmin):
+
+    def save_model(self, request, obj, form, change):
+        if change:
+            original_obj = type(obj).objects.get(pk=obj.pk)
+            original_value = getattr(original_obj, "mpoly")
+            obj.mpoly = original_value
+            form.cleaned_data["mpoly"] = original_value
+
+        super().save_model(request, obj, form, change)
+
+
+class DistrictAdmin(FacetAdmin):
     list_display = ["name"]
 
     formfield_overrides = {
@@ -19,14 +31,14 @@ class DistrictAdmin(admin.ModelAdmin):
     }
 
 
-class RegisteredCommunityOrganizationAdmin(admin.ModelAdmin):
-    list_display = ["name"]
+class RegisteredCommunityOrganizationAdmin(FacetAdmin):
+    list_display = ["name", "targetable"]
+    list_filter = ["targetable"]
     search_fields = ["name"]
     readonly_fields = ("zip_code_names", "zip_codes")
 
     formfield_overrides = {
         models.MultiPolygonField: {"widget": OSMWidget},
-        ZipCode: {"widget": OSMWidget},
     }
 
     def zip_code_names(self, obj):
@@ -42,7 +54,7 @@ class RegisteredCommunityOrganizationAdmin(admin.ModelAdmin):
         return obj.intersecting_zips.all()
 
 
-class ZipCodeAdmin(admin.ModelAdmin):
+class ZipCodeAdmin(FacetAdmin):
     list_display = ["name"]
     search_fields = ["name"]
 
@@ -51,7 +63,7 @@ class ZipCodeAdmin(admin.ModelAdmin):
     }
 
 
-class StateHouseDistrictAdmin(admin.ModelAdmin):
+class StateHouseDistrictAdmin(FacetAdmin):
     list_display = ["name"]
     search_fields = ["name"]
     formfield_overrides = {
@@ -59,7 +71,7 @@ class StateHouseDistrictAdmin(admin.ModelAdmin):
     }
 
 
-class StateSenateDistrictAdmin(admin.ModelAdmin):
+class StateSenateDistrictAdmin(FacetAdmin):
     list_display = ["name"]
     search_fields = ["name"]
     formfield_overrides = {
