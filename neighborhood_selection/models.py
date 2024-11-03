@@ -2,6 +2,7 @@ import uuid
 
 from django.db import models, transaction
 
+from facets.models import RegisteredCommunityOrganization
 from neighborhood_selection.tasks import update_neighborhood_role_and_channel
 
 
@@ -15,6 +16,7 @@ class Neighborhood(models.Model):
     featured = models.BooleanField(blank=False, default=False)
 
     name = models.CharField(max_length=512)
+    rcos = models.ManyToManyField(RegisteredCommunityOrganization, blank=True)
 
     def save(self, *args, **kwargs):
         if not self._state.adding:
