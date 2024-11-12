@@ -25,17 +25,27 @@ services:
      test: ["CMD", "redis-cli","ping"]
      interval: 1s
 
-  web:
+  base:
     build: .
-    image: pbaabp-web:docker-compose
-    command: python manage.py runserver 0.0.0.0:8000
-    volumes:
-      - .:/code
-    ports:
-      - "8000:8000"
-    environment:
+    image: pbaabp:docker-compose
+    environment: &base_environment
+      DEBUG: "True"
       DATABASE_URL: postgresql://pbaabp:pbaabp@postgres:5432/pbaabp
       DJANGO_READ_DOT_ENV_FILE: "True"
+      DJANGO_EMAIL_HOST: "maildev"
+      DJANGO_EMAIL_PORT: 1025
+      DJANGO_EMAIL_USE_TLS: "False"
+      DJANGO_DEFAULT_FROM_EMAIL: "Philly Bike Action <pba@example.com>"
+    volumes: &base_volumes
+      - .:/code
+
+  web:
+    image: pbaabp:docker-compose
+    command: python manage.py runserver 0.0.0.0:8000
+    environment: *base_environment
+    volumes: *base_volumes
+    ports:
+      - "8000:8000"
     depends_on:
       redis:
         condition: service_healthy
@@ -43,13 +53,10 @@ services:
         condition: service_healthy
 
   worker:
-    image: pbaabp-web:docker-compose
+    image: pbaabp:docker-compose
     command: hupper -m celery -A pbaabp worker --beat -l DEBUG
-    volumes:
-      - .:/code
-    environment:
-      DATABASE_URL: postgresql://pbaabp:pbaabp@postgres:5432/pbaabp
-      DJANGO_READ_DOT_ENV_FILE: "True"
+    environment: *base_environment
+    volumes: *base_volumes
     depends_on:
       redis:
         condition: service_healthy
@@ -57,14 +64,11 @@ services:
         condition: service_healthy
 
   discord:
-    image: pbaabp-web:docker-compose
+    image: pbaabp:docker-compose
     command: python manage.py run_dev_discord
+    environment: *base_environment
+    volumes: *base_volumes
     stop_signal: SIGINT
-    volumes:
-      - .:/code
-    environment:
-      DATABASE_URL: postgresql://pbaabp:pbaabp@postgres:5432/pbaabp
-      DJANGO_READ_DOT_ENV_FILE: "True"
     depends_on:
       redis:
         condition: service_healthy

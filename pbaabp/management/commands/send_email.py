@@ -1,8 +1,8 @@
 from django.conf import settings
 from django.core.management.base import BaseCommand
 
-from profiles.models import Profile
 from pbaabp.email import send_email_message
+from profiles.models import Profile
 
 TO = ["bikes@durbin.ee"]
 profiles = Profile.objects.filter(user__email__in=TO)

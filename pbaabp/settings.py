@@ -291,7 +291,7 @@ SERVER_EMAIL = env("DJANGO_SERVER_EMAIL", default=DEFAULT_FROM_EMAIL)
 WAGTAIL_SITE_NAME = "Philly Bike Action!"
 
 # Discord
-DISCORD_BOT_TOKEN = env("DISCORD_BOT_TOKEN")
+DISCORD_BOT_TOKEN = env("DISCORD_BOT_TOKEN", default=None)
 
 # Wordpress
 WP_URL = env("WP_URL", default="https://bikeaction.org")
@@ -300,8 +300,8 @@ WP_LOGIN_PASS = env("WP_LOGIN_PASS", default=None)
 WP_CAMPAIGN_PAGE_ID = env("WP_CAMPAIGN_PAGE_ID", default=5877)
 
 # Mailchimp
-MAILCHIMP_API_KEY = env("MAILCHIMP_API_KEY")
-MAILCHIMP_AUDIENCE_ID = env("MAILCHIMP_AUDIENCE_ID")
+MAILCHIMP_API_KEY = env("MAILCHIMP_API_KEY", default=None)
+MAILCHIMP_AUDIENCE_ID = env("MAILCHIMP_AUDIENCE_ID", default=None)
 
 # django-allauth
 ACCOUNT_FORMS = {
@@ -317,8 +317,8 @@ SOCIALACCOUNT_PROVIDERS = {
     "discord": {
         "APPS": [
             {
-                "client_id": env("DISCORD_OAUTH_CLIENT_ID"),
-                "secret": env("DISCORD_OAUTH_CLIENT_SECRET"),
+                "client_id": env("DISCORD_OAUTH_CLIENT_ID", default=None),
+                "secret": env("DISCORD_OAUTH_CLIENT_SECRET", default=None),
                 "key": "",
             }
         ],

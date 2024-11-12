@@ -9,22 +9,22 @@ default:
 	@echo
 	@exit 1
 
-.state/docker-build-web: Dockerfile requirements.txt requirements/base.txt requirements/dev.txt
-	# Build our web container for this project.
-	docker compose build --build-arg  USER_ID=$(shell id -u)  --build-arg GROUP_ID=$(shell id -g) --force-rm web
+.state/docker-build-base: Dockerfile requirements.txt requirements/base.txt requirements/dev.txt
+	# Build our base container for this project.
+	docker compose build --build-arg  USER_ID=$(shell id -u)  --build-arg GROUP_ID=$(shell id -g) --force-rm base
 
 	# Collect static assets
 	#docker compose run --rm web python manage.py collectstatic --noinput
 
 	# Mark the state so we don't rebuild this needlessly.
 	mkdir -p .state
-	touch .state/docker-build-web
+	touch .state/docker-build-base
 
 .state/db-migrated:
 	make migrate
 	mkdir -p .state && touch .state/db-migrated
 
-.state/db-initialized: .state/docker-build-web .state/db-migrated
+.state/db-initialized: .state/docker-build-base .state/db-migrated
 	# Mark the state so we don't reload after first launch.
 	docker compose run --rm web ./manage.py loaddata fixtures/*.json
 	mkdir -p .state
@@ -47,20 +47,20 @@ migrations: .state/db-initialized
 	# Run Django makemigrations
 	docker compose run --rm web ./manage.py makemigrations
 
-migrate: .state/docker-build-web
+migrate: .state/docker-build-base
 	# Run Django migrate
 	docker compose run --rm web ./manage.py migrate $(filter-out $@,$(MAKECMDGOALS))
 
-lint: .state/docker-build-web
-	docker compose run --rm web isort --check-only .
-	docker compose run --rm web black --check .
-	docker compose run --rm web flake8
+lint: .state/docker-build-base
+	docker compose run --rm base isort --check-only .
+	docker compose run --rm base black --check .
+	docker compose run --rm base flake8
 
-reformat: .state/docker-build-web
-	docker compose run --rm web isort .
-	docker compose run --rm web black .
+reformat: .state/docker-build-base
+	docker compose run --rm base isort .
+	docker compose run --rm base black .
 
-test: .state/docker-build-web
+test: .state/docker-build-base
 	docker compose run --rm web pytest --reuse-db --no-migrations
 
 check: test lint
@@ -68,6 +68,6 @@ check: test lint
 clean:
 	docker compose down -v
 	rm -rf staticroot
-	rm -f .state/docker-build-web
+	rm -f .state/docker-build-base
 	rm -f .state/db-initialized
 	rm -f .state/db-migrated
