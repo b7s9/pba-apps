@@ -33,6 +33,9 @@ default:
 serve: .state/db-initialized
 	docker compose up --remove-orphans -d
 
+stop:
+	docker compose stop
+
 shell: .state/db-initialized
 	docker compose run --rm web /bin/bash
 
