@@ -1,0 +1,34 @@
+Hello {{first_name}},
+
+{% if petition %}
+*You are receiving this email from [Philly Bike Action](https://bikeaction.org/) because you signed our [Petition for Parking-Protected Bike Lane on 47th St](https://apps.bikeaction.org/campaigns/47th-st-bike-lane/) this project’s boundaries.*
+{% else %}
+*You are receiving this email from [Philly Bike Action](https://bikeaction.org/) because you have a Philly Bike Action account and you live within this project’s boundaries.*
+{% endif %}
+
+**City Councilmember Jamie Gauthier and the Office of Transportation and Infrastructure Systems are co-hosting a Community Meeting on Wednesday 11/20.**
+
+<img src="templates/email/47th_st_2024_11_20/images/47th-community-meeting.png" style="width: 100%">
+
+Everyone is welcome to give feedback at this community meeting\! **You don’t need to speak—just fill out a survey** showing your support for the [47th Street plan](https://www.phila.gov/documents/48th-47th-project/)\! **You can do it in 5-10 minutes**, or take as long as you like to view all the details of the plan. If you are looking for ideas on what language to use in your feedback, consider sharing comments on how you use 47th Street, experiences you have had as a cyclist, and specific features you would like to see (e.g., a stop sign at a certain intersection.)  Focusing on safety for all street users \- not just bikers \- is also helpful.  These improvements will make everyone safer\!
+
+**COMMUNITY MEETING INFO:**  
+**Wednesday Nov. 20, 6:30-8PM**   
+**St Francis de Sales Auditorium, 917 S 47th Street**  
+**Co-hosted by City Councilmember Jamie Gauthier**
+
+47th Street is scheduled to be repaved in 2025 and it’s the best opportunity to improve safety.  Possibilities include speed cushions, safer intersections, and a **protected bike lane**.  This project needs your support\!
+
+Philly Bike Action encourages you to attend the meeting to learn more from the City about their plan and to provide feedback advocating for the safest options.  
+
+If you are unable to attend, you can submit your comments via email to [andrew.goodman@phila.gov](mailto:andrew.goodman@phila.gov), [trevian.ambroise@phila.gov](mailto:trevian.ambroise@phila.gov) and [otis@phila.gov](mailto:otis@phila.gov).  
+
+[For more info visit the OTIS Project Page](https://www.phila.gov/documents/48th-47th-project/)
+
+Thank you for your support in making Philadelphia's streets safer for everyone who uses them\!
+
+**Philly Bike Action** 
+
+{% if petition %}
+**Want more from Philly Bike Action?** Join our [newsletter](https://bikeaction.org) or create a [PBA Account](https://apps.bikeaction.org/accounts/signup/) so we can let you know when important input opportunities like this one happen in your neighborhood.
+{% endif %}
