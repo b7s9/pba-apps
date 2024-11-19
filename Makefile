@@ -26,7 +26,7 @@ default:
 
 .state/db-initialized: .state/docker-build-base .state/db-migrated
 	# Mark the state so we don't reload after first launch.
-	docker compose run --rm web ./manage.py loaddata fixtures/*.json
+	docker compose run --rm web ./manage.py loaddata fixtures/*.json fixtures/*.json.gz
 	mkdir -p .state
 	touch .state/db-initialized
 

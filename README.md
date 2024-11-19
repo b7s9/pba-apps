@@ -32,6 +32,9 @@ This command should do everything necessary to get the service up and running lo
 After it completes, you can open a browser to [http://localhost:8000/](http://localhost:8000)
 to view the running web app.
 
+You can login as `admin@example.com` with password `password`.
+This user has full permissions across all parts of the app.
+
 ### Suspending the services
 
 If you want to stop the app to save resources locally
