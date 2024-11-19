@@ -8,7 +8,8 @@ Do not show the header on signin page.
 {% block content %}
 <div class="form-header">
   <img src="https://bikeaction.org/wp-content/uploads/2023/07/Sticker_Print_Green.svg">
-  <h1>{% blocktrans %}Thanks for signing in to Philly Bike Action {{ event.title }}!{% endblocktrans %}</h1>
+  <h1>{% blocktrans %}Thanks for signing in to Philly Bike Action!{% endblocktrans %}</h1>
+  <h2>{{ event.title }}</h2>
   {% comment %}Page will reload in {seconds}...{% endcomment %}
   <p>{% translate "Page will reload in" %} <span id="countdown">5</span>...</p>
 </div>
