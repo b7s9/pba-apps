@@ -2,19 +2,22 @@ from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.db.models import Q
 
+from campaigns.models import PetitionSignature
 from pbaabp.email import send_email_message
 from profiles.models import Profile
-from campaigns.models import PetitionSignature
 
 TO = ["bikes@durbin.ee"]
 
-signatures = PetitionSignature.objects.filter(petition__title="Parking-Protected Bike Lane on 47th St").filter(Q(zip_code__startswith="19143") | Q(zip_code__startswith="19104"))
+signatures = PetitionSignature.objects.filter(
+    petition__title="Parking-Protected Bike Lane on 47th St"
+).filter(Q(zip_code__startswith="19143") | Q(zip_code__startswith="19104"))
 profiles = Profile.objects.filter(zip_code__in=["19143", "19104"])
 
 signatures = []
 profiles = Profile.objects.filter(user__email__in=TO)
 
 SENT = []
+
 
 class Command(BaseCommand):
 
@@ -23,7 +26,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         settings.EMAIL_SUBJECT_PREFIX = ""
-        print('Petitions!')
+        print("Petitions!")
         for signature in signatures:
             if signature.email not in SENT:
                 send_email_message(
@@ -37,7 +40,7 @@ class Command(BaseCommand):
             else:
                 print(f"skipping {signature}")
         print(len(SENT))
-        print('Profiles!')
+        print("Profiles!")
         for profile in profiles:
             if profile.user.email not in SENT:
                 send_email_message(
