@@ -5,14 +5,21 @@ from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.template.response import TemplateResponse
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
-from djstripe.models import Customer, PaymentMethod, Price, Product, Subscription
+from djstripe.models import (
+    Customer,
+    PaymentMethod,
+    Price,
+    Product,
+    Session,
+    Subscription,
+)
 
 from membership.forms import RecurringDonationSetupForm
-from membership.models import DonationTier
+from membership.models import Donation, DonationProduct, DonationTier
 from pbaabp.email import send_email_message
 from profiles.forms import BaseProfileSignupForm
 from profiles.models import Profile
@@ -155,9 +162,16 @@ Thank you for being a part of the action!
 
 @csrf_exempt
 def create_one_time_donation_checkout_session(request):
-    product = Product.objects.filter(name="One-Time Donation", active=True).first()
+    stripe.api_key = settings.STRIPE_SECRET_KEY
+
+    if donation_product_id := request.GET.get("donation_product_id", None):
+        donation_product = get_object_or_404(DonationProduct, id=donation_product_id)
+        product = donation_product.stripe_product
+        stripe_product = donation_product.stripe_product
+    else:
+        product = Product.objects.filter(name="One-Time Donation", active=True).first()
+
     if product is None:
-        stripe.api_key = settings.STRIPE_SECRET_KEY
         stripe_product_search = stripe.Product.search(
             query="active:'true' AND name:'One-Time Donation'"
         )
@@ -225,15 +239,37 @@ def create_one_time_donation_checkout_session(request):
         request.session["_stripe_checkout_session_id"] = session.id
         return JsonResponse({"clientSecret": session.client_secret})
     else:
-        context = {"stripe_public_key": settings.STRIPE_PUBLIC_KEY}
+        request.session["_redirect_after_donation"] = request.META.get("HTTP_REFERER", None)
+        context = {
+            "stripe_public_key": settings.STRIPE_PUBLIC_KEY,
+            "donation_product_id": donation_product_id,
+        }
         return TemplateResponse(request, "checkout_session.html", context)
 
 
 def complete_one_time_donation_checkout_session(request):
     checkout_session_id = request.session.pop("_stripe_checkout_session_id", default=None)
     stripe.api_key = settings.STRIPE_SECRET_KEY
-    session = stripe.checkout.Session.retrieve(checkout_session_id)
+    session = stripe.checkout.Session.retrieve(checkout_session_id, expand=["line_items"])
     if session["status"] == "complete":
+        _session = Session()._get_or_retrieve(session["id"], expand=["line_items"])
+        _session.save()
+        donation_products = DonationProduct.objects.filter(
+            stripe_product__id__in=[li["price"]["product"] for li in _session.line_items]
+        ).all()
+        if donation_products:
+            for line_item in _session.line_items:
+                donation_product = DonationProduct.objects.filter(
+                    stripe_product__id=line_item["price"]["product"]
+                ).first()
+                if donation_product:
+                    _d = Donation(
+                        donation_product=donation_product, amount=line_item["amount_total"] / 100
+                    )
+                    _d.save()
+        if redirect_to := request.session.pop("_redirect_after_donation", default=None):
+            messages.add_message(request, messages.INFO, "Thank you for your donation!")
+            return redirect(redirect_to)
         return redirect("index")
     return redirect("index")
 

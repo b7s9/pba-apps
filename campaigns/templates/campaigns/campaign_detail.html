@@ -27,6 +27,15 @@
 <p style="font-size: smaller; color: grey; width: 100%; text-align: center;">{% translate "This campaign has been completed." %}</p>
 {% endif %}
 
+{% if campaign.donation_goal %}
+<div class="progress-bar-container">
+  <div class="progress-bar" style="height: 2em; width: {{ campaign.donation_progress }}%">
+    <span style="float: right; padding-right: 1em; padding-top: .45em;">${{ campaign.donation_total|intcomma }}</span>
+  </div>
+  <span class="progress-goal">${{ campaign.donation_goal|intcomma }}</span>
+</div>
+{% endif %}
+
 {{ campaign.content_rendered|safe }}
 
 {% if campaign.has_actions and not campaign.status == "completed" %}
@@ -36,7 +45,7 @@
 {% if campaign.donation_action %}
   <div id="donation" class="button-holder">
     <h2>{% translate "Make a donation" %}</h2>
-    <a href="{% url 'create_one_time_donation_checkout_session' %}" class="cta-button submit-button">{% translate "Donate Now!" %}</a>
+    <a href="{% url 'create_one_time_donation_checkout_session' %}?donation_product_id={{ campaign.donation_product.id }}" class="cta-button submit-button">{% translate "Donate Now!" %}</a>
   </div>
 {% endif %}
 {% if campaign.subscription_action and not campaign.status == "completed" %}

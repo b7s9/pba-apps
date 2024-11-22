@@ -55,3 +55,32 @@ def sync_donation_tier_to_stripe(donationtier_id):
 
     donation_tier.stripe_price = price
     donation_tier.save()
+
+
+@shared_task
+def sync_donation_product_to_stripe(donationproduct_id):
+    from membership.models import DonationProduct
+
+    donation_product = DonationProduct.objects.get(id=donationproduct_id)
+
+    stripe.api_key = settings.STRIPE_SECRET_KEY
+
+    if donation_product.stripe_product:
+        stripe_product = Product()._get_or_retrieve(donation_product.stripe_product.id)
+        stripe_product._api_update(
+            name=donation_product.name,
+            description=(donation_product.description if donation_product.description else ""),
+        )
+    else:
+        stripe_product = stripe.Product.create(
+            name=donation_product.name,
+            active=True,
+            description=(donation_product.description if donation_product.description else ""),
+            shippable=False,
+            statement_descriptor="Philly Bike Action",
+            metadata={"donationproduct_id": str(donationproduct_id)},
+        )
+        stripe_product = Product()._get_or_retrieve(stripe_product["id"])
+
+    donation_product.stripe_product = stripe_product
+    donation_product.save()

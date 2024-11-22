@@ -11,6 +11,7 @@ from multi_email_field.fields import MultiEmailField
 from ordered_model.models import OrderedModel
 
 from events.models import ScheduledEvent
+from membership.models import Donation, DonationProduct
 from pbaabp.models import ChoiceArrayField, MarkdownField
 
 
@@ -47,6 +48,16 @@ class Campaign(OrderedModel):
     call_to_action = models.CharField(max_length=64, null=True, blank=True)
 
     donation_action = models.BooleanField(default=False)
+    donation_product = models.ForeignKey(
+        DonationProduct,
+        null=True,
+        blank=True,
+        to_field="id",
+        on_delete=models.SET_NULL,
+        related_name="campaigns",
+    )
+    donation_goal = models.IntegerField(default=None, null=True, blank=True)
+
     subscription_action = models.BooleanField(default=False)
 
     content = MarkdownField(rendered_field="content_rendered", validator=VALIDATOR_NULL)
@@ -64,6 +75,22 @@ class Campaign(OrderedModel):
             or self.donation_action
             or self.subscription_action
         )
+
+    @property
+    def donation_total(self):
+        if self.donation_product:
+            return Donation.objects.filter(donation_product=self.donation_product).aggregate(
+                models.Sum("amount", default=0)
+            )["amount__sum"]
+        return None
+
+    @property
+    def donation_progress(self):
+        if self.donation_goal:
+            if self.donation_total > self.donation_goal:
+                return 100
+            return int(100 * (self.donation_total / self.donation_goal))
+        return 100
 
     def future_events(self):
         return self.events.filter(start_datetime__gt=timezone.now())

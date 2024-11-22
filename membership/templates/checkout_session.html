@@ -24,7 +24,7 @@
   
   // Fetch Checkout Session and retrieve the client secret
   async function initialize() {
-    const response = await fetch("{% if price_id %}{% url 'create_subscription_checkout_session' price_id=price_id %}{% else %}{% url 'create_one_time_donation_checkout_session' %}{% endif %}", {
+    const response = await fetch("{% if price_id %}{% url 'create_subscription_checkout_session' price_id=price_id %}{% else %}{% url 'create_one_time_donation_checkout_session' %}{% if donation_product_id %}?donation_product_id={{ donation_product_id }}{% endif %}{% endif %}", {
       method: "POST",
     });
     const { clientSecret } = await response.json();
