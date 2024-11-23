@@ -10,10 +10,14 @@
   <!-- Checkout will insert the payment form here -->
 </div>
 <div id="actions" style="width: 100%; margin: auto; text-align: center; padding-top: 1em;">
-  {% if request.user.is_authenticated %}
-      <a href="{% url 'profile' %}">{% translate "⬅️ Go Back" %}</a>
+  {% if donation_product_id and request.META.HTTP_REFERER %}
+      <a href="{{ request.META.HTTP_REFERER }}">{% translate "⬅️ Go Back" %}</a>
   {% else %}
-      <a href="{% url 'index' %}">{% translate "⬅️ Go Back" %}</a>
+      {% if request.user.is_authenticated %}
+          <a href="{% url 'profile' %}">{% translate "⬅️ Go Back" %}</a>
+      {% else %}
+          <a href="{% url 'index' %}">{% translate "⬅️ Go Back" %}</a>
+      {% endif %}
   {% endif %}
 </div>
 <script>

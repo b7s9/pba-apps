@@ -46,6 +46,7 @@ class Campaign(OrderedModel):
     description = models.TextField(null=True, blank=True)
     cover = models.ImageField(upload_to="campaigns", null=True, blank=True)
     call_to_action = models.CharField(max_length=64, null=True, blank=True)
+    call_to_action_header = models.BooleanField(default=True)
 
     donation_action = models.BooleanField(default=False)
     donation_product = models.ForeignKey(

@@ -3,12 +3,14 @@ import uuid
 from django.contrib.auth.models import User
 from django.db import models, transaction
 from djstripe.models import Price, Product
+from markdownfield.models import RenderedMarkdownField
 from ordered_model.models import OrderedModel
 
 from membership.tasks import (
     sync_donation_product_to_stripe,
     sync_donation_tier_to_stripe,
 )
+from pbaabp.models import MarkdownField
 
 
 class DonationProduct(OrderedModel):
@@ -19,6 +21,8 @@ class DonationProduct(OrderedModel):
 
     name = models.CharField(max_length=512)
     description = models.TextField(null=True, blank=True)
+    disclaimer = MarkdownField(rendered_field="disclaimer_rendered", null=True, blank=True)
+    disclaimer_rendered = RenderedMarkdownField()
 
     def save(self, *args, **kwargs):
         if self._state.adding:
