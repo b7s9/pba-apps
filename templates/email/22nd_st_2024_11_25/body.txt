@@ -1,0 +1,62 @@
+Hello {{first_name}},
+
+{% if petition %}
+*You are receiving this email from [Philly Bike Action](https://bikeaction.org/) because you signed our [Support the 22nd Street Bike Lane in Fairmount](https://apps.bikeaction.org/campaigns/support-the-22nd-street-bike-lane-in-fairmount/) petition.*
+{% else %}
+*You are receiving this email from [Philly Bike Action](https://bikeaction.org/) because you have a Philly Bike Action account and you live in the 5th Councilmanic District.*
+{% endif %}
+
+Tell Councilmember Young: [extend the bike lane and pedestrian safety measures](https://drive.google.com/file/d/1nDxa_O5zZE-XIvCTmd3dffj4zd8CnXxn/view?usp=sharing) on 22nd Street from Pennsylvania Avenue to Brown Street\! 
+
+**Take action today AND tomorrow** alongside neighbors from across the 5th District to make an impact. <b style="background-color: yellow;">This is the final push, and Councilmember Young responds well to lots of outreach from constituents!</b>
+
+## Take Action: Email and Call
+
+* First, email Councilmember Young & cc his staffers **today and tomorrow** (11/25 and 11/26).   
+    * Send a new email each day. Repetition is key\!   
+    * Use our email template below  
+* Then, call Councilmember Young’s office **today and tomorrow** (11/25 and 11/26)  
+    * Use our sample call script below
+
+### Email Template
+
+<a href="mailto:Jeffery.Young@phila.gov?cc=Tammy.Byars@phila.gov, Conlan.Crosley@phila.gov, elshafiyq.aali@phila.gov, Onyx.Finney@phila.gov, Kymelle.Clark@phila.gov, Bonita.Cummings@phila.gov, Halle.M.Anderson@phila.gov, Rondabay.Liggins-McCoy@phila.gov&subject=Introduce%20a%20Bill%20for%20the%2022nd%20Street%20Traffic%20Safety%20Project&body=Councilmember%20Young%2C%20%20%0A%20%20%20%0AAs%20a%20resident%20of%20District%205%2C%20I%20want%20to%20strongly%20express%20my%20support%20for%20the%2022nd%20Street%20Traffic%20Safety%20Project.%0A%0AThis%20project%20has%20already%20received%20support%20from%20numerous%20neighborhood%20groups%2C%20including%20both%20Fairmount%20and%20Spring%20Garden%20Civic%20Associations%2C%20Fairmount%20CDC%2C%20Spring%20Garden%20CDC%2C%20Bache-Martin%20HSA%2C%20Friends%20of%20Eastern%20State%20Penitentiary%20Park%2C%20and%20the%2015th%20Ward%20Democrats.%20120%20Fairmount%20residents%20also%20signed%20a%20petition%20in%20support%20of%20the%20project.%20%0A%0A**Please%20introduce%20a%20bill%20for%20the%2022nd%20Street%20Traffic%20Safety%20Project**%20from%20Pennsylvania%20Avenue%20to%20Brown%20Street%20with%20a%20parking%20protected%20bike%20lane%20from%20Spring%20Garden%20Street%20to%20Green%20Street.%20%20%0A%20%20%20%20%0A%5BInsert%20personal%20story%20or%20experience%20here%5D%0A%0AThank%20you%20for%20making%20our%20neighborhood%20safer%20for%20all%20road%20users.%0A%0ASincerely%2C%20%20%0A%5BYour%20Name%5D%0A%5BYour%20Home%20Address%5D">Click Here</a> to open a draft in your email client. Or copy and paste from below:
+  
+To: Jeffery.Young@phila.gov  
+CC: Tammy.Byars@phila.gov, Conlan.Crosley@phila.gov, elshafiyq.aali@phila.gov, Onyx.Finney@phila.gov, Kymelle.Clark@phila.gov, Bonita.Cummings@phila.gov, Halle.M.Anderson@phila.gov, Rondabay.Liggins-McCoy@phila.gov  
+
+Subject: Introduce a Bill for the 22nd Street Traffic Safety Project   
+   
+Councilmember Young,  
+   
+As a resident of District 5, I want to strongly express my support for the 22nd Street Traffic Safety Project.
+
+This project has already received support from numerous neighborhood groups, including both Fairmount and Spring Garden Civic Associations, Fairmount CDC, Spring Garden CDC, Bache-Martin HSA, Friends of Eastern State Penitentiary Park, and the 15th Ward Democrats. 120 Fairmount residents also signed a petition in support of the project. 
+
+**Please introduce a bill for the 22nd Street Traffic Safety Project** from Pennsylvania Avenue to Brown Street with a parking protected bike lane from Spring Garden Street to Green Street.  
+    
+\[Insert personal story or experience here\]
+
+Thank you for making our neighborhood safer for all road users.
+
+Sincerely,  
+\[Your Name\]  
+\[Your Home Address\]
+
+### Call Script
+
+Councilmember Young’s Office: 215-686-3442
+
+* “Hello, I live in the 5th District and am calling to leave a message for Councilmember Young.”  
+* “I am calling to share my strong support for the 22nd Street Traffic Safety Project. This project is important to me because \[insert personal experience here\].  
+* I am calling to ask Councilmember Young to introduce a bill for the 22nd Street Traffic Safety Project from Pennsylvania Avenue to Brown Street, with a parking protected bike lane from Spring Garden Street to Green Street. Thank you\!
+
+---
+
+Thank you for your support in making Philadelphia's streets safer for everyone who uses them\!
+
+**Philly Bike Action**
+
+{% if petition %}
+**Want more from Philly Bike Action?** Join our [newsletter](https://bikeaction.org) or create a [PBA Account](https://apps.bikeaction.org/accounts/signup/) so we can let you know when important input opportunities like this one happen in your neighborhood.
+{% endif %}
