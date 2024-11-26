@@ -6,7 +6,7 @@ from campaigns.models import Campaign, Petition, PetitionSignature
 
 
 class CampaignAdmin(OrderedModelAdmin):
-    readonly_fields = ["wordpress_id"]
+    readonly_fields = ["wordpress_id", "donation_total"]
     autocomplete_fields = ["events"]
     list_display = ("__str__", "status", "visible", "move_up_down_links")
     list_filter = ["status", "visible"]

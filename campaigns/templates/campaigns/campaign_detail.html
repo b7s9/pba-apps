@@ -31,12 +31,27 @@
 
 {% if campaign.has_actions and not campaign.status == "completed" %}
 <span id="action"></span>
+{% if campaign.call_to_action_header %}
 <h2>{% if campaign.call_to_action %}{{ campaign.call_to_action }}{% else %}{% translate "Take Action Now!" %}{% endif %}</h2>
+{% endif %}
 {% endif %}
 {% if campaign.donation_action %}
   <div id="donation" class="button-holder">
     <h2>{% translate "Make a donation" %}</h2>
-    <a href="{% url 'create_one_time_donation_checkout_session' %}" class="cta-button submit-button">{% translate "Donate Now!" %}</a>
+
+    {% if campaign.donation_goal %}
+    <div class="progress-bar-container">
+      <div class="progress-bar" style="height: 2em; width: {{ campaign.donation_progress }}%">
+        <span style="float: right; padding-right: 1em; padding-top: .45em;">${{ campaign.donation_total|intcomma }}</span>
+      </div>
+      <span class="progress-goal">${{ campaign.donation_goal|intcomma }}</span>
+    </div>
+    {% endif %}
+
+    <a href="{% url 'create_one_time_donation_checkout_session' %}?donation_product_id={{ campaign.donation_product.id }}" class="cta-button submit-button">{% translate "Donate Now!" %}</a>
+    {% if campaign.donation_product.disclaimer %}
+    <p>{{ campaign.donation_product.disclaimer_rendered|safe }}</p>
+    {% endif %}
   </div>
 {% endif %}
 {% if campaign.subscription_action and not campaign.status == "completed" %}
