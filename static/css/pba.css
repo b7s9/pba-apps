@@ -646,23 +646,25 @@ body {
 
 .progress-bar-container {
   width: 90%;
-  margin: 0 auto;
-  border: 1px solid black;
-  border-radius: 1em;
-  margin-bottom: 2em;
+  margin: 0 auto 2em;
+  overflow: hidden;
 }
 
 .progress-bar {
-  border-radius: 1em;
+  border: 1px solid black;
+  height: 2em;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
   background-color: #70bf44;
+  height: 100%
 }
 
 .progress-goal {
-  position: relative;
   margin-top: .5em;
   float: right;
 }
-
 
 .petition-letter {
   border: 1px solid lightgrey;
