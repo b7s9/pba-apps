@@ -5,7 +5,8 @@ from django.core.validators import RegexValidator
 from django.db import models, transaction
 from interactions.models.discord.enums import ScheduledEventStatus
 
-from events.tasks import sync_to_mailchimp, sync_to_wordpress
+from events.tasks import sync_to_mailchimp
+from lib.slugify import unique_slugify
 
 
 class ScheduledEvent(models.Model):
@@ -29,8 +30,7 @@ class ScheduledEvent(models.Model):
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     discord_id = models.CharField(max_length=64, null=True, blank=True)
-    wordpress_id = models.CharField(max_length=64, null=True, blank=True)
-    wordpress_slug = models.SlugField(max_length=512, null=True, blank=True)
+    slug = models.SlugField(max_length=512, null=True, blank=True)
 
     title = models.CharField(max_length=512)
     status = models.CharField(max_length=16, choices=Status.choices)
@@ -41,21 +41,8 @@ class ScheduledEvent(models.Model):
     end_datetime = models.DateTimeField(null=True, blank=True)
 
     def save(self, *args, **kwargs):
-        if not self._state.adding:
-            old_model = ScheduledEvent.objects.get(pk=self.pk)
-            change_fields = [
-                f.name
-                for f in ScheduledEvent._meta._get_fields()
-                if f.name not in ["id", "discord_id", "wordpress_id", "wordpress_slug"]
-            ]
-            modified = False
-            for i in change_fields:
-                if getattr(old_model, i, None) != getattr(self, i, None):
-                    modified = True
-            if modified:
-                transaction.on_commit(lambda: sync_to_wordpress.delay(self.id))
-        else:
-            transaction.on_commit(lambda: sync_to_wordpress.delay(self.id))
+        if self.slug is None:
+            unique_slugify(self, self.title)
         super(ScheduledEvent, self).save(*args, **kwargs)
 
     def __str__(self):

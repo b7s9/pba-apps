@@ -5,7 +5,7 @@
 {% with event=object %}
 <meta property="og:type" content="article">
 <meta property="og:title" content="PBA Event - {{ event.title }}">
-<meta property="og:url" content="https://apps.bikeaction.org/events/{{ event.wordpress_slug }}">
+<meta property="og:url" content="https://apps.bikeaction.org/events/{{ event.slug }}">
 {% if event.cover %}<meta property="og:image" content="{{ event.cover }}">{% endif %}
 <meta property="og:description" content="{{ event.description|truncatechars:"300" }}">
 {% endwith %}
@@ -38,12 +38,12 @@
       {% if request.user.is_authenticated %}
         {% if event in request.user.profile.events %}
         <p>You are currently RSVP'd "Yes"!</p>
-        <a class="submit-button" href="{% url 'event_rsvp_cancel' event.wordpress_slug %}">Cancel RSVP</a>
+        <a class="submit-button" href="{% url 'event_rsvp_cancel' event.slug %}">Cancel RSVP</a>
         {% else %}
-        <a class="submit-button" href="{% url 'event_rsvp' event.wordpress_slug %}">RSVP</a>
+        <a class="submit-button" href="{% url 'event_rsvp' event.slug %}">RSVP</a>
         {% endif %}
       {% else %}
-        <a class="submit-button" href="{% url 'event_rsvp' event.wordpress_slug %}">RSVP</a>
+        <a class="submit-button" href="{% url 'event_rsvp' event.slug %}">RSVP</a>
       {% endif %}
     </div>
     {% endif %}
@@ -82,13 +82,13 @@
 <div class="pagination">
   <div class="pagination-nav next">
     {% if next_event %}
-    <span><a href="{% url 'event_detail' next_event.wordpress_slug %}">{{ next_event.title }} <i class='bx bx-chevrons-right'></i></a></span>
+    <span><a href="{% url 'event_detail' next_event.slug %}">{{ next_event.title }} <i class='bx bx-chevrons-right'></i></a></span>
     {% endif %}
   </div>
   <br><br>
   <div class="pagination-nav previous">
     {% if previous_event %}
-    <span><a href="{% url 'event_detail' previous_event.wordpress_slug %}"><i class='bx bx-chevron-left'></i> {{ previous_event.title }}</a></span>
+    <span><a href="{% url 'event_detail' previous_event.slug %}"><i class='bx bx-chevron-left'></i> {{ previous_event.title }}</a></span>
     {% endif %}
   </div>
 </div>

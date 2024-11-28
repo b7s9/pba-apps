@@ -19,7 +19,7 @@ Do not show the header on signin page.
       document.getElementById("countdown").innerHTML = time;
       time--;
       if (time == 0) {
-          window.location.href = "{% url 'event_signin' event_slug_or_id=event.wordpress_slug %}?kiosk=1";
+          window.location.href = "{% url 'event_signin' event_slug_or_id=event.slug %}?kiosk=1";
       }
   }, 1000);
 </script>

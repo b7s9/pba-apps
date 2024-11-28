@@ -36,4 +36,4 @@ class AllEventsFeed(ICalFeed):
         return item.start_datetime + datetime.timedelta(hours=1)
 
     def item_link(self, item):
-        return reverse("event_detail", args=[item.wordpress_slug])
+        return reverse("event_detail", args=[item.slug])

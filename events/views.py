@@ -18,7 +18,7 @@ def _fetch_event_by_slug_or_id(event_slug_or_id):
         event_by_id = ScheduledEvent.objects.filter(id=event_slug_or_id).first()
     except ValueError:
         event_by_id = None
-    event_by_slug = ScheduledEvent.objects.filter(wordpress_slug=event_slug_or_id).first()
+    event_by_slug = ScheduledEvent.objects.filter(slug=event_slug_or_id).first()
 
     if event_by_id is not None:
         return event_by_id
@@ -89,7 +89,7 @@ class PastEventsListView(ListView):
 
 class EventDetailView(DetailView):
     model = ScheduledEvent
-    slug_field = "wordpress_slug"
+    slug_field = "slug"
 
     def next_event(self, current_object):
         return (
@@ -134,16 +134,14 @@ def event_rsvp(request, event_slug_or_id):
     if request.user.is_authenticated:
         rsvp, created = EventRSVP.objects.update_or_create(event=event, user=request.user)
         rsvp.save()
-        return HttpResponseRedirect(reverse("event_detail", kwargs={"slug": event.wordpress_slug}))
+        return HttpResponseRedirect(reverse("event_detail", kwargs={"slug": event.slug}))
 
     if request.method == "POST":
         form = EventRSVPForm(request.POST)
         if form.is_valid():
             form.instance.event = event
             form.save()
-            return HttpResponseRedirect(
-                reverse("event_detail", kwargs={"slug": event.wordpress_slug})
-            )
+            return HttpResponseRedirect(reverse("event_detail", kwargs={"slug": event.slug}))
     else:
         form = EventRSVPForm()
     return render(
@@ -170,7 +168,7 @@ def event_rsvp_cancel(request, event_slug_or_id):
 
     if request.user.is_authenticated and event in request.user.profile.events:
         EventRSVP.objects.filter(user=request.user, event=event).delete()
-        return HttpResponseRedirect(reverse("event_detail", kwargs={"slug": event.wordpress_slug}))
+        return HttpResponseRedirect(reverse("event_detail", kwargs={"slug": event.slug}))
 
 
 def event_signin(request, event_slug_or_id):
@@ -196,9 +194,7 @@ def event_signin(request, event_slug_or_id):
                 form.save()
 
             if request.GET.get("kiosk", False):
-                return redirect(
-                    "event_signin_kiosk_postroll", event_slug_or_id=event.wordpress_slug
-                )
+                return redirect("event_signin_kiosk_postroll", event_slug_or_id=event.slug)
             else:
                 return HttpResponseRedirect("https://bikeaction.org")
     elif timezone.now() > event.start_datetime + datetime.timedelta(days=1):

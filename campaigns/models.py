@@ -3,7 +3,6 @@ import uuid
 from django.core.validators import RegexValidator
 from django.db import models
 from django.utils import timezone
-from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 from markdownfield.models import RenderedMarkdownField
 from markdownfield.validators import VALIDATOR_NULL
@@ -11,6 +10,7 @@ from multi_email_field.fields import MultiEmailField
 from ordered_model.models import OrderedModel
 
 from events.models import ScheduledEvent
+from lib.slugify import unique_slugify
 from membership.models import Donation, DonationProduct
 from pbaabp.models import ChoiceArrayField, MarkdownField
 
@@ -98,7 +98,7 @@ class Campaign(OrderedModel):
 
     def save(self, *args, **kwargs):
         if self.slug is None:
-            self.slug = slugify(self.title)[:49]
+            unique_slugify(self, self.title)
         super(Campaign, self).save(*args, **kwargs)
 
     def __str__(self):
@@ -155,7 +155,7 @@ class Petition(models.Model):
 
     def save(self, *args, **kwargs):
         if self.slug is None:
-            self.slug = slugify(self.title)[:49]
+            unique_slugify(self, self.title)
         super(Petition, self).save(*args, **kwargs)
 
     def form(self):
