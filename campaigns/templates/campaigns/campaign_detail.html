@@ -41,9 +41,10 @@
 
     {% if campaign.donation_goal %}
     <div class="progress-bar-container">
-      <div class="progress-bar" style="height: 2em; width: {{ campaign.donation_progress }}%">
-        <span style="float: right; padding-right: 1em; padding-top: .45em;">${{ campaign.donation_total|intcomma }}</span>
+      <div class="progress-bar">
+        <div class="progress-bar-fill" style="width: {{ campaign.donation_progress }}%"></div>
       </div>
+      <span style="float: left; padding-left: min(calc({{ campaign.donation_progress }}% - 1.5em), calc(100% - 4.2em)); margin-top: .5em;">${{ campaign.donation_total|intcomma }}</span>
       <span class="progress-goal">${{ campaign.donation_goal|intcomma }}</span>
     </div>
     {% endif %}
