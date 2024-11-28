@@ -2,53 +2,6 @@ from celery import shared_task
 from django.conf import settings
 from mailchimp3 import MailChimp, helpers
 
-from lib.wordpress import WordPressAPI
-
-
-@shared_task
-def sync_to_wordpress(scheduled_event_id):
-    if settings.WP_LOGIN_PASS is None:
-        return
-
-    from events.models import ScheduledEvent
-
-    wordpress = WordPressAPI()
-    wordpress.auth()
-
-    event = ScheduledEvent.objects.get(id=scheduled_event_id)
-
-    if event.discord_id is None:
-        wordpress.delete_event(event.wordpress_id)
-        event.wordpress_id = None
-        event.wordpress_slug = None
-        event.save()
-    elif event.wordpress_id:
-        _event = wordpress.update_event(
-            event_id=event.wordpress_id,
-            title=event.title,
-            description=event.description,
-            location=event.location,
-            status="publish",
-            start_datetime=event.start_datetime,
-            end_datetime=event.end_datetime,
-            cover_url=event.cover,
-        )
-        event.wordpress_slug = _event["slug"]
-        event.save()
-    else:
-        _event = wordpress.create_event(
-            title=event.title,
-            description=event.description,
-            location=event.location,
-            status="publish",
-            start_datetime=event.start_datetime,
-            end_datetime=event.end_datetime,
-            cover_url=event.cover,
-        )
-        event.wordpress_id = _event["id"]
-        event.wordpress_slug = _event["slug"]
-        event.save()
-
 
 @shared_task
 def sync_to_mailchimp(event_signin_id):
@@ -86,7 +39,7 @@ def sync_to_mailchimp(event_signin_id):
                     {
                         "name": (
                             f"attended-{event_sign_in.event.start_datetime.strftime('%Y-%m-%d')}-"
-                            f"{event_sign_in.event.wordpress_slug}"
+                            f"{event_sign_in.event.slug}"
                         ),
                         "status": "active",
                     },

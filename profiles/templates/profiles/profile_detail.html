@@ -77,10 +77,10 @@
       </tr>
       {% for rsvp in request.user.profile.upcoming_events %}
       <tr>
-        <td><a href="{% url 'event_detail' rsvp.event.wordpress_slug %}">{{ rsvp.event.title }}</a></td>
+        <td><a href="{% url 'event_detail' rsvp.event.slug %}">{{ rsvp.event.title }}</a></td>
         <td>
-          <a class="smol-button" href="{% url 'event_detail' rsvp.event.wordpress_slug %}">View Event</a>
-          <a class="smol-button" href="{% url 'event_rsvp_cancel' rsvp.event.wordpress_slug %}">Cancel RSVP</a>
+          <a class="smol-button" href="{% url 'event_detail' rsvp.event.slug %}">View Event</a>
+          <a class="smol-button" href="{% url 'event_rsvp_cancel' rsvp.event.slug %}">Cancel RSVP</a>
         </td>
       </tr>
       {% endfor %}
