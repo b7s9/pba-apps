@@ -83,6 +83,8 @@ cmarkgfm==2024.1.14
     #   django-tuieditor
 constantly==23.10.4
     # via twisted
+croniter==5.0.1
+    # via discord-py-interactions
 cryptography==42.0.8
     # via
     #   autobahn
@@ -94,7 +96,7 @@ daphne==4.1.2
     # via channels
 defusedxml==0.7.1
     # via willow
-discord-py-interactions==5.11.0
+discord-py-interactions==5.13.2
     # via -r requirements/base.in
 discord-typings==0.9.0
     # via discord-py-interactions
@@ -283,10 +285,12 @@ python-dateutil==2.9.0.post0
     # via
     #   botocore
     #   celery
+    #   croniter
     #   django-recurrence
     #   icalendar
 pytz==2024.1
     # via
+    #   croniter
     #   django-modelcluster
     #   icalendar
     #   l18n
