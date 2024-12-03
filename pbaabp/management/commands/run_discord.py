@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.core.management.base import BaseCommand
 
-from discord.bot import bot
+from pba_discord.bot import bot
 
 
 class Command(BaseCommand):

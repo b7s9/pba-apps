@@ -4,8 +4,8 @@ from django.conf import settings
 from django.contrib.gis.geos import Point
 from mailchimp3 import MailChimp, helpers
 
-from discord.bot import bot
 from facets.utils import geocode_address
+from pba_discord.bot import bot
 
 
 async def _add_user_to_connected_role(uid):

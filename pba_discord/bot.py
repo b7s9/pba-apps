@@ -14,8 +14,8 @@ from interactions.api.events import (
 )
 from interactions.ext import prefixed_commands
 
-from discord.handlers import OnMessage
 from events.models import EventRSVP, ScheduledEvent
+from pba_discord.handlers import OnMessage
 
 
 class PBADiscordBot(Client):

@@ -3,8 +3,8 @@ from celery import shared_task
 from django.conf import settings
 from interactions import Permissions
 
-from discord.bot import bot
-from discord.components.neighborhood_selection import NeighborhoodSelection
+from pba_discord.bot import bot
+from pba_discord.components.neighborhood_selection import NeighborhoodSelection
 
 
 async def aupdate_neighborhood_role_and_channel(neighborhood_id):
