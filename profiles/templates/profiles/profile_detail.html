@@ -108,29 +108,4 @@
   </div>
   {% endif %}
 </div>
-{% if request.user.tshirt_requests.all %}
-<hr>
-<div class="form-header">
-  <h2>T-Shirts</h2>
-  <p>Your T-Shirt requests</p>
-  <div class="table-container">
-    <table>
-      <tr><th>Fit</th><th>Size</th><th>Print Color</th><th>Action</th></tr>
-      {% for tshirt_request in request.user.tshirt_requests.all %}
-      <tr>
-        <td>{% if tshirt_request.fit == 0 %}Unisex{% elif tshirt_request.fit == 1 %}Crop{% else %}?{% endif %}</td>
-        <td>{{ tshirt_request.get_size_display }}</td>
-        <td>{{ tshirt_request.get_print_color_display }}</td>
-        <td>{% if not tshirt_request.paid %}<a href="{% url 'shirt_pay' shirt_id=tshirt_request.id %}">Pay</a>{% else %}<span style="color: #83BD56;">Paid</span>{% endif %}</td>
-      </tr>
-      {% endfor %}
-    </table>
-  </div>
-  <div style="font-size: smaller;">
-    <p>We anticipate that shirts will cost $20-$30 depending on our final order size.</p>
-    <p>This will include covering the cost of printing and a small fundraiser for PBA.</p>
-    <p>We will confirm your order and collect payment after placing the order.</p>
-  </div>
-</div>
-{% endif %}
 {% endblock %}

@@ -6,7 +6,7 @@ from django.contrib.gis.forms.widgets import OSMWidget
 from django.db.models import Count, Q
 
 from facets.models import District, RegisteredCommunityOrganization
-from profiles.models import Profile, ShirtInterest
+from profiles.models import Profile
 
 
 class ProfileCompleteFilter(admin.SimpleListFilter):
@@ -196,19 +196,6 @@ class ProfileAdmin(admin.ModelAdmin):
             )
 
 
-@admin.action(description="Mark selected shirts as fulfilled")
-def make_fulfilled(modeladmin, request, queryset):
-    queryset.update(fulfilled=True)
-
-
-class ShirtInterestAdmin(admin.ModelAdmin):
-    list_display = ["user", "paid", "fulfilled", "fit", "size", "print_color"]
-    list_filter = ["paid", "fulfilled", "fit", "size", "print_color"]
-    search_fields = ["user__first_name", "user__last_name", "user__email"]
-    autocomplete_fields = ("user",)
-    actions = [make_fulfilled]
-
-
 admin.site.register(Profile, ProfileAdmin)
 
 
@@ -218,4 +205,3 @@ class UserAdmin(BaseUserAdmin):
 
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
-admin.site.register(ShirtInterest, ShirtInterestAdmin)

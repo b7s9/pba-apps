@@ -156,35 +156,3 @@ class Profile(models.Model):
 
     def __str__(self):
         return f"{self.user.first_name} {self.user.last_name} - {self.user.email}"
-
-
-class ShirtInterest(models.Model):
-    class Fit(models.IntegerChoices):
-        ALTERNATIVE_01070C = 0, 'Unisex Classic Fit - "Go-To T-Shirt"'
-        ALTERNATIVE_5114C1 = (
-            1,
-            "Women's Relaxed Fit - \"Women's Go-To Headliner Cropped Tee\"",
-        )
-
-    class Size(models.IntegerChoices):
-        XS = -2, "XS"
-        S = -1, "S"
-        M = 0, "M"
-        L = 1, "L"
-        XL = 2, "XL"
-        XXL = 3, "2XL"
-
-    class PrintColor(models.IntegerChoices):
-        PINK = 0, "Pink"
-        GREEN = 1, "Green"
-
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="tshirt_requests")
-    paid = models.BooleanField(default=False)
-    fulfilled = models.BooleanField(default=False)
-
-    fit = models.IntegerField(null=False, blank=False, choices=Fit.choices)
-    size = models.IntegerField(null=False, blank=False, choices=Size.choices)
-    print_color = models.IntegerField(null=False, blank=False, choices=PrintColor.choices)
