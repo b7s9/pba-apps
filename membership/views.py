@@ -22,22 +22,19 @@ from membership.forms import RecurringDonationSetupForm
 from membership.models import Donation, DonationProduct, DonationTier
 from pbaabp.email import send_email_message
 from profiles.forms import BaseProfileSignupForm
-from profiles.models import Profile
 
 _CUSTOM_FIELDS = [
     {
-        "key": "full_name",
-        "label": {"type": "custom", "custom": "Full Name, as you want us to address you"},
+        "key": "first_name",
+        "label": {"type": "custom", "custom": "First Name"},
         "type": "text",
         "text": {"maximum_length": 128},
     },
     {
-        "key": "council_district",
-        "label": {"type": "custom", "custom": "Council District"},
-        "type": "dropdown",
-        "dropdown": {
-            "options": [{"label": d[1], "value": d[0]} for d in Profile.District.choices]
-        },
+        "key": "last_name",
+        "label": {"type": "custom", "custom": "Last Name"},
+        "type": "text",
+        "text": {"maximum_length": 128},
     },
     {
         "key": "newsletter_opt_in",
@@ -46,6 +43,17 @@ _CUSTOM_FIELDS = [
         "dropdown": {"options": [{"label": "Yes", "value": 1}, {"label": "No", "value": 0}]},
     },
 ]
+
+_CUSTOM_TEXT = {
+    "terms_of_service_acceptance": {
+        "message": (
+            "I have read the Philly Bike Action "
+            "[Code of Conduct](https://apps.bikeaction.org/policies/code-of-conduct/) "
+            "and "
+            "[Privacy and Data Statement](https://apps.bikeaction.org/policies/privacy-and-data/)."
+        ),
+    }
+}
 
 
 @csrf_exempt
@@ -62,7 +70,10 @@ def create_checkout_session(request, price_id=None):
             line_items=[{"price": price_id, "quantity": 1}] if price_id is not None else None,
             return_url=request.build_absolute_uri(reverse("complete_checkout_session")),
             customer=customer.id if customer else None,
+            billing_address_collection="required" if customer is None else "auto",
             custom_fields=_CUSTOM_FIELDS if customer is None else None,
+            custom_text=_CUSTOM_TEXT if customer is None else None,
+            consent_collection={"terms_of_service": "required"} if customer is None else None,
         )
         request.session["_stripe_checkout_session_id"] = session.id
         return JsonResponse({"clientSecret": session.client_secret})
@@ -105,24 +116,23 @@ def complete_checkout_session(request):
             subscription = Subscription._get_or_retrieve(session["subscription"])
             if not request.user.is_authenticated:
                 custom_fields = {d["key"]: d[d["type"]]["value"] for d in session["custom_fields"]}
-                first_name, _, last_name = custom_fields["full_name"].partition(" ")
-                if last_name == "":
-                    last_name = "Unknown"
+                first_name = custom_fields["first_name"]
+                last_name = custom_fields["last_name"]
                 email = session["customer_details"]["email"]
+                street_address = session["customer_details"]["address"]["line1"]
                 zip_code = session["customer_details"]["address"]["postal_code"]
-                council_district = int(custom_fields["council_district"])
                 newsletter_opt_in = bool(int(custom_fields["newsletter_opt_in"]))
                 form = BaseProfileSignupForm(
                     {
-                        "email": email,
-                        "username": email,
-                        "password1": "Password@99",
-                        "password2": "Password@99",
                         "first_name": first_name,
                         "last_name": last_name,
-                        "council_district": council_district,
+                        "street_address": street_address,
                         "zip_code": zip_code,
+                        "email": email,
+                        "username": email,
                         "newsletter_opt_in": newsletter_opt_in,
+                        "password1": "Password@99",
+                        "password2": "Password@99",
                     }
                 )
                 if form.is_valid():
