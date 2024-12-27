@@ -22,6 +22,9 @@ class AccountAdapter(DefaultAccountAdapter):
         ).strip()
         return subject, message
 
+    def get_password_change_redirect_url(self, request):
+        return reverse("profile")
+
     def send_mail(self, template_prefix, email, context):  # noqa: F811
         ctx = {
             "email": email,

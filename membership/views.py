@@ -143,9 +143,10 @@ def complete_checkout_session(request):
                     customer = Customer._get_or_retrieve(stripe_customer["id"])
                     customer.subscriber = user
                     customer.save()
-                    link = reverse("account_set_password")
+                    link = reverse("sesame_login")
                     link = request.build_absolute_uri(link)
                     link += sesame.utils.get_query_string(user)
+                    link += f"&next={reverse('account_set_password')}"
                     subject = f"Welcome! Create a password for {request.get_host()}"
                     message = f"""\
 Hello {user.first_name},
