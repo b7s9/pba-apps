@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="form-header">
+  <h1>Project Application</h1>
+
+  <p>We're excited that you want to support Philly Bike Action by leading a new project!
+
+  <p><b>Philly Bike Action is happy to support and facilitate projects that align with our mission!</b> Past projects include: initiatives for new/improved bike lanes, engagements with City Council, bike lane cleanups, direct action demonstrations for safe streets, and more.</p>
+
+  <p>Please use this form to submit an application to the Board of Directors for a new project. We will review it and get back to you as soon as possible.</p>
+
+  <p>If your project is accepted, we will share helpful how-to documents to get you started. However, <b>you</b> will be responsible for organizing the project until its completion. We encourage you to proactively ask for help and guidance from experienced PBA organizers to ensure the project follows PBA processes and quality standards.</p>
+
+  <p>Have questions? Please reach out to <a href="mailto:info@bikeaction.org">info@bikeaction.org</a>.</p>
+
+</div>
+<div class="form-container">
+  <form class="application-form" method="post">
+  {% csrf_token %}
+
+  {{ form.non_field_errors }}
+
+  {% for hidden_field in form.hidden_fields %}
+    {{ hidden_field.errors }}
+    {{ hidden_field }}
+  {% endfor %}
+
+  <h2>Summary</h2>
+
+  {% include 'snippets/field.html' with field=form.shortname %}
+  {% include 'snippets/field.html' with field=form.quick_summary %}
+
+  <h2>Project leader information</h2>
+  <p>
+    <label>Name</label>
+    <span class="prefilled">{{ request.user.first_name }} {{ request.user.last_name }}</span>
+  </p>
+  <p>
+    <label>Discord username</label>
+    <span class="prefilled">{{ request.user.profile.discord.extra_data.username }}</span>
+  </p>
+  <p>
+    <label>Email</label>
+    <span class="prefilled">{{ request.user.email }}</span>
+  </p>
+  <p>
+    <label>City Council District</label>
+    <span class="prefilled">{{ request.user.profile.district }}</span>
+  </p>
+  {% include 'snippets/field.html' with field=form.leader_phone_number %}
+  {% include 'snippets/field.html' with field=form.leader_preferred_contact_method %}
+  {% include 'snippets/field.html' with field=form.leader_past_experience %}
+
+  <h2>Project overview</h2>
+  {% include 'snippets/field.html' with field=form.mission_relevance %}
+  {% include 'snippets/field.html' with field=form.success_criteria %}
+  {% include 'snippets/field.html' with field=form.name_use %}
+  {% include 'snippets/field.html' with field=form.recruitment %}
+  {% include 'snippets/field.html' with field=form.external_orgs %}
+
+  <h2>Logistics</h2>
+  {% include 'snippets/field.html' with field=form.location %}
+  {% include 'snippets/field.html' with field=form.time_and_date %}
+  {% include 'snippets/field.html' with field=form.recurring %}
+
+
+  <h2>Resources</h2>
+  <p>Successful projects require promotion, volunteer management, and tech support (petitions, emails, etc). Estimating these needs ahead of time ensures a smoother experience and makes it easier to determine if a project is within our scope at a given time.</p>
+
+  <p>If requested, PBA can offer useful equipment such as (but not limited to):</p>
+
+  <ul>
+    <li>Cargo Trailer with hitch and repair kits</li>
+    <li>Pink and green cones</li>
+    <li>Yellow safety vests</li>
+    <li>Bumper magnets</li>
+    <li>Folding table, chair, and dolly</li>
+    <li>Yellow caution tape, clear tape, scissors, colored sidewalk chalk, blank posterboard</li>
+    <li>Quick Setup Easels</li>
+    <li>Tupperware container with assorted flyers</li>
+    <li>Bicycle counter</li>
+  </ul>
+  <br>
+
+  {% include 'snippets/field.html' with field=form.equipment_needed %}
+  {% include 'snippets/field.html' with field=form.volunteers_needed %}
+  {% include 'snippets/field.html' with field=form.promotion_needed %}
+  {% include 'snippets/field.html' with field=form.finances_needed %}
+  {% include 'snippets/field.html' with field=form.others_needed %}
+
+  <h2>Anything Else</h2>
+  {% include 'snippets/field.html' with field=form.anything_else%}
+
+  <div class="button-holder">
+    <button class="submit-button" type="submit" value="Submit!">Submit</button>
+  </div>
+
+  </form>
+</div>
+{% endblock %}

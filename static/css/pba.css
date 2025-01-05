@@ -411,6 +411,36 @@ form #id_donation_tier > div {
   padding-left: 1em;
 }
 
+form.application-form label {
+  width: 100%;
+  float: unset;
+  font-weight: 500;
+  margin-bottom: .5em;
+}
+
+form.application-form input {
+  width: 100%;
+  max-width: unset;
+}
+
+form.application-form input[type=checkbox] {
+  width: auto;
+}
+
+form.application-form .prefilled {
+  background-color: #dddddd;
+  padding: .25em;
+  border-radius: .25em;
+}
+
+form.application-form p+p {
+  margin-top: .5em;
+}
+
+form.application-form h2:first-of-type {
+  margin-top: 0;
+}
+
 .button-holder {
   text-align: center;
   padding: 1em;

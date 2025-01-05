@@ -90,6 +90,14 @@ class Profile(models.Model):
         super(Profile, self).save(*args, **kwargs)
 
     @property
+    def complete(self):
+        return bool(self.street_address) and bool(self.zip_code)
+
+    @property
+    def apps_connected(self):
+        return self.discord is not None
+
+    @property
     def district(self):
         if self.street_address is None:
             return None

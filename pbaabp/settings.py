@@ -114,6 +114,7 @@ INSTALLED_APPS = [
     "release",
     "maillinks",
     "facets",
+    "projects",
     "cms",
 ]
 
