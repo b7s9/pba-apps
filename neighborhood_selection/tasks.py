@@ -11,7 +11,7 @@ async def aupdate_neighborhood_role_and_channel(neighborhood_id):
     from neighborhood_selection.models import Neighborhood
 
     neighborhood = await Neighborhood.objects.filter(id=neighborhood_id).afirst()
-    if neighborhood is None or not neighborhood.approved:
+    if neighborhood is None or neighborhood.draft:
         return
 
     await bot.login(settings.DISCORD_BOT_TOKEN)

@@ -29,6 +29,7 @@ def project_application_view(request, pk=None):
 
     return render(request, "project_application_view.html", {"application": application})
 
+
 @login_required
 def project_application(request, pk=None):
     profile_complete = request.user.profile.complete
@@ -69,6 +70,7 @@ def project_application(request, pk=None):
         if form.is_valid():
             submission = ProjectApplication(submitter=request.user, draft=False)
             submission.data = form.to_json()
+            submission.render_markdown()
             submission.save()
             if pk:
                 application = ProjectApplication.objects.filter(id=pk)
