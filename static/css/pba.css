@@ -380,6 +380,8 @@ form .helptext {
 form .errorlist {
   list-style: none;
   color: red;
+  padding-inline-start: 1em;
+  padding-bottom: .5em;
 }
 form p {
   margin-block-start: 0em;
@@ -441,6 +443,21 @@ form.application-form h2:first-of-type {
   margin-top: 0;
 }
 
+form.application-form .errorlist {
+  list-style: none;
+  color: red;
+  padding-inline-start: 1em;
+  padding-bottom: .5em;
+}
+
+form.application-form label.required::after {
+  content: '*';
+}
+
+form.application-form .form-errors {
+  text-align: center;
+}
+
 .button-holder {
   text-align: center;
   padding: 1em;
@@ -496,6 +513,10 @@ form.application-form h2:first-of-type {
 .submit-button:not([disabled]):active, button:not([disabled]):active {
   box-shadow: #fff 2px 2px 0 0, #555 2px 2px 0 1px;
   transform: translate(2px, 2px);
+}
+
+.secondary-button {
+  background-color: #c1c1c1;
 }
 
 @media (min-width: 768px) {

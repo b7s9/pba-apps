@@ -4,6 +4,9 @@ from django import forms
 class ProjectApplicationForm(forms.Form):
     required_css_class = "required"
 
+    def to_json(self):
+        return {field.name: {"label": field.label, "value": field.value()} for field in self}
+
     shortname = forms.CharField(
         label="Shortname", max_length=128, help_text="A short name for your project", required=True
     )
