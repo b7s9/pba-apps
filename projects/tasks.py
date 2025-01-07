@@ -15,6 +15,7 @@ async def _add_new_project_message_and_thread(project_application_id):
     await bot.login(settings.DISCORD_BOT_TOKEN)
     guild = await bot.fetch_guild(settings.NEW_PROJECT_REVIEW_DISCORD_GUILD_ID)
     selection_channel = await guild.fetch_channel(settings.NEW_PROJECT_REVIEW_DISCORD_CHANNEL_ID)
+    mention_role = await guild.fetch_role(settings.NEW_PROJECT_REVIEW_DISCORD_ROLE_MENTION_ID)
     submitter = await sync_to_async(lambda: application.submitter)()
     profile = await sync_to_async(lambda: submitter.profile)()
     discord = await sync_to_async(lambda: profile.discord)()
@@ -25,6 +26,7 @@ async def _add_new_project_message_and_thread(project_application_id):
         auto_archive_duration=AutoArchiveDuration.ONE_WEEK,
     )
     await thread.send(application.markdown)
+    await thread.send(f"{mention_role.mention} please review!")
     application.thread_id = thread.id
     await application.asave()
 
