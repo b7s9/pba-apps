@@ -425,6 +425,11 @@ form.application-form input {
   max-width: unset;
 }
 
+form.application-form textarea {
+  width: 100%;
+  max-width: unset;
+}
+
 form.application-form input[type=checkbox] {
   width: auto;
 }
