@@ -21,6 +21,7 @@ urlpatterns = [
     path("email/login/", EmailLoginView.as_view(), name="email_login"),
     path("maillink/", include("maillinks.urls")),
     path("rcos/", include("facets.urls")),
+    path("projects/", include("projects.urls")),
     path("", include("pages.urls")),
     path("admin/", admin.site.urls),
     path("cms/", include(wagtailadmin_urls)),

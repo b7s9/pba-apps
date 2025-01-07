@@ -57,6 +57,52 @@
   {% endif %}
 </div>
 
+{% if request.user.profile.project_application_drafts %}
+<hr>
+<div class="form-header">
+  <h2>Project Application Drafts</h2>
+  <div class="table-container">
+    <table>
+        <tr>
+          <th>Name</th>
+          <th>Summary</th>
+          <th>Actions</th>
+        </tr>
+        {% for application in request.user.profile.project_application_drafts %}
+        <tr>
+          <td>{{ application.data.shortname.value }}</td>
+          <td>{{ application.data.quick_summary.value|truncatechars:64 }}</td>
+          <td><a href="{% url 'project_application_edit' pk=application.id %}">Edit/Submit</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+  </div>
+</div>
+{% endif %}
+
+{% if request.user.profile.project_applications %}
+<hr>
+<div class="form-header">
+  <h2>Project Applications</h2>
+  <div class="table-container">
+    <table>
+        <tr>
+          <th>Name</th>
+          <th>Summary</th>
+          <th>Actions</th>
+        </tr>
+        {% for application in request.user.profile.project_applications %}
+        <tr>
+          <td>{{ application.data.shortname.value }}</td>
+          <td>{{ application.data.quick_summary.value|truncatechars:64 }}</td>
+          <td><a href="{% url 'project_application_view' pk=application.id %}">View</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+  </div>
+</div>
+{% endif %}
+
 <hr>
 <div class="form-header">
   <h2>{% translate "Your District and RCOs" %}</h2>

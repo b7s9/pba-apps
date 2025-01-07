@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load markdownify %}
+
+{% block content %}
+<div class="form-header">
+  <h1>Project Application</h1>
+
+</div>
+<div class="form-container">
+
+{{ application.markdown|markdownify }}
+
+</div>
+{% endblock %}

@@ -12,6 +12,7 @@ from facets.models import (
     RegisteredCommunityOrganization as RegisteredCommunityOrganizationFacet,
 )
 from profiles.tasks import geocode_profile, sync_to_mailchimp
+from projects.models import ProjectApplication
 
 
 class Profile(models.Model):
@@ -88,6 +89,22 @@ class Profile(models.Model):
             transaction.on_commit(lambda: sync_to_mailchimp.delay(self.id))
             transaction.on_commit(lambda: geocode_profile.delay(self.id))
         super(Profile, self).save(*args, **kwargs)
+
+    @property
+    def complete(self):
+        return bool(self.street_address) and bool(self.zip_code)
+
+    @property
+    def apps_connected(self):
+        return self.discord is not None
+
+    @property
+    def project_application_drafts(self):
+        return ProjectApplication.objects.filter(submitter=self.user, draft=True).all()
+
+    @property
+    def project_applications(self):
+        return ProjectApplication.objects.filter(submitter=self.user, draft=False).all()
 
     @property
     def district(self):
