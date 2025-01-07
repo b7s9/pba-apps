@@ -1,0 +1,22 @@
+Hello {{ profile.user.first_name }},
+
+*You are receiving this email from [Philly Bike Action](https://bikeaction.org/) because you have a PBA account and live in the project area.*
+
+**Attend Public Feedback Meeting for Fishtown Neighborhood Bikeways Plan  \- Wednesday Jan 15**
+
+<span style="width: 80%; text-align: center;"><img style="width: 100%; border-radius: 5px; border: solid grey;" src="templates/email/fishtown_neighborhood_bikeways_2025_01_07/images/Fishtown_Bikeways_Map.PNG"></span>
+
+The Office of Multi-Modal Planning (OTIS) will be collecting community feedback on the  [**Fishtown Neighborhood Bikeways**](https://www.phila.gov/documents/fishtown-bikeways/) **plan at** the Fishtown Neighbors Association meeting on January 15, 2024\. The project may include adding **raised crosswalks, traffic diverters, and contraflow bike lanes** to make Fishtown streets safer for people using bikes. *It is critical that this meeting is well attended by supporters of bicycle infrastructure\!* 
+
+**This meeting is open to anyone** \- you do not need to live within the Fishtown Neighbors Association boundaries. Please come show support for street safety measures whether you live, work, or ride through Fishtown.
+
+The Delaware River Waterfront Co will also be there to talk about trail updates from Penn Treaty to the Battery.
+
+**Meeting Details:**   
+Wednesday, January 15th | 7 \- 8:30 PM | [Fishtown Recreation Center](https://maps.app.goo.gl/jSb8LpX3CSU4wCVR9) (1202 E Montgomery Ave)
+
+Can’t make it in person? [Register to attend remotely.](https://us06web.zoom.us/meeting/register/tZEufu2vqz0oHNbnyh8JuE_3VhgtV2L5qmLh%20)
+
+[**RSVP**](https://apps.bikeaction.org/events/fishtown-neighbors-fishtown-bikeways-otis-presentation/) with Philly Bike Action.
+
+**Philly Bike Action**
