@@ -38,6 +38,8 @@ _features = [
 ]
 
 table_options = {
+    "editor": "text",
+    "renderer": "html",
     "contextMenu": [
         "row_above",
         "row_below",
