@@ -82,6 +82,7 @@ INSTALLED_APPS = [
     "wagtail.images",
     "wagtail.search",
     "wagtail.admin",
+    "wagtail.contrib.table_block",
     "wagtail",
     "modelcluster",
     "taggit",
@@ -361,7 +362,9 @@ NEIGHBORHOOD_SELECTION_NOTIFICATION_DISCORD_CHANNEL_ID = env(
 # New Project Application Notifications
 NEW_PROJECT_REVIEW_DISCORD_GUILD_ID = env("NEW_PROJECT_REVIEW_DISCORD_GUILD_ID", default=None)
 NEW_PROJECT_REVIEW_DISCORD_CHANNEL_ID = env("NEW_PROJECT_REVIEW_DISCORD_CHANNEL_ID", default=None)
-NEW_PROJECT_REVIEW_DISCORD_ROLE_MENTION_ID = env("NEW_PROJECT_REVIEW_DISCORD_ROLE_MENTION_ID", default=None)
+NEW_PROJECT_REVIEW_DISCORD_ROLE_MENTION_ID = env(
+    "NEW_PROJECT_REVIEW_DISCORD_ROLE_MENTION_ID", default=None
+)
 
 # Discord Connected
 DISCORD_CONNECTED_GUILD_ID = env("DISCORD_CONNECTED_GUILD_ID", default=None)

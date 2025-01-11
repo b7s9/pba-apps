@@ -1,0 +1,26 @@
+% extends "base.html" %}
+{% load wagtailuserbar %}
+
+{% load static %}
+{% load wagtailcore_tags %}
+
+{% block body_class %}template-cmspage{% endblock %}
+
+{% block title %}
+    - {{ page.title }}
+{% endblock %}
+
+{% block content %}
+    {% wagtailuserbar %}
+    <div class="cms-title">
+      <h2>{{ page.title }}</h2>
+    <div class="cms-body">
+      <div class="content-container">
+          <ul>
+          {% for page in self.get_children %}
+          <li><a href="{{page.url}}">{{page.title}}</a>
+          {% endfor %}
+          </ul>
+      </div>
+    </div>
+{% endblock %}

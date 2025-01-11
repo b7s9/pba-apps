@@ -10,7 +10,7 @@ TO = ["bikes@durbin.ee"]
 
 profiles = Profile.objects.all()
 
-#profiles = Profile.objects.filter(user__email__in=TO)
+# profiles = Profile.objects.filter(user__email__in=TO)
 
 SENT = []
 

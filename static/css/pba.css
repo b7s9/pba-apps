@@ -923,3 +923,76 @@ body {
 #rco_boundaries {
   height: 50vh;
 }
+
+/* CMS */
+
+.block-paragraph .text-right {
+  text-align: right;
+}
+
+.block-paragraph .text-center {
+  text-align: center;
+}
+
+
+Horizontal: htLeft, htCenter, htRight, htJustify
+Vertical: htTop, htMiddle, htBottom
+
+.block-table .htLeft {
+  text-align: left;
+}
+
+.block-table .htCenter {
+  text-align: center;
+}
+
+.block-table .htRight {
+  text-align: right;
+}
+
+.block-table .htJustify {
+  text-align: justify;
+}
+
+.block-table .htTop {
+  vertical-align: top;
+}
+
+.block-table .htMiddle {
+  vertical-align: middle;
+}
+
+.block-table .htBottom {
+  vertical-align: bottom;
+}
+
+.block-table table {
+    border-collapse: collapse;
+    font-size: .9em;
+    text-align: left;
+    min-width: 35em;
+    table-layout:fixed;
+}
+@media screen and (max-width: 40rem) {
+  .block-table table {
+    min-width: 80vw;
+    font-size: 3vw;
+  }
+}
+.block-table th {
+    background-color: #83BD56;
+    color: #ffffff;
+}
+.block-table th,
+.block-table td {
+    padding: .25em 1em;
+}
+.block-table tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+.block-table tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+.block-table tbody tr:last-of-type {
+    border-bottom: 2px solid #83BD56;
+}

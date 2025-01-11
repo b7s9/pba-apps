@@ -1,22 +1,98 @@
 from wagtail.admin.panels import FieldPanel
-from wagtail.fields import RichTextField
+from wagtail.blocks import ChoiceBlock, RawHTMLBlock, RichTextBlock, StructBlock
+from wagtail.contrib.table_block.blocks import TableBlock
+from wagtail.fields import RichTextField, StreamField
 from wagtail.models import Page
 
 
-class HomePage(Page):
-    body = RichTextField(blank=True)
+class AlignedParagraphBlock(StructBlock):
+    """
+    RichTextBlock that can be aligned.
+    """
 
-    parent_page_types = ["wagtailcore.Page"]
-    max_count_per_parent = 1
+    alignment = ChoiceBlock(
+        choices=[("left", "Left"), ("center", "Center"), ("right", "Right")],
+        default="left",
+    )
+    paragraph = RichTextBlock()
+
+    class Meta:
+        template = "blocks/aligned_paragraph.html"
+
+
+_features = [
+    "h2",
+    "h3",
+    "h4",
+    "bold",
+    "italic",
+    "ol",
+    "ul",
+    "hr",
+    "link",
+    "document-link",
+    "image",
+    "embed",
+    "code",
+    "blockquote",
+]
+
+table_options = {
+    "contextMenu": [
+        "row_above",
+        "row_below",
+        "---------",
+        "col_left",
+        "col_right",
+        "---------",
+        "remove_row",
+        "remove_col",
+        "---------",
+        "undo",
+        "redo",
+        "---------",
+        "copy",
+        "cut",
+        "---------",
+        "alignment",
+    ],
+}
+
+
+class CmsStreamPage(Page):
+    body = StreamField(
+        [
+            ("paragraph", AlignedParagraphBlock(features=_features)),
+            ("html", RawHTMLBlock()),
+            ("table", TableBlock(table_options=table_options)),
+        ],
+        use_json_field=True,
+    )
+
+    subpage_types = ["NavigationContainerPage", "CmsStreamPage"]
+
     content_panels = Page.content_panels + [
         FieldPanel("body"),
     ]
 
 
-class CmsPage(Page):
+class NavigationContainerPage(Page):
+    """
+    This page doesn't have HTML, and it works only to support hierarchical
+    structure of the site.
+    """
+
+    class Meta:
+        verbose_name = "Navigation Container Page"
+
+    subpage_types = ["NavigationContainerPage", "CmsStreamPage"]
+
+
+class HomePage(Page):
     body = RichTextField(blank=True)
 
-    parent_page_types = [HomePage]
+    subpage_types = ["NavigationContainerPage", "CmsStreamPage"]
+    max_count_per_parent = 1
     content_panels = Page.content_panels + [
         FieldPanel("body"),
     ]
