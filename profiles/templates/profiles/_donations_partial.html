@@ -44,7 +44,7 @@
   </div>
   {% endif %}
   <h3>{% translate "Subscriptions" %}</h3>
-  {% if customer.active_subscriptions.all %}
+  {% if customer.subscriptions.all %}
   <div class="table-container">
     <table>
       <tr>
@@ -52,7 +52,7 @@
         <th>{% translate "Status" %}</th>
         <th>{% translate "Actions" %}</th>
       </tr>
-      {% for subscription in customer.active_subscriptions.all %}
+      {% for subscription in customer.subscriptions.all %}
       <tr>
         <td>{{ subscription.plan }}</td>
         <td>{{ subscription.status }}</td>
@@ -60,6 +60,12 @@
           {% if subscription.status == "active" %}
           <a class="smol-button" href="{% url 'change_recurring_donation' subscription_id=subscription.id %}">{% translate "change" %}</a>
           <a class="smol-button" href="{% url 'cancel_recurring_donation' subscription_id=subscription.id %}">{% translate "cancel" %}</a>
+          {% elif subscription.status == "past_due" %}
+            {% if customer.payment_methods.all %}
+            <a class="smol-button" href="{% url 'create_setup_session' %}">{% translate "update card" %}</a>
+            {% else %}
+            <a class="smol-button" href="{% url 'create_setup_session' %}">{% translate "add card" %}</a>
+            {% endif %}
           {% endif %}
         </td>
       </tr>
@@ -73,7 +79,7 @@
     <a class="submit-button" href="{% url 'setup_recurring_donation' %}">{% translate "Setup a recurring donation" %}</a>
   </div>
   {% endif %}
-  {% if customer.payment_methods.all %}
+  {% if customer.payment_methods.all or customer.subscriptions.all %}
   <h3>{% translate "Stored Payment Methods" %}</h3>
   <div class="table-container">
     <table>
