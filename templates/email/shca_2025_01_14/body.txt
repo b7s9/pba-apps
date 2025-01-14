@@ -1,0 +1,20 @@
+Hello {{ profile.user.first_name }}, *you are receiving this email from [Philly Bike Action](https://bikeaction.org/) because you have a PBA account and live in Society Hill Civic Association.*
+
+[Society Hill Civic Association](https://societyhillcivic.org/) just [published a survey](https://docs.google.com/forms/d/e/1FAIpQLSc-F_9fXSFDKMbpdR8fhdvDTh4nKSLgi0KnBmEqhajmDAhGEw/viewform) for Society Hill residents on their views about proposed changes to bike lanes in Society Hill – specifically on Pine, Spruce, and 3rd street.
+
+<div style="text-align: center;"><a href="https://docs.google.com/forms/d/e/1FAIpQLSc-F_9fXSFDKMbpdR8fhdvDTh4nKSLgi0KnBmEqhajmDAhGEw/viewform">Take the survey here</a></div>
+
+These responses will likely be reviewed at tomorrow's Society Hill Civic Association meeting, so please submit your responses as **soon as possible**\! It will only take a few moments and will ensure that the Society Hill Civic Association board hears from its residents who ride bikes.
+
+---
+
+**Looking for more ways to get involved?**
+
+There will be a meeting of the Society Hill Civic Association to discuss the bike lanes on Wednesday, January 15th (**tomorrow**) at Old Pine Community Center, 401 Lombard Street. Make time to attend and be sure your voice is heard\! The times are as follows:
+
+- 5:45p.m.	Board Meeting  
+- 7:30p.m.	Community Meeting
+
+You can also attend the PBA District 1 meeting on January 27th, at 7pm. [RSVP here](https://apps.bikeaction.org/events/pba-district-1-meeting-6/)\!
+
+**Philly Bike Action**
