@@ -1,6 +1,7 @@
 from asgiref.sync import async_to_sync, sync_to_async
 from celery import shared_task
 from django.conf import settings
+from django.urls import reverse
 from interactions.models.discord.enums import AutoArchiveDuration
 
 from pba_discord.bot import bot
@@ -25,8 +26,31 @@ async def _add_new_project_message_and_thread(project_application_id):
         reason=f"Project Application submitted by {discord_username}",
         auto_archive_duration=AutoArchiveDuration.ONE_WEEK,
     )
-    await thread.send(application.markdown)
-    await thread.send(f"{mention_role.mention} please review!")
+    if not application.markdown:
+        await sync_to_async(application.render_markdown)()
+    msg = ""
+    in_response = False
+    for line in application.markdown.split("\n"):
+        if line == "```":
+            if in_response:
+                in_response = False
+            else:
+                in_response = True
+        if len(msg) + len(line) >= 1990:
+            if in_response:
+                msg += "```\n"
+            await thread.send(msg)
+            msg = ""
+            if in_response:
+                msg += "```\n"
+        msg += line + "\n"
+    await thread.send(msg)
+    link = reverse("project_application_view", kwargs={"pk": application.id})
+    link = f"https://apps.bikeaction.org{link}"
+    await thread.send(
+        f"{mention_role.mention} please review!\n\n"
+        f"You can view the application online [here]({link}) after logging in."
+    )
     application.thread_id = thread.id
     await application.asave()
 
