@@ -996,3 +996,7 @@ Vertical: htTop, htMiddle, htBottom
 .block-table tbody tr:last-of-type {
     border-bottom: 2px solid #83BD56;
 }
+
+.project-application code {
+    white-space: pre-wrap;
+}
