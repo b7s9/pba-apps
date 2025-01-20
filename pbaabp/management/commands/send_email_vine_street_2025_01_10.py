@@ -1,8 +1,6 @@
 from django.conf import settings
 from django.core.management.base import BaseCommand
-from django.db.models import Q
 
-from campaigns.models import PetitionSignature
 from pbaabp.email import send_email_message
 from profiles.models import Profile
 
