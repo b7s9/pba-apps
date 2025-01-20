@@ -1,11 +1,10 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
-from django.contrib.gis.db import models
 from django.db.models import Count, Q
-from leaflet.admin import LeafletGeoAdminMixin
 
 from facets.models import District, RegisteredCommunityOrganization
+from pbaabp.admin import ReadOnlyLeafletGeoAdminMixin
 from profiles.models import Profile
 
 
@@ -91,7 +90,7 @@ class RCOFilter(admin.SimpleListFilter):
         return queryset
 
 
-class ProfileAdmin(LeafletGeoAdminMixin, admin.ModelAdmin):
+class ProfileAdmin(ReadOnlyLeafletGeoAdminMixin, admin.ModelAdmin):
     list_display = [
         "_name",
         "_user",

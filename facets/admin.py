@@ -1,5 +1,4 @@
-from django.contrib.gis import admin
-from leaflet.admin import LeafletGeoAdminMixin
+from django.contrib import admin
 
 from facets.models import (
     District,
@@ -8,9 +7,10 @@ from facets.models import (
     StateSenateDistrict,
     ZipCode,
 )
+from pbaabp.admin import ReadOnlyLeafletGeoAdminMixin
 
 
-class FacetAdmin(LeafletGeoAdminMixin, admin.GISModelAdmin):
+class FacetAdmin(ReadOnlyLeafletGeoAdminMixin, admin.ModelAdmin):
     ordering = ("name",)
 
     def save_model(self, request, obj, form, change):
