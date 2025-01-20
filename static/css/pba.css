@@ -572,7 +572,7 @@ body {
   }
 }
 .table-container th {
-    background-color: #83BD56;
+    background-color: #70bf44;
     color: #ffffff;
 }
 .table-container th,
@@ -586,7 +586,7 @@ body {
     background-color: #f3f3f3;
 }
 .table-container tbody tr:last-of-type {
-    border-bottom: 2px solid #83BD56;
+    border-bottom: 2px solid #70bf44;
 }
 .table-container .smol-button {
   display: inline-block;
@@ -980,7 +980,7 @@ Vertical: htTop, htMiddle, htBottom
   }
 }
 .block-table th {
-    background-color: #83BD56;
+    background-color: #70bf44;
     color: #ffffff;
 }
 .block-table th,
@@ -994,7 +994,7 @@ Vertical: htTop, htMiddle, htBottom
     background-color: #f3f3f3;
 }
 .block-table tbody tr:last-of-type {
-    border-bottom: 2px solid #83BD56;
+    border-bottom: 2px solid #70bf44;
 }
 
 .project-application code {
