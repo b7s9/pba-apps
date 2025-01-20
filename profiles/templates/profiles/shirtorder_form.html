@@ -7,8 +7,9 @@
 <div class="form-header">
   <p>This form can be used to pre-order a PBA shirt.</p>
   <p>Pre-ordered shirts have a cost of $30, and will be shipped to you via bike courier or USPS.</p>
-  <p>Pre-orders will close <b>Monday February 3rd</b> order <i>before</i> that date!</p>
-  <p>If you miss the pre-order, you will havea chance to buy a shirt from this run at the Philly Bike Expo or April Citywide depending on availability!</p>
+  <p>Pre-orders will close <b>Monday February 3rd</b>. Order <i>before</i> that date!</p>
+  <p>Estimated delivery is first week of March 2025</p>
+  <p>If you miss the pre-order, you will have a chance to buy a shirt from this run at the Philly Bike Expo or April Citywide depending on availability!</p>
   <p>Consider and select your options below</p>
   <div class="display: flex;">
     <div style="border: 1px solid grey; border-radius: 1em; margin: 0.5em;">
@@ -17,6 +18,7 @@
       <img style="max-width: 30%;" src="{% static 'images/tshirts/pink-unisex.jpg' %}">
       <img style="max-width: 30%;" src="{% static 'images/tshirts/green-unisex.jpg' %}">
       <p>This is more or less a standard straight cut T-Shirt</p>
+      <p><i>Shirts run slightly large. If you are between sizes, we reccommend sizing down.</i></p>
       <div class="table-container">
         <table style="margin: .5em auto;">
           <tr><td></td><th>XS</th><th>S</th><th>M</th><th>L</th><th>XL</th><th>2XL</th></tr>
@@ -31,7 +33,8 @@
       <h4>Women's Relaxed Fit</h4>
       <img style="max-width: 30%;" src="{% static 'images/tshirts/green-crop.jpg' %}">
       <img style="max-width: 30%;" src="{% static 'images/tshirts/pink-crop.jpg' %}">
-      <p>This is more or less a standard straight cut T-Shirt</p>
+      <p>This is a flowy shirt, slightly cropped.</p>
+      <p><i>Shirts run slightly large. If you are between sizes, we reccommend sizing down.</i></p>
       <div class="table-container">
         <table style="margin: .5em auto;">
           <tr><td></td><th>XS</th><th>S</th><th>M</th><th>L</th><th>XL</th><th>2XL</th></tr>
@@ -44,6 +47,7 @@
   </div>
 </div>
 <div class="form-container">
+  <h3>Select your shirt</h3>
   <form method="post">
   {% csrf_token %}
 
@@ -74,6 +78,8 @@
   <div class="button-holder">
     <button class="submit-button" type="submit" value="submit">Pre-order and pay</button>
   </div>
+
+  <p><i>If you want to order multiple shirts, you can return to this form via your profile page later.</i></p>
 
   </form>
 

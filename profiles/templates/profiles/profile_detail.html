@@ -175,7 +175,7 @@
         <td>
           {% if not tshirt_order.paid %}
             <a href="{% url 'shirt_pay' shirt_id=tshirt_order.id %}">Pay</a>
-            <a href="{% url 'shirt_delete' shirt_id=tshirt_order.id %}">Cancel</a>
+            <a href="{% url 'shirt_delete' pk=tshirt_order.id %}">Cancel</a>
           {% else %}
             <span style="color: #83BD56;">Paid</span><br>
             {% if tshirt_order.fulfilled %}
