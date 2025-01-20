@@ -1,6 +1,5 @@
 from django.contrib.gis import admin
-from django.contrib.gis.db import models
-from django.contrib.gis.forms.widgets import OSMWidget
+from leaflet.admin import LeafletGeoAdminMixin
 
 from facets.models import (
     District,
@@ -11,7 +10,8 @@ from facets.models import (
 )
 
 
-class FacetAdmin(admin.ModelAdmin):
+class FacetAdmin(LeafletGeoAdminMixin, admin.GISModelAdmin):
+    ordering = ("name",)
 
     def save_model(self, request, obj, form, change):
         if change:
@@ -26,20 +26,12 @@ class FacetAdmin(admin.ModelAdmin):
 class DistrictAdmin(FacetAdmin):
     list_display = ["name"]
 
-    formfield_overrides = {
-        models.MultiPolygonField: {"widget": OSMWidget},
-    }
-
 
 class RegisteredCommunityOrganizationAdmin(FacetAdmin):
     list_display = ["name", "targetable"]
     list_filter = ["targetable"]
     search_fields = ["name"]
     readonly_fields = ("zip_code_names", "zip_codes")
-
-    formfield_overrides = {
-        models.MultiPolygonField: {"widget": OSMWidget},
-    }
 
     def zip_code_names(self, obj):
         return ", ".join(
@@ -58,25 +50,15 @@ class ZipCodeAdmin(FacetAdmin):
     list_display = ["name"]
     search_fields = ["name"]
 
-    formfield_overrides = {
-        models.MultiPolygonField: {"widget": OSMWidget},
-    }
-
 
 class StateHouseDistrictAdmin(FacetAdmin):
     list_display = ["name"]
     search_fields = ["name"]
-    formfield_overrides = {
-        models.MultiPolygonField: {"widget": OSMWidget},
-    }
 
 
 class StateSenateDistrictAdmin(FacetAdmin):
     list_display = ["name"]
     search_fields = ["name"]
-    formfield_overrides = {
-        models.MultiPolygonField: {"widget": OSMWidget},
-    }
 
 
 admin.site.register(District, DistrictAdmin)
