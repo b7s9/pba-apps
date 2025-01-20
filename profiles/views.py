@@ -131,7 +131,6 @@ def complete_tshirt_checkout_session(request, shirt_id):
     checkout_session_id = request.session.pop("_stripe_checkout_session_id", default=None)
     stripe.api_key = settings.STRIPE_SECRET_KEY
     session = stripe.checkout.Session.retrieve(checkout_session_id)
-    print(session)
     if session["status"] == "complete":
         s = ShirtOrder.objects.get(id=shirt_id)
         s.billing_details = session["customer_details"]
