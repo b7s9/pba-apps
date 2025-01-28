@@ -13,7 +13,7 @@ class PetitionSignatureForm(forms.ModelForm):
         fields = Petition.PetitionSignatureChoices.values + ["newsletter_opt_in"]
         help_texts = {
             "comment": "Your comment, which will be displayed on the campaign page",
-            "newsletter_opt_in": "Check this box to recieve our bi-weekly newsletter",
+            "newsletter_opt_in": "Check this box to recieve our monthly newsletter",
         }
 
     send_email = forms.BooleanField(

@@ -8,7 +8,7 @@ class ReleaseSignatureForm(ModelForm):
 
     newsletter_opt_in = BooleanField(
         required=False,
-        help_text="Check this box to receive our bi-weekly newsletter",
+        help_text="Check this box to receive our monthly newsletter",
         label="Subscribe to PBA newsletter",
         initial=True,
     )

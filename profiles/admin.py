@@ -1,11 +1,10 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
-from django.contrib.gis.db import models
-from django.contrib.gis.forms.widgets import OSMWidget
 from django.db.models import Count, Q
 
 from facets.models import District, RegisteredCommunityOrganization
+from pbaabp.admin import ReadOnlyLeafletGeoAdminMixin
 from profiles.models import Profile, ShirtOrder
 
 
@@ -91,7 +90,7 @@ class RCOFilter(admin.SimpleListFilter):
         return queryset
 
 
-class ProfileAdmin(admin.ModelAdmin):
+class ProfileAdmin(ReadOnlyLeafletGeoAdminMixin, admin.ModelAdmin):
     list_display = [
         "_name",
         "_user",
@@ -112,9 +111,6 @@ class ProfileAdmin(admin.ModelAdmin):
     ]
     search_fields = ["user__first_name", "user__last_name", "user__email"]
     autocomplete_fields = ("user",)
-    formfield_overrides = {
-        models.PointField: {"widget": OSMWidget},
-    }
 
     def _user(self, obj=None):
         if obj is None:
