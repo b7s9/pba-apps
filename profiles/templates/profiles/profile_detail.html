@@ -169,7 +169,7 @@
       <tr><th>Fit</th><th>Size</th><th>Print Color</th><th>Action</th></tr>
       {% for tshirt_order in request.user.tshirt_orders.all %}
       <tr>
-        <td>{% if tshirt_order.fit == 0 %}Unisex{% elif tshirt_order.fit == 1 %}Crop{% else %}?{% endif %}</td>
+        <td>{% if tshirt_order.fit == 2 %}Unisex{% elif tshirt_order.fit == 3 %}Crop{% else %}?{% endif %}</td>
         <td>{{ tshirt_order.get_size_display }}</td>
         <td>{{ tshirt_order.get_print_color_display }}</td>
         <td>
