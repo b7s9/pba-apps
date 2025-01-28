@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block extra_js %}
+<script src="https://js.stripe.com/v3/"></script>
+{% endblock %}
+
+{% block content %}
+<div id="checkout">
+  <!-- Checkout will insert the payment form here -->
+</div>
+<div id="actions" style="width: 100%; margin: auto; text-align: center; padding-top: 1em;">
+  {% if request.user.is_authenticated %}
+      <a href="{% url 'profile' %}">{% translate "⬅️ Go Back" %}</a>
+  {% else %}
+      <a href="{% url 'index' %}">{% translate "⬅️ Go Back" %}</a>
+  {% endif %}
+</div>
+<script>
+  // Initialize Stripe.js
+  const stripe = Stripe('{{ stripe_public_key }}');
+
+  initialize();
+
+  // Fetch Checkout Session and retrieve the client secret
+  async function initialize() {
+    const response = await fetch("{% url 'shirt_pay' shirt_id=shirt.id %}", {
+      method: "POST",
+    });
+    const { clientSecret } = await response.json();
+
+    // Initialize Checkout
+    const checkout = await stripe.initEmbeddedCheckout({
+      clientSecret,
+    });
+
+    // Mount Checkout
+    checkout.mount('#checkout');
+  }
+</script>
+{% endblock %}
