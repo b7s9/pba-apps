@@ -177,11 +177,13 @@ class Profile(models.Model):
 
 class ShirtOrder(models.Model):
     class Fit(models.IntegerChoices):
-        ALTERNATIVE_01070C = 0, 'Unisex Classic Fit - "Go-To T-Shirt"'
-        ALTERNATIVE_5114C1 = (
-            1,
-            "Women's Relaxed Fit - \"Women's Go-To Headliner Cropped Tee\"",
-        )
+        # ALTERNATIVE_01070C = 0, 'Unisex Classic Fit - "Go-To T-Shirt"'
+        # ALTERNATIVE_5114C1 = (
+        #    1,
+        #    "Women's Relaxed Fit - \"Women's Go-To Headliner Cropped Tee\"",
+        # )
+        NEXT_LEVEL_3600 = 2, 'Unisex Classic Fit - "Next Level - Cotton T-Shirt - 3600"'
+        NEXT_LEVEL_1580 = 3, "Women's Relaxed Fit - \"Next Level - Women's Ideal Crop Top - 1580\""
 
     class Size(models.IntegerChoices):
         XS = -2, "XS"
