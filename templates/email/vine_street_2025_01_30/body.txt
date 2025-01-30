@@ -1,0 +1,52 @@
+Hello {{ profile.user.first_name }}, *You are receiving this email from [Philly Bike Action](https://bikeaction.org/) because you have a PBA account. This is our 2nd Vine St email – if you’ve already submitted feedback, thank you! There is no need to do so again.*
+
+Last chance to provide feedback on [PennDOT’s Concept Plan for Vine Street](https://www.pa.gov/agencies/penndot/projects-near-you/district-6-projects/vine-st-corridor-safety-improvements.html) \-- **Comment form closes tomorrow!**
+
+<span style="width: 80%; text-align: center;"><img style="width: 100%; border-radius: 5px; border: solid grey;" src="templates/email/vine_street_2025_01_30/images/vine_street_safety_improvements_project_location_map.jpg"></span>
+
+PennDOT is [collecting a second round of feedback](https://forms.office.com/pages/responsepage.aspx?id=iYN8F3s7qEm36MfzaGvgSWlpo6d20elGqQ2khlGtQVZUMzFZUDlTNUlLM0YzMUFKM0M4WDNOOVg5Sy4u&route=shorturl) on its plans to install safety improvements on Vine St, which include **eastbound and westbound bike lanes**. Unfortunately, their revised plans will make the eastbound bike lane **more dangerous** by placing it between a travel lane and a parking lane, which will put bicyclists in the dangerous “door zone.”
+
+*It is critical that those who support better bike infrastructure and safer streets provide their input on this project*.
+
+Tell PennDOT not to backtrack on safety by using these recommended answers on the [public comment form](https://forms.office.com/pages/responsepage.aspx?id=iYN8F3s7qEm36MfzaGvgSWlpo6d20elGqQ2khlGtQVZUMzFZUDlTNUlLM0YzMUFKM0M4WDNOOVg5Sy4u&route=shorturl)**:**
+
+1. **Do you support the addition of a westbound bike lane on Vine Street from 13th Street to 9th Street?**
+
+	Yes, but the bike lane should be next to the curb and protected.
+
+	Extend the bike lane to Broad Street.
+
+	If needed, remove street parking to protect the bike lane.
+
+2. **Do you support the reconfiguration of bike lanes on the 10th and 13th Street overpasses by shifting the bike lane to curbside with added lane separator curb?**
+
+	Yes.
+
+3. **Do you support maintaining metered street parking along Vine Street EB between 11th Street and 9th Street?**
+
+	No, because the bike lane should be next to the curb and protected.
+
+	The safety of bike lane users will be compromised by this added parking.
+
+	Restore the design from Version 1\.
+
+4. **Do you support the installation of speed slots (speed humps) with signing and advanced pavement markings along Vine Street WB between 10th Street and 8th Street?**
+
+	Yes.
+
+	Also install speed slots in the school zone between 13th and Broad. 
+
+5. **Do you support the installation of School Zone Pavement Markings along Vine Street WB?**
+
+	  
+	Yes.
+
+6. **Thank you for taking the time to provide feedback on the revised concept. Please use the space below to provide any additional comments regarding the project.**
+
+	Extend the Vine Street WB road diet to Broad Street.
+
+<span style="color: red;"><b>SURVEY DEADLINE</b>: January 31, 2025</span>
+
+Thank you for taking action to make Vine Street safer for bike users!
+
+**Philly Bike Action**

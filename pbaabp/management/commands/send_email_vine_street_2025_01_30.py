@@ -8,7 +8,7 @@ TO = ["bikes@durbin.ee"]
 
 profiles = Profile.objects.all()
 
-# profiles = Profile.objects.filter(user__email__in=TO)
+profiles = Profile.objects.filter(user__email__in=TO)
 
 SENT = []
 
@@ -23,7 +23,7 @@ class Command(BaseCommand):
         for profile in profiles:
             if profile.user.email not in SENT:
                 send_email_message(
-                    "vine_street_2025_01_10",
+                    "vine_street_2025_01_30",
                     "Philly Bike Action <noreply@bikeaction.org>",
                     [profile.user.email],
                     {"profile": profile},
