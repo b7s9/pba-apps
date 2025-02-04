@@ -62,7 +62,7 @@ class ShirtsAreDoneMixin:
         return HttpResponseRedirect(reverse("profile"))
 
 
-class ShirtOrderView(LoginRequiredMixin, CreateView):
+class ShirtOrderView(LoginRequiredMixin, ShirtsAreDoneMixin, CreateView):
     model = ShirtOrder
     fields = ["fit", "print_color", "size"]
 
@@ -80,7 +80,7 @@ class ShirtOrderView(LoginRequiredMixin, CreateView):
         return reverse("shirt_pay", kwargs={"shirt_id": self.obj.id})
 
 
-class ShirtOrderDeleteView(LoginRequiredMixin, DeleteView):
+class ShirtOrderDeleteView(LoginRequiredMixin, ShirtsAreDoneMixin, DeleteView):
     model = ShirtOrder
 
     def get_success_url(self):
@@ -90,6 +90,10 @@ class ShirtOrderDeleteView(LoginRequiredMixin, DeleteView):
 
 @csrf_exempt
 def create_tshirt_checkout_session(request, shirt_id):
+    # Close t-shirt orders
+    messages.add_message(request, messages.INFO, "Sorry, shirt orders are closed!")
+    return HttpResponseRedirect(reverse("profile"))
+
     stripe.api_key = settings.STRIPE_SECRET_KEY
     stripe_product_search = stripe.Product.search(
         query="active:'true' AND name:'T-Shirt Pre-Order 2025-02'"
