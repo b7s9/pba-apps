@@ -58,6 +58,7 @@ class Campaign(OrderedModel):
         related_name="campaigns",
     )
     donation_goal = models.IntegerField(default=None, null=True, blank=True)
+    donation_goal_show_numbers = models.BooleanField(default=True)
 
     subscription_action = models.BooleanField(default=False)
 

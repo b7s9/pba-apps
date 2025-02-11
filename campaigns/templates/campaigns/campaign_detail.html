@@ -44,8 +44,10 @@
       <div class="progress-bar">
         <div class="progress-bar-fill" style="width: {{ campaign.donation_progress }}%"></div>
       </div>
+      {% if campaign.donation_goal_show_numbers %}
       <span style="float: left; padding-left: min(calc({{ campaign.donation_progress }}% - 1.5em), calc(100% - 4.2em)); margin-top: .5em;">${{ campaign.donation_total|intcomma }}</span>
       <span class="progress-goal">${{ campaign.donation_goal|intcomma }}</span>
+      {% endif %}
     </div>
     {% endif %}
 
