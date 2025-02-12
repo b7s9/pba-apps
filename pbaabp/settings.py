@@ -116,6 +116,7 @@ INSTALLED_APPS = [
     "maillinks",
     "facets",
     "projects",
+    "aliases",
     "cms",
 ]
 
@@ -278,9 +279,7 @@ MAILGUN_API_KEY = env("MAILGUN_API_KEY", default=None)
 if MAILGUN_API_KEY is not None:
     EMAIL_BACKEND = "email_log.backends.EmailBackend"
     EMAIL_LOG_BACKEND = "anymail.backends.mailgun.EmailBackend"
-    ANYMAIL = {
-        "MAILGUN_API_KEY": MAILGUN_API_KEY
-    }
+    ANYMAIL = {"MAILGUN_API_KEY": MAILGUN_API_KEY}
 else:
     EMAIL_BACKEND = "email_log.backends.EmailBackend"
     EMAIL_LOG_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
@@ -289,7 +288,6 @@ else:
     EMAIL_USE_TLS = env.bool("DJANGO_EMAIL_USE_TLS", default=True)
     EMAIL_HOST_USER = env("DJANGO_EMAIL_HOST_USER", default=None)
     EMAIL_HOST_PASSWORD = env("DJANGO_EMAIL_HOST_PASSWORD", default=None)
-
 
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#default-from-email
