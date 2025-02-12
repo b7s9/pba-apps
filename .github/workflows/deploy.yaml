@@ -19,4 +19,5 @@ jobs:
         uses: dokku/github-action@master
         with:
           git_remote_url: 'ssh://dokku@dokku.bikeaction.org:22/apps-bikeaction-org'
+          branch: main
           ssh_private_key: ${{ secrets.DEPLOY_SSH_KEY }}
