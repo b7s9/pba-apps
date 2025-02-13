@@ -77,7 +77,7 @@
   <div id="events">
     {% for event in campaign.future_events.all|dictsort:"start_datetime" %}
     <div class="event">
-      <a href="https://bikeaction.org/events/{% if event.slug %}{{ event.wordpress_slug }}{% else %}{% endif %}"><box-icon name='calendar-event'></box-icon> {{ event.title }} - {{ event.start_datetime|date }}</a>
+      <a href="{% url "event_detail" slug=event.slug %}"><box-icon name='calendar-event'></box-icon> {{ event.title }} - {{ event.start_datetime|date }}</a>
     </div>
     {% endfor %}
   </div>
