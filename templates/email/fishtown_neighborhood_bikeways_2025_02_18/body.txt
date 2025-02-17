@@ -1,0 +1,24 @@
+Hello {{ profile.user.first_name }},
+
+*You are receiving this email from [Philly Bike Action](https://bikeaction.org/) because you have a PBA account and live in the project area.*
+
+Let OTIS know that you want safer roads in Fishtown by [**emailing your support**](mailto:jeanette.brugger@phila.gov?cc=president@fishtown.org&subject=Fishtown%20Neighborhood%20Bikeways%20Project&body=My%20name%20is%20%5Benter%20your%20name%5D%20and%20I%20live%20at%20%5Benter%20street%20address%5D.%20%0A%0A%5Bprovide%20context%20about%20how%20this%20project%20would%20effect%20you.%20For%20example%2C%20I%20live%2C%20work%2C%20travel%20to%20Fishtown...%5D%0A%0AI%20am%20writing%20to%20express%20my%20strong%20support%20for%20the%20following%20safety%20improvements%20as%20part%20of%20OTIS'%20Fishtown%20Neighborhood%20Bikeways%20Project%3A%0A%0A1.%20The%20current%20design%20for%20the%20contraflow%20bike%20lane%20on%20Palmer%20Street%20near%20Palmer%20Park.%0A%0A2.%20An%20additional%20contraflow%20lane%20on%20Columbia%20Avenue%20near%20Delaware%20Avenue%20that%20connect%20the%20neighborhood%20to%20Penn%20Treaty%20Park%20and%20the%20Delaware%20River%20Trail.%20The%20current%20plan%20directs%20bicyclists%20onto%20a%20narrow%20sidewalk%20with%20pedestrians.%0A%0AThank%20you%20for%20the%20opportunity%20to%20provide%20feedback%20on%20this%20project.) for the **Fishtown Neighborhood Bikeways** project by **Wednesday, February 19\!**
+
+OTIS is finalizing their designs for the Fishtown Neighborhood Bikeways [project](https://www.phila.gov/documents/fishtown-bikeways/), which aims to make residential streets safer for people walking and biking. This includes critical potential infrastructure upgrades like contraflow bike lanes, but OTIS needs to know neighbors support these project elements.
+
+Let OTIS know that you: 
+
+1. **SUPPORT the contraflow bike lane on Palmer St. near Palmer Park.**
+
+2. **SUPPORT a contraflow bike lane on Columbia Ave. near Delaware Ave. to connect the neighborhood to Penn Treaty Park and the Delaware River Trail.** The current plan directs bicyclists onto a narrow sidewalk with pedestrians near a bus stop.
+
+<div style="width: 100%; text-align: center">
+<p><a href="mailto:jeanette.brugger@phila.gov?cc=president@fishtown.org&subject=Fishtown%20Neighborhood%20Bikeways%20Project&body=My%20name%20is%20%5Benter%20your%20name%5D%20and%20I%20live%20at%20%5Benter%20street%20address%5D.%20%0A%0A%5Bprovide%20context%20about%20how%20this%20project%20would%20effect%20you.%20For%20example%2C%20I%20live%2C%20work%2C%20travel%20to%20Fishtown...%5D%0A%0AI%20am%20writing%20to%20express%20my%20strong%20support%20for%20the%20following%20safety%20improvements%20as%20part%20of%20OTIS'%20Fishtown%20Neighborhood%20Bikeways%20Project%3A%0A%0A1.%20The%20current%20design%20for%20the%20contraflow%20bike%20lane%20on%20Palmer%20Street%20near%20Palmer%20Park.%0A%0A2.%20An%20additional%20contraflow%20lane%20on%20Columbia%20Avenue%20near%20Delaware%20Avenue%20that%20connect%20the%20neighborhood%20to%20Penn%20Treaty%20Park%20and%20the%20Delaware%20River%20Trail.%20The%20current%20plan%20directs%20bicyclists%20onto%20a%20narrow%20sidewalk%20with%20pedestrians.%0A%0AThank%20you%20for%20the%20opportunity%20to%20provide%20feedback%20on%20this%20project.">Click here to send an email</a> using our template.<br>
+Please include your name and address.</p>
+</div>
+
+<span style="width: 80%; text-align: center;"><img style="width: 100%; border-radius: 5px; border: solid grey;" src="templates/email/fishtown_neighborhood_bikeways_2025_02_18/images/Fishtown_Bikeways_Project.PNG"></span>
+
+Submit your comments by Wednesday, February 19!
+
+**Philly Bike Action**
