@@ -1,0 +1,22 @@
+Hello {{ profile.user.first_name }},
+
+*You are receiving this message from [Philly Bike Action](https://bikeaction.org/) because you have a PBA account and are a resident of Council District 5\.*
+
+City Council’s Streets & Services Committee will be holding a hearing at City Hall, Room 400 on **Monday 2/24 starting at 1:30pm** with **approval for [three bike lanes on the agenda](https://phila.legistar.com/MeetingDetail.aspx?ID=1282453&GUID=11B68287-DEE6-47E3-83CA-F5FE7C57BA38&Options=info|&Search=)**.
+
+* 22nd Street from Spring Garden to Green Street, connecting the Parkway through Fairmount Ave (Bill \#250005)
+* 13th Street from Cecil B Moore to Diamond Street, through Temple University’s Campus (Bill \#250006)
+* 23rd Street from Race to Market Street which will connect the Schuylkill River Trail to bike lanes on Market Street (Bill \#250007)
+
+**We are looking for volunteers to testify in favor of these new bike lanes.**
+
+If you’re interested in speaking, please email [jawad.pullin@phila.gov](mailto:jawad.pullin@phila.gov) with your Name, Phone Number, and the relevant bill numbers (\#250005 for 22nd st, \#250006 for 13th st, or \#250007 for 23rd street). [Email to Sign up to Testify.](mailto:jawad.pullin@phila.gov?bcc=district-5@bikeaction.org&subject=Signing%20up%20to%20TESTIFY%20on%20Bill%20%23250005%2C%20250006%2C%20250007%20%20&body=Hello%2C%20My%20name%20is%20%5BNAME%5D%20and%20I%20am%20signing%20up%20to%20testify%20on%20Bill%20%23250005%2C%20250006%2C%20250007%20at%20the%20Streets%20and%20Services%20Committee%20Hearing%20on%202%2F24%20at%201%3A30PM.%20My%20phone%20number%20is%20%5BPHONE%20NUMBER%5D.)
+
+*Note: Please keep testimony short, 2 minutes (300 words) or less, and include the bill numbers. Allow 15 minutes to get past security with photo ID. Enter City Hall at the northeast corner, Room 400 is on the 4th floor.*
+
+If you can’t show up but would like to write in support, email jawad.pullin@phila.gov **no later than Sunday**. [Email to Write in Support.](mailto:jawad.pullin@phila.gov?bcc=district-5@bikeaction.org&subject=I%20SUPPORT%20Bill%20%23250005%2C%20250006%2C%20250007%20%20&body=Hello%2C%20My%20name%20is%20%5BNAME%5D%2C%20I%20live%20at%20%5BADDRESS%5D%20and%20I%20SUPPORT%20Bill%20%23250005%2C%20250006%2C%20250007.%0A%0AI%20applaud%20Councilmember%20Jeffrey%20Young%20for%20taking%20roadway%20safety%20seriously%20and%20thank%20the%20Councilmember%20for%20introducing%20these%20bills%20to%20make%20our%20streets%20safer%20and%20more%20accessible%20for%20all%20roadway%20users.)
+
+Yours Truly,  
+**Philly Bike Action**
+
+<span style="width: 80%; text-align: center;"><img style="width: 100%; border-radius: 5px; border: solid grey;" src="templates/email/d5_bike_lane_bills_2025_02_21/imgs/d5_bike_lane_bills.png"></span>
