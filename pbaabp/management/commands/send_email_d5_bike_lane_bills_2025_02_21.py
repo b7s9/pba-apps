@@ -1,9 +1,9 @@
 from django.conf import settings
 from django.core.management.base import BaseCommand
 
+from facets.models import District
 from pbaabp.email import send_email_message
 from profiles.models import Profile
-from facets.models import District
 
 district = District.objects.get(name="District 5")
 

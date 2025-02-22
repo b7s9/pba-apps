@@ -1,7 +1,10 @@
+import csv
+
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
 from django.db.models import Count, Q
+from django.http import HttpResponse
 
 from facets.models import District, RegisteredCommunityOrganization
 from pbaabp.admin import ReadOnlyLeafletGeoAdminMixin
@@ -197,12 +200,59 @@ def make_fulfilled(modeladmin, request, queryset):
     queryset.update(fulfilled=True)
 
 
-class ShirtOrderAdmin(admin.ModelAdmin):
-    list_display = ["user", "paid", "fulfilled", "fit", "size", "print_color"]
-    list_filter = ["paid", "fulfilled", "fit", "size", "print_color"]
+@admin.action(description="Export Orders as CSV")
+def csv_export(self, request, queryset):
+
+    fields = [
+        "shipping_method",
+        "shipping_name",
+        "shipping_line1",
+        "shipping_line2",
+        "shipping_city",
+        "shipping_state",
+        "shipping_postal_code",
+        "get_fit_display",
+        "get_print_color_display",
+        "get_size_display",
+    ]
+
+    response = HttpResponse(content_type="text/csv")
+    response["Content-Disposition"] = "attachment; filename=shirt-orders.csv"
+    writer = csv.writer(response)
+    writer.writerow(fields)
+    for obj in queryset:
+        writer.writerow(
+            [
+                obj.shipping_method,
+                obj.shipping_name(),
+                obj.shipping_line1(),
+                obj.shipping_line2(),
+                obj.shipping_city(),
+                obj.shipping_state(),
+                obj.shipping_postal_code(),
+                obj.get_fit_display(),
+                obj.get_print_color_display(),
+                obj.get_size_display(),
+            ]
+        )
+
+    return response
+
+
+class ShirtOrderAdmin(ReadOnlyLeafletGeoAdminMixin, admin.ModelAdmin):
+    list_display = ["user", "paid", "shipping_method", "fulfilled", "fit", "size", "print_color"]
+    list_filter = ["paid", "shipping_method", "fulfilled", "fit", "size", "print_color"]
     search_fields = ["user__first_name", "user__last_name", "user__email"]
     autocomplete_fields = ("user",)
-    actions = [make_fulfilled]
+    readonly_fields = [
+        "shipping_name",
+        "shipping_line1",
+        "shipping_line2",
+        "shipping_city",
+        "shipping_state",
+        "shipping_postal_code",
+    ]
+    actions = [csv_export, make_fulfilled]
 
 
 admin.site.register(Profile, ProfileAdmin)

@@ -197,6 +197,12 @@ class ShirtOrder(models.Model):
         PINK = 0, "Pink"
         GREEN = 1, "Green"
 
+    class ShippingMethod(models.TextChoices):
+        USPS = "usps"
+        COURIER = "courier"
+        PICKUP = "pickup"
+        OTHER = "other"
+
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -206,6 +212,41 @@ class ShirtOrder(models.Model):
     billing_details = models.JSONField(null=True, blank=True)
     shipping_details = models.JSONField(null=True, blank=True)
 
+    location = models.PointField(blank=True, null=True, srid=4326)
+    shipping_method = models.CharField(
+        max_length=32, null=True, blank=True, choices=ShippingMethod.choices
+    )
+
     fit = models.IntegerField(null=False, blank=False, choices=Fit.choices)
     size = models.IntegerField(null=False, blank=False, choices=Size.choices)
     print_color = models.IntegerField(null=False, blank=False, choices=PrintColor.choices)
+
+    def shipping_name(self):
+        if self.shipping_details:
+            return self.shipping_details.get("name")
+        return None
+
+    def shipping_line1(self):
+        if self.shipping_details:
+            return self.shipping_details.get("address", {}).get("line1")
+        return None
+
+    def shipping_line2(self):
+        if self.shipping_details:
+            return self.shipping_details.get("address", {}).get("line2")
+        return None
+
+    def shipping_city(self):
+        if self.shipping_details:
+            return self.shipping_details.get("address", {}).get("city")
+        return None
+
+    def shipping_state(self):
+        if self.shipping_details:
+            return self.shipping_details.get("address", {}).get("state")
+        return None
+
+    def shipping_postal_code(self):
+        if self.shipping_details:
+            return self.shipping_details.get("address", {}).get("postal_code")
+        return None
