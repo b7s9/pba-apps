@@ -6,9 +6,8 @@ from profiles.models import Profile
 
 TO = ["bikes@durbin.ee"]
 
-profiles = Profile.objects.filter(zip_code__in=["TEST LOL"])
+profiles = Profile.objects.all()
 
-signatures = []
 profiles = Profile.objects.filter(user__email__in=TO)
 
 SENT = []
@@ -24,7 +23,7 @@ class Command(BaseCommand):
         for profile in profiles:
             if profile.user.email not in SENT:
                 send_email_message(
-                    "fishtown_neighborhood_bikeways_2025_01_07",
+                    "vine_street_2025_01_30",
                     "Philly Bike Action <noreply@bikeaction.org>",
                     [profile.user.email],
                     {"profile": profile},

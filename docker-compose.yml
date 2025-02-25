@@ -26,7 +26,9 @@ services:
      interval: 1s
 
   base:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
     image: pbaabp:docker-compose
     environment: &base_environment
       DEBUG: "True"

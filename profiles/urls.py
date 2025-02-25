@@ -15,4 +15,12 @@ urlpatterns = [
         name="profile_rcos_partial",
     ),
     path("edit/", views.ProfileUpdateView.as_view(), name="profile_update"),
+    path("tshirt/", views.ShirtOrderView.as_view(), name="shirt_order"),
+    path("tshirt/<pk>/delete/", views.ShirtOrderDeleteView.as_view(), name="shirt_delete"),
+    path("tshirt/<shirt_id>/pay/", views.create_tshirt_checkout_session, name="shirt_pay"),
+    path(
+        "tshirt/<shirt_id>/pay/complete/",
+        views.complete_tshirt_checkout_session,
+        name="shirt_pay_complete",
+    ),
 ]

@@ -44,8 +44,10 @@
       <div class="progress-bar">
         <div class="progress-bar-fill" style="width: {{ campaign.donation_progress }}%"></div>
       </div>
+      {% if campaign.donation_goal_show_numbers %}
       <span style="float: left; padding-left: min(calc({{ campaign.donation_progress }}% - 1.5em), calc(100% - 4.2em)); margin-top: .5em;">${{ campaign.donation_total|intcomma }}</span>
       <span class="progress-goal">${{ campaign.donation_goal|intcomma }}</span>
+      {% endif %}
     </div>
     {% endif %}
 
@@ -75,7 +77,7 @@
   <div id="events">
     {% for event in campaign.future_events.all|dictsort:"start_datetime" %}
     <div class="event">
-      <a href="https://bikeaction.org/events/{% if event.slug %}{{ event.wordpress_slug }}{% else %}{% endif %}"><box-icon name='calendar-event'></box-icon> {{ event.title }} - {{ event.start_datetime|date }}</a>
+      <a href="{% url "event_detail" slug=event.slug %}"><box-icon name='calendar-event'></box-icon> {{ event.title }} - {{ event.start_datetime|date }}</a>
     </div>
     {% endfor %}
   </div>

@@ -1,0 +1,174 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="form-header">
+  <h1>I want a shirt!</h1>
+</div>
+<div class="form-header">
+  <p>This form can be used to pre-order a PBA shirt.</p>
+  <p>Pre-ordered shirts have a cost of $30, and will be shipped to you via bike courier or USPS.</p>
+  <p>Pre-orders will close <b>Monday February 3rd</b>. Order <i>before</i> that date!</p>
+  <p>Estimated delivery is first week of March 2025</p>
+  <p>If you miss the pre-order, you will have a chance to buy a shirt from this run at the Philly Bike Expo or April Citywide depending on availability!</p>
+  <p>Consider and select your options below</p>
+  <div class="display: flex;">
+    <div style="border: 1px solid grey; border-radius: 1em; margin: 0.5em;">
+      <h3>Next Level - Cotton T-Shirt - 3600</h3>
+      <h4>Unisex Classic Fit</h4>
+      <img style="max-width: 30%;" src="{% static 'images/tshirts/pink-unisex.jpg' %}">
+      <img style="max-width: 30%;" src="{% static 'images/tshirts/green-unisex.jpg' %}">
+      <p>This is more or less a standard straight cut T-Shirt</p>
+
+      <div class="table-container">
+        <table style="margin: .5em auto;">
+          <tbody>
+            <tr>
+              <th></th>
+              <th>XS</th>
+              <th>S</th>
+              <th>M</th>
+              <th>L</th>
+              <th>XL</th>
+              <th>2XL</th>
+            </tr>
+            <tr>
+              <td>Body Length</td>
+              <td>27</td>
+              <td>28</td>
+              <td>29</td>
+              <td>30</td>
+              <td>31</td>
+              <td>32</td>
+            </tr>
+            <tr>
+              <td>Chest Width (Laid Flat)</td>
+              <td>17 1/2</td>
+              <td>19</td>
+              <td>20 1/2</td>
+              <td>22</td>
+              <td>24</td>
+              <td>26</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+    <div style="border: 1px solid grey; border-radius: 1em; margin: 0.5em;">
+      <h3>Next Level - Women's Ideal Crop Top - 1580</h3>
+      <h4>Women's Relaxed Fit</h4>
+      <img style="max-width: 30%;" src="{% static 'images/tshirts/green-crop.jpg' %}">
+      <img style="max-width: 30%;" src="{% static 'images/tshirts/pink-crop.jpg' %}">
+      <p>This is a relaxed fit cropped shirt.</p>
+      <div class="table-container">
+        <table style="margin: .5em auto;">
+          <tbody>
+            <tr>
+              <th></th>
+              <th>XS</th>
+              <th>S</th>
+              <th>M</th>
+              <th>L</th>
+              <th>XL</th>
+              <th>2XL</th>
+            </tr>
+            <tr>
+              <td>Body Length</td>
+              <td>18 3/4</td>
+              <td>19 3/8</td>
+              <td>20</td>
+              <td>20 5/8</td>
+              <td>21 1/4</td>
+              <td>21 7/8</td>
+            </tr>
+            <tr>
+              <td>Chest Width (Laid Flat)</td>
+              <td>17 5/8</td>
+              <td>18 5/8</td>
+              <td>19 5/8</td>
+              <td>20 5/8</td>
+              <td>22 1/8</td>
+              <td>23 5/8</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="form-container">
+  <h3>Select your shirt</h3>
+  <form method="post">
+  {% csrf_token %}
+
+  {{ form.non_field_errors }}
+
+  {% for hidden_field in form.hidden_fields %}
+    {{ hidden_field.errors }}
+    {{ hidden_field }}
+  {% endfor %}
+
+  {% for field in form.visible_fields %}
+    <p>
+      {{ field.label_tag }}
+      {{ field.errors }}
+      {{ field }}
+      <span class="helptext">{{ field.help_text }}</span>
+    </p>
+  {% endfor %}
+
+  <div id="shirtPreview" style="width: 100%; text-align: center;">
+    <p><img style="display: none; margin: 1em auto; border-radius: 1em; max-width: 30%;" id="shirtPreviewImg" src=""></img></p>
+    <p><small><i>Appearance of sizing, color, and placement may vary on final product.</i></small></p>
+  </div>
+
+  <div style="font-size: smaller; text-align: center;">
+    <p></p>
+  </div>
+
+  <div class="button-holder">
+    <button class="submit-button" type="submit" value="submit">Pre-order and pay</button>
+  </div>
+
+  <p><i>If you want to order multiple shirts, you can return to this form via your profile page later.</i></p>
+
+  </form>
+
+  <script>
+    function modifyElement(elementId, targetElementId) {
+        document.getElementById(targetElementId).innerHTML = document.getElementById(elementId).value;
+    }
+    function updateForm() {
+        console.log('here');
+        var fit = document.getElementById("id_fit").value;
+        var printColor =  document.getElementById("id_print_color").value;
+        if ( fit === "3" && printColor === "0" ) {
+            document.getElementById("shirtPreviewImg").src = "{% static "images/tshirts/pink-crop.jpg" %}";
+            document.getElementById("shirtPreviewImg").style.display = "block";
+        }
+        else if ( fit === "3" && printColor === "1" ) {
+            document.getElementById("shirtPreviewImg").src = "{% static "images/tshirts/green-crop.jpg" %}";
+            document.getElementById("shirtPreviewImg").style.display = "block";
+        }
+        else if ( fit === "2" && printColor === "0" ) {
+            document.getElementById("shirtPreviewImg").src = "{% static "images/tshirts/pink-unisex.jpg" %}";
+            document.getElementById("shirtPreviewImg").style.display = "block";
+        }
+        else if ( fit === "2" && printColor === "1" ) {
+            document.getElementById("shirtPreviewImg").src = "{% static "images/tshirts/green-unisex.jpg" %}";
+            document.getElementById("shirtPreviewImg").style.display = "block";
+        }
+        else {
+            document.getElementById("shirtPreviewImg").src = "";
+            document.getElementById("shirtPreviewImg").style.display = "none";
+        }
+    }
+    window.onload=function() {
+        document.getElementById("id_fit").oninput = function () {updateForm()}.bind();
+        document.getElementById("id_print_color").oninput = function () {updateForm();}.bind();
+        updateForm();
+        setInterval(function() {updateForm();}, 1000);
+    }
+  </script>
+</div>
+{% endblock %}

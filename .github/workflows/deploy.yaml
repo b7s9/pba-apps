@@ -1,0 +1,23 @@
+---
+name: 'deploy'
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cloning repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Push to dokku
+        uses: dokku/github-action@master
+        with:
+          git_remote_url: 'ssh://dokku@dokku.bikeaction.org:22/apps-bikeaction-org'
+          branch: main
+          ssh_private_key: ${{ secrets.DEPLOY_SSH_KEY }}
