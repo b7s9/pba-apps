@@ -1,0 +1,22 @@
+Hello {{ profile.user.first_name }},
+
+*You are receiving this email from [Philly Bike Action](https://bikeaction.org/) because you have a PBA account and live in the project area.*
+
+Tell OTIS you support a 3rd Street Bike Lane from South St to Market St\! Make your voice heard at the open house on **March 6 anytime between 6–7:30 PM** **at Old Pine Community Center (401 Lombard St)**. 
+
+We need your support because a 3rd Street Bike Lane would:
+
+- Reduce speeding and improve safety for all road users;  
+- Provide a safe space for bikes, scooters, and mobility devices;  
+- Reduce crossing distance for people walking and in wheelchairs;  
+- Provide a buffer from noisy car traffic for people on sidewalks.
+
+<span style="width: 100%">
+<img style="width: 100%; display: inline;" src="templates/email/save_3rd_street_bike_lane/images/composite.png">
+</span>
+
+**Don’t let safety opponents block the plan for this crucial bike lane.** Drop in at the open house for *as little as 10 minutes* to complete the exit survey. Once you’ve made a plan to attend, you can also sign our [petition](https://apps.bikeaction.org/campaigns/save-the-3rd-street-bike-lane/). 
+
+PBA will be organizing bike parking during the event – look for us at the corner of 4th and Lombard!
+
+**Philly Bike Action**
