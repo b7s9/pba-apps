@@ -12,6 +12,7 @@ ENV PATH="${PATH}:/home/user/.local/bin"
 USER user
 WORKDIR /code
 COPY requirements /code/requirements
-COPY requirements.txt /code/
-RUN pip install -r requirements.txt
+RUN pip install -r requirements/base.txt
+RUN pip install -r requirements/dev.txt
+RUN pip install -r requirements/deploy.txt
 COPY . /code/
