@@ -1,0 +1,33 @@
+Hello {{ profile.user.first_name }},
+
+*You are receiving this email from [Philly Bike Action](https://bikeaction.org/) because you have a PBA account and live in the second councilmanic district.*
+
+The District 2 organizing team needs help\! We are looking for volunteers to assist with our monthly meetings. The roles we are looking to fill are:
+
+1. Note taker (digital notes preferred)  
+2. Agenda maker  
+3. Meeting facilitator  
+4. Meeting manager (confirms that volunteers for roles 1-3 are identified one week before the meeting. This role does not require monthly meeting attendance.)
+
+FAQ:
+
+1. What is the time commitment for each of these roles?  
+   a. *Only 3-5 hours per **month**\!*   
+2. When and where are the District 2 monthly meetings?  
+   a. *District 2 meetings are held on the 2nd floor of the Ethical Society (1906 Rittenhouse Square) on the second Monday of every month from 6:30-8pm.*  
+3. Do I need any prior experience to volunteer?  
+   a. *We ask that all volunteers have attended at least one District 2 meeting before.*  
+4. Can I “try out” the role before committing?  
+   a. *Yes\! You can try it out at an upcoming meeting without committing long-term.*  
+5. Is there training available for each role?  
+   a. *Yes\! We will connect you with an organizer who can give you access to our google drive, explain how the role works, and answer any questions you may have.*  
+6. If I volunteer, how long would I hold that position?  
+   a. *Ideally, you would be able to serve for at least 6 months. But we can be flexible if you have to miss a meeting or your plans change\!*  
+7. How do I indicate my interest?  
+   a. *Reply to this email by* _**Monday, March 10**_ *and tell us which role you are interested in or want to try out.*  
+8. What if I have a question that wasn’t answered here?  
+   a. *See question number 7 above\!*
+
+Thank you for considering volunteering with us\! PBA is powered by volunteers like you who care about winning safe bike infrastructure for all.
+
+**Philly Bike Action**
