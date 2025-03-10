@@ -4,6 +4,7 @@ from ordered_model.admin import OrderedModelAdmin
 
 from campaigns.models import Campaign, Petition, PetitionSignature
 from campaigns.tasks import geocode_signature
+from facets.models import District, RegisteredCommunityOrganization
 from pbaabp.admin import ReadOnlyLeafletGeoAdminMixin
 
 
@@ -24,7 +25,26 @@ class CampaignAdmin(OrderedModelAdmin):
 
 
 class PetitionAdmin(admin.ModelAdmin):
-    pass
+    readonly_fields = ["petition_report"]
+
+    def petition_report(self, obj):
+        report = ""
+        totalsigs = obj.signatures.count()
+        report += f"Total signatures: {totalsigs}\n"
+        nongeocoded = obj.signatures.filter(location=None).count()
+        report += f"Non-geocoded signatures: {nongeocoded}\n\n"
+        report += "Districts:\n"
+        philly = 0
+        for district in District.objects.all():
+            cnt = obj.signatures.filter(location__within=district.mpoly).count()
+            philly += cnt
+            report += f"{district.name}: {cnt}\n"
+        report += f"\nAll of Philadelphia: {philly}\n"
+        report += "\nRCOs:\n"
+        for rco in RegisteredCommunityOrganization.objects.all():
+            cnt = obj.signatures.filter(location__within=rco.mpoly).count()
+            report += f"{rco.name}: {cnt}\n"
+        return report
 
 
 def geocode(modeladmin, request, queryset):
