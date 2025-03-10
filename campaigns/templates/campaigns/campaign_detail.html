@@ -102,9 +102,9 @@
   <div id="petitions">
   {% for petition in campaign.petitions.all %}
     {% if campaign.petitions.all|length > 0 %}<h2>{{ petition.title }}</h2>{% endif %}
-    {% if petition.display_on_campaign_page %}
+    {% if petition.letter %}
     <div class="petition">
-      {% include 'petition/view.html' with petition=petition form=petition.form %}
+      <p>{{petition.letter|linebreaks}}</p>
     </div>
     {% endif %}
     {% if petition.signatures.all %}
