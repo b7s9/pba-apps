@@ -1,7 +1,7 @@
 import uuid
 
+from django.contrib.gis.db import models
 from django.core.validators import RegexValidator
-from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from markdownfield.models import RenderedMarkdownField
@@ -239,6 +239,7 @@ class PetitionSignature(models.Model):
         null=True,
         blank=True,
     )
+    location = models.PointField(blank=True, null=True, srid=4326)
 
     newsletter_opt_in = models.BooleanField(
         blank=False, default=True, verbose_name=_("Newsletter Opt-In")

@@ -3,6 +3,8 @@ from django.contrib import admin
 from ordered_model.admin import OrderedModelAdmin
 
 from campaigns.models import Campaign, Petition, PetitionSignature
+from campaigns.tasks import geocode_signature
+from pbaabp.admin import ReadOnlyLeafletGeoAdminMixin
 
 
 class CampaignAdmin(OrderedModelAdmin):
@@ -25,8 +27,14 @@ class PetitionAdmin(admin.ModelAdmin):
     pass
 
 
-class PetitionSignatureAdmin(admin.ModelAdmin):
-    actions = [csvexport]
+def geocode(modeladmin, request, queryset):
+    for obj in queryset:
+        if obj.location is None:
+            geocode_signature.delay(obj.id)
+
+
+class PetitionSignatureAdmin(admin.ModelAdmin, ReadOnlyLeafletGeoAdminMixin):
+    actions = [csvexport, geocode]
     list_display = [
         "get_name",
         "email",
