@@ -75,6 +75,7 @@ class AliasAdmin(admin.ModelAdmin):
                 "domain",
             )
         )
+        qs = qs.order_by("alias")
         return qs
 
     def recip_display(self, obj=None):
@@ -101,6 +102,7 @@ class AliasAdmin(admin.ModelAdmin):
         return f"{obj.alias}@{obj.domain}"
 
     get_alias_display.short_description = "Alias"
+    get_alias_display.admin_order_field = "alias"
 
 
 admin.site.register(Alias, AliasAdmin)
