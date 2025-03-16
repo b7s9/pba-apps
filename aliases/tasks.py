@@ -40,3 +40,13 @@ def sync_alias_to_mailgun(alias_id):
     Alias.objects.filter(id=alias_id).update(
         mailgun_updated_at=datetime.datetime.now(datetime.UTC), mailgun_id=_mailgun_id
     )
+
+
+@shared_task
+def remove_alias_from_mailgun(mailgun_alias_id):
+    url = "https://api.mailgun.net/v3/routes"
+    auth = ("api", settings.MAILGUN_API_KEY)
+
+    url += f"/{mailgun_alias_id}"
+    response = requests.delete(url, auth=auth)
+    response.raise_for_status()

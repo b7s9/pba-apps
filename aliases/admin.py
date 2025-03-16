@@ -85,8 +85,5 @@ class AliasAdmin(admin.ModelAdmin):
             return None
         return f"{obj.alias}@{obj.domain}"
 
-    def has_delete_permission(self, request, obj=None):
-        return False
-
 
 admin.site.register(Alias, AliasAdmin)
