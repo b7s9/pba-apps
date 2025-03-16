@@ -2,6 +2,8 @@ import datetime
 
 from django import forms
 from django.contrib import admin
+from django.db.models import Value
+from django.db.models.functions import Concat
 from django.forms.models import BaseInlineFormSet
 
 from aliases.models import Alias, AliasRecipient
@@ -57,17 +59,30 @@ class AliasAdmin(admin.ModelAdmin):
     list_display = ("get_alias_display", "recip_display", "ready")
     inlines = [AliasRecipientInline]
     readonly_fields = ("domain", "mailgun_id", "ready")
-    search_fields = ("alias", "recipients__email_address")
+    search_fields = ("alias", "recipients__email_address", "fq_alias")
 
     fieldsets = [
         ("ALIAS CONFIGURATION", {"fields": ("alias", "domain")}),
         ("Status", {"fields": ("ready", "mailgun_id")}),
     ]
 
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        qs = qs.annotate(
+            fq_alias=Concat(
+                "alias",
+                Value("@"),
+                "domain",
+            )
+        )
+        return qs
+
     def recip_display(self, obj=None):
         if obj is None:
             return None
         return ", ".join([r.email_address for r in obj.recipients.all()])
+
+    recip_display.short_description = "Recipients"
 
     def ready(self, obj=None):
         if obj is None:
@@ -84,6 +99,8 @@ class AliasAdmin(admin.ModelAdmin):
         if obj is None:
             return None
         return f"{obj.alias}@{obj.domain}"
+
+    get_alias_display.short_description = "Alias"
 
 
 admin.site.register(Alias, AliasAdmin)
