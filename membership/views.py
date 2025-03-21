@@ -1,4 +1,3 @@
-import sesame.utils
 import stripe
 from django.conf import settings
 from django.contrib import messages
@@ -20,8 +19,7 @@ from djstripe.models import (
 
 from membership.forms import RecurringDonationSetupForm
 from membership.models import Donation, DonationProduct, DonationTier
-from pbaabp.email import send_email_message
-from profiles.forms import BaseProfileSignupForm
+from pbaabp.tasks import create_pba_account
 
 _CUSTOM_FIELDS = [
     {
@@ -122,49 +120,22 @@ def complete_checkout_session(request):
                 street_address = session["customer_details"]["address"]["line1"]
                 zip_code = session["customer_details"]["address"]["postal_code"]
                 newsletter_opt_in = bool(int(custom_fields["newsletter_opt_in"]))
-                form = BaseProfileSignupForm(
-                    {
-                        "first_name": first_name,
-                        "last_name": last_name,
-                        "street_address": street_address,
-                        "zip_code": zip_code,
-                        "email": email,
-                        "username": email,
-                        "newsletter_opt_in": newsletter_opt_in,
-                        "password1": "Password@99",
-                        "password2": "Password@99",
-                    }
+
+                user = create_pba_account(
+                    first_name=first_name,
+                    last_name=last_name,
+                    street_address=street_address,
+                    zip_code=zip_code,
+                    email=email,
+                    newsletter_opt_in=newsletter_opt_in,
+                    subscription=True,
+                    _return=True,
                 )
-                if form.is_valid():
-                    user = form.save(request)
-                    user.set_unusable_password()
-                    user.save()
-                    stripe_customer = stripe.Customer.retrieve(subscription.customer.id)
-                    customer = Customer._get_or_retrieve(stripe_customer["id"])
-                    customer.subscriber = user
-                    customer.save()
-                    link = reverse("sesame_login")
-                    link = request.build_absolute_uri(link)
-                    link += sesame.utils.get_query_string(user)
-                    link += f"&next={reverse('account_set_password')}"
-                    subject = f"Welcome! Create a password for {request.get_host()}"
-                    message = f"""\
-Hello {user.first_name},
-
-We created an account on {request.get_host()} so that you can manage your
-new recurring donation to Philly Bike Action. Follow the link below to
-set a password for your account.
-
-* [Create your password]({link})
-
-NOTE: This link will expire in 7 days!
-
-Thank you for being a part of the action!
-"""
-                    send_email_message(
-                        None, None, [user.email], None, message=message, subject=subject
-                    )
-                    login(request, user, backend=settings.AUTHENTICATION_BACKENDS[0])
+                stripe_customer = stripe.Customer.retrieve(subscription.customer.id)
+                customer = Customer._get_or_retrieve(stripe_customer["id"])
+                customer.subscriber = user
+                customer.save()
+                login(request, user, backend=settings.AUTHENTICATION_BACKENDS[0])
             payment_method = subscription.default_payment_method
             if subscription.customer.default_payment_method is None:
                 subscription.customer.add_payment_method(payment_method, set_default=True)

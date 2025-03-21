@@ -2,6 +2,7 @@ import uuid
 
 from django.contrib.gis.db import models
 from django.core.validators import RegexValidator
+from django.db import transaction
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from markdownfield.models import RenderedMarkdownField
@@ -13,6 +14,7 @@ from events.models import ScheduledEvent
 from lib.slugify import unique_slugify
 from membership.models import Donation, DonationProduct
 from pbaabp.models import ChoiceArrayField, MarkdownField
+from pbaabp.tasks import create_pba_account, subscribe_to_newsletter
 
 
 class Campaign(OrderedModel):
@@ -141,7 +143,7 @@ class Petition(models.Model):
         LAST_NAME = "last_name", "Last Name"
         EMAIL = "email", "E-mail"
         PHONE = "phone_number", "Phone Number"
-        ADDRESS_LINE_1 = "postal_address_line_1", "Address Line 1"
+        ADDRESS_LINE_1 = "postal_address_line_1", "Street Address"
         ADDRESS_LINE_2 = "postal_address_line_2", "Address Line 2"
         CITY = "city", "City"
         STATE = "state", "State"
@@ -155,6 +157,8 @@ class Petition(models.Model):
         blank=True,
         null=True,
     )
+
+    create_account_opt_in = models.BooleanField(default=False, blank=False)
 
     def save(self, *args, **kwargs):
         if self.slug is None:
@@ -223,10 +227,10 @@ class PetitionSignature(models.Model):
         blank=True,
     )
     postal_address_line_1 = models.CharField(
-        verbose_name="Address line 1", max_length=128, null=True, blank=True
+        verbose_name="Street Address", max_length=128, null=True, blank=True
     )
     postal_address_line_2 = models.CharField(
-        verbose_name="Address line 2", max_length=128, null=True, blank=True
+        verbose_name="Address Line 2", max_length=128, null=True, blank=True
     )
     city = models.CharField(verbose_name="City", max_length=64, null=True, blank=True)
     state = models.CharField(verbose_name="State", max_length=64, null=True, blank=True)
@@ -246,6 +250,29 @@ class PetitionSignature(models.Model):
     newsletter_opt_in = models.BooleanField(
         blank=False, default=True, verbose_name=_("Newsletter Opt-In")
     )
+    create_account_opt_in = models.BooleanField(
+        blank=False, default=False, verbose_name=_("Create a PBA Account")
+    )
+
+    def save(self, *args, **kwargs):
+        if self.email and self.newsletter_opt_in:
+            transaction.on_commit(
+                lambda: subscribe_to_newsletter.delay(
+                    self.email, tags=["petition", f"petition-{self.petition.slug}"]
+                )
+            )
+        if self.create_account_opt_in:
+            transaction.on_commit(
+                lambda: create_pba_account.delay(
+                    first_name=self.first_name,
+                    last_name=self.last_name,
+                    street_address=self.postal_address_line_1,
+                    zip_code=self.zip_code,
+                    email=self.email,
+                    newsletter_opt_in=self.newsletter_opt_in,
+                )
+            )
+        super(PetitionSignature, self).save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.first_name} {self.last_name} - {self.email}"

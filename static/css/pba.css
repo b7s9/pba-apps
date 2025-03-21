@@ -357,7 +357,7 @@ form {
   color: grey;
 }
 form label {
-  width: 9em;
+  width: 10em;
   margin-bottom: .25em;
   margin-right: 1em;
   display: block;
@@ -371,6 +371,7 @@ form label[for=id_captcha] {
   display: none;
 }
 form .helptext {
+  max-width: 24em;
   padding-top: .5em;
   display: block;
   font-size: smaller;
