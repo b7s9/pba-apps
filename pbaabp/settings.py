@@ -278,12 +278,12 @@ EMAIL_SUBJECT_PREFIX = env("DJANGO_EMAIL_SUBJECT_PREFIX", default="[Philly Bike 
 MAILGUN_EMAIL = env("MAILGUN_EMAIL", default=None)
 MAILGUN_API_KEY = env("MAILGUN_API_KEY", default=None)
 if MAILGUN_API_KEY is not None and MAILGUN_EMAIL is not None:
-    print('sending email via mailgun api')
+    print("sending email via mailgun api")
     EMAIL_BACKEND = "email_log.backends.EmailBackend"
     EMAIL_LOG_BACKEND = "anymail.backends.mailgun.EmailBackend"
     ANYMAIL = {"MAILGUN_API_KEY": MAILGUN_API_KEY}
 else:
-    print('sending email via smtp')
+    print("sending email via smtp")
     EMAIL_BACKEND = "email_log.backends.EmailBackend"
     EMAIL_LOG_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
     EMAIL_HOST = env("DJANGO_EMAIL_HOST", default="smtp.mailgun.org")
