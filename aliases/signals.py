@@ -14,4 +14,8 @@ def update_mailgun(sender, instance, created, **kwargs):
 @receiver(post_delete, sender=Alias)
 def remove_mailgun_route(sender, instance, **kwargs):
     if instance.mailgun_id:
-        transaction.on_commit(lambda: remove_alias_from_mailgun.delay(instance.mailgun_id))
+        transaction.on_commit(
+            lambda: remove_alias_from_mailgun.delay(
+                instance.alias, instance.domain, instance.mailgun_id
+            )
+        )

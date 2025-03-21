@@ -13,6 +13,9 @@ class Alias(models.Model):
         default="bikeaction.org",
         help_text="The domain, the part after the @",
     )
+    enable_smtp = models.BooleanField(
+        default=False, help_text="Should the user have SMTP sending credentials?"
+    )
     description = models.CharField(
         max_length=128, null=True, blank=True, help_text="A description for humans."
     )
@@ -23,6 +26,7 @@ class Alias(models.Model):
 
     # Mailgun
     mailgun_id = models.CharField(max_length=64, null=True, blank=True)
+    mailgun_smtp_password = models.CharField(max_length=64, null=True, blank=True)
     mailgun_updated_at = models.DateTimeField(null=True)
 
     class Meta:

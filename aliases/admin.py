@@ -58,13 +58,31 @@ class AliasRecipientInline(admin.TabularInline):
 class AliasAdmin(admin.ModelAdmin):
     list_display = ("get_alias_display", "recip_display", "ready")
     inlines = [AliasRecipientInline]
-    readonly_fields = ("domain", "mailgun_id", "ready")
+    readonly_fields = ("domain", "mailgun_id", "mailgun_smtp_password", "ready")
     search_fields = ("alias", "recipients__email_address", "fq_alias")
 
     fieldsets = [
-        ("ALIAS CONFIGURATION", {"fields": ("alias", "domain")}),
-        ("Status", {"fields": ("ready", "mailgun_id")}),
+        ("ALIAS CONFIGURATION", {"fields": ("alias", "domain", "enable_smtp")}),
+        ("Status", {"fields": ("ready", "mailgun_id", "mailgun_smtp_password")}),
     ]
+
+    def get_form(self, request, obj=None, **kwargs):
+        if obj and obj.enable_smtp and obj.mailgun_smtp_password:
+            help_text = (
+                f"SMTP Username: {obj.alias}@{obj.domain}<br>"
+                f"SMTP Password: {obj.mailgun_smtp_password}<br>"
+                "SMTP Hostname: smtp.mailgun.org<br>"
+                "SMTP Port: 587<br>"
+                "SMTP TLS: Yes<br>"
+                'See <a href="https://support.google.com/mail/answer/22370">here</a> '
+                'for instructions for gmail. <b>Note</b>: uncheck "treat as an alias"'
+            )
+        elif obj and obj.enable_smtp and not obj.mailgun_smtp_password:
+            help_text = "SMTP credentials not ready, try refreshing..."
+        else:
+            help_text = "n/a"
+        kwargs.update({"help_texts": {"mailgun_smtp_password": help_text}})
+        return super(AliasAdmin, self).get_form(request, obj, **kwargs)
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
@@ -95,6 +113,7 @@ class AliasAdmin(admin.ModelAdmin):
         )
 
     ready.boolean = True
+    ready.short_description = "Alias ready"
 
     def get_alias_display(self, obj=None):
         if obj is None:

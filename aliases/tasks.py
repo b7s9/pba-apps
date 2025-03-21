@@ -22,31 +22,67 @@ def sync_alias_to_mailgun(alias_id):
         "action": [f'forward("{recipients}")', "stop()"],
     }
 
-    if alias.mailgun_id:
-        url += f"/{alias.mailgun_id}"
-        data["id"] = alias.mailgun_id
-        print("PUT", url, data, headers, auth)
-        response = requests.put(url, params=data, headers=headers, auth=auth)
-        response.raise_for_status()
-        data = response.json()
-        _mailgun_id = data["id"]
+    _mailgun_id = None
+    if recipients:
+        if alias.mailgun_id:
+            url += f"/{alias.mailgun_id}"
+            data["id"] = alias.mailgun_id
+            response = requests.put(url, params=data, headers=headers, auth=auth)
+            response.raise_for_status()
+            data = response.json()
+            _mailgun_id = data["id"]
+        else:
+            response = requests.post(url, params=data, headers=headers, auth=auth)
+            response.raise_for_status()
+            data = response.json()
+            _mailgun_id = data["route"]["id"]
+
+    _mailgun_smtp_password = None
+    if alias.enable_smtp:
+        if alias.mailgun_smtp_password:
+            _mailgun_smtp_password = alias.mailgun_smtp_password
+        else:
+            url = f"https://api.mailgun.net/v3/domains/{alias.domain}/credentials"
+            headers = {}
+            data = {"login": f"{alias.alias}@{alias.domain}"}
+            response = requests.post(url, params=data, headers=headers, auth=auth)
+            response.raise_for_status()
+            data = response.json()
+            _mailgun_smtp_password = data["credentials"][f"{alias.alias}@{alias.domain}"]
     else:
-        print("POST", url, data, headers, auth)
-        response = requests.post(url, params=data, headers=headers, auth=auth)
-        response.raise_for_status()
-        data = response.json()
-        _mailgun_id = data["route"]["id"]
+        if alias.mailgun_smtp_password:
+            url = (
+                "https://api.mailgun.net/v3/domains/"
+                f"{alias.domain}/credentials/{alias.alias}@{alias.domain}"
+            )
+            response = requests.delete(url, auth=auth)
+            try:
+                response.raise_for_status()
+            except requests.exceptions.HTTPError:
+                pass
+            data = response.json()
+            _mailgun_smtp_password = None
 
     Alias.objects.filter(id=alias_id).update(
-        mailgun_updated_at=datetime.datetime.now(datetime.UTC), mailgun_id=_mailgun_id
+        mailgun_updated_at=datetime.datetime.now(datetime.UTC),
+        mailgun_id=_mailgun_id,
+        mailgun_smtp_password=_mailgun_smtp_password,
     )
 
 
 @shared_task
-def remove_alias_from_mailgun(mailgun_alias_id):
-    url = "https://api.mailgun.net/v3/routes"
+def remove_alias_from_mailgun(alias, domain, mailgun_alias_id):
+    url = f"https://api.mailgun.net/v3/routes/{mailgun_alias_id}"
     auth = ("api", settings.MAILGUN_API_KEY)
-
-    url += f"/{mailgun_alias_id}"
     response = requests.delete(url, auth=auth)
-    response.raise_for_status()
+    try:
+        response.raise_for_status()
+    except requests.exceptions.HTTPError:
+        pass
+
+    url = f"https://api.mailgun.net/v3/domains/{domain}/credentials/{alias}@{domain}"
+    response = requests.delete(url, auth=auth)
+    try:
+        response.raise_for_status()
+    except requests.exceptions.HTTPError:
+        pass
