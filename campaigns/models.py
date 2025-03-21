@@ -110,12 +110,14 @@ class Petition(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=512)
     slug = models.SlugField(null=True, blank=True)
-    letter = models.TextField()
+    letter = models.TextField(null=True, blank=True)
     call_to_action = models.CharField(
         max_length=64, null=True, blank=True, default="Add your signature to the following message"
     )
+    call_to_action_header = models.BooleanField(default=True)
     display_on_campaign_page = models.BooleanField(default=True, blank=False)
     signature_goal = models.IntegerField(default=None, null=True, blank=True)
+    show_submissions = models.BooleanField(default=True)
 
     mailto_send = models.BooleanField(default=False, blank=False)
     send_email = models.BooleanField(default=False, blank=False)

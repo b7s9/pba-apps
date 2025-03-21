@@ -1,7 +1,11 @@
 {% load i18n %}
+{% if petition.call_to_action_header %}
 <h3 id="{{ petition.slug }}">{{ petition.call_to_action }}</h3>
+{% endif %}
 <div class="form-container">
+  {% if form.petition.letter %}
   <div class="petition-letter">{{ form.petition.letter|linebreaks }}</div>
+  {% endif %}
   <form method="post" action="{% url 'sign_petition' petition_slug_or_id=petition.slug %}">
   {% csrf_token %}
 

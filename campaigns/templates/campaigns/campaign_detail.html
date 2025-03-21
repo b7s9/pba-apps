@@ -92,7 +92,7 @@
     </div>
     {% endif %}
     {% if petition.signatures.all %}
-    <div class="fade-transition" hx-get="{% url 'petition_signatures' petition_slug_or_id=petition.id %}" hx-trigger="every 5s" hx-swap="innerHTML transition:true">
+    <div class="fade-transition" hx-get="{% url 'petition_signatures' petition_slug_or_id=petition.id %}" hx-trigger="every 10s" hx-swap="innerHTML transition:true">
       {% include 'campaigns/_partial_signatures.html' %}
     </div>
     {% endif %}
