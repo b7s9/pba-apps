@@ -1,7 +1,7 @@
 import stripe
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth import login
+from django.contrib.auth import get_user_model, login
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -121,21 +121,24 @@ def complete_checkout_session(request):
                 zip_code = session["customer_details"]["address"]["postal_code"]
                 newsletter_opt_in = bool(int(custom_fields["newsletter_opt_in"]))
 
-                user = create_pba_account(
-                    first_name=first_name,
-                    last_name=last_name,
-                    street_address=street_address,
-                    zip_code=zip_code,
-                    email=email,
-                    newsletter_opt_in=newsletter_opt_in,
-                    subscription=True,
-                    _return=True,
-                )
+                user = get_user_model().objects.filter(email=email).first()
+                if user is None:
+                    user = create_pba_account(
+                        first_name=first_name,
+                        last_name=last_name,
+                        street_address=street_address,
+                        zip_code=zip_code,
+                        email=email,
+                        newsletter_opt_in=newsletter_opt_in,
+                        subscription=True,
+                        _return=True,
+                    )
+                    login(request, user, backend=settings.AUTHENTICATION_BACKENDS[0])
+
                 stripe_customer = stripe.Customer.retrieve(subscription.customer.id)
                 customer = Customer._get_or_retrieve(stripe_customer["id"])
                 customer.subscriber = user
                 customer.save()
-                login(request, user, backend=settings.AUTHENTICATION_BACKENDS[0])
             payment_method = subscription.default_payment_method
             if subscription.customer.default_payment_method is None:
                 subscription.customer.add_payment_method(payment_method, set_default=True)
