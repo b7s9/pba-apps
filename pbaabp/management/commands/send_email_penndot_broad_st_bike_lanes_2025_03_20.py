@@ -1,3 +1,5 @@
+import hashlib
+
 from django.conf import settings
 from django.core.management.base import BaseCommand
 
@@ -7,8 +9,6 @@ from profiles.models import Profile
 profiles = Profile.objects.all()
 
 SENT = []
-
-import hashlib
 
 DONOTSEND = [
     "0747c131b2a6c57d3d997181730e5a6a03dee5621b9d0df92c8b652d8d1f4e2f",
