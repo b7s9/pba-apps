@@ -7,7 +7,7 @@ from wagtail import urls as wagtail_urls
 from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.documents import urls as wagtaildocs_urls
 
-from pbaabp.views import EmailLoginView
+from pbaabp.views import EmailLoginView, newsletter_bridge
 
 urlpatterns = [
     path("accounts/", include("allauth.urls")),
@@ -26,6 +26,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("cms/", include(wagtailadmin_urls)),
     path("documents/", include(wagtaildocs_urls)),
+    path(f"mailjet/{settings.MAILJET_SECRET_SIGNUP_URL}/", newsletter_bridge),
     path("", include(wagtail_urls)),
 ]
 

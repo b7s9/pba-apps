@@ -1,11 +1,16 @@
 import sesame.utils
+from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.core.exceptions import SuspiciousOperation
+from django.http import Http404, HttpResponse
 from django.shortcuts import render
 from django.urls import reverse
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import FormView
 
 from pbaabp.email import send_email_message
 from pbaabp.forms import EmailLoginForm
+from profiles.tasks import add_mailjet_subscriber
 
 
 class EmailLoginView(FormView):
@@ -54,3 +59,23 @@ Thank you for being a part of the action!
     def form_valid(self, form):
         self.email_submitted(form.cleaned_data["email"])
         return render(self.request, "email_login_success.html")
+
+
+@csrf_exempt
+def newsletter_bridge(request):
+    if settings.MAILJET_SECRET_SIGNUP_URL is None:
+        raise Http404()
+
+    name = request.POST.get("Name")
+    email = request.POST.get("Email")
+
+    errors = []
+    if email is None:
+        errors.append("Email is not provided")
+    if name is None:
+        errors.append("Name is not provided")
+    if errors:
+        raise SuspiciousOperation(f"Errors: {','.join(errors)}")
+
+    add_mailjet_subscriber.delay(email, name.split()[0], name.split()[-1], name)
+    return HttpResponse("OK")

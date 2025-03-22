@@ -11,7 +11,7 @@ from facets.models import District as DistrictFacet
 from facets.models import (
     RegisteredCommunityOrganization as RegisteredCommunityOrganizationFacet,
 )
-from profiles.tasks import geocode_profile, sync_to_mailchimp
+from profiles.tasks import geocode_profile, sync_to_mailchimp, sync_to_mailjet
 from projects.models import ProjectApplication
 
 
@@ -84,9 +84,11 @@ class Profile(models.Model):
                     modified = True
             if modified:
                 transaction.on_commit(lambda: sync_to_mailchimp.delay(self.id))
+                transaction.on_commit(lambda: sync_to_mailjet.delay(self.id))
                 transaction.on_commit(lambda: geocode_profile.delay(self.id))
         else:
             transaction.on_commit(lambda: sync_to_mailchimp.delay(self.id))
+            transaction.on_commit(lambda: sync_to_mailjet.delay(self.id))
             transaction.on_commit(lambda: geocode_profile.delay(self.id))
         super(Profile, self).save(*args, **kwargs)
 
