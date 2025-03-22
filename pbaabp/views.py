@@ -77,5 +77,6 @@ def newsletter_bridge(request):
     if errors:
         raise SuspiciousOperation(f"Errors: {','.join(errors)}")
 
-    add_mailjet_subscriber.delay(email, name.split()[0], name.split()[-1], name)
+    first_name, _, last_name = name.partition(" ")
+    add_mailjet_subscriber.delay(email, first_name, last_name, name)
     return HttpResponse("OK")
