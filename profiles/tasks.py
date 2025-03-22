@@ -93,6 +93,14 @@ def add_mailjet_subscriber(email, first_name, last_name, name):
 
 
 @shared_task
+def unsubscribe_mailjet_email(list_id, email):
+    if int(list_id) == int(settings.MAILJET_CONTACT_LIST_ID):
+        from profiles.models import Profile
+
+        Profile.objects.filter(user__email=email).update(newsletter_opt_in=False)
+
+
+@shared_task
 def sync_to_mailchimp(profile_id):
     from profiles.models import Profile
 

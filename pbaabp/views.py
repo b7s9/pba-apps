@@ -1,7 +1,10 @@
+import base64
+import json
+
 import sesame.utils
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.core.exceptions import SuspiciousOperation
+from django.core.exceptions import PermissionDenied, SuspiciousOperation
 from django.http import Http404, HttpResponse
 from django.shortcuts import render
 from django.urls import reverse
@@ -10,7 +13,7 @@ from django.views.generic import FormView
 
 from pbaabp.email import send_email_message
 from pbaabp.forms import EmailLoginForm
-from profiles.tasks import add_mailjet_subscriber
+from profiles.tasks import add_mailjet_subscriber, unsubscribe_mailjet_email
 
 
 class EmailLoginView(FormView):
@@ -79,4 +82,23 @@ def newsletter_bridge(request):
 
     first_name, _, last_name = name.partition(" ")
     add_mailjet_subscriber.delay(email, first_name, last_name, name)
+    return HttpResponse("OK")
+
+
+@csrf_exempt
+def mailjet_unsubscribe(request):
+    auth_header = request.META.get("HTTP_AUTHORIZATION")
+    if auth_header is not None and auth_header.startswith("Basic "):
+        encoded_credentials = auth_header[6:]
+        decoded_credentials = base64.b64decode(encoded_credentials).decode("utf-8").split(":")
+        username, password = decoded_credentials[0], decoded_credentials[1]
+        if username != "mailjet" or password != settings.MAILJET_WEBHOOK_SECRET:
+            raise PermissionDenied()
+    else:
+        raise PermissionDenied()
+
+    data = json.loads(request.body)
+    if data.get("mj_list_id") and data.get("email"):
+        unsubscribe_mailjet_email.delay(data.get("mj_list_id"), data.get("email"))
+
     return HttpResponse("OK")
