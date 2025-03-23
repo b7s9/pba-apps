@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
+{% load wagtailuserbar %}
+
 {% load wagtailcore_tags %}
 
 {% block content %}
+  {% wagtailuserbar %}
   {{ page.body|richtext }}
 {% endblock %}
