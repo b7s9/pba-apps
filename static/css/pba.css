@@ -16,7 +16,7 @@ blockquote {
   width: 100%;
   margin: 0 auto;
   text-align: center;
-  background-color: #70bf44;
+  background-color: rgb(131, 189, 86);
   height: 6em;
   font-family: "Big Shoulders Display";
   position: sticky;
@@ -50,7 +50,6 @@ blockquote {
 }
 
 .nav-header ul {
-  margin: 0;
   padding: 0;
   display: inline-block;
 }
@@ -71,19 +70,16 @@ blockquote {
 
 .nav-header a {
   color: white;
-  text-shadow:
-    -1px -1px 0 #555,
-    1px -1px 0 #555,
-    -1px 1px 0 #555,
-    1px 1px 0 #555;
   text-decoration: none;
-  font-weight: 700;
-  font-size: 1.75em;
+  font-weight: 600;
+  font-size: 1.65em;
+  text-transform: uppercase;
 }
 
 .nav-header li ul {
   display: none;
   position: absolute;
+  top: 100%;
   z-index: 1;
   margin-left: -.75em;
   background-color: #d8107d;
@@ -95,7 +91,7 @@ blockquote {
 }
 
 .nav-header li ul li:first-child {
-  margin-top: .75em;
+  padding-top: .75em;
 }
 
 .nav-header li:hover {
@@ -105,25 +101,22 @@ blockquote {
 .nav-header li:has(ul)::after {
   content: '⌄';
   position: relative;
-  bottom: .4em;
+  bottom: .6em;
   color: white;
-  text-shadow:
-    -1px -1px 0 #555,
-    1px -1px 0 #555,
-    -1px 1px 0 #555,
-    1px 1px 0 #555;
 }
 
 .nav-header li:hover ul {
   display: block;
+  background-color: rgb(131, 189, 86);
 }
 
 .nav-header li ul:hover {
   display: block;
+  background-color: rgb(131, 189, 86);
 }
 
 .nav-header li ul li:hover {
-  background-color: #70bf44;
+  background-color: #d8107d;
 }
 
 .nav-header li:has(a.current_branch) {
@@ -131,7 +124,7 @@ blockquote {
 }
 
 .nav-header li ul li:has(a.current_item) {
-  background-color: #70bf44;
+  background-color: #d8107d;
 }
 
 .mobile-nav-header {
@@ -140,6 +133,7 @@ blockquote {
   padding: 0;
   position: sticky;
   position: -webkit-sticky;
+  text-transform: uppercase;
   z-index: 100;
 }
 
@@ -183,13 +177,8 @@ blockquote {
   .mobile-nav-header a {
     color: white;
     text-decoration: none;
-    font-size: 1.75em;
-    font-weight: 700;
-    text-shadow:
-      -1px -1px 0 #555,
-      1px -1px 0 #555,
-      -1px 1px 0 #555,
-      1px 1px 0 #555;
+    font-size: 1.65em;
+    font-weight: 600;
     display: block;
   }
 
@@ -227,7 +216,7 @@ blockquote {
     width: 10em;
     padding: .25em;
     text-align: left;
-    background-color: #70bf44;
+    background-color: rgb(131, 189, 86);
     padding-left: 1em;
     padding-right: 1em;
   }
@@ -302,11 +291,6 @@ box-icon {
   background-color: black;
   color: white;
   margin-top: auto;
-  text-shadow:
-    -1px -1px 0 #555,
-    1px -1px 0 #555,
-    -1px 1px 0 #555,
-    1px 1px 0 #555;
 }
 
 .footer .footer-row {
@@ -323,7 +307,7 @@ box-icon {
 
 .footer .copyright {
   padding: 1em;
-  background-color: #70bf44;
+  background-color: rgb(131, 189, 86);
 }
 
 /* Forms */
@@ -472,7 +456,7 @@ form.application-form .form-errors {
 /* CSS */
 .submit-button, button {
   appearance: button;
-  background-color: #70bf44;
+  background-color: rgb(131, 189, 86);
   background-image: none;
   border: 1px solid #555;
   border-radius: 4px;
@@ -483,24 +467,18 @@ form.application-form .form-errors {
   display: inline-block;
   font-size: 2em;
   font-family: "Big Shoulders Display";
-  font-weight: bold;
+  font-weight: 600;
   line-height: 20px;
   margin: 0 5px 10px 0;
   overflow: visible;
   padding: 12px 40px;
   text-align: center;
   text-decoration: none;
-  text-transform: none;
   touch-action: manipulation;
   user-select: none;
   -webkit-user-select: none;
   vertical-align: middle;
   white-space: nowrap;
-  text-shadow:
-    -1px -1px 0 #555,
-    1px -1px 0 #555,
-    -1px 1px 0 #555,
-    1px 1px 0 #555;
 }
 
 .submit-button:focus, button:focus {
@@ -573,7 +551,7 @@ body {
   }
 }
 .table-container th {
-    background-color: #70bf44;
+    background-color: rgb(131, 189, 86);
     color: #ffffff;
 }
 .table-container th,
@@ -587,7 +565,7 @@ body {
     background-color: #f3f3f3;
 }
 .table-container tbody tr:last-of-type {
-    border-bottom: 2px solid #70bf44;
+    border-bottom: 2px solid rgb(131, 189, 86);
 }
 .table-container .smol-button {
   display: inline-block;
@@ -715,7 +693,7 @@ body {
 }
 
 .progress-bar-fill {
-  background-color: #70bf44;
+  background-color: rgb(131, 189, 86);
   height: 100%;
   border-radius: 1em;
 }
@@ -981,7 +959,7 @@ Vertical: htTop, htMiddle, htBottom
   }
 }
 .block-table th {
-    background-color: #70bf44;
+    background-color: rgb(131, 189, 86);
     color: #ffffff;
 }
 .block-table th,
@@ -995,7 +973,7 @@ Vertical: htTop, htMiddle, htBottom
     background-color: #f3f3f3;
 }
 .block-table tbody tr:last-of-type {
-    border-bottom: 2px solid #70bf44;
+    border-bottom: 2px solid rgb(131, 189, 86);
 }
 
 .project-application code {
