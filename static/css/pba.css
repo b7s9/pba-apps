@@ -71,8 +71,8 @@ blockquote {
 .nav-header a {
   color: white;
   text-decoration: none;
-  font-weight: 600;
-  font-size: 1.65em;
+  font-weight: 800;
+  font-size: 1.55em;
   text-transform: uppercase;
 }
 
@@ -113,6 +113,10 @@ blockquote {
 .nav-header li ul:hover {
   display: block;
   background-color: rgb(131, 189, 86);
+}
+
+.nav-header li ul li {
+    font-weight: 700;
 }
 
 .nav-header li ul li:hover {
@@ -178,7 +182,7 @@ blockquote {
     color: white;
     text-decoration: none;
     font-size: 1.65em;
-    font-weight: 600;
+    font-weight: 800;
     display: block;
   }
 
@@ -210,6 +214,10 @@ blockquote {
 
   .mobile-nav-header ul li ul li {
     width: 9em;
+  }
+
+  .mobile-nav-header ul li ul li a {
+    font-weight: 700;
   }
 
   .mobile-nav-header li {
@@ -467,7 +475,7 @@ form.application-form .form-errors {
   display: inline-block;
   font-size: 2em;
   font-family: "Big Shoulders Display";
-  font-weight: 600;
+  font-weight: 700;
   line-height: 20px;
   margin: 0 5px 10px 0;
   overflow: visible;
