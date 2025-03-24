@@ -9,6 +9,7 @@ from django.urls import reverse
 from mailchimp3 import MailChimp, helpers
 
 from pbaabp.email import send_email_message
+from pbaabp.integrations.mailjet import Mailjet
 from profiles.forms import BaseProfileSignupForm
 
 BASE_MESSAGE = """
@@ -84,7 +85,7 @@ Thank you for being a part of the action!
 
 
 @shared_task
-def subscribe_to_newsletter(email, tags=None):
+def subscribe_to_newsletter(email, first_name=None, last_name=None, tags=None):
     if tags is None:
         tags = []
     mailchimp = MailChimp(mc_api=settings.MAILCHIMP_API_KEY)
@@ -101,3 +102,20 @@ def subscribe_to_newsletter(email, tags=None):
         helpers.get_subscriber_hash(email),
         data={"tags": [{"name": tag, "status": "active"} for tag in tags]},
     )
+
+    name = ""
+    if first_name:
+        name += first_name
+    if last_name:
+        name += f" {last_name}"
+    mailjet = Mailjet()
+    mailjet.fetch_contact(email)
+    mailjet.update_contact_data(
+        email,
+        {
+            "first_name": first_name,
+            "last_name": last_name,
+            "name": name,
+        },
+    )
+    mailjet.add_contact_to_list(email, subscribed=True)
