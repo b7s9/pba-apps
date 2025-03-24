@@ -954,12 +954,10 @@ body {
 
 .block-card-img {
   width:  100%;
-  padding-top: 2.5em;
 }
 
 @media only screen and (max-width: 600px) {
   .block-card-img {
-    padding-top: unset;
   }
 }
 
