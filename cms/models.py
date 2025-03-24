@@ -45,6 +45,7 @@ class CardBlock(StructBlock):
 
 
 _features = [
+    "anchor-identifier",
     "h2",
     "h3",
     "h4",

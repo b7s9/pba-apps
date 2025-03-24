@@ -37,4 +37,5 @@ shapely
 wagtail
 wagtail-localize
 wagtail-localize-git
+wagtailset
 whitenoise

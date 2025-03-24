@@ -82,6 +82,7 @@ INSTALLED_APPS = [
     "wagtail.images",
     "wagtail.search",
     "wagtail.admin",
+    "wagtailset.draftail_anchors",
     "wagtail.contrib.table_block",
     "wagtail",
     "modelcluster",
