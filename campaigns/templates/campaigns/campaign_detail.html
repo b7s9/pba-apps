@@ -11,30 +11,34 @@
 
 {% block content %}
 <div class="campaign-header">
-    <div class="campaign-overlay"></div>
-    <div class="campaign-header-img" style="{% if campaign.cover %}background: url({{ campaign.cover.url }}); {% endif %}background-repeat: no-repeat; background-size: cover; background-position: center;"></div>
-    <div class="campaign-title">
-      <h1>{{ campaign.title }}</h1>
-    </div>
+  <div class="campaign-overlay"></div>
+  <div class="campaign-header-img" style="{% if campaign.cover %}background: url({{ campaign.cover.url }}); {% endif %}background-repeat: no-repeat; background-size: cover; background-position: center;"></div>
+  <div class="campaign-title">
+    <h1>{{ campaign.title }}</h1>
+  </div>
 </div>
+
 <div class="campaign-container">
+
 {% if campaign.has_actions and not campaign.status == "completed" %}
   <div class="button-holder">
     <a href="#action" class="cta-button submit-button" >{% if campaign.call_to_action %}{{ campaign.call_to_action }}{% else %}{% translate "Take Action Now!" %}{% endif %}</a>
   </div>
 {% endif %}
+
 {% if campaign.status == "completed" %}
-<p style="font-size: smaller; color: grey; width: 100%; text-align: center;">{% translate "This campaign has been completed." %}</p>
+  <p style="font-size: smaller; color: grey; width: 100%; text-align: center;">{% translate "This campaign has been completed." %}</p>
 {% endif %}
 
 {{ campaign.content_rendered|safe }}
 
 {% if campaign.has_actions and not campaign.status == "completed" %}
-<span id="action"></span>
-{% if campaign.call_to_action_header %}
-<h2>{% if campaign.call_to_action %}{{ campaign.call_to_action }}{% else %}{% translate "Take Action Now!" %}{% endif %}</h2>
+  <span id="action"></span>
+  {% if campaign.call_to_action_header %}
+  <h2>{% if campaign.call_to_action %}{{ campaign.call_to_action }}{% else %}{% translate "Take Action Now!" %}{% endif %}</h2>
+  {% endif %}
 {% endif %}
-{% endif %}
+
 {% if campaign.donation_action %}
   <div id="donation" class="button-holder">
     <h2>{% translate "Make a donation" %}</h2>
@@ -57,6 +61,7 @@
     {% endif %}
   </div>
 {% endif %}
+
 {% if campaign.subscription_action and not campaign.status == "completed" %}
   {% with request.user.djstripe_customers.first as customer %}
   {% if customer.active_subscriptions.all %}
@@ -72,6 +77,7 @@
   {% endif %}
   {% endwith %}
 {% endif %}
+
 {% if campaign.events.all and not campaign.status == "completed" %}
   <h3>{% translate "Attend an event" %}</h3>
   <div id="events">
@@ -82,6 +88,7 @@
     {% endfor %}
   </div>
 {% endif %}
+
 {% if campaign.petitions.all and not campaign.status == "completed" %}
   <div id="petitions">
   {% for petition in campaign.petitions.all %}
@@ -115,7 +122,9 @@
   {% endfor %}
   </div>
 {% endif %}
+
 </div>
+
 <script>
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
