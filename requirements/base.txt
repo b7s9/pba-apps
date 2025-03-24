@@ -364,7 +364,7 @@ vine==5.1.0
     #   amqp
     #   celery
     #   kombu
-wagtail==6.1.3
+wagtail==6.4.1
     # via
     #   -r base.in
     #   wagtail-localize

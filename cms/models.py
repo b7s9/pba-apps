@@ -1,7 +1,14 @@
 from wagtail.admin.panels import FieldPanel
-from wagtail.blocks import ChoiceBlock, RawHTMLBlock, RichTextBlock, StructBlock
+from wagtail.blocks import (
+    CharBlock,
+    ChoiceBlock,
+    RawHTMLBlock,
+    RichTextBlock,
+    StructBlock,
+)
 from wagtail.contrib.table_block.blocks import TableBlock
 from wagtail.fields import RichTextField, StreamField
+from wagtail.images.blocks import ImageBlock
 from wagtail.models import Page
 
 
@@ -18,6 +25,23 @@ class AlignedParagraphBlock(StructBlock):
 
     class Meta:
         template = "blocks/aligned_paragraph.html"
+
+
+class CardBlock(StructBlock):
+    """
+    A card with a header, text, and image
+    """
+
+    image = ImageBlock()
+    image_side = ChoiceBlock(
+        choices=[("left", "Left"), ("right", "Right")],
+        default="left",
+    )
+    header = CharBlock(required=False)
+    text = RichTextBlock()
+
+    class Meta:
+        template = "blocks/card.html"
 
 
 _features = [
@@ -64,6 +88,7 @@ table_options = {
 class CmsStreamPage(Page):
     body = StreamField(
         [
+            ("card", CardBlock(features=_features)),
             ("paragraph", AlignedParagraphBlock(features=_features)),
             ("html", RawHTMLBlock()),
             ("table", TableBlock(table_options=table_options)),
