@@ -14,9 +14,11 @@
     <link href="{% static 'fontawesome/css/solid.css' %}" rel="stylesheet" />
     <link href="{% static 'fontawesome/css/regular.css' %}" rel="stylesheet" />
 
-    {% block title %}
-    <title>{% translate "Philly Bike Action!" %}</title>
-    {% endblock %}
+    <title>
+      {% block title %}
+        {% translate "Philly Bike Action!" %}
+      {% endblock %}
+    </title>
 
     <script defer data-domain="apps.bikeaction.org" src="https://plausible.io/js/script.js"></script>
 

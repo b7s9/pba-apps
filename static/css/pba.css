@@ -401,6 +401,10 @@ form #id_donation_tier > div {
   padding-left: 1em;
 }
 
+.project-application code {
+    white-space: pre-wrap;
+}
+
 form.application-form label {
   width: 100%;
   float: unset;
@@ -533,6 +537,7 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  line-height: 125%;
 }
 
 .table-container {
@@ -916,10 +921,6 @@ body {
   text-align: center;
 }
 
-
-Horizontal: htLeft, htCenter, htRight, htJustify
-Vertical: htTop, htMiddle, htBottom
-
 .block-table .htLeft {
   text-align: left;
 }
@@ -979,6 +980,13 @@ Vertical: htTop, htMiddle, htBottom
     border-bottom: 2px solid rgb(131, 189, 86);
 }
 
-.project-application code {
-    white-space: pre-wrap;
+.cms-content {
+  margin: auto;
+  max-width: 40em;
+  padding-left: 1em;
+  padding-right: 1em;
+}
+
+.cms-title > h1:first-of-type {
+  margin-top: 1em;
 }
