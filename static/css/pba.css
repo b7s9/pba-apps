@@ -10,6 +10,10 @@ blockquote {
   border-radius: .5em;
   padding-left: .5em;
   padding-right: .5em;
+  margin-block-start: 0;
+  margin-block-end: .5em;
+  margin-inline-start: .5em;
+  margin-inline-end: .5em;
 }
 
 .header {
@@ -1037,6 +1041,13 @@ body {
   padding-right: 1em;
 }
 
+.cms-content blockquote {
+  padding: 1em;
+}
+
 .cms-title > h1:first-of-type {
   margin-top: 1em;
+}
+
+.cms-content h2[id]:hover::after {
 }
