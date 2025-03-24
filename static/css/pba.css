@@ -188,8 +188,8 @@ blockquote {
 
   #menu-icon {
     position: absolute;
-    top: 1em;
-    right: 1em;
+    top: .75em;
+    right: .75em;
   }
 
   #menu-icon ~ ul {
@@ -256,18 +256,6 @@ blockquote {
   text-align: center;
 }
 
-box-icon {
-  position: relative;
-  top: .25em;
-}
-
-.messages box-icon {
-  position:relative;
-  float: left;
-  display: block;
-  top: -.25em;
-}
-
 .messages .alert {
   margin: 0 auto;
   padding: .5em;
@@ -299,6 +287,13 @@ box-icon {
   background-color: black;
   color: white;
   margin-top: auto;
+}
+
+.social-icon i {
+  color: white;
+  margin-left: .25em;
+  margin-right: .25em;
+  font-size: 2em;
 }
 
 .footer .footer-row {
