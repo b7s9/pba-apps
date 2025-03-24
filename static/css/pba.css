@@ -293,6 +293,14 @@ blockquote {
   margin-top: 1.5em;
 }
 
+.footer input[type=text],input[type=email] {
+  font-size: 1em;
+  font-family: Ubuntu;
+  margin: auto;
+  width: 100%;
+  padding: .25em;
+}
+
 .social-icon i {
   color: black;
   background-color: white;
@@ -312,7 +320,8 @@ blockquote {
 
 .footer .footer-row .footer-column {
   margin: 1em;
-  min-width: 10em;
+  min-width: 14em;
+  max-width: 18em;
   width: 25%;
 }
 
