@@ -334,7 +334,7 @@ blockquote {
   background-color: white;
   margin-left: .25em;
   margin-right: .25em;
-  font-size: 2em;
+  font-size: 1.6em;
   padding: .3em;
   border-radius: .2em;
 }
@@ -352,6 +352,14 @@ blockquote {
   width: 25%;
   align-content: center;
   text-align: center;
+}
+
+.footer form {
+  padding-bottom: 0em;
+}
+
+.footer .button-holder {
+  padding-bottom: 0em;
 }
 
 .footer-column {
