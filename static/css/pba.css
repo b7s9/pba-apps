@@ -158,6 +158,7 @@ blockquote {
   position: sticky;
   position: -webkit-sticky;
   text-transform: uppercase;
+  line-height: 1;
   z-index: 100;
 }
 
@@ -233,7 +234,7 @@ blockquote {
   }
 
   .mobile-nav-header ul li ul li {
-    width: 9em;
+    width: 14em;
   }
 
   .mobile-nav-header ul li ul li a {
@@ -241,11 +242,12 @@ blockquote {
   }
 
   .mobile-nav-header li {
-    width: 10em;
-    padding: .25em;
+    width: 14em;
+    padding-top: .5em;
+    padding-bottom: .5em;
     text-align: left;
     background-color: rgb(131, 189, 86);
-    padding-left: 1em;
+    padding-left: .5em;
     padding-right: 1em;
   }
 
@@ -349,11 +351,16 @@ blockquote {
 }
 
 .footer .footer-row .footer-column {
-  margin: 1em;
   min-width: 14em;
   max-width: 18em;
   width: 25%;
   align-content: center;
+  text-align: center;
+}
+
+.footer-column {
+  margin-left: 2em;
+  margin-right: 2em;
 }
 
 .footer .copyright {
@@ -560,21 +567,18 @@ form.application-form .form-errors {
 
 @media (min-width: 768px) {
   .submit-button, button {
-    padding: 12px 50px;
   }
 }
 
 @media screen and (max-width: 40rem) {
   .submit-button, button {
     font-size: 1.5em;
-    padding: 10px 30px;
   }
 }
 
 @media screen and (max-width: 20rem) {
   .submit-button, button {
     font-size: 1.25em;
-    padding: 7px 25px;
   }
 }
 
