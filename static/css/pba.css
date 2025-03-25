@@ -633,7 +633,7 @@ body {
 @media screen and (max-width: 40rem) {
   .table-container table {
     min-width: 80vw;
-    font-size: 3vw;
+    font-size: 2.5vw;
   }
 }
 .table-container th {
