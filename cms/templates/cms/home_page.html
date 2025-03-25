@@ -2,6 +2,7 @@
 {% load wagtailuserbar %}
 
 {% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
 
 {% block body_class %}cms-stream-page{% endblock %}
 
@@ -9,14 +10,20 @@
   {{ page.title }}
 {% endblock %}
 
+{% block content_container %}
+<div class="content-container homepage-container">
 {% block content %}
   {% wagtailuserbar %}
-  <div class="cms-content">
-    <div class="cms-title">
-      <h1>{{ page.title }}</h1>
-    </div>
-    <div class="cms-body">
-      {% include_block page.body %}
+  <div class="homepage-content">
+    <div class="homepage-body-container">
+      {% image page.body_background original as body_background %}
+      <div class="homepage-body-background-overlay"></div>
+      <img class="homepage-body-background" src="{{body_background.url}}">
+      <div class="homepage-body">
+        {% include_block page.body %}
+      </div>
     </div>
   </div>
+{% endblock %}
+</div>
 {% endblock %}
