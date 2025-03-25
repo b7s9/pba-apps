@@ -135,6 +135,7 @@ MIDDLEWARE = [
     "django_htmx.middleware.HtmxMiddleware",
     "wagtail.contrib.redirects.middleware.RedirectMiddleware",
     "pbaabp.middleware.TimezoneMiddleware",
+    "pbaabp.middleware.FooterNewsletterSignupFormMiddleware",
 ]
 
 ROOT_URLCONF = "pbaabp.urls"
@@ -354,6 +355,9 @@ SESAME_MAX_AGE = 7 * 24 * 3600
 # django-recaptcha
 if DEBUG:
     SILENCED_SYSTEM_CHECKS = ["django_recaptcha.recaptcha_test_key_error"]
+    # https://developers.google.com/recaptcha/docs/faq#id-like-to-run-automated-tests-with-recaptcha.-what-should-i-do
+    RECAPTCHA_PUBLIC_KEY = "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
+    RECAPTCHA_PRIVATE_KEY = "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe"
 else:
     RECAPTCHA_PUBLIC_KEY = env("RECAPTCHA_PUBLIC_KEY", default=None)
     RECAPTCHA_PRIVATE_KEY = env("RECAPTCHA_PRIVATE_KEY", default=None)

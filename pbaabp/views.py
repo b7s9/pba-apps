@@ -12,7 +12,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import FormView
 
 from pbaabp.email import send_email_message
-from pbaabp.forms import EmailLoginForm
+from pbaabp.forms import EmailLoginForm, NewsletterSignupForm
+from pbaabp.tasks import subscribe_to_newsletter
 from profiles.tasks import add_mailjet_subscriber, unsubscribe_mailjet_email
 
 
@@ -102,3 +103,24 @@ def mailjet_unsubscribe(request):
         unsubscribe_mailjet_email.delay(data.get("mj_list_id"), data.get("email"))
 
     return HttpResponse("OK")
+
+
+def _newsletter_signup_partial(request):
+    if request.method == "POST":
+        form = NewsletterSignupForm(request.POST)
+        if form.is_valid():
+            first_name = form.cleaned_data["footer_newsletter_signup_first_name"]
+            last_name = form.cleaned_data["footer_newsletter_signup_last_name"]
+            email = form.cleaned_data["footer_newsletter_signup_email"]
+
+            subscribe_to_newsletter.delay(email, first_name, last_name)
+
+            return render(
+                request,
+                "_newsletter_signup_success_partial.html",
+                {"first_name": form.cleaned_data["footer_newsletter_signup_first_name"]},
+            )
+        else:
+            return render(request, "_newsletter_signup_partial.html", {"form": form})
+
+    return render(request, "_newsletter_signup_partial.html", {"form": form})
