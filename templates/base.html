@@ -21,6 +21,7 @@
     </title>
 
     <script defer data-domain="apps.bikeaction.org" src="https://plausible.io/js/script.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
     {% block extra_head %}
     {% endblock %}
@@ -30,50 +31,54 @@
   </head>
   <body>
     <div class="wrapper">
-    {% block header %}
-    <div class="header">
-      <div class="img-header">
-        <a href="https://bikeaction.org/" aria-label="{% translate "Philly Bike Action! Home" %}"><img alt="{% translate "Philly Bike Action!" %}" src="{% static 'images/pba-letters.svg' %}"></img></a>
-      </div>
-      <div class="nav-header">
-        {% if LANGUAGE_CODE == "es" %}
-        {% sitetree_menu from "header-es" include "trunk,topmenu" %}
-        {% else %}
-        {% sitetree_menu from "header" include "trunk,topmenu" %}
-        {% endif %}
-      </div>
-      <div class="mobile-nav-header">
-        <a href="javascript:void(0);" aria-label="Toggle navigation" onclick="toggleNav()">
-          <i id="menu-icon" class="fa-solid fa-bars"></i>
-        </a>
-        <div id="mobileNavTree">
+
+      {% block header %}
+      <div class="header">
+        <div class="img-header">
+          <a href="https://bikeaction.org/" aria-label="{% translate "Philly Bike Action! Home" %}"><img alt="{% translate "Philly Bike Action!" %}" src="{% static 'images/pba-letters.svg' %}"></img></a>
+        </div>
+        <div class="nav-header">
           {% if LANGUAGE_CODE == "es" %}
           {% sitetree_menu from "header-es" include "trunk,topmenu" %}
           {% else %}
           {% sitetree_menu from "header" include "trunk,topmenu" %}
           {% endif %}
         </div>
-      </div>
-    </div>
-    {% endblock %}
-    <div class="messages">
-      {% if messages %}
-      <div class="messages">
-        {% for message in messages %}
-        <div {% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>
-          <i class="fa-regular fa-circle-xmark icon-remove alert-close" onclick="closeAlert(this)"></i>
-          <span>{{ message }}</span>
+        <div class="mobile-nav-header">
+          <a href="javascript:void(0);" aria-label="Toggle navigation" onclick="toggleNav()">
+            <i id="menu-icon" class="fa-solid fa-bars"></i>
+          </a>
+          <div id="mobileNavTree">
+            {% if LANGUAGE_CODE == "es" %}
+            {% sitetree_menu from "header-es" include "trunk,topmenu" %}
+            {% else %}
+            {% sitetree_menu from "header" include "trunk,topmenu" %}
+            {% endif %}
+          </div>
         </div>
-        {% endfor %}
       </div>
-      {% endif %}
-    </div>
-    <div class="content-container">
-    {% block content %}
-    {% endblock %}
-    </div>
-    <div class="footer">
-    {% block footer %}
+      {% endblock %}
+
+      <div class="messages">
+        {% if messages %}
+        <div class="messages">
+          {% for message in messages %}
+          <div {% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>
+            <i class="fa-regular fa-circle-xmark icon-remove alert-close" onclick="closeAlert(this)"></i>
+            <span>{{ message }}</span>
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+      </div>
+
+      <div class="content-container">
+      {% block content %}
+      {% endblock %}
+      </div>
+
+      <div class="footer">
+      {% block footer %}
         <div class="footer-row">
           <div class="footer-column">
             <img width="90%" style="padding: 1em;" alt="{% translate "Philly Bike Action!" %}" src="{% static 'images/brand/PBA_pink_alpha.png' %}">
@@ -84,27 +89,11 @@
               </a>
             </span>
           </div>
-          <!--
           <div class="footer-column">
-            <h3>Subscribe to our Newsletter</h3>
-            <form>
-              <div class="form-fields">
-                <p>
-                  <input type="text" name="first_name" maxlength="64" placeholder="First name" required="" id="id_first_name">
-                </p>
-                <p>
-                  <input type="text" name="last_name" maxlength="64" placeholder="Last name" required="" id="id_last_name">
-                </p>
-                <p>
-                  <input type="email" name="email" maxlength="254" placeholder="Email" required="" id="id_email">
-                </p>
-              </div>
-              <div class="button-holder">
-                <input class="submit-button" type="submit" value="Submit">
-              </div>
-            </form>
+            {% with request.newsletter_form  as form %}
+            {% include '_newsletter_signup_partial.html' %}
+            {% endwith %}
           </div>
-          -->
           <div class="footer-column">
             <h3>{% translate "Find us on Social Media" %}</h3>
               <a class="social-icon" aria-label="{% translate "@phlbikeaction on instagram" %}" href="https://www.instagram.com/phlbikeaction/">
@@ -124,10 +113,17 @@
               <a style="color: white" href="{% url "privacy" %}">Privacy and Data Statement</a><br>
               <a style="color: white" href="{% url "conduct" %}">Code of Conduct</a>
           </div>
+          <div class="footer-row gcaptcha-disclaimer">
+            <span>
+              This site is protected by reCAPTCHA and the Google
+              <a href="https://policies.google.com/privacy">Privacy Policy</a> and
+              <a href="https://policies.google.com/terms">Terms of Service</a> apply.
+            </span>
+          </div>
         </div>
         <div class="copyright"><span><i class="fa-regular fa-copyright"></i> {% translate "2025 Philly Bike Action. All rights reserved." %}</span></div>
-    {% endblock %}
-    </div>
+      {% endblock %}
+      </div>
     </div>
     <script src="{% static 'js/htmx.min.js' %}" defer></script>
     {% django_htmx_script %}

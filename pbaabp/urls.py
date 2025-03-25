@@ -7,7 +7,12 @@ from wagtail import urls as wagtail_urls
 from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.documents import urls as wagtaildocs_urls
 
-from pbaabp.views import EmailLoginView, mailjet_unsubscribe, newsletter_bridge
+from pbaabp.views import (
+    EmailLoginView,
+    _newsletter_signup_partial,
+    mailjet_unsubscribe,
+    newsletter_bridge,
+)
 
 urlpatterns = [
     path("accounts/", include("allauth.urls")),
@@ -22,6 +27,11 @@ urlpatterns = [
     path("maillink/", include("maillinks.urls")),
     path("rcos/", include("facets.urls")),
     path("projects/", include("projects.urls")),
+    path(
+        "_partials/_newsletter_signup_partial/",
+        _newsletter_signup_partial,
+        name="newsletter_signup_partial",
+    ),
     path("", include("pages.urls")),
     path("admin/", admin.site.urls),
     path("cms/", include(wagtailadmin_urls)),

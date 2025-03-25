@@ -1,0 +1,60 @@
+<div id="newsletterDiv" hx-target="this" hx-swap="innerHtml swap:0.5s">
+  <h3>Subscribe to our Monthly Newsletter</h3>
+
+  <form name="footerNewsletterForm" id="footerNewsletterForm" class="fade-me-out" action="javascript:void(0);">
+    {% csrf_token %}
+
+    {{ form.non_field_errors }}
+
+    <div>
+      <script>
+        function announce(){
+            const event = new Event('verified');
+            const elem = document.querySelector("#footerNewsletterSubmit");
+            elem.dispatchEvent(event);
+        }
+        function submitForm () {
+            const button = document.getElementById("footerNewsletterSubmit");
+            button.disabled = true;
+            const form = document.getElementById("footerNewsletterForm");
+            if (form.checkValidity()) {
+                const widgetId = grecaptcha.render('newsletter-form-recaptcha', {
+                    'sitekey' : '{{ request.google_recaptcha_site_key }}',
+                    'callback' : announce,
+                    'size' : "invisible"
+                });
+              grecaptcha.reset(widgetId);
+              grecaptcha.execute(widgetId);
+            } else {
+              button.disabled = false;
+            }
+        }
+      </script>
+    </div>
+
+    {% for field in form %}
+    <p>
+      {{ field }}
+      {{ field.errors }}
+    </p>
+    {% endfor %}
+
+    <div class="button-holder">
+      <div
+        id="newsletter-form-recaptcha"
+      ></div>
+      <button
+        type="post"
+        id="footerNewsletterSubmit"
+        hx-post="{% url 'newsletter_signup_partial' %}"
+        hx-trigger="verified"
+        hx-indicator="#spinner"
+        hx-on:click="submitForm()"
+        class="button submit-button"
+      >
+          <span="spinner-text">Submit</span>
+      </button>
+    </div>
+    <br>
+  </form>
+</div>
