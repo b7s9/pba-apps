@@ -8,7 +8,7 @@ from wagtail.blocks import (
     StructBlock,
 )
 from wagtail.contrib.table_block.blocks import TableBlock
-from wagtail.fields import StreamField, RichTextField
+from wagtail.fields import RichTextField, StreamField
 from wagtail.images.blocks import ImageBlock
 from wagtail.models import Page
 from wagtail_link_block.blocks import LinkBlock
