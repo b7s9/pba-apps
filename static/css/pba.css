@@ -376,6 +376,10 @@ blockquote {
   margin-right: 1rem;
 }
 
+.footer form p+p {
+  margin-top: .5em;
+}
+
 .footer button {
   font-size: 2rem;
   padding: 15px 20px;
@@ -438,26 +442,35 @@ form {
   color: grey;
 }
 form label {
-  width: 10em;
+  width: 100%;
   margin-bottom: .25em;
   margin-right: 1em;
-  display: block;
-  float: left;
+  display: inline-block;
+  text-align: left;
 }
 form textarea {
-  max-width: 20em;
-  width: 90%;
+    font-size: 1em;
+  border: 1px solid black;
+  border-radius: .5em;
+  padding: .5em;
+  width: 100%;
 }
 form label[for=id_captcha] {
   display: none;
 }
+form input {
+  font-size: 1em;
+  border: 1px solid black;
+  border-radius: .5em;
+  padding: .5em;
+  width: 100%;
+}
 form .helptext {
-  max-width: 24em;
   padding-top: .5em;
   display: block;
   font-size: smaller;
   color: #404040;
-  clear: both;
+  text-align: left;
 }
 form .errorlist {
   list-style: none;
@@ -470,9 +483,10 @@ form p {
   margin-block-end: 0em;
   margin-inline-start: 0px;
   margin-inline-end: 0px;
+  text-align: center;
 }
 form p + p {
-  padding-top: .5em;
+  margin-top: 1em;
 }
 form ul {
   font-size: smaller;
@@ -483,16 +497,22 @@ form .g-recaptcha:not(button) {
   padding-bottom: 0em;
 }
 form select {
-  max-width: 11em;
+  margin-left: 1em;
 }
-form input[type=checkbox] {
-  margin-right: 10em;
-}
-
-form #id_donation_tier > div {
+form input[type=checkbox], select {
+  margin-top: .5em;
+  width: unset;
   display: block;
-  clear: both;
-  padding-left: 1em;
+  text-align: left;
+  -ms-transform: scale(1.25); /* IE */
+  -moz-transform: scale(1.25); /* FF */
+  -webkit-transform: scale(1.25); /* Safari and Chrome */
+  -o-transform: scale(1.25); /* Opera */
+  transform: scale(1.25);
+}
+input[type=radio] {
+  display: inline-block;
+  width: auto;
 }
 
 .project-application code {
@@ -521,6 +541,9 @@ form.application-form input[type=checkbox] {
 }
 
 form.application-form .prefilled {
+  display: block;
+  text-align: left;
+  padding: .5em;
   background-color: #dddddd;
   padding: .25em;
   border-radius: .25em;
