@@ -159,8 +159,6 @@ blockquote {
   display: none;
   float: right;
   padding: 0;
-  position: sticky;
-  position: -webkit-sticky;
   text-transform: uppercase;
   z-index: 100;
 }
@@ -215,6 +213,8 @@ blockquote {
     position: absolute;
     top: .75em;
     right: .75em;
+    padding: .75em;
+    margin: -.75em;
   }
 
   #menu-icon ~ ul {
@@ -647,6 +647,7 @@ body {
   margin: 0;
   width: 100vw;
   min-height: 100vh;
+  height: fit-content;
   display: flex;
   flex-direction: column;
   line-height: 1.25;
