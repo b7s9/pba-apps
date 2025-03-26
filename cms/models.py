@@ -139,6 +139,14 @@ class NavigationContainerPage(Page):
 
 class HomePage(Page):
 
+    hero_background = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+
     body_background = models.ForeignKey(
         'wagtailimages.Image',
         null=True,
@@ -158,6 +166,7 @@ class HomePage(Page):
     subpage_types = ["NavigationContainerPage", "CmsStreamPage"]
     max_count_per_parent = 1
     content_panels = Page.content_panels + [
-        FieldPanel("body"),
+        FieldPanel('hero_background'),
         FieldPanel('body_background'),
+        FieldPanel("body"),
     ]

@@ -308,7 +308,6 @@ blockquote {
 
 /* Footer */
 .footer {
-  width: 100vw;
   margin: 0 auto;
   text-align: center;
   background-color: black;
@@ -340,7 +339,12 @@ blockquote {
   border-radius: .2em;
 }
 
+.footer .social-icon {
+  text-decoration: none;
+}
+
 .footer .footer-row {
+  padding: 1em;
   display: flex;
   flex-flow: row wrap;
   justify-content: center;
@@ -375,7 +379,7 @@ blockquote {
 
 .footer {
   .gcaptcha-disclaimer {
-    width: 100vw;
+    width: 100%;
     padding-left: 1em;
     padding-right: 1em;
     color: lightgrey;
@@ -537,7 +541,7 @@ form.application-form .form-errors {
 }
 
 /* CSS */
-.submit-button, button {
+.submit-button {
   appearance: button;
   background-color: rgb(131, 189, 86);
   background-image: none;
@@ -564,26 +568,25 @@ form.application-form .form-errors {
   white-space: nowrap;
 }
 
-.submit-button:disabled, .submit-button[disabled],
-button:disabled, .submit-button[disabled] {
+.submit-button:disabled, .submit-button[disabled] {
   background-color: lightgrey;
   box-shadow: none;
 }
 
-.submit-button:focus, button:focus {
+.submit-button:focus {
   text-decoration: none;
 }
 
-.submit-button:focus, button:hover {
+.submit-button:focus {
   text-decoration: none;
 }
 
-.submit-button:focus, button:active {
+.submit-button:focus {
   box-shadow: rgba(0, 0, 0, .125) 0 3px 5px inset;
   outline: 0;
 }
 
-.submit-button:not([disabled]):active, button:not([disabled]):active {
+.submit-button:not([disabled]):active):active {
   box-shadow: #fff 2px 2px 0 0, #555 2px 2px 0 1px;
   transform: translate(2px, 2px);
 }
@@ -593,18 +596,18 @@ button:disabled, .submit-button[disabled] {
 }
 
 @media (min-width: 768px) {
-  .submit-button, button {
+  .submit-button {
   }
 }
 
 @media screen and (max-width: 40rem) {
-  .submit-button, button {
+  .submit-button {
     font-size: 1.5em;
   }
 }
 
 @media screen and (max-width: 20rem) {
-  .submit-button, button {
+  .submit-button {
     font-size: 1.25em;
   }
 }
@@ -996,6 +999,154 @@ body {
 
 /* CMS */
 
+.homepage-button {
+  appearance: button;
+  background-color: rgb(131, 189, 86);
+  background-image: none;
+  border: none;
+  border-radius: 1em;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 2em;
+  font-family: "Big Shoulders Display";
+  font-weight: 700;
+  line-height: 20px;
+  margin: 0 5px 10px 0;
+  overflow: visible;
+  padding: 12px 40px;
+  text-align: center;
+  text-decoration: none;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  vertical-align: middle;
+  white-space: nowrap;
+  transition: all 0.3s ease-in-out;
+}
+
+.homepage-button:hover {
+  transform: scale(1.05);
+}
+
+.homepage-button-pink {
+  background-color: rgba(216, 16, 125, 255);
+}
+
+.homepage-logo-img img {
+  max-width: 20rem;
+  margin-bottom: 4rem;
+}
+
+.homepage-leadout {
+  margin-top: 5rem;
+  margin-bottom: 2rem;
+  text-align: center;
+  align-items: center;
+}
+
+.homepage-leadout-img img {
+  max-width: 8rem;
+}
+
+.homepage-actions-container {
+  width: 100%;
+}
+
+.homepage-leadout-text .txt {
+  font-family: "Big Shoulders Display";
+  font-weight: 900;
+  text-transform: uppercase;
+  font-size: 3rem;
+  max-width: 30rem;
+  margin: auto;
+  margin-top: 3rem;
+}
+
+.homepage-action-subscribe {
+  margin: auto;
+}
+
+.homepage-action-subscribe form {
+  margin: 0;
+  padding: 0;
+}
+
+.homepage-action-join {
+  max-width: 30rem;
+  margin: auto;
+}
+
+.homepage-action-subscribe input {
+  width: 80%;
+  max-width: 15rem;
+  padding: .6rem;
+  border-radius: .5rem;
+  font-size: 1.25rem;
+  margin-bottom: .25rem;
+}
+
+.homepage-action-subscribe button {
+  margin-top: 2rem;
+}
+
+.homepage-actions-container {
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+  justify-content: space-evenly;
+  align-content: center;
+  margin: auto;
+  width: 100%;
+  margin-bottom: 5em;
+  max-width: 55rem;
+}
+
+.homepage-actions-container .action-text {
+  font-family: "Big Shoulders Display";
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: 3.5rem;
+  margin: auto;
+  margin-bottom: 1rem;
+}
+
+.homepage-actions-container .subscribe-text {
+  font-size: 2rem;
+  max-width: 8em;
+  margin-bottom: 2rem;
+}
+
+.button-corral button {
+  margin-top: .25em;
+  margin-left: .25em;
+  margin-right: .25em;
+}
+
+@media only screen and (max-width: 768px) {
+  .homepage-actions-container {
+    grid-template-columns: 1fr;
+    margin: unset;
+    margin-bottom: 4rem;
+  }
+  .homepage-action-join {
+    margin-top: 4rem;
+  }
+  .homepage-logo-img img {
+    display: none;
+  }
+}
+
+.homepage-action-subscribe {
+  text-align: center;
+  align-items: center;
+}
+
+.homepage-action-join {
+  text-align: center;
+  align-items: center;
+}
+
 .homepage-body-container {
   overflow: hidden;
   position: relative;
@@ -1048,7 +1199,7 @@ body {
   margin-top: 1em;
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 768px) {
   .homepage-block-card-container {
     grid-template-columns: 1fr;
   }
