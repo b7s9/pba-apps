@@ -87,6 +87,8 @@ INSTALLED_APPS = [
     "wagtail",
     "modelcluster",
     "taggit",
+    # Wagtail Addons
+    "wagtail_link_block",
     # Addons
     "allauth",
     "allauth.account",

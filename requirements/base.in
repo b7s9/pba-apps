@@ -35,6 +35,7 @@ pynliner
 sentry-sdk[django]
 shapely
 wagtail
+wagtail-link-block
 wagtail-localize
 wagtail-localize-git
 wagtailset

@@ -256,11 +256,15 @@ class PetitionSignature(models.Model):
 
     def save(self, *args, **kwargs):
         if self.email and self.newsletter_opt_in:
+            name = ""
+            if self.first_name:
+                name += self.first_name
+            if self.last_name:
+                name += f" {self.last_name}"
             transaction.on_commit(
                 lambda: subscribe_to_newsletter.delay(
                     self.email,
-                    first_name=self.first_name,
-                    last_name=self.last_name,
+                    name,
                     tags=["petition", f"petition-{self.petition.slug}"],
                 )
             )

@@ -360,12 +360,31 @@ blockquote {
   text-align: center;
 }
 
-.footer form {
+.footer .button-holder {
+  padding-top: 1.5em;
   padding-bottom: 0em;
 }
 
-.footer .button-holder {
-  padding-bottom: 0em;
+.footer form {
+  vertical-align: middle;
+  margin: 0;
+  padding: 0;
+  line-height: 1.25rem;
+}
+
+.footer form input {
+  width: 80%;
+  max-width: 15rem;
+  padding: .7rem !important;
+  border-radius: .5rem;
+  font-size: 1.2rem !important;
+  margin-bottom: .25rem;
+  margin-right: 1rem;
+}
+
+.footer button {
+  font-size: 2rem;
+  padding: 15px 20px;
 }
 
 .footer-column {
@@ -1028,8 +1047,16 @@ body {
   transition: all 0.3s ease-in-out;
 }
 
+.homepage-button:disabled, .homepage-button[disabled] {
+  background-color: darkgrey;
+}
+
 .homepage-button:hover {
   transform: scale(1.05);
+}
+
+.homepage-button:disabled:hover, .homepage-button[disabled]:hover {
+  transform: unset;
 }
 
 .homepage-button-pink {
@@ -1094,6 +1121,20 @@ body {
   line-height: 1.25rem;
 }
 
+.homepage-action-subscribe form p {
+  display: inline;
+}
+
+.homepage-action-subscribe .button-holder {
+  display: inline;
+  margin: 0;
+  padding: 0;
+}
+
+.homepage-action-subscribe .button-holder #homepagenewsletter-form-recaptcha {
+  display: inline;
+}
+
 .homepage-action-join {
   max-width: 30rem;
   margin: auto;
@@ -1117,6 +1158,7 @@ body {
 @media only screen and (max-width: 768px) {
   .homepage-action-subscribe input {
     margin: auto;
+    margin-bottom: .5rem;
     max-width: 18rem;
     display: block;
   }
@@ -1155,7 +1197,7 @@ body {
   margin-bottom: 1rem;
 }
 
-.button-corral button {
+.button-corral .homepage-button {
   margin-top: .25em;
   margin-left: .25em;
   margin-right: .25em;
@@ -1203,7 +1245,12 @@ body {
   width: 100%;
   height: 100%;
   z-index: -1;
-  background-color: rgba(0, 0, 0, 0.75);
+  background: rgba(0, 0, 0, 0.75);
+}
+
+.homepage-body-background-overlay-gradient {
+  background: unset;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75) 70%, rgba(0, 0, 0, 1) 90%);
 }
 
 .homepage-container {

@@ -11,6 +11,9 @@ from wagtail.contrib.table_block.blocks import TableBlock
 from wagtail.fields import StreamField
 from wagtail.images.blocks import ImageBlock
 from wagtail.models import Page
+from wagtail_link_block.blocks import LinkBlock
+
+from pbaabp.forms import NewsletterSignupForm
 
 
 class AlignedParagraphBlock(StructBlock):
@@ -43,6 +46,31 @@ class CardBlock(StructBlock):
 
     class Meta:
         template = "blocks/card.html"
+
+
+class HomepageButtonBlock(StructBlock):
+    """
+    A button with text, a color, width, and optional icon
+    """
+
+    text = CharBlock()
+    url = LinkBlock()
+    color = ChoiceBlock(
+        choices=[("pink", "Pink"), ("green", "Green")],
+        default="pink",
+    )
+    width = ChoiceBlock(
+        choices=[("full", "Full"), ("half", "Half")],
+        default="full",
+    )
+    icon = CharBlock(
+        required=False,
+        help_text=(
+            "A FontAwesome icon name, see "
+            '<a href="https://fontawesome.com/search?ic=free">here</a> '
+            "for list of options"
+        ),
+    )
 
 
 class HomepageCardBlock(StructBlock):
@@ -137,9 +165,24 @@ class NavigationContainerPage(Page):
 
 class HomePage(Page):
 
+    def get_context(self, request):
+        context = super().get_context(request)
+        context["homepage_newsletter_form"] = NewsletterSignupForm(form_name="homepage")
+        return context
+
     hero_background = models.ForeignKey(
         "wagtailimages.Image", null=True, blank=True, on_delete=models.SET_NULL, related_name="+"
     )
+
+    hero_buttons_cta = models.CharField(max_length=128)
+    hero_buttons = StreamField(
+        [
+            ("button", HomepageButtonBlock()),
+        ]
+    )
+
+    hero_title = models.TextField()
+    hero_text = models.TextField()
 
     body_background = models.ForeignKey(
         "wagtailimages.Image", null=True, blank=True, on_delete=models.SET_NULL, related_name="+"
@@ -157,6 +200,10 @@ class HomePage(Page):
     # max_count_per_parent = 1
     content_panels = Page.content_panels + [
         FieldPanel("hero_background"),
+        FieldPanel("hero_title"),
+        FieldPanel("hero_text"),
+        FieldPanel("hero_buttons_cta"),
+        FieldPanel("hero_buttons"),
         FieldPanel("body_background"),
         FieldPanel("body"),
     ]

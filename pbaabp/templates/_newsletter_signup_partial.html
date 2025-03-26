@@ -1,26 +1,26 @@
-<div id="newsletterDiv" hx-target="this" hx-swap="innerHtml swap:0.5s">
+<div id="{{ form_name|default_if_none:"footer" }}newsletterDiv" hx-target="this" hx-swap="innerHtml swap:0.5s">
   <h3>Subscribe to our Monthly Newsletter</h3>
 
-  <form name="footerNewsletterForm" id="footerNewsletterForm" class="fade-me-out" action="javascript:void(0);">
+  <form name="{{ form_name|default_if_none:"footer" }}NewsletterForm" id="{{ form_name|default_if_none:"footer" }}NewsletterForm" class="fade-me-out" action="javascript:void(0);">
     {% csrf_token %}
 
     {{ form.non_field_errors }}
 
     <div>
       <script>
-        function announce(){
+        function {{ form_name|default_if_none:"footer" }}submitNewsletterFormAnnounce(){
             const event = new Event('verified');
-            const elem = document.querySelector("#footerNewsletterSubmit");
+            const elem = document.querySelector("#{{ form_name|default_if_none:"footer" }}NewsletterSubmit");
             elem.dispatchEvent(event);
         }
-        function submitForm () {
-            const button = document.getElementById("footerNewsletterSubmit");
+        function {{ form_name|default_if_none:"footer" }}submitNewsletterForm () {
+            const button = document.getElementById("{{ form_name|default_if_none:"footer" }}NewsletterSubmit");
             button.disabled = true;
-            const form = document.getElementById("footerNewsletterForm");
+            const form = document.getElementById("{{ form_name|default_if_none:"footer" }}NewsletterForm");
             if (form.checkValidity()) {
-                const widgetId = grecaptcha.render('newsletter-form-recaptcha', {
+                const widgetId = grecaptcha.render('{{ form_name|default_if_none:"footer" }}newsletter-form-recaptcha', {
                     'sitekey' : '{{ request.google_recaptcha_site_key }}',
-                    'callback' : announce,
+                    'callback' : {{ form_name|default_if_none:"footer" }}submitNewsletterFormAnnounce,
                     'size' : "invisible"
                 });
               grecaptcha.reset(widgetId);
@@ -41,18 +41,17 @@
 
     <div class="button-holder">
       <div
-        id="newsletter-form-recaptcha"
+        id="{{ form_name|default_if_none:"footer" }}newsletter-form-recaptcha"
       ></div>
       <button
         type="post"
-        id="footerNewsletterSubmit"
+        id="{{ form_name|default_if_none:"footer" }}NewsletterSubmit"
         hx-post="{% url 'newsletter_signup_partial' %}"
         hx-trigger="verified"
-        hx-indicator="#spinner"
-        hx-on:click="submitForm()"
-        class="button submit-button"
+        hx-on:click="{{ form_name|default_if_none:"footer" }}submitNewsletterForm()"
+        class="homepage-button"
       >
-          <span="spinner-text">Submit</span>
+          Submit
       </button>
     </div>
     <br>

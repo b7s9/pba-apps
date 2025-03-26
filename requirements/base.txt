@@ -137,6 +137,7 @@ django==4.2.20
     #   laces
     #   sentry-sdk
     #   wagtail
+    #   wagtail-link-block
     #   wagtail-localize
     #   wagtail-localize-git
 django-admin-csvexport==2.2
@@ -374,9 +375,12 @@ vine==5.1.0
 wagtail==6.4.1
     # via
     #   -r base.in
+    #   wagtail-link-block
     #   wagtail-localize
     #   wagtail-localize-git
     #   wagtailset
+wagtail-link-block==1.1.7
+    # via -r base.in
 wagtail-localize==1.9
     # via
     #   -r base.in

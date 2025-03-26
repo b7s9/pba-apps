@@ -11,19 +11,19 @@ class EmailLoginForm(forms.Form):
 
 
 class NewsletterSignupForm(forms.Form):
-    footer_newsletter_signup_captcha = ReCaptchaField(widget=ReCaptchaV2Invisible)
 
-    footer_newsletter_signup_first_name = forms.CharField(
+    def __init__(self, *args, form_name=None, **kwargs):
+        self.auto_id = f"{form_name}_%s"
+        super().__init__(*args, **kwargs)
+
+    newsletter_signup_captcha = ReCaptchaField(widget=ReCaptchaV2Invisible)
+
+    newsletter_signup_name = forms.CharField(
         required=True,
-        label=_("First name"),
-        widget=forms.TextInput(attrs={"hx-validate": "true", "placeholder": "First name"}),
+        label=_("Your Name"),
+        widget=forms.TextInput(attrs={"hx-validate": "true", "placeholder": "Your Name"}),
     )
-    footer_newsletter_signup_last_name = forms.CharField(
-        label=_("Last name"),
-        widget=forms.TextInput(attrs={"hx-validate": "true", "placeholder": "Last name"}),
-        required=False,
-    )
-    footer_newsletter_signup_email = forms.EmailField(
+    newsletter_signup_email = forms.EmailField(
         label=_("Email"),
         widget=forms.TextInput(
             attrs={"hx-validate": "true", "placeholder": "Email", "type": "email"}

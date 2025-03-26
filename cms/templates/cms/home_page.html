@@ -18,7 +18,7 @@
   <div class="homepage-content">
     <div class="homepage-body-container">
       {% image page.hero_background original as body_background %}
-      <div class="homepage-body-background-overlay"></div>
+      <div class="homepage-body-background-overlay homepage-body-background-overlay-gradient"></div>
       <img class="homepage-body-background" src="{{body_background.url}}">
       <div class="homepage-actions-container">
         <div class="homepage-leadout">
@@ -29,33 +29,32 @@
             <img src="{% static 'images/pba-glyph.svg' %}">
           </div>
           <div class="homepage-leadout-text">
-            <div class="title">Safe, protected bike lanes for Philadelphia</div>
-            <div class="text">
-Philly Bike Action is a 501(c)4 non-profit run entirely by volunteers.
-            </div>
+            <div class="title">{{ page.hero_title }}</div>
+            <div class="text">{{ page.hero_text }}</div>
           </div>
         </div>
 
         <div class="homepage-action-join">
-          <div class="action-text">Join the Action!</div>
+          <div class="action-text">{{ page.hero_buttons_cta }}</div>
           <div class="button-corral" style="display: grid; grid-template-columns: 1fr 1fr;">
-            <button style="grid-column: span 2;" class="homepage-button homepage-button-pink">Get Involved</button>
-            <button style="grid-column: span 2;" class="homepage-button homepage-button-pink">Become a member</button>
-            <button style="grid-column: span 2;" class="homepage-button homepage-button-pink">Join our Discord</button>
-            <button style="" class="homepage-button">Events</button>
-            <button style="" class="homepage-button">Campaigns</button>
+            {% for button in page.hero_buttons %}
+            <a href="{{ button.value.url.get_url }}"
+              {% if button.value.url.new_window %}target="_blank"{% endif %}
+              style="{% if button.value.width == "full" %}grid-column: span 2;{% endif %}"
+              class="homepage-button homepage-button-{{ button.value.color }}"
+            >{{ button.value.text }}</a>
+            {% endfor %}
           </div>
         </div>
       </div>
 
       <div class="homepage-action-subscribe">
         <div>
-          <div class="action-text subscribe-text">Subscribe to our monthly newlsetter</div>
-          <form action="javascript:void(0);">
-            <input type="text" placeholder="Your Name" required="">
-            <input type="email" placeholder="Email" maxlength="320" required="">
-            <button type="post" class="homepage-button">Submit</button>
-          </form>
+            {% with homepage_newsletter_form  as form %}
+            {% with "homepage" as form_name %}
+            {% include '_newsletter_signup_partial.html' %}
+            {% endwith %}
+            {% endwith %}
         </div>
       </div>
 
