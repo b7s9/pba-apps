@@ -1084,6 +1084,7 @@ body {
 
 .homepage-action-subscribe {
   margin: auto;
+  margin-bottom: 2rem;
 }
 
 .homepage-action-subscribe form {
