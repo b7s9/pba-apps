@@ -1459,6 +1459,21 @@ body {
     border-bottom: 2px solid rgb(131, 189, 86);
 }
 
+.blockNewsletterForm {
+  max-width: 20em;
+  padding: 0;
+  margin: auto;
+  .button-holder {
+    padding-bottom: 0;
+    button {
+      padding: 10px 40px;
+      margin: 0;
+      text-transform: none;
+      border-radius: .1em;
+    }
+  }
+}
+
 .cms-content {
   margin: auto;
   max-width: 40em;

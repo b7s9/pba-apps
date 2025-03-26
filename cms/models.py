@@ -48,6 +48,18 @@ class CardBlock(StructBlock):
         template = "blocks/card.html"
 
 
+class NewsletterSignupBlock(StructBlock):
+    def get_context(self, value, parent_context=None):
+        context = super().get_context(value, parent_context=parent_context)
+        context["block_newsletter_form"] = NewsletterSignupForm(
+            form_name="block", show_header=False
+        )
+        return context
+
+    class Meta:
+        template = "_block_newsletter_signup_partial.html"
+
+
 class HomepageButtonBlock(StructBlock):
     """
     A button with text, a color, width, and optional icon
@@ -140,6 +152,7 @@ class CmsStreamPage(Page):
             ("paragraph", AlignedParagraphBlock(features=_features)),
             ("html", RawHTMLBlock()),
             ("table", TableBlock(table_options=table_options)),
+            ("newsletter_signup", NewsletterSignupBlock()),
         ],
         use_json_field=True,
     )

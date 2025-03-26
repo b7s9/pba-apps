@@ -24,6 +24,6 @@ class FooterNewsletterSignupFormMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
-        request.newsletter_form = NewsletterSignupForm()
+        request.newsletter_form = NewsletterSignupForm(form_name="footer")
         request.google_recaptcha_site_key = settings.RECAPTCHA_PUBLIC_KEY
         return self.get_response(request)

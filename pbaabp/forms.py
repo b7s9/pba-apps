@@ -12,8 +12,10 @@ class EmailLoginForm(forms.Form):
 
 class NewsletterSignupForm(forms.Form):
 
-    def __init__(self, *args, form_name=None, **kwargs):
+    def __init__(self, *args, form_name=None, show_header=True, **kwargs):
         self.auto_id = f"{form_name}_%s"
+        self.form_name = form_name
+        self.show_header = show_header
         super().__init__(*args, **kwargs)
 
     newsletter_signup_captcha = ReCaptchaField(widget=ReCaptchaV2Invisible)

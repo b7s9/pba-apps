@@ -107,7 +107,9 @@ def mailjet_unsubscribe(request):
 
 def _newsletter_signup_partial(request):
     if request.method == "POST":
-        form = NewsletterSignupForm(request.POST)
+        form_name = request.POST.get("form_name", None)
+        show_header = request.POST.get("show_header", True)
+        form = NewsletterSignupForm(request.POST, form_name=form_name, show_header=show_header)
         if form.is_valid():
             name = form.cleaned_data["newsletter_signup_name"]
             email = form.cleaned_data["newsletter_signup_email"]
