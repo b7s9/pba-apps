@@ -72,10 +72,12 @@
         {% endif %}
       </div>
 
+      {% block content_container %}
       <div class="content-container">
       {% block content %}
       {% endblock %}
       </div>
+      {% endblock %}
 
       <div class="footer">
       {% block footer %}

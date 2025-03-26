@@ -1,7 +1,9 @@
 {% extends "base.html" %}
-{% load wagtailuserbar %}
+{% load static %}
 
+{% load wagtailuserbar %}
 {% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
 
 {% block body_class %}cms-stream-page{% endblock %}
 
@@ -9,14 +11,67 @@
   {{ page.title }}
 {% endblock %}
 
+{% block content_container %}
+<div class="content-container homepage-container">
 {% block content %}
   {% wagtailuserbar %}
-  <div class="cms-content">
-    <div class="cms-title">
-      <h1>{{ page.title }}</h1>
+  <div class="homepage-content">
+    <div class="homepage-body-container">
+      {% image page.hero_background original as body_background %}
+      <div class="homepage-body-background-overlay"></div>
+      <img class="homepage-body-background" src="{{body_background.url}}">
+      <div class="homepage-body">
+        <div class="homepage-leadout">
+          <div class="homepage-logo-img">
+            <img src="{% static 'images/pba-logo.svg' %}">
+          </div>
+          <div class="homepage-leadout-img">
+            <img src="{% static 'images/pba-glyph.svg' %}">
+          </div>
+          <div class="homepage-leadout-text">
+            <div class="txt">Safe, protected bike lanes for Philadelphia</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="homepage-actions-container">
+        <div class="homepage-action-subscribe">
+          <div>
+            <div class="action-text subscribe-text">Subscribe to our monthly newlsetter</div>
+            <form action="javascript:void(0);">
+              <input type="text" placeholder="First name" required="">
+              <br>
+              <input type="text" placeholder="Last name">
+              <br>
+              <input type="email" placeholder="Email" maxlength="320" required="">
+              <br>
+              <button type="post" class="homepage-button">Submit</button>
+            </form>
+          </div>
+        </div>
+        <div class="homepage-action-join">
+          <div class="action-text">Join the Action!</div>
+          <div class="button-corral" style="display: grid; grid-template-columns: 1fr 1fr;">
+            <button style="grid-column: span 2;" class="homepage-button homepage-button-pink">Get Involved</button>
+            <button style="grid-column: span 2;" class="homepage-button homepage-button-pink">Become a member</button>
+            <button style="grid-column: span 2;" class="homepage-button homepage-button-pink">Join our Discord <i class="fa-brands fa-discord" style="font-size: smaller;"></i></button>
+            <button style="" class="homepage-button">Events</button>
+            <button style="" class="homepage-button">Campaigns</button>
+          </div>
+        </div>
+      </div>
+
     </div>
-    <div class="cms-body">
-      {% include_block page.body %}
+
+    <div class="homepage-body-container">
+      {% image page.body_background original as body_background %}
+      <div class="homepage-body-background-overlay"></div>
+      <img class="homepage-body-background" src="{{body_background.url}}">
+      <div class="homepage-body">
+        {% include_block page.body %}
+      </div>
     </div>
   </div>
+{% endblock %}
+</div>
 {% endblock %}
