@@ -8,7 +8,7 @@ from wagtail.blocks import (
     StructBlock,
 )
 from wagtail.contrib.table_block.blocks import TableBlock
-from wagtail.fields import StreamField
+from wagtail.fields import StreamField, RichTextField
 from wagtail.images.blocks import ImageBlock
 from wagtail.models import Page
 from wagtail_link_block.blocks import LinkBlock
@@ -195,7 +195,7 @@ class HomePage(Page):
     )
 
     hero_title = models.TextField()
-    hero_text = models.TextField()
+    hero_text = RichTextField()
 
     body_background = models.ForeignKey(
         "wagtailimages.Image", null=True, blank=True, on_delete=models.SET_NULL, related_name="+"
