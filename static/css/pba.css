@@ -1004,7 +1004,7 @@ body {
   background-color: rgb(131, 189, 86);
   background-image: none;
   border: none;
-  border-radius: 1em;
+  border-radius: .5em;
   box-sizing: border-box;
   color: #fff;
   cursor: pointer;
@@ -1015,7 +1015,8 @@ body {
   line-height: 20px;
   margin: 0 5px 10px 0;
   overflow: visible;
-  padding: 12px 40px;
+  padding: 20px 40px;
+  text-transform: uppercase;
   text-align: center;
   text-decoration: none;
   touch-action: manipulation;
@@ -1032,36 +1033,52 @@ body {
 
 .homepage-button-pink {
   background-color: rgba(216, 16, 125, 255);
+  padding: 30px 40px;
+  font-size: 2.3rem;
 }
 
 .homepage-logo-img img {
-  max-width: 20rem;
-  margin-bottom: 4rem;
+  max-width: 18rem;
+  margin-bottom: 2rem;
 }
 
 .homepage-leadout {
-  margin-top: 5rem;
+  margin-top: 3rem;
   margin-bottom: 2rem;
   text-align: center;
   align-items: center;
 }
 
 .homepage-leadout-img img {
-  max-width: 8rem;
+  max-width: 6rem;
 }
 
 .homepage-actions-container {
   width: 100%;
+  margin-top: 2rem;
 }
 
-.homepage-leadout-text .txt {
+.homepage-leadout-text {
+  max-width: 30rem;
+  margin: auto;
+  margin-top: 1rem;
+}
+
+.homepage-leadout-text .title {
   font-family: "Big Shoulders Display";
   font-weight: 900;
   text-transform: uppercase;
-  font-size: 3rem;
-  max-width: 30rem;
+  font-size: 2.3rem;
   margin: auto;
-  margin-top: 3rem;
+  max-width: 22rem;
+}
+
+.homepage-leadout-text .text {
+  margin-top: 1em;
+  font-size: 1.25rem;
+  font-weight: 300;
+  padding-left: 1em;
+  padding-right: 1em;
 }
 
 .homepage-action-subscribe {
@@ -1069,8 +1086,10 @@ body {
 }
 
 .homepage-action-subscribe form {
+  vertical-align: middle;
   margin: 0;
   padding: 0;
+  line-height: 1.25rem;
 }
 
 .homepage-action-join {
@@ -1081,14 +1100,28 @@ body {
 .homepage-action-subscribe input {
   width: 80%;
   max-width: 15rem;
-  padding: .6rem;
+  padding: .7rem;
   border-radius: .5rem;
   font-size: 1.25rem;
   margin-bottom: .25rem;
+  margin-right: 1rem;
 }
 
 .homepage-action-subscribe button {
-  margin-top: 2rem;
+  font-size: 2rem;
+  padding: 15px 20px;
+}
+
+@media only screen and (max-width: 768px) {
+  .homepage-action-subscribe input {
+    margin: auto;
+    max-width: 18rem;
+    display: block;
+  }
+  .homepage-action-subscribe button {
+    padding: 20px 40px;
+    margin-top: 1rem;
+  }
 }
 
 .homepage-actions-container {
@@ -1098,23 +1131,26 @@ body {
   align-content: center;
   margin: auto;
   width: 100%;
-  margin-bottom: 5em;
-  max-width: 55rem;
+  margin-bottom: 2em;
+  max-width: 60rem;
 }
 
 .homepage-actions-container .action-text {
   font-family: "Big Shoulders Display";
   font-weight: 800;
   text-transform: uppercase;
-  font-size: 3.5rem;
+  font-size: 4rem;
   margin: auto;
   margin-bottom: 1rem;
 }
 
-.homepage-actions-container .subscribe-text {
+.homepage-action-subscribe .subscribe-text {
+  font-family: "Big Shoulders Display";
+  font-weight: 800;
+  text-transform: uppercase;
   font-size: 2rem;
-  max-width: 8em;
-  margin-bottom: 2rem;
+  margin: auto;
+  margin-bottom: 1rem;
 }
 
 .button-corral button {
@@ -1130,9 +1166,8 @@ body {
     margin-bottom: 4rem;
   }
   .homepage-action-join {
-    margin-top: 4rem;
   }
-  .homepage-logo-img img {
+  .homepage-leadout-img img {
     display: none;
   }
 }
