@@ -34,7 +34,6 @@
 
       {% csrf_token %}
       <p>
-        <label for="id_street_address">Street address:</label>
         <input type="text" id="street_address" name="street_address" autocomplete="shipping street-address" placeholder="Your Street Address" required>
         {% if not GOOGLE %}
         <span class="helptext">
@@ -50,8 +49,8 @@
         {% endif %}
       <p>
       <div class="button-holder">
-        <button type="submit">Search</button>
-        <img id="indicator" class="htmx-indicator" src="{% static 'images/spinner.gif' %}" style="height: 2em; padding-left: 1em;">
+        <button class="submit-button" type="submit">Search</button>
+        <img id="indicator" class="htmx-indicator" src="{% static 'images/spinner.gif' %}" style="height: 2em; padding-left: 1em; position: absolute;">
       </div>
     </form>
   </div>
