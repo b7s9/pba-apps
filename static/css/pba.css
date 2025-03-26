@@ -555,7 +555,7 @@ form.application-form .form-errors {
 }
 
 /* CSS */
-.submit-button {
+.submit-button, button[type=submit] {
   appearance: button;
   background-color: rgb(131, 189, 86);
   background-image: none;
@@ -582,25 +582,18 @@ form.application-form .form-errors {
   white-space: nowrap;
 }
 
-.submit-button:disabled, .submit-button[disabled] {
+.submit-button:disabled, .submit-button[disabled], button[type=submit]:disabled, button[type=submit][disabled] {
   background-color: lightgrey;
   box-shadow: none;
 }
 
-.submit-button:focus {
+.submit-button:focus, button[type=submit]:focus {
   text-decoration: none;
-}
-
-.submit-button:focus {
-  text-decoration: none;
-}
-
-.submit-button:focus {
   box-shadow: rgba(0, 0, 0, .125) 0 3px 5px inset;
   outline: 0;
 }
 
-.submit-button:not([disabled]):active):active {
+.submit-button:not([disabled]):active):active, button[type=submit]:not([disabled]):active):active {
   box-shadow: #fff 2px 2px 0 0, #555 2px 2px 0 1px;
   transform: translate(2px, 2px);
 }
