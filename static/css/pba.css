@@ -695,6 +695,11 @@ body {
   display: inline;
 }
 
+.campaign-content-container {
+  padding-left: 0;
+  padding-right: 0;
+}
+
 .campaign-container {
   width: 100%;
   max-width: 60em;
