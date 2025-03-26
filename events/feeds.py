@@ -26,7 +26,7 @@ class AllEventsFeed(ICalFeed):
 
     def item_description(self, item):
         return item.description
-        
+
     def item_location(self, item):
         return item.location
 

@@ -1,8 +1,16 @@
 from django.shortcuts import redirect, render
+from wagtail.models import Site
+
+from cms.models import HomePage
 
 
-def index(request):
-    if request.user.is_authenticated:
+def index(request, *args, **kwargs):
+    if request.get_host() == "abp.bikeaction.org":
+        site = Site.find_for_request(request)
+        root_page = site.root_page
+        page = HomePage.objects.get(id=root_page.id)
+        return page.serve(request)
+    elif request.user.is_authenticated:
         return redirect("profile")
     return render(request, "index.html")
 
