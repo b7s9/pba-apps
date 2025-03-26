@@ -14,7 +14,7 @@
   <div class="homepage-content">
     <div class="homepage-body-container">
       {% image page.hero_background original as body_background %}
-      <div class="homepage-body-background-overlay homepage-body-background-overlay-gradient"></div>
+      <div class="homepage-body-background-overlay homepage-body-background-overlay-bottom-gradient"></div>
       <img class="homepage-body-background" src="{{body_background.url}}">
       <div class="homepage-actions-container">
         <div class="homepage-leadout">
@@ -58,7 +58,7 @@
 
     <div class="homepage-body-container">
       {% image page.body_background original as body_background %}
-      <div class="homepage-body-background-overlay"></div>
+      <div class="homepage-body-background-overlay homepage-body-background-overlay-top-gradient"></div>
       <img class="homepage-body-background" src="{{body_background.url}}">
       <div class="homepage-body">
         {% include_block page.body %}
