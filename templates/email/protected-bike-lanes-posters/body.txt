@@ -1,4 +1,4 @@
-<div style="display: flex; justify-content: center; align-items: center;">
+<div style="display: flex; justify-content: center; align-items: center; max-width: 100%; margin-left: 2em; margin-right: 2em; text-align: center;">
   <span style="padding: 1em;"><img src="templates/email/protected-bike-lanes-posters/images/logo-PBA.png"        style="width: 100%; vertical-align: middle;"></span>
   <span style="padding: 1em;"><img src="templates/email/protected-bike-lanes-posters/images/logo-5th-square.png" style="width: 100%; vertical-align: middle;"></span>
   <span style="padding: 1em;"><img src="templates/email/protected-bike-lanes-posters/images/logo-BCGP.png"       style="width: 100%; vertical-align: middle;"></span>
@@ -9,8 +9,7 @@
 <div style="display: flex; justify-content: center;">
   <b style="font-size: larger;">Get a free “Protected Bike Lanes!” Window Poster!</b>
 </div>
-
-<div style="display: flex; justify-content: center;">
+<div style="display: flex; justify-content: center; margin-top: 1em; margin-bottom: 1em; margin-left: 2em; margin-right: 2em; max-width: 90%;">
   <img src="templates/email/protected-bike-lanes-posters/images/posters-collage.jpg"><br>
 </div>
 <div style="display: flex; justify-content: center;">
