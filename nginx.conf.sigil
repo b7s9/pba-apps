@@ -96,6 +96,11 @@ server {
   {{ if $.LINGERING_TIMEOUT }}lingering_timeout {{ $.LINGERING_TIMEOUT }};{{end}}
   {{ if $.SEND_TIMEOUT }}send_timeout {{ $.SEND_TIMEOUT }};{{end}}
 
+  location /wp-content/ {
+    proxy_ssl_server_name on;
+    proxy_pass https://{{ var "AWS_S3_CUSTOM_DOMAIN" }};
+  }
+
   location    / {
 
     gzip on;
