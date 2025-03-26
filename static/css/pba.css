@@ -1050,10 +1050,10 @@ body {
   font-size: 2em;
   font-family: "Big Shoulders Display";
   font-weight: 700;
-  line-height: 20px;
+  line-height: 1;
   margin: 0 5px 10px 0;
   overflow: visible;
-  padding: 20px 40px;
+  padding: 15px 40px;
   text-transform: uppercase;
   text-align: center;
   text-decoration: none;
@@ -1079,7 +1079,7 @@ body {
 
 .homepage-button-pink {
   background-color: rgba(216, 16, 125, 255);
-  padding: 30px 40px;
+  padding: 24px 40px;
   font-size: 2.3rem;
 }
 
@@ -1199,7 +1199,7 @@ body {
   text-transform: uppercase;
   font-size: 4rem;
   margin: auto;
-  margin-bottom: 1rem;
+  margin-bottom: 0;
 }
 
 .homepage-action-subscribe .subscribe-text {
