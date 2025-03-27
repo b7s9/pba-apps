@@ -16,6 +16,7 @@ from pbaabp.views import (
     _newsletter_signup_partial,
     mailjet_unsubscribe,
     newsletter_bridge,
+    wagtail_pages,
 )
 
 urlpatterns = [
@@ -54,6 +55,7 @@ urlpatterns = [
         },
         name="django.contrib.sitemaps.views.sitemap",
     ),
+    path("cms_pages/", wagtail_pages),
     path("", include(wagtail_urls)),
 ]
 

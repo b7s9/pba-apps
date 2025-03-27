@@ -10,6 +10,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import FormView
+from wagtail.models import Site
 
 from pbaabp.email import send_email_message
 from pbaabp.forms import EmailLoginForm, NewsletterSignupForm
@@ -125,3 +126,19 @@ def _newsletter_signup_partial(request):
             return render(request, "_newsletter_signup_partial.html", {"form": form})
 
     return render(request, "_newsletter_signup_partial.html", {"form": form})
+
+
+def wagtail_pages(request):
+    site = Site.find_for_request(request)
+    if site is None:
+        site = Site.objects.select_related("root_page").get(is_default_site=True)
+    pages = (
+        site.root_page.get_descendants(inclusive=True)
+        .live()
+        .public()
+        .order_by("path")
+        .defer_streamfields()
+        .specific()
+    )
+
+    return render(request, "wagtail_pages.html", {"pages": pages})
