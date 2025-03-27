@@ -1,4 +1,5 @@
 from django.shortcuts import redirect, render
+from django.views.decorators.clickjacking import xframe_options_exempt
 from wagtail.models import Site
 
 from cms.models import HomePage
@@ -27,3 +28,12 @@ def index(request, *args, **kwargs):
 
 def brand(request):
     return render(request, "brand-guidelines.html")
+
+
+def safe_streets_ride(request):
+    return render(request, "safe-streets-ride.html")
+
+
+@xframe_options_exempt
+def safe_streets_ride_inner(request):
+    return render(request, "safe-streets-ride-inner.html")
