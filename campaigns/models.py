@@ -41,6 +41,9 @@ class Campaign(OrderedModel):
         ALL_CITY = 99, "All of Philadelphia"
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
     title = models.CharField(max_length=512)
     slug = models.SlugField(null=True, blank=True)
     status = models.CharField(max_length=16, choices=Status.choices)

@@ -29,6 +29,9 @@ class ScheduledEvent(models.Model):
         return _mapping.get(discord_status, cls.Status.UNKNOWN)
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
     discord_id = models.CharField(max_length=64, null=True, blank=True)
     slug = models.SlugField(max_length=512, null=True, blank=True)
 

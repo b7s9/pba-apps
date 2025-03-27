@@ -5,8 +5,12 @@ from django.urls import include, path
 from sesame.views import LoginView
 from wagtail import urls as wagtail_urls
 from wagtail.admin import urls as wagtailadmin_urls
+from wagtail.contrib.sitemaps.sitemap_generator import Sitemap as WagtailSitemap
+from wagtail.contrib.sitemaps.views import sitemap as wagtail_sitemap
 from wagtail.documents import urls as wagtaildocs_urls
 
+from campaigns.sitemap import CampaignSitemap
+from events.sitemap import ScheduledEventSitemap
 from pbaabp.views import (
     EmailLoginView,
     _newsletter_signup_partial,
@@ -38,6 +42,18 @@ urlpatterns = [
     path("documents/", include(wagtaildocs_urls)),
     path(f"mailjet/{settings.MAILJET_SECRET_SIGNUP_URL}/", newsletter_bridge),
     path("mailjet/unsubscribe/", mailjet_unsubscribe),
+    path(
+        "sitemap.xml",
+        wagtail_sitemap,
+        {
+            "sitemaps": {
+                "pages": WagtailSitemap,
+                "campaigns": CampaignSitemap,
+                "events": ScheduledEventSitemap,
+            }
+        },
+        name="django.contrib.sitemaps.views.sitemap",
+    ),
     path("", include(wagtail_urls)),
 ]
 
