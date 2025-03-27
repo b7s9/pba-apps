@@ -144,6 +144,25 @@ table_options = {
 }
 
 
+class FullSlugFieldPanel(FieldPanel):
+
+    def __init__(self, field_name=None, heading=None, help_text=None, read_only=None, **kwargs):
+        heading = "Full URL" if not heading else heading
+        help_text = "Takes into account parent slugs" if not help_text else help_text
+        return super(FullSlugFieldPanel, self).__init__(
+            "get_url_parts", heading=heading, help_text=help_text, read_only=True, **kwargs
+        )
+
+    def db_field(self):
+        return None
+
+    def format_value_for_display(self, value):
+        try:
+            return f"{value()[-1]}"
+        except TypeError:
+            return "must set a slug and save first"
+
+
 class CmsStreamPage(Page):
 
     show_title = models.BooleanField(default=True)
@@ -162,6 +181,7 @@ class CmsStreamPage(Page):
     subpage_types = ["NavigationContainerPage", "CmsStreamPage"]
 
     content_panels = Page.content_panels + [
+        FullSlugFieldPanel(),
         FieldPanel("show_title"),
         FieldPanel("body"),
     ]
