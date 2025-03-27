@@ -7,7 +7,6 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from markdownfield.models import RenderedMarkdownField
 from markdownfield.validators import VALIDATOR_NULL
-from multi_email_field.fields import MultiEmailField
 from ordered_model.models import OrderedModel
 
 from events.models import ScheduledEvent
@@ -128,8 +127,8 @@ class Petition(models.Model):
     send_email = models.BooleanField(default=False, blank=False)
     email_subject = models.CharField(max_length=988, blank=True, null=True)
     email_body = models.TextField(null=True, blank=True)
-    email_to = MultiEmailField(blank=True, null=True)
-    email_cc = MultiEmailField(blank=True, null=True)
+    email_to = models.TextField(blank=True, null=True, help_text="one per line")
+    email_cc = models.TextField(blank=True, null=True, help_text="one per line")
     email_include_comment = models.BooleanField(default=False)
 
     campaign = models.ForeignKey(

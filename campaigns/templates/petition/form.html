@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load pba_tags %}
 
 {% if petition.call_to_action_header %}
 <h3 id="{{ petition.slug }}">{{ petition.call_to_action }}</h3>
@@ -40,8 +41,8 @@
       <p>{% translate "This is a preview of the email that will be sent when you submit:" %}</p><br>
       <table>
         <tr><td>Subject:</td><td><b>{{ petition.email_subject }}</b></td></tr>
-        <tr><td>To:</td><td>{{ petition.email_to|join:', ' }}</td></tr>
-        {% if petition.email_cc %}<tr><td>Cc:</td><td>{{ petition.email_cc|join:', ' }}</td></tr>{% endif %}
+        <tr><td>To:</td><td>{{ petition.email_to|splitlines|join:', ' }}</td></tr>
+        {% if petition.email_cc %}<tr><td>Cc:</td><td>{{ petition.email_cc|splitlines|join:', ' }}</td></tr>{% endif %}
         <tr><td>From:</td><td><span class="user-input"><span id="previewFromFirstName"></span> <span id="previewFromLastName"></span></span> &lt;{% if petition.mailto_send %}<span class="user-input" id="previewEmailFrom"></span>{% else %}noreply@bikeaction.org{% endif %}&gt;</td></tr>
         <tr><td>Reply-To:</td><td><span class="user-input" id="previewEmailReplyTo"></span>{% if not petition.mailto_send %}, info@bikeaction.org{% endif %}</td></tr>
         <tr></tr>

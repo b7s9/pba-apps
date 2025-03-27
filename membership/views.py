@@ -220,6 +220,11 @@ def create_one_time_donation_checkout_session(request):
                 if request.user.is_authenticated and request.user.djstripe_customers.first()
                 else None
             ),
+            customer_email=(
+                request.user.email
+                if request.user.is_authenticated and not request.user.djstripe_customers.first()
+                else None
+            ),
         )
         request.session["_stripe_checkout_session_id"] = session.id
         return JsonResponse({"clientSecret": session.client_secret})

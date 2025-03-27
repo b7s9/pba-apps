@@ -17,7 +17,6 @@ django-ical
 django-leaflet
 django-markdownfield
 django-markdownify
-django-multi-email-field
 django-ordered-model
 django-recaptcha
 django-relativity
@@ -30,7 +29,7 @@ mailchimp3
 markdown
 pillow
 psycopg2-binary
-pygit2<=1.14.1
+pygit2
 pynliner
 sentry-sdk[django]
 shapely
