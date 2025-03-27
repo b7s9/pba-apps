@@ -5,16 +5,16 @@
 
 {% block body_class %}cms-stream-page{% endblock %}
 
-{% block title %}
-  {{ page.title }}
-{% endblock %}
+{% block title %}{{ page.title }}{% endblock %}
 
 {% block content %}
   {% wagtailuserbar %}
   <div class="cms-content">
+    {% if page.show_title %}
     <div class="cms-title">
       <h1>{{ page.title }}</h1>
     </div>
+    {% endif %}
     <div class="cms-body">
       {% include_block page.body %}
     </div>

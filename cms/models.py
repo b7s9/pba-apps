@@ -146,6 +146,8 @@ table_options = {
 
 class CmsStreamPage(Page):
 
+    show_title = models.BooleanField(default=True)
+
     body = StreamField(
         [
             ("card", CardBlock(features=_features)),
@@ -160,6 +162,7 @@ class CmsStreamPage(Page):
     subpage_types = ["NavigationContainerPage", "CmsStreamPage"]
 
     content_panels = Page.content_panels + [
+        FieldPanel("show_title"),
         FieldPanel("body"),
     ]
 
