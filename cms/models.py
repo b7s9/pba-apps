@@ -1,4 +1,5 @@
 from django.db import models
+from django.http import Http404
 from wagtail.admin.panels import FieldPanel
 from wagtail.blocks import (
     CharBlock,
@@ -7,6 +8,7 @@ from wagtail.blocks import (
     RichTextBlock,
     StructBlock,
 )
+from wagtail.contrib.routable_page.models import RoutablePageMixin, path
 from wagtail.contrib.table_block.blocks import TableBlock
 from wagtail.fields import RichTextField, StreamField
 from wagtail.images.blocks import ImageBlock
@@ -147,19 +149,23 @@ table_options = {
 class FullSlugFieldPanel(FieldPanel):
 
     def __init__(self, field_name=None, heading=None, help_text=None, read_only=None, **kwargs):
+        field_name = "get_url_parts" if not field_name else field_name
         heading = "Full URL" if not heading else heading
         help_text = "Takes into account parent slugs" if not help_text else help_text
         return super(FullSlugFieldPanel, self).__init__(
-            "get_url_parts", heading=heading, help_text=help_text, read_only=True, **kwargs
+            field_name, heading=heading, help_text=help_text, read_only=True, **kwargs
         )
 
     def db_field(self):
         return None
 
     def format_value_for_display(self, value):
-        try:
+        value = value()
+        if isinstance(value, list):
             return f"{value()[-1]}"
-        except TypeError:
+        elif isinstance(value, str):
+            return value
+        elif value is None:
             return "must set a slug and save first"
 
 
@@ -199,6 +205,112 @@ class NavigationContainerPage(Page):
     subpage_types = ["NavigationContainerPage", "CmsStreamPage"]
 
 
+class PostPage(Page):
+    """
+    A Post
+    """
+
+    author = models.CharField(max_length=128, default="Philly Bike Action")
+
+    date = models.DateField()
+
+    body = StreamField(
+        [
+            ("card", CardBlock(features=_features)),
+            ("paragraph", AlignedParagraphBlock(features=_features)),
+            ("html", RawHTMLBlock()),
+            ("table", TableBlock(table_options=table_options)),
+            ("newsletter_signup", NewsletterSignupBlock()),
+        ],
+        use_json_field=True,
+    )
+
+    content_panels = Page.content_panels + [
+        FullSlugFieldPanel("canonical_url"),
+        FieldPanel("author"),
+        FieldPanel("date"),
+        FieldPanel("body"),
+    ]
+
+    def serve(self, request):
+        if request.META["PATH_INFO"] != self.canonical_url():
+            raise Http404
+        return super().serve(request)
+
+    def get_url_parts(self, request=None):
+        parts = super().get_url_parts()
+        return (parts[0], parts[1], self.canonical_url())
+
+    def next_post(self):
+        if self.pk is not None:
+            return (
+                PostPage.objects.live()
+                .filter(date__gte=self.date)
+                .exclude(slug=self.slug)
+                .order_by("pk")
+                .first()
+            )
+        return None
+
+    def prev_post(self):
+        if self.pk is not None:
+            return (
+                PostPage.objects.live()
+                .filter(date__lte=self.date)
+                .exclude(slug=self.slug)
+                .order_by("pk")
+                .first()
+            )
+        return None
+
+    def canonical_url(self):
+        try:
+            parent_part_url = self.get_parent().specific.get_url_parts()[-1]
+            return (
+                f"{parent_part_url}"
+                f"{self.date.year:04}/{self.date.month:02}/{self.date.day:02}/"
+                f"{self.slug}/"
+            )
+        except AttributeError:
+            return None
+
+    class Meta:
+        verbose_name = "Post"
+
+
+class PostsContainerPage(RoutablePageMixin, Page):
+    """
+    Displays recent posts, contains posts
+    """
+
+    def get_posts(self):
+        return PostPage.objects.descendant_of(self).live().order_by("-date")
+
+    @path("<int:year>/")
+    @path("<int:year>/<int:month>/")
+    @path("<int:year>/<int:month>/<int:day>/")
+    def post_by_date(self, request, year, month=None, day=None, *args, **kwargs):
+        self.posts = self.get_posts().filter(date__year=year)
+        if month:
+            self.posts = self.posts.filter(date__month=month)
+        if day:
+            self.posts = self.posts.filter(date__day=day)
+        return self.render(request)
+
+    @path("<int:year>/<int:month>/<int:day>/<slug:slug>/")
+    def post_by_date_slug(self, request, year, month, day, slug, *args, **kwargs):
+        post_page = self.get_posts().filter(slug=slug).first()
+        if not post_page:
+            raise Http404
+        # here we render another page, so we call the serve method of the page instance
+        return post_page.serve(request)
+
+    class Meta:
+        verbose_name = "Posts"
+
+    subpage_types = ["PostPage"]
+
+
 class HomePage(Page):
 
     def get_context(self, request):
@@ -232,7 +344,7 @@ class HomePage(Page):
         ]
     )
 
-    subpage_types = ["NavigationContainerPage", "CmsStreamPage"]
+    subpage_types = ["NavigationContainerPage", "CmsStreamPage", "PostsContainerPage"]
     # max_count_per_parent = 1
     content_panels = Page.content_panels + [
         FieldPanel("hero_background"),

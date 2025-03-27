@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load wagtailuserbar %}
+
+{% load static %}
+{% load wagtailcore_tags %}
+{% load post_tags %}
+
+{% block body_class %}template-cmspage{% endblock %}
+
+{% block title %}
+{{ page.title }}
+{% endblock %}
+
+{% block content %}
+  {% wagtailuserbar %}
+  <div class="cms-content">
+    <div class="cms-title">
+      <h1>{{ page.title }}</h1>
+    </div>
+    <div class="cms-body">
+      <div class="content-container">
+        <ul>
+        {% for post in self.get_posts %}
+          <li><a href="{% post_url post %}">{{post.title}} - {{post.date}}</a>
+        {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+{% endblock %}
