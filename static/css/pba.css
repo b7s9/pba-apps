@@ -314,7 +314,7 @@ blockquote {
 
 .footer h3 {
   margin-bottom: .5em;
-  margin-top: 1.5em;
+  margin-top: 1rem;
 }
 
 .footer {
@@ -328,10 +328,7 @@ blockquote {
 }
 
 .footer .social-icon i {
-  color: black;
-  background-color: white;
-  margin-left: .25em;
-  margin-right: .25em;
+  color: white;
   font-size: 1.6em;
   padding: .3em;
   border-radius: .2em;
@@ -384,13 +381,15 @@ blockquote {
 }
 
 .footer button {
-  font-size: 2rem;
-  padding: 15px 20px;
+  font-size: 1.75rem;
+  padding: .5rem 2rem;
 }
 
 .footer-column {
   margin-left: 2em;
   margin-right: 2em;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
 }
 
 .footer .credits {
@@ -420,6 +419,7 @@ blockquote {
     font-size: smaller;
     padding-top: 1em;
     padding-bottom: 0;
+    margin-top: 1rem;
 
     a,a:visited {
       color: lightgrey;
@@ -1147,9 +1147,13 @@ body {
   font-size: 2.3rem;
 }
 
+#homepageNewsletterSubmit {
+  padding: .75rem 2rem;
+}
+
 .homepage-logo-img img {
   max-width: 18rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 
 .homepage-leadout {
@@ -1390,6 +1394,10 @@ body {
   color: white;
 }
 
+.block-homepagecard + .block-homepagecard {
+  margin-top: 3rem;
+}
+
 .homepage-block-card-titles {
   padding-right: 1rem;
 }
@@ -1413,6 +1421,10 @@ body {
   font-size: 1.35rem;
   font-weight: 400;
   line-height: 1.5;
+}
+
+.homepage-block-card-text p {
+  margin-top: 2.25rem;
 }
 
 .block-card-container {
