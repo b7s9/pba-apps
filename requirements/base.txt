@@ -136,6 +136,7 @@ django==5.1.7
     #   django-treebeard
     #   django-tuieditor
     #   djangorestframework
+    #   easy-thumbnails
     #   laces
     #   sentry-sdk
     #   wagtail
@@ -200,6 +201,8 @@ djangorestframework==3.15.2
     # via wagtail
 draftjs-exporter==5.1.0
     # via wagtail
+easy-thumbnails==2.10
+    # via -r base.in
 emoji==2.14.1
     # via discord-py-interactions
 et-xmlfile==2.0.0
@@ -262,6 +265,7 @@ openpyxl==3.1.5
 pillow==11.1.0
     # via
     #   -r base.in
+    #   easy-thumbnails
     #   pillow-heif
     #   wagtail
 pillow-heif==0.22.0

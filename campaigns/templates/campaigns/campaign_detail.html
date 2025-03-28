@@ -1,11 +1,12 @@
 {% extends 'base.html' %}
-{% load humanize i18n %}
+{% load humanize i18n thumbnail %}
+
 
 {% block extra_head %}
 <meta property="og:type" content="article">
 <meta property="og:title" content="{{ campaign.title }}">
 <meta property="og:url" content="https://apps.bikeaction.org/campaigns/{{ campaign.slug }}">
-{% if campaign.cover %}<meta property="og:image" content="{{ campaign.cover.url }}">{% endif %}
+{% if campaign.cover %}<meta property="og:image" content="{{ campaign.cover|thumbnail_url:'small' }}">{% endif %}
 <meta property="og:description" content="{{ campaign.description }}">
 {% endblock %}
 
@@ -14,7 +15,7 @@
 
   <div class="campaign-header">
     <div class="campaign-overlay"></div>
-    <div class="campaign-header-img" style="{% if campaign.cover %}background: url({{ campaign.cover.url }}); {% endif %}background-repeat: no-repeat; background-size: cover; background-position: center;"></div>
+    <div class="campaign-header-img" style="{% if campaign.cover %}background: url({{ campaign.cover|thumbnail_url:'banner' }}); {% endif %}background-repeat: no-repeat; background-size: cover; background-position: center;"></div>
     <div class="campaign-title">
       <h1>{{ campaign.title }}</h1>
     </div>

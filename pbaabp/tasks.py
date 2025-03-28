@@ -2,10 +2,12 @@ from urllib.parse import urlparse
 
 import sesame.utils
 from celery import shared_task
+from django.apps import apps
 from django.conf import settings
 from django.db import transaction
 from django.test import RequestFactory
 from django.urls import reverse
+from easy_thumbnails.files import generate_all_aliases
 from mailchimp3 import MailChimp, helpers
 
 from pbaabp.email import send_email_message
@@ -119,3 +121,11 @@ def subscribe_to_newsletter(email, first_name=None, last_name=None, tags=None):
         },
     )
     mailjet.add_contact_to_list(email, subscribed=True)
+
+
+@shared_task
+def generate_thumbnails(app_name, object_name, pk, field):
+    model = apps.get_model(app_name, object_name)
+    instance = model._default_manager.get(pk=pk)
+    fieldfile = getattr(instance, field)
+    generate_all_aliases(fieldfile, include_global=True)

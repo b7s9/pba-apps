@@ -24,6 +24,7 @@ django-sesame
 django-sitetree
 django-storages[s3]
 django-tuieditor
+easy-thumbnails
 geopy
 mailchimp3
 markdown

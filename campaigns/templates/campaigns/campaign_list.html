@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load i18n %}
+{% load thumbnail %}
 
 {% block content %}
 {% regroup object_list|dictsort:"status" by status as campaigns_by_status %}
@@ -19,7 +20,7 @@
   <div class="campaign-card">
     <a href="{% url 'campaign' slug=campaign.slug %}">
       <h2>{{ campaign.title }} - <span style="color: red;"><b>{% translate "DRAFT" %}</b></span></h2>
-      {% if campaign.cover %}<img class="campaign-card-img" src="{{ campaign.cover.url }}">{% endif %}
+      {% if campaign.cover %}<img class="campaign-card-img" src="{{ campaign.cover|thumbnail:'small'}}">{% endif %}
       <p>{{ campaign.description }}</p>
     </a>
   </div>
@@ -29,7 +30,7 @@
   <div class="campaign-card">
     <a href="{% url 'campaign' slug=campaign.slug %}">
       <h2>{{ campaign.title }}</h2>
-      {% if campaign.cover %}<img class="campaign-card-img" src="{{ campaign.cover.url }}">{% endif %}
+      {% if campaign.cover %}<img class="campaign-card-img" src="{{ campaign.cover|thumbnail:'small' }}">{% endif %}
       <p>{{ campaign.description }}</p>
     </a>
   </div>

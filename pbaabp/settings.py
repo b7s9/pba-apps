@@ -51,6 +51,7 @@ APPEND_SLASH = True
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool("DEBUG", default=False)
+THUMBNAIL_DEBUG = DEBUG
 
 ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=["localhost"])
 CSRF_TRUSTED_ORIGINS = env.list("DJANGO_CSRF_TRUSTED_ORIGINS", default=["http://localhost"])
@@ -108,6 +109,7 @@ INSTALLED_APPS = [
     "csvexport",
     "markdownify.apps.MarkdownifyConfig",
     "leaflet",
+    "easy_thumbnails",
     # Our apps
     "pbaabp",
     "pages",
@@ -250,6 +252,13 @@ STORAGES = {
     },
 }
 
+THUMBNAIL_ALIASES = {
+    "campaigns.Campaign.cover": {
+        "small": {"size": (512, 0), "quality": 100},
+        "banner": {"size": (1768, 0), "quality": 90},
+    },
+}
+
 AWS_ACCESS_KEY_ID = env("AWS_ACCESS_KEY_ID", default=None)
 AWS_SECRET_ACCESS_KEY = env("AWS_SECRET_ACCESS_KEY", default=None)
 AWS_STORAGE_BUCKET_NAME = env("AWS_STORAGE_BUCKET_NAME", default=None)
@@ -261,6 +270,7 @@ if all(
     [x is not None for x in [AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_STORAGE_BUCKET_NAME]]
 ):
     STORAGES["default"] = {"BACKEND": "storages.backends.s3boto3.S3Boto3Storage"}
+    THUMBNAIL_DEFAULT_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
