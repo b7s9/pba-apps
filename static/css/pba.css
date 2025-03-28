@@ -452,7 +452,7 @@ form label {
   text-align: left;
 }
 form textarea {
-    font-size: 1em;
+  font-size: 1em;
   border: 1px solid black;
   border-radius: .5em;
   padding: .5em;
@@ -474,6 +474,11 @@ form .helptext {
   font-size: smaller;
   color: #404040;
   text-align: left;
+}
+form input[type=checkbox] + .helptext {
+  display: inline-block;
+  padding-left: .5em;
+  width: calc(100% - 3em);
 }
 form .errorlist {
   list-style: none;
@@ -499,19 +504,14 @@ form ul {
 form .g-recaptcha:not(button) {
   padding-bottom: 0em;
 }
-form select {
-  margin-left: 1em;
-}
 form input[type=checkbox], select {
-  margin-top: .5em;
+  zoom: 1.5;
+  display: inline-block;
+  text-align: left;
+}
+form select {
   width: unset;
   display: block;
-  text-align: left;
-  -ms-transform: scale(1.25); /* IE */
-  -moz-transform: scale(1.25); /* FF */
-  -webkit-transform: scale(1.25); /* Safari and Chrome */
-  -o-transform: scale(1.25); /* Opera */
-  transform: scale(1.25);
 }
 input[type=radio] {
   display: inline-block;
@@ -522,6 +522,9 @@ input[type=radio] {
     white-space: pre-wrap;
 }
 
+form.application-form p {
+  padding-top: .5em;
+}
 form.application-form label {
   width: 100%;
   float: unset;
@@ -539,7 +542,7 @@ form.application-form textarea {
   max-width: unset;
 }
 
-form.application-form input[type=checkbox] {
+form input[type=checkbox] {
   width: auto;
 }
 
@@ -556,6 +559,9 @@ form.application-form p+p {
   margin-top: .5em;
 }
 
+form.application-form h2 {
+  margin-top: 1em;
+}
 form.application-form h2:first-of-type {
   margin-top: 0;
 }
@@ -568,7 +574,24 @@ form.application-form .errorlist {
 }
 
 form.application-form label.required::after {
-  content: '*';
+  content: ' *';
+}
+
+form.application-form label input {
+  display: inline;
+  margin-right: .5em;
+}
+form.application-form label.has(input) {
+  display: inline;
+}
+form.application-form #id_teams {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+@media (max-width: 768px) {
+  form.application-form #id_teams {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 form.application-form .form-errors {

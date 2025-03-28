@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="form-header">
+  <h1><span style="color: red;">DRAFT</span> - Organizer Nomination</h1>
+
+  <div style="text-align: left;">
+  <p style="color: grey">Any text can go here to lead out the form...</p>
+  <p> It's a long form! But don't worry, you can save your submission in a draft state and return to it at any time from your PBA profile page </p>
+  </div>
+
+</div>
+<div class="form-container">
+  <form class="application-form" method="post">
+  {% csrf_token %}
+
+  {% if form.errors %}
+  <div class="form-errors">
+    <p><b>Form invalid!</b> Please correct errors in <span style="color: red;">red</span> below</p>
+    <br>
+    <br>
+  </div>
+  {% endif %}
+
+  {{ form.non_field_errors }}
+
+  {% for hidden_field in form.hidden_fields %}
+    {{ hidden_field.errors }}
+    {{ hidden_field }}
+  {% endfor %}
+
+  <h2>Nomination</h2>
+
+  {% include 'snippets/field.html' with field=form.nominator %}
+  {% include 'snippets/field.html' with field=form.duties_and_expectations %}
+
+  <h2>Applicant Information</h2>
+  <p>
+    <label>Name</label>
+    <span class="prefilled">{{ request.user.first_name }} {{ request.user.last_name }}</span>
+  </p>
+  <p>
+    <label>Discord username</label>
+    <span class="prefilled">{{ request.user.profile.discord.extra_data.username }}</span>
+  </p>
+  <p>
+    <label>Email</label>
+    <span class="prefilled">{{ request.user.email }}</span>
+  </p>
+  <p>
+    <label>City Council District</label>
+    <span class="prefilled">{{ request.user.profile.district }}</span>
+  </p>
+
+  {% include 'snippets/field.html' with field=form.phone_number %}
+  {% include 'snippets/field.html' with field=form.preferred_contact_method %}
+
+  <h2>Desired role</h2>
+
+  {% include 'snippets/field.html' with field=form.primary_role %}
+  {% include 'snippets/field.html' with invisible=True field=form.primary_role_other %}
+  {% include 'snippets/field.html' with field=form.regular_duties %}
+  {% include 'snippets/field.html' with field=form.teams %}
+
+  <h2>Past Involvement</h2>
+  {% include 'snippets/field.html' with field=form.involvement %}
+  {% include 'snippets/field.html' with field=form.past_experience %}
+  {% include 'snippets/field.html' with field=form.current_contribution %}
+  {% include 'snippets/field.html' with invisible=True field=form.current_contribution_info %}
+
+  <h2>Availability</h2>
+  {% include 'snippets/field.html' with field=form.online_availability %}
+  {% include 'snippets/field.html' with field=form.inperson_availability %}
+
+  <h2>Additional info</h2>
+  {% include 'snippets/field.html' with field=form.public_speaking %}
+  {% include 'snippets/field.html' with field=form.support_needed %}
+  {% include 'snippets/field.html' with field=form.anything_else %}
+
+  <h2>Conduct</h2>
+  {% include 'snippets/field.html' with field=form.code_of_conduct %}
+  {% include 'snippets/field.html' with invisible=True field=form.coc_what_email %}
+  {% include 'snippets/field.html' with field=form.not_gonna_try_to_name_this %}
+  {% include 'snippets/field.html' with invisible=True field=form.not_gonna_try_to_name_this_info %}
+
+  <div class="button-holder">
+    <button id="saveDraft" class="secondary-button" type="submit" name="save-draft" value="Save Draft" formnovalidate="formnovalidate">Save Draft</button>
+    <button class="submit-button" type="submit" name="submit-application" value="Submit!" formnovalidate="formnovalidate">Submit</button>
+    <span class="helptext">Use "Save Draft" to store your responses without any validation and return later. Once submitted your response will not be editable.</span>
+  </div>
+
+  </form>
+</div>
+<script>
+    const roleSelect = document.getElementById('id_primary_role');
+    roleSelect.addEventListener('change', function() {
+      const roleOther = document.getElementById('id_primary_role_other');
+      if (roleSelect.value == "other") {
+        roleOther.closest('.formfield').style.display = '';
+      } else {
+        roleOther.closest('.formfield').style.display = 'none';
+      }
+    });
+
+    const contributionSelect = document.getElementById('id_current_contribution');
+    contributionSelect.addEventListener('change', function() {
+      const contributionOther = document.getElementById('id_current_contribution_info');
+      if (contributionSelect.value == "yes") {
+        contributionOther.closest('.formfield').style.display = '';
+      } else {
+        contributionOther.closest('.formfield').style.display = 'none';
+      }
+    });
+
+    const cocCheck = document.getElementById('id_code_of_conduct');
+    cocCheck.addEventListener('change', function() {
+      const cocQuestion = document.getElementById('id_coc_what_email');
+      if (cocCheck.checked) {
+        cocQuestion.closest('.formfield').style.display = '';
+      } else {
+        cocQuestion.closest('.formfield').style.display = 'none';
+      }
+    });
+
+    const ngttntSelect = document.getElementById('id_not_gonna_try_to_name_this');
+    ngttntSelect.addEventListener('change', function() {
+      const ngttntOther = document.getElementById('id_not_gonna_try_to_name_this_info');
+      if (ngttntSelect.value == "yes") {
+        ngttntOther.closest('.formfield').style.display = '';
+      } else {
+        ngttntOther.closest('.formfield').style.display = 'none';
+      }
+    });
+
+    addEventListener("load", (e) => {
+      const event = new Event("change");
+      roleSelect.dispatch(event);
+      contributionSelect.dispatch(event);
+      cocCheck.dispatch(event);
+      ngttntSelect.dispatch(event);
+    });
+</script>
+{% endblock %}

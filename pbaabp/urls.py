@@ -32,6 +32,7 @@ urlpatterns = [
     path("maillink/", include("maillinks.urls")),
     path("rcos/", include("facets.urls")),
     path("projects/", include("projects.urls")),
+    path("organizers/", include("organizers.urls")),
     path(
         "_partials/_newsletter_signup_partial/",
         _newsletter_signup_partial,

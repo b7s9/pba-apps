@@ -1,7 +1,13 @@
 from django import forms
+from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from django_recaptcha.fields import ReCaptchaField
 from django_recaptcha.widgets import ReCaptchaV2Invisible
+
+
+def validate_is_checked(value):
+    if not value:
+        raise ValidationError(_("Please read, acknowledge, and confirm by clicking the box"))
 
 
 class EmailLoginForm(forms.Form):
