@@ -3,7 +3,7 @@
 {% load i18n %}
 {% block content %}
 <div class="form-header">
-  <h1>{% blocktranslate %}Welcome to Philly Bike Action, {{ profile.user.first_name }}{% endblocktranslate %}</h1>
+  <h1>{% blocktranslate with first_name=profile.user.first_name %}Welcome to Philly Bike Action, {{ first_name }}{% endblocktranslate %}</h1>
   <div class="table-container">
     <table>
         <tr>
@@ -46,10 +46,10 @@
     </table>
   </div>
   {% url 'profile_update' as profile_update_url %}
-  <p>{% blocktranslate %}Need to update any of the above? <a href="{{ profile_update_url }}">Click Here!</a>{% endblocktranslate %}</p>
+  <small>{% blocktranslate %}Need to update any of the above? <a href="{{ profile_update_url }}">Click Here!</a>{% endblocktranslate %}</small>
   {% if request.user.has_usable_password %}
   {% url 'account_change_password' as change_password_url %}
-  <p>{% blocktranslate %}Change your password <a href="{{ change_password_url }}">here</a>.{% endblocktranslate %}</p>
+  <br><small>{% blocktranslate %}Change your password <a href="{{ change_password_url }}">here</a>.{% endblocktranslate %}</small>
   {% else %}
   <p style="color: darkred;"><b>{% translate "Your account does not have a password set." %}</b></p>
   {% url 'account_set_password' as set_password_url %}
@@ -121,6 +121,7 @@
         <th>{% translate "Event" %}</th>
         <th>{% translate "Actions" %}</th>
       </tr>
+      {% if request.user.profile.upcoming_events %}
       {% for rsvp in request.user.profile.upcoming_events %}
       <tr>
         <td><a href="{% url 'event_detail' rsvp.event.slug %}">{{ rsvp.event.title }}</a></td>
@@ -130,6 +131,15 @@
         </td>
       </tr>
       {% endfor %}
+      {% else %}
+      <tr>
+        <td colspan=2>
+            You haven't RSVPd for any upcoming events!<br>
+            See what PBA has coming up on our<br>
+            <a style="font-size: larger;" href="{% url 'events_list' %}">Events Page</a>.
+        </td>
+      </tr>
+      {% endif %}
     </table>
   </div>
 </div>
@@ -137,9 +147,7 @@
 <hr>
 <div class="form-header">
   <h2>{% translate "Donations" %}</h2>
-  <div class="button-holder">
-    <p><a class="submit-button" href="{% url 'create_one_time_donation_checkout_session' %}">{% translate "Make a one-time donation" %}</a></p>
-  </div>
+  <a style="font-size: 1.5em;" class="homepage-button" href="{% url 'create_one_time_donation_checkout_session' %}">{% translate "Make a one-time donation" %}</a>
   <p><small>
     {% translate "Philly Bike Action is a social welfare organization incorporated in the Commonwealth of Pennsylvania." %}
     {% translate "Contributions to Philly Bike Action are not deductible as charitable contributions for federal income tax purposes." %}
@@ -150,7 +158,7 @@
   </div>
   {% else %}
   <div class="button-holder">
-    <p><a class="submit-button" href="{% url 'setup_recurring_donation' %}">{% translate "Setup a recurring donation" %}</a></p>
+    <p><a class="homepage-button" href="{% url 'setup_recurring_donation' %}">{% translate "Setup a recurring donation" %}</a></p>
   </div>
   {% endif %}
 </div>
