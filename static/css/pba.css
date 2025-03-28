@@ -393,9 +393,20 @@ blockquote {
   margin-right: 2em;
 }
 
-.footer .copyright {
+.footer .credits {
   padding: 1em;
   background-color: rgb(131, 189, 86);
+  color: white;
+}
+.footer .credits .shoutout a,a:visited {
+  color: white;
+}
+.footer .credits .shoutout {
+  font-size: smaller;
+}
+.footer .copyright {
+  margin-top: .5em;
+  display: block;
 }
 
 .footer {
