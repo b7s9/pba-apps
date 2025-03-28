@@ -398,8 +398,10 @@ blockquote {
   background-color: rgb(131, 189, 86);
   color: white;
 }
-.footer .credits .shoutout a,a:visited {
-  color: white;
+.footer .credits .shoutout {
+  a,a:visited {
+    color: white;
+  }
 }
 .footer .credits .shoutout {
   font-size: smaller;

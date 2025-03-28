@@ -1,0 +1,11 @@
+Hi {{ first_name }},
+
+*You are receiving this email because you've attended a [Philly Bike Action](https://bikeaction.org) meeting in District 3 in the past, or you have an account on [apps.bikeaction.org](https://apps.bikeaction.org) with a District 3 address!*
+
+This is a reminder that our next monthly meeting will be on Thursday, April 3 at 6:30pm at the Cedar Works, 4919 Pentridge St. We'll aim to wrap up by 8:00 and then head to Carbon Copy for an optional beer and chat.
+
+<div style="display: flex; justify-content: center;">
+  <a class="submit-button" href="https://apps.bikeaction.org/events/westsw-philly-monthly-meeting/">View Event and RSVP Now!</a>
+</div>
+
+Join us to help decide what our priorities should be in District 3 for the rest of 2025!
