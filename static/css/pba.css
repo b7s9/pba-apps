@@ -581,7 +581,7 @@ form.application-form .form-errors {
 }
 
 /* CSS */
-.submit-button {
+.submit-button, .secondary-button {
   appearance: button;
   background-color: rgb(131, 189, 86);
   background-image: none;
@@ -608,15 +608,17 @@ form.application-form .form-errors {
   transition: all 0.3s ease-in-out;
 }
 
-.submit-button:disabled, .submit-button[disabled] {
+.submit-button:disabled, .submit-button[disabled],
+.secondary-button:disabled, .secondary-button[disabled] {
   background-color: darkgrey;
 }
 
-.submit-button:hover {
+.submit-button:hover, .secondary-button:hover {
   transform: scale(1.05);
 }
 
-.submit-button:disabled:hover, .submit-button[disabled]:hover {
+.submit-button:disabled:hover, .submit-button[disabled]:hover
+.secondary-button:disabled:hover, .secondary-button[disabled]:hover {
   transform: unset;
 }
 
@@ -625,18 +627,18 @@ form.application-form .form-errors {
 }
 
 @media (min-width: 768px) {
-  .submit-button {
+  .submit-button, .secondary-button {
   }
 }
 
 @media screen and (max-width: 40rem) {
-  .submit-button {
+  .submit-button, .secondary-button {
     font-size: 1.5em;
   }
 }
 
 @media screen and (max-width: 20rem) {
-  .submit-button {
+  .submit-button, .secondary-button {
     font-size: 1.25em;
   }
 }
