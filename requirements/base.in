@@ -19,6 +19,7 @@ django-markdownfield
 django-markdownify
 django-ordered-model
 django-recaptcha
+django-redis
 django-relativity
 django-sesame
 django-sitetree

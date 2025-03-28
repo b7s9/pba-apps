@@ -176,11 +176,21 @@ DATABASES["default"]["ATOMIC_REQUESTS"] = True
 DATABASES["default"]["CONN_MAX_AGE"] = 600
 DATABASES["default"]["CONN_HEALTH_CHECKS"] = True
 
+_REDIS_URL = env("REDIS_URL", default="redis://redis:6379/0")
+if _REDIS_URL.startswith("rediss://"):
+    _REDIS_URL = _REDIS_URL + "?ssl_cert_reqs=none"
+
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.dummy.DummyCache",
     }
 }
+
+if True:
+    CACHES["default"]["BACKEND"] = "django_redis.cache.RedisCache"
+    CACHES["default"]["LOCATION"] = f"{_REDIS_URL}/10"
+    CACHES["default"]["OPTIONS"] = {"CLIENT_CLASS": "django_redis.client.DefaultClient"}
+
 
 # Authentication
 AUTHENTICATION_BACKENDS = [
@@ -279,11 +289,6 @@ if all(
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Celery
-
-_REDIS_URL = env("REDIS_URL", default="redis://redis:6379/0")
-if _REDIS_URL.startswith("rediss://"):
-    _REDIS_URL = _REDIS_URL + "?ssl_cert_reqs=none"
-
 CELERY_BROKER_URL = _REDIS_URL
 CELERY_RESULT_BACKEND = _REDIS_URL
 CELERY_BEAT_SCHEDULE = {}

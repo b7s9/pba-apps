@@ -1,8 +1,8 @@
 from django.conf import settings
-from django.db.models import Q
 from django.core.management.base import BaseCommand
+from django.db.models import Q
 
-from events.models import ScheduledEvent, EventSignIn
+from events.models import EventSignIn, ScheduledEvent
 from facets.models import District
 from pbaabp.email import send_email_message
 from profiles.models import Profile
@@ -10,7 +10,7 @@ from profiles.models import Profile
 district = District.objects.get(name="District 3")
 profiles = Profile.objects.filter(location__within=district.mpoly)
 
-events = ScheduledEvent.objects.filter(Q(slug__contains='d3') | Q(slug__contains='district-3'))
+events = ScheduledEvent.objects.filter(Q(slug__contains="d3") | Q(slug__contains="district-3"))
 sign_ins = EventSignIn.objects.filter(event__in=events)
 
 SENT = []
@@ -44,5 +44,5 @@ class Command(BaseCommand):
                 SENT.append(profile.user.email.lower())
             else:
                 print(f"skipping {sign_in}")
-            
+
         print(len(SENT))

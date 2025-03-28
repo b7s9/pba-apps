@@ -127,6 +127,7 @@ django==5.1.7
     #   django-permissionedforms
     #   django-recaptcha
     #   django-recurrence
+    #   django-redis
     #   django-relativity
     #   django-sesame
     #   django-storages
@@ -179,6 +180,8 @@ django-recaptcha==4.0.0
     # via -r base.in
 django-recurrence==1.11.1
     # via django-ical
+django-redis==5.4.0
+    # via -r base.in
 django-relativity==0.2.6
     # via -r base.in
 django-sesame==3.2.2
@@ -308,7 +311,9 @@ pytz==2025.2
 qrcode==8.0
     # via django-allauth
 redis==5.2.1
-    # via celery
+    # via
+    #   celery
+    #   django-redis
 requests==2.32.3
     # via
     #   django-anymail
