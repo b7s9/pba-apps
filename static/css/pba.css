@@ -581,13 +581,12 @@ form.application-form .form-errors {
 }
 
 /* CSS */
-.submit-button, button[type=submit] {
+.submit-button {
   appearance: button;
   background-color: rgb(131, 189, 86);
   background-image: none;
-  border: 1px solid #555;
-  border-radius: 4px;
-  box-shadow: #fff 4px 4px 0 0,#555 4px 4px 0 1px;
+  border: none;
+  border-radius: .5em;
   box-sizing: border-box;
   color: #fff;
   cursor: pointer;
@@ -595,10 +594,10 @@ form.application-form .form-errors {
   font-size: 2em;
   font-family: "Big Shoulders Display";
   font-weight: 700;
-  line-height: 20px;
+  line-height: 1;
   margin: 0 5px 10px 0;
   overflow: visible;
-  padding: 12px 40px;
+  padding: 15px 40px;
   text-align: center;
   text-decoration: none;
   touch-action: manipulation;
@@ -606,22 +605,19 @@ form.application-form .form-errors {
   -webkit-user-select: none;
   vertical-align: middle;
   white-space: nowrap;
+  transition: all 0.3s ease-in-out;
 }
 
-.submit-button:disabled, .submit-button[disabled], button[type=submit]:disabled, button[type=submit][disabled] {
-  background-color: lightgrey;
-  box-shadow: none;
+.submit-button:disabled, .submit-button[disabled] {
+  background-color: darkgrey;
 }
 
-.submit-button:focus, button[type=submit]:focus {
-  text-decoration: none;
-  box-shadow: rgba(0, 0, 0, .125) 0 3px 5px inset;
-  outline: 0;
+.submit-button:hover {
+  transform: scale(1.05);
 }
 
-.submit-button:not([disabled]):active):active, button[type=submit]:not([disabled]):active):active {
-  box-shadow: #fff 2px 2px 0 0, #555 2px 2px 0 1px;
-  transform: translate(2px, 2px);
+.submit-button:disabled:hover, .submit-button[disabled]:hover {
+  transform: unset;
 }
 
 .secondary-button {
@@ -1457,7 +1453,7 @@ body {
 
 .block-table table {
     border-collapse: collapse;
-    font-size: .9em;
+    font-size: 1em;
     text-align: left;
     min-width: 35em;
     table-layout:fixed;
@@ -1465,7 +1461,6 @@ body {
 @media screen and (max-width: 40rem) {
   .block-table table {
     min-width: 80vw;
-    font-size: 3vw;
   }
 }
 .block-table th {
@@ -1486,6 +1481,26 @@ body {
     border-bottom: 2px solid rgb(131, 189, 86);
 }
 
+.block-table thead tr:first-of-type th:first-child {
+  border-top-left-radius: .5em;
+}
+.block-table thead tr:first-of-type th:last-child {
+  border-top-right-radius: .5em;
+}
+.block-table tbody tr:last-of-type th:first-child {
+  border-bottom-left-radius: .5em;
+  border-bottom: none;
+}
+.block-table tbody tr:last-of-type:has(th) {
+  border-bottom: none !important;
+}
+.block-table tbody tr:first-of-type td:last-child {
+  border-top: 1px solid #dddddd;
+}
+.block-table tr:last-of-type td:last-child {
+  border-bottom: 1px solid #dddddd;
+}
+
 .blockNewsletterForm {
   max-width: 20em;
   padding: 0;
@@ -1496,7 +1511,6 @@ body {
       padding: 10px 40px;
       margin: 0;
       text-transform: none;
-      border-radius: .1em;
     }
   }
 }
