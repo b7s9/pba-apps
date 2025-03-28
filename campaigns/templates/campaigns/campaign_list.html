@@ -20,7 +20,7 @@
   <div class="campaign-card">
     <a href="{% url 'campaign' slug=campaign.slug %}">
       <h2>{{ campaign.title }} - <span style="color: red;"><b>{% translate "DRAFT" %}</b></span></h2>
-      {% if campaign.cover %}<img class="campaign-card-img" src="{{ campaign.cover|thumbnail:'small'}}">{% endif %}
+      {% if campaign.cover %}<img class="campaign-card-img" src="{{ campaign.cover|thumbnail_url:'small'}}">{% endif %}
       <p>{{ campaign.description }}</p>
     </a>
   </div>
@@ -30,7 +30,7 @@
   <div class="campaign-card">
     <a href="{% url 'campaign' slug=campaign.slug %}">
       <h2>{{ campaign.title }}</h2>
-      {% if campaign.cover %}<img class="campaign-card-img" src="{{ campaign.cover|thumbnail:'small' }}">{% endif %}
+      {% if campaign.cover %}<img class="campaign-card-img" src="{{ campaign.cover|thumbnail_url:'small' }}">{% endif %}
       <p>{{ campaign.description }}</p>
     </a>
   </div>
