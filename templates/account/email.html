@@ -44,15 +44,15 @@
             {% endslot %}
             {% slot actions %}
                 <div class="button-holder" style="font-size: smaller;">
-                {% element button type="submit" name="action_primary" %}
+                    <button class="submit-button" name="action_primary">
                     {% trans 'Make Primary' %}
-                {% endelement %}
-                {% element button tags="secondary" type="submit" name="action_send" %}
+                    </button>
+                    <button class="secondary-button" name="action_send">
                     {% trans 'Re-send Verification' %}
-                {% endelement %}
-                {% element button tags="danger,delete" type="submit" name="action_remove" %}
+                    </button>
+                    <button class="secondary-button" name="action_remove">
                     {% trans 'Remove' %}
-                {% endelement %}
+                    </button>
                 </div>
             {% endslot %}
         {% endelement %}
@@ -72,9 +72,9 @@
             {% endslot %}
             {% slot actions %}
                 <div class="button-holder">
-                {% element button name="action_add" type="submit" %}
+                    <button class="submit-button" type="submit">
                     {% trans "Add Email" %}
-                {% endelement %}
+                    </button>
                 </div>
             {% endslot %}
         {% endelement %}
