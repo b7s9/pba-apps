@@ -16,14 +16,10 @@ def index(request, *args, **kwargs):
                 LegacyQRCodeScan.objects.create(qr_code=qr_code)
                 return redirect(qr_code.target)
 
-    if request.get_host() == "abp.bikeaction.org":
-        site = Site.find_for_request(request)
-        root_page = site.root_page
-        page = HomePage.objects.get(id=root_page.id)
-        return page.serve(request)
-    elif request.user.is_authenticated:
-        return redirect("profile")
-    return render(request, "index.html")
+    site = Site.find_for_request(request)
+    root_page = site.root_page
+    page = HomePage.objects.get(id=root_page.id)
+    return page.serve(request)
 
 
 def brand(request):
