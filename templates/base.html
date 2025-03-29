@@ -14,7 +14,7 @@
     <link href="{% static 'fontawesome/css/solid.min.css' %}" rel="stylesheet" />
     <link href="{% static 'fontawesome/css/regular.min.css' %}" rel="stylesheet" />
 
-    <title>{% block title %}{% translate "Philly Bike Action!" %}{% endblock %}</title>
+    <title>{% block title %}{% if page.title %}{{ page.title }}{% else %}{% translate "Philly Bike Action!" %}{% endif %}{% endblock %}</title>
 
     {% block opengraph %}
     <meta name="description" content="{% block description %}{% if page.search_description %}{{ page.search_description }}{% else %}Join the Action!{% endif %}{% endblock %}">
