@@ -1157,8 +1157,7 @@ body {
 }
 
 .homepage-leadout {
-  margin-top: 3rem;
-  margin-bottom: 2rem;
+  margin: 3rem 1rem;
   text-align: center;
   align-items: center;
 }
@@ -1205,7 +1204,7 @@ body {
   font-weight: 700;
   text-transform: uppercase;
   font-size: 2rem;
-  margin: auto;
+  margin: auto 1rem;
   padding-bottom: 1rem;
 }
 
