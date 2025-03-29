@@ -420,7 +420,7 @@ GOOGLE_MAPS_API_KEY = env("GOOGLE_MAPS_API_KEY", default=None)
 # django-admin-csvexport
 # https://github.com/thomst/django-admin-csvexport/issues/3
 DATA_UPLOAD_MAX_NUMBER_FIELDS = None
-CSV_EXPORT_FORMAT_FORM = False
+CSV_EXPORT_FORMAT_FORM = True
 CSV_EXPORT_DELIMITER = ","
 CSV_EXPORT_ESCAPECHAR = '"'
 CSV_EXPORT_QUOTECHAR = '"'
