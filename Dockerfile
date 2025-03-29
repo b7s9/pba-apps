@@ -18,7 +18,8 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 
 RUN --mount=type=cache,target=/root/.cache/pip \
     pip install -r requirements/deploy.txt
-COPY . /code/
+
+COPY .ssh /root/.ssh
 COPY . /code/
 RUN \
     DJANGO_SECRET_KEY=deadbeefcafe \
