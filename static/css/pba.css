@@ -1,5 +1,9 @@
 /* Header and Nav */
 
+:root {
+  --app-height: 100vh;
+}
+
 * {
   box-sizing: inherit;
   scroll-margin-top: 8em;
@@ -171,6 +175,7 @@ blockquote {
   padding: 0;
   text-transform: uppercase;
   z-index: 100;
+  height: --app-height;
 }
 
 @media only screen and (max-width: 893px) {
@@ -231,12 +236,24 @@ blockquote {
     display: none;
   }
 
+  @keyframes detect-scroll {
+    from,
+    to {
+      --can-scroll: ;
+    }
+  }
+
   #mobileNavTree {
     display: none;
     position: absolute;
     right: 0em;
     top: 4em;
     z-index: 5;
+    overflow-y: scroll;
+    height: calc(var(--app-height) - 4em);
+    max-height: calc(var(--app-height) - 4em);
+    background: rgb(131, 189, 86);
+    overscroll-behavior: contain;
   }
 
   .mobile-nav-header ul {

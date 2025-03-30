@@ -167,6 +167,23 @@
               nav.style.display = "block";
             }
         }
+
+        const appHeight = () => {
+          console.log(window.innerHeight);
+          document.documentElement.style.setProperty('--app-height', `${window.innerHeight}px`, "important")
+        }
+        window.addEventListener('resize', appHeight);
+        appHeight();
+
+        document.addEventListener('keydown', function(event) {
+          if (event.key === "Escape") {
+            const divElement = document.getElementById('mobileNavTree');
+            if (divElement && divElement.style.display !== 'none') {
+              divElement.style.display = 'none';
+            }
+          }
+        });
+
     </script>
   </body>
 </html>
