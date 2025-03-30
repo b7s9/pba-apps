@@ -20,13 +20,13 @@
     <meta name="description" content="{% block description %}{% if page.search_description %}{{ page.search_description }}{% else %}Join the Action!{% endif %}{% endblock %}">
 
     <meta property="og:type" content="website">
-    <meta property="og:title" content="{% block og_title %}{% if page.seo_title %}{{ page.seo_title }}{% else %}{{ page.title }}{% endif %}{% endblock %}">
+    <meta property="og:title" content="{% block og_title %}{% if page.seo_title %}{{ page.seo_title }}{% else %}{% if page.title %}{{ page.title }}{% else %}{% translate "Philly Bike Action!" %}{% endif %}{% endif %}{% endblock %}">
     <meta property="og:description" content="{% block og_description %}{% if page.search_description %}{{ page.search_description }}{% else %}Join the Action!{% endif %}{% endblock %}">
     <meta property="og:image" content="{% static 'images/og.png' %}">
 
     <meta name="twitter:card" content="summary_large_image">
     <meta property="twitter:domain" content="{{ request.http.host }}">
-    <meta name="twitter:title" content="{% block twitter_title %}{% if page.seo_title %}{{ page.seo_title }}{% else %}{{ page.title }}{% endif %}{% endblock %}">
+    <meta name="twitter:title" content="{% block twitter_title %}{% if page.seo_title %}{{ page.seo_title }}{% else %}{% if page.title %}{{ page.title }}{% else %}{% translate "Philly Bike Action!" %}{% endif %}{% endif %}{% endblock %}">
     <meta name="twitter:description" content="{% block twitter_description %}{% if page.search_description %}{{ page.search_description }}{% else %}Join the Action!{% endif %}{% endblock %}">
     <meta name="twitter:image" content="{% static 'images/og.png' %}">
     {% endblock %}
