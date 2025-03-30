@@ -173,7 +173,7 @@ blockquote {
   z-index: 100;
 }
 
-@media only screen and (max-width: 852px) {
+@media only screen and (max-width: 893px) {
 
   * {
     scroll-margin-top: 5em;
