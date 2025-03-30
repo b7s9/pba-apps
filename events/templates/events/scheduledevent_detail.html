@@ -78,10 +78,12 @@
 <div class="calendar-subscribe">
   <div>Share:</div>
   {% with share_url=request.build_absolute_uri %}
-  <span class="calendar-share">{% post_to_reddit "PBA!" share_url "<i class=\"fa-brands fa-reddit\"></i> Reddit" %}</span>
-  <span class="calendar-share">{% post_to_twitter "PBA!" share_url "<i class=\"fa-brands fa-twitter\"></i> Twitter" %}</span>
-  <span class="calendar-share">{% post_to_bluesky "PBA!" share_url "<i class=\"fa-brands fa-bluesky\"></i> Bluesky" %}</span>
+  {% with share_title="Philly Bike Action Event! {{ event.title }}" %}
+  <span class="calendar-share">{% post_to_reddit  share_title share_url "<i class=\"fa-brands fa-reddit\"></i> Reddit" %}</span>
+  <span class="calendar-share">{% post_to_twitter share_title share_url "<i class=\"fa-brands fa-twitter\"></i> Twitter" %}</span>
+  <span class="calendar-share">{% post_to_bluesky share_title share_url "<i class=\"fa-brands fa-bluesky\"></i> Bluesky" %}</span>
   <span class="calendar-share"><a href="{% qr_url_from_text share_url image_format='png' %}" download="qr-code-{{ event.slug }}.png"><i class="fa-solid fa-qrcode"></i> QR Code</a></span>
+  {% endwith %}
   {% endwith %}
   <span class="calendar-share">{% copy_to_clipboard share_url "<i class=\"fa-solid fa-copy\"></i> Copy URL" %}</span>
   {% add_copy_script %}
