@@ -243,6 +243,8 @@ blockquote {
     margin-top: 0;
     margin-bottom: 0;
     padding-left: 1em;
+    display: flex;
+    flex-direction: column;
   }
 
   .mobile-nav-header ul li ul li {
@@ -276,6 +278,13 @@ blockquote {
 
   .mobile-nav-header ul li ul li:has(a.current_item) {
     background-color: #d8107d;
+  }
+
+  #mobileNavTree ul li {
+    order: 2;
+  }
+  #mobileNavTree ul li:last-child {
+    order: 1;
   }
 }
 
