@@ -91,6 +91,7 @@ blockquote {
   text-align: center;
   display: inline-block;
   float: left;
+  position: relative;
 }
 
 .nav-header a {
@@ -99,15 +100,23 @@ blockquote {
   font-weight: 800;
   font-size: 1.55em;
   text-transform: uppercase;
+  text-wrap: nowrap;
 }
 
 .nav-header li ul {
   display: none;
   position: absolute;
   top: 100%;
+  left: 0;
   z-index: 1;
-  margin-left: -.75em;
   background-color: #d8107d;
+}
+
+@media only screen and (max-width: 920px) {
+  .nav-header ul li:last-child ul {
+    left: 100%;
+    transform: translate(-100%);
+  }
 }
 
 .nav-header li ul li {
@@ -164,7 +173,7 @@ blockquote {
   z-index: 100;
 }
 
-@media only screen and (max-width: 875px) {
+@media only screen and (max-width: 852px) {
 
   * {
     scroll-margin-top: 5em;
