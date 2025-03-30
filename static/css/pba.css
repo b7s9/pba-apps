@@ -894,6 +894,30 @@ body {
   text-align: center;
 }
 
+.calendar-subscribe {
+  margin-top: 1em;
+  text-align: center;
+}
+.calendar-share {
+  border-radius: .5em;
+  padding: .25em .5em;
+  background-color: rgb(131, 189, 86);
+  display: inline-block;
+  margin: .25em auto;
+}
+.copy-this button {
+  color: white;
+  border-radius: .5em;
+  padding: .25em .5em;
+  background-color: rgb(131, 189, 86);
+  display: inline-block;
+  margin: .25em auto;
+}
+.calendar-share a {
+  text-decoration: none;
+  color: white;
+}
+
 .progress-bar-container {
   width: 90%;
   margin: 0 auto 2em;

@@ -56,6 +56,7 @@ urlpatterns = [
         },
         name="django.contrib.sitemaps.views.sitemap",
     ),
+    path("qr_code/", include("qr_code.urls", namespace="qr_code")),
     path("cms_pages/", wagtail_pages),
     path("", include(wagtail_urls)),
 ]

@@ -21,6 +21,9 @@ class AllEventsFeed(ICalFeed):
             .order_by("-start_datetime")
         )
 
+    def item_guid(self, item):
+        return item.id
+
     def item_title(self, item):
         return item.title
 

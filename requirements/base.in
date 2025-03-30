@@ -18,6 +18,7 @@ django-leaflet
 django-markdownfield
 django-markdownify
 django-ordered-model
+django-qr-code
 django-recaptcha
 django-redis
 django-relativity

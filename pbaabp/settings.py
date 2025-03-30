@@ -110,6 +110,7 @@ INSTALLED_APPS = [
     "markdownify.apps.MarkdownifyConfig",
     "leaflet",
     "easy_thumbnails",
+    "qr_code",
     # Our apps
     "pbaabp",
     "pages",

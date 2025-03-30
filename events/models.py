@@ -1,8 +1,11 @@
 import uuid
 
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 from django.db import models, transaction
+from django.urls import reverse
+from icalendar import Calendar, Event
 from interactions.models.discord.enums import ScheduledEventStatus
 
 from events.tasks import sync_to_mailchimp
@@ -42,6 +45,24 @@ class ScheduledEvent(models.Model):
     location = models.CharField(max_length=512, null=True, blank=True)
     start_datetime = models.DateTimeField()
     end_datetime = models.DateTimeField(null=True, blank=True)
+
+    def ics(self):
+        _calendar = Calendar()
+        _calendar.add("prodid", "-//Philly Bike Action//PBA Events//EN")
+        _calendar.add("version", "2.0")
+
+        _event = Event()
+        _event["uid"] = self.id
+        _event.add("summary", self.title)
+        _event.add("description", self.description)
+        _event.add("dtstart", self.start_datetime)
+        _event.add("dtend", self.end_datetime)
+        _event.add("location", self.location)
+        _event.add("url", settings.SITE_URL + reverse("event_detail", args=[self.slug]))
+
+        _calendar.add_component(_event)
+
+        return _calendar.to_ical().decode()
 
     def save(self, *args, **kwargs):
         if self.slug is None:
