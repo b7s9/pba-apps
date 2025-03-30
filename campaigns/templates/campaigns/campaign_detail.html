@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load humanize i18n thumbnail %}
+{% load humanize i18n thumbnail share_tags qr_code %}
 
 
 {% block extra_head %}
@@ -82,7 +82,7 @@
     {% endwith %}
   {% endif %}
 
-  {% if campaign.events.all and not campaign.status == "completed" %}
+  {% if campaign.future_events.all and not campaign.status == "completed" %}
     <h3>{% translate "Attend an event" %}</h3>
     <div id="events">
       {% for event in campaign.future_events.all|dictsort:"start_datetime" %}
@@ -91,6 +91,22 @@
       </div>
       {% endfor %}
     </div>
+  {% endif %}
+
+  {% if campaign.social_shares %}
+  <div class="calendar-subscribe">
+    <div>Share:</div>
+    {% with share_url=request.build_absolute_uri %}
+    {% with share_title=campaign.call_to_action|default_if_none:"Take Action Now"|add:" "|add:campaign.title %}
+    <span class="calendar-share">{% post_to_reddit  share_title share_url "<i class=\"fa-brands fa-reddit\"></i> Reddit" %}</span>
+    <span class="calendar-share">{% post_to_twitter share_title share_url "<i class=\"fa-brands fa-twitter\"></i> Twitter" %}</span>
+    <span class="calendar-share">{% post_to_bluesky share_title share_url "<i class=\"fa-brands fa-bluesky\"></i> Bluesky" %}</span>
+    <span class="calendar-share"><a href="{% qr_url_from_text share_url image_format='png' %}" download="qr-code-{{ event.slug }}.png"><i class="fa-solid fa-qrcode"></i> QR Code</a></span>
+    {% endwith %}
+    {% endwith %}
+    <span class="calendar-share">{% copy_to_clipboard share_url "<i class=\"fa-solid fa-copy\"></i> Copy URL" %}</span>
+    {% add_copy_script %}
+  </div>
   {% endif %}
 
   {% if campaign.petitions.all and not campaign.status == "completed" %}

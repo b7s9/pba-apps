@@ -66,6 +66,8 @@ class Campaign(OrderedModel):
 
     subscription_action = models.BooleanField(default=False)
 
+    social_shares = models.BooleanField(default=True)
+
     content = MarkdownField(rendered_field="content_rendered", validator=VALIDATOR_NULL)
     content_rendered = RenderedMarkdownField()
 
