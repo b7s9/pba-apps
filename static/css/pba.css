@@ -286,6 +286,9 @@ blockquote {
   #mobileNavTree ul li:last-child {
     order: 1;
   }
+  #mobileNavTree > ul li ul li {
+    order: 2 !important;
+  }
 }
 
 /* Messages */
