@@ -98,6 +98,7 @@ INSTALLED_APPS = [
     "allauth.mfa",
     "allauth.socialaccount",
     "allauth.socialaccount.providers.discord",
+    "django_bleach",
     "django_htmx",
     "django_recaptcha",
     "djstripe",

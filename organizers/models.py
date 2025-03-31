@@ -19,6 +19,9 @@ class OrganizerApplication(models.Model):
     data = models.JSONField()
     markdown = models.TextField(blank=True, null=True)
 
+    def __str__(self):
+        return f"{self.submitter.first_name} {self.submitter.last_name}"
+
     def render_markdown(self):
         context = {field: data["value"] for field, data in self.data.items()}
         form = OrganizerApplicationForm(label_suffix="")

@@ -49,6 +49,14 @@ def organizer_application(request, pk=None):
         messages.add_message(request, messages.ERROR, message)
         return redirect("profile")
 
+    if (
+        request.user.profile.organizer_application
+        or request.user.profile.organizer_application_draft
+    ):
+        message = "You may only have one organizer application or draft organizer application."
+        messages.add_message(request, messages.ERROR, message)
+        return redirect("profile")
+
     if pk:
         application = get_object_or_404(OrganizerApplication, id=pk)
         if not application.draft:

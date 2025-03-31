@@ -19,6 +19,9 @@ class ProjectApplication(models.Model):
     data = models.JSONField()
     markdown = models.TextField(blank=True, null=True)
 
+    def __str__(self):
+        return f"{self.data.get('shortname', {'value': 'TBD'}).get('value')}"
+
     def render_markdown(self):
         context = {field: data["value"] for field, data in self.data.items()}
         form = ProjectApplicationForm(label_suffix="")

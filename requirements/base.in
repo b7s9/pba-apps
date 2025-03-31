@@ -9,6 +9,7 @@ django
 django-admin-csvexport
 django-allauth[mfa]
 django-anymail[mailgun]
+django-bleach
 django-dotenv
 django-email-log
 django-environ

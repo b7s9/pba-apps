@@ -4,7 +4,7 @@ from organizers.models import OrganizerApplication
 
 
 class OrganizerApplicationAdmin(admin.ModelAdmin):
-    pass
+    list_display = ("__str__", "submitter")
 
 
 admin.site.register(OrganizerApplication, OrganizerApplicationAdmin)
