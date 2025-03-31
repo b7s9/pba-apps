@@ -9,11 +9,30 @@ def validate_coc_email_value(value):
         raise ValidationError("Hmmmm, that's not quite right.")
 
 
-class OrganizerForm(forms.Form):
+class OrganizerApplicationForm(forms.Form):
     required_css_class = "required"
 
     def to_json(self):
         return {field.name: {"label": field.label, "value": field.value()} for field in self}
+
+    def clean(self):
+        cleaned_data = super().clean()
+        if cleaned_data.get("primary_role") == "other" and not cleaned_data.get(
+            "primary_role_other"
+        ):
+            self.add_error(
+                "primary_role_other", "You must describe your intended role when selecting Other."
+            )
+        if cleaned_data.get("current_contribution") == "yes" and not cleaned_data.get(
+            "current_contribution_info"
+        ):
+            self.add_error(
+                "current_contribution_info", "You must describe your current contributions."
+            )
+        if cleaned_data.get("not_gonna_try_to_name_this") == "yes" and not cleaned_data.get(
+            "not_gonna_try_to_name_this_info"
+        ):
+            self.add_error("not_gonna_try_to_name_this_info", "Please explain.")
 
     # The Basics
 

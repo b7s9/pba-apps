@@ -2,11 +2,30 @@
 
 {% block content %}
 <div class="form-header">
-  <h1>Organizer Nomination Form</h1>
+  <h1>Organizer Application Form</h1>
 
   <div style="text-align: left;">
-  <p style="color: grey">Any text can go here to lead out the form...</p>
-  <p> It's a long form! But don't worry, you can save your submission in a draft state and return to it at any time from your PBA profile page </p>
+
+    <p>
+      Want to become a PBA Organizer?
+      Please complete the form below
+      so we can learn more about your previous experience with PBA
+      and how you would like to further contribute to our mission.
+    </p>
+
+    <p>
+      <b>Reminder</b>: This is not an "interest form",
+      this is an application!
+      If accepted, you will be brought onboard immediately.
+      We're happy to discuss the Organizer role with you before you apply.
+      Please email questions to info@bikeaction.org.
+    </p>
+
+    <p>
+      It's a long form! But don't worry,
+      you can save your submission in a draft state
+      and return to it at any time from your PBA profile page.
+    </p>
   </div>
 
 </div>
@@ -92,7 +111,7 @@
   </form>
 </div>
 <script>
-    const roleSelect = document.getElementById('id_primary_role');
+    var roleSelect = document.getElementById('id_primary_role');
     roleSelect.addEventListener('change', function() {
       const roleOther = document.getElementById('id_primary_role_other');
       if (roleSelect.value == "other") {
@@ -102,7 +121,7 @@
       }
     });
 
-    const contributionSelect = document.getElementById('id_current_contribution');
+    var contributionSelect = document.getElementById('id_current_contribution');
     contributionSelect.addEventListener('change', function() {
       const contributionOther = document.getElementById('id_current_contribution_info');
       if (contributionSelect.value == "yes") {
@@ -112,7 +131,7 @@
       }
     });
 
-    const cocCheck = document.getElementById('id_code_of_conduct');
+    var cocCheck = document.getElementById('id_code_of_conduct');
     cocCheck.addEventListener('change', function() {
       const cocQuestion = document.getElementById('id_coc_what_email');
       if (cocCheck.checked) {
@@ -122,7 +141,7 @@
       }
     });
 
-    const ngttntSelect = document.getElementById('id_not_gonna_try_to_name_this');
+    var ngttntSelect = document.getElementById('id_not_gonna_try_to_name_this');
     ngttntSelect.addEventListener('change', function() {
       const ngttntOther = document.getElementById('id_not_gonna_try_to_name_this_info');
       if (ngttntSelect.value == "yes") {
@@ -133,11 +152,12 @@
     });
 
     addEventListener("load", (e) => {
+      console.log('doin it');
       const event = new Event("change");
-      roleSelect.dispatch(event);
-      contributionSelect.dispatch(event);
-      cocCheck.dispatch(event);
-      ngttntSelect.dispatch(event);
+      roleSelect.dispatchEvent(event);
+      contributionSelect.dispatchEvent(event);
+      cocCheck.dispatchEvent(event);
+      ngttntSelect.dispatchEvent(event);
     });
 </script>
 {% endblock %}

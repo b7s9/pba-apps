@@ -1,10 +1,10 @@
 from django.contrib import admin
 
-from organizers.models import OrganizerSubmission
+from organizers.models import OrganizerApplication
 
 
-class OrganizerSubmissionAdmin(admin.ModelAdmin):
+class OrganizerApplicationAdmin(admin.ModelAdmin):
     pass
 
 
-admin.site.register(OrganizerSubmission, OrganizerSubmissionAdmin)
+admin.site.register(OrganizerApplication, OrganizerApplicationAdmin)

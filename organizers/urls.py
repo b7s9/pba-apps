@@ -3,7 +3,11 @@ from django.urls import path
 from organizers import views
 
 urlpatterns = [
-    path("form/", views.organizer_form, name="organizer_form"),
-    path("form/<pk>/edit", views.organizer_form, name="organizer_form_edit"),
-    path("form/<pk>/view", views.organizer_form_view, name="organizer_form_view"),
+    path("application/", views.organizer_application, name="organizer_application"),
+    path("application/<pk>/edit/", views.organizer_application, name="organizer_application_edit"),
+    path(
+        "application/<pk>/view/",
+        views.organizer_application_view,
+        name="organizer_application_view",
+    ),
 ]
