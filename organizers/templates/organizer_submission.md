@@ -1,105 +1,124 @@
-# {{ application.data.shortname.value|safe }}
-
-```
-{{ application.data.quick_summary.value|safe }}
-```
+# {{ submission.submitter.first_name }} {{ submission.submitter.last_name }}
 
 ## Leader
 
 **Name**:
 ```
-{{ application.submitter.first_name }} {{ application.submitter.last_name }}
+{{ submission.submitter.first_name }} {{ submission.submitter.last_name }}
+```
+
+**District**:
+```
+{{ submission.submitter.profile.district }}
 ```
 
 **Discord username**:
 ```
-{{ application.submitter.profile.discord.extra_data.username }}
+{{ submission.submitter.profile.discord.extra_data.username }}
 ```
 
-**{{ application.data.leader_preferred_contact_method.label }}**:
+**{{ submission.data.preferred_contact_method.label }}**:
 ```
-{{ application.data.leader_preferred_contact_method.value }}
-```
-
-**Past Experience**:
-```
-{{ application.data.leader_past_experience.value|safe }}
+{{ submission.data.preferred_contact_method.value }}
 ```
 
-## Overview
-
-**{{ application.data.mission_relevance.label|safe }}**:
+## Nominating Organizer/Board Member
 ```
-{{ application.data.mission_relevance.value|safe }}
+{{ submission.data.nominator.value }}
 ```
 
-**{{ application.data.success_criteria.label|safe }}**:
+## Desired role
+
+**{{ submission.data.primary_role.label }}**:
 ```
-{{ application.data.success_criteria.value|safe }}
+{{ submission.data.primary_role.value }}
 ```
 
-**{{ application.data.name_use.label|safe }}**:
+{% if submission.data.primary_role_other.value == "other" %}
+**{{ submission.data.primary_other_role.label }}**:
 ```
-{{ application.data.name_use.value|safe }}
+{{ submission.data.primary_otherrole.value }}
+```
+{% endif %}
+
+**{{ submission.data.regular_duties.label }}**
+```
+{{ submission.data.regular_duties.value }}
 ```
 
-**{{ application.data.recruitment.label|safe }}**:
-```
-{{ application.data.recruitment.value|safe }}
-```
-
-**{{ application.data.external_orgs.label|safe }}**:
-```
-{{ application.data.external_orgs.value|safe }}
+**{{ submission.data.teams.label }}**
+```{% for team in submission.data.teams.value %}
+- {{ team }}{% endfor %}
 ```
 
-## Logistics
+## Past Involvement
 
-**{{ application.data.location.label|safe }}**:
+**{{ submission.data.involvement.label }}**
 ```
-{% if application.data.location.value %}{{ application.data.location.value|safe }}{% else %}no response{% endif %}
-```
-
-**{{ application.data.time_and_date.label|safe }}**:
-```
-{% if application.data.time_and_date.value %}{{ application.data.time_and_date.value|safe }}{% else %}no response{% endif %}
+{{ submission.data.involvement.value }}
 ```
 
-**{{ application.data.recurring.label|safe }}**:
+**{{ submission.data.past_experience.label }}**
 ```
-{% if application.data.recurring.value %}{{ application.data.recurring.value|safe }}{% else %}no response{% endif %}
-```
-
-## Resources
-
-**{{ application.data.equipment_needed.label|safe }}**:
-```
-{{ application.data.equipment_needed.value|safe }}
+{{ submission.data.past_experience.value }}
 ```
 
-**{{ application.data.volunteers_needed.label|safe }}**:
+**{{ submission.data.current_contribution.label }}**
 ```
-{{ application.data.volunteers_needed.value|safe }}
-```
-
-**{{ application.data.promotion_needed.label|safe }}**:
-```
-{{ application.data.promotion_needed.value|safe }}
+{{ submission.data.current_contribution.value }}
 ```
 
-**{{ application.data.finances_needed.label|safe }}**:
+{% if submission.data.current_contribution_info.value %}
+**{{ submission.data.current_contribution_info.label }}**
 ```
-{{ application.data.finances_needed.value|safe }}
+{{ submission.data.current_contribution_info.value }}
+```
+{% endif %}
+
+## Availability
+
+**{{ submission.data.online_availability.label }}**
+```
+{{ submission.data.online_availability.value }}
 ```
 
-**{{ application.data.others_needed.label|safe }}**:
+**{{ submission.data.inperson_availability.label }}**
 ```
-{% if application.data.others_needed.value %}{{ application.data.others_needed.value|safe }}{% else %}no response{% endif %}
+{{ submission.data.inperson_availability.value }}
 ```
 
-## Anything Else
+## Additional info
 
-**{{ application.data.anything_else.label|safe }}**:
+**{{ submission.data.public_speaking.label }}**:
 ```
-{% if application.data.anything_else.value %}{{ application.data.anything_else.value|safe }}{% else %}no response{% endif %}
+{{ submission.data.public_speaking.value|default:"no response" }}
 ```
+
+**{{ submission.data.support_needed.label }}**:
+```
+{{ submission.data.support_needed.value|default:"no response" }}
+```
+
+**{{ submission.data.anything_else.label }}**:
+```
+{{ submission.data.anything_else.value|default:"no response" }}
+```
+
+## Conduct
+
+**Code of Conduct agreed**:
+```
+True
+```
+
+**{{ submission.data.not_gonna_try_to_name_this.label }}**:
+```
+{{ submission.data.not_gonna_try_to_name_this.value }}
+```
+
+{% if submission.data.not_gonna_try_to_name_this_info.value %}
+**{{ submission.data.not_gonna_try_to_name_this_info.label }}**:
+```
+Response redacted by default. Only select PBA Admins can access this via bikeaction.org/admin/
+```
+{% endif %}

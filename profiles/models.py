@@ -11,6 +11,7 @@ from facets.models import District as DistrictFacet
 from facets.models import (
     RegisteredCommunityOrganization as RegisteredCommunityOrganizationFacet,
 )
+from organizers.models import OrganizerSubmission
 from profiles.tasks import geocode_profile, sync_to_mailchimp, sync_to_mailjet
 from projects.models import ProjectApplication
 
@@ -107,6 +108,14 @@ class Profile(models.Model):
     @property
     def project_applications(self):
         return ProjectApplication.objects.filter(submitter=self.user, draft=False).all()
+
+    @property
+    def organizer_nomination_drafts(self):
+        return OrganizerSubmission.objects.filter(submitter=self.user, draft=True).all()
+
+    @property
+    def organizer_nominations(self):
+        return OrganizerSubmission.objects.filter(submitter=self.user, draft=False).all()
 
     @property
     def district(self):

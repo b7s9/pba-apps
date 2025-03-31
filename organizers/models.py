@@ -22,9 +22,9 @@ class OrganizerSubmission(models.Model):
     def render_markdown(self):
         context = {field: data["value"] for field, data in self.data.items()}
         form = OrganizerForm(label_suffix="")
-        context["application"] = self
+        context["submission"] = self
         context["form"] = form
-        self.markdown = render_to_string("organizer_form.md", context)
+        self.markdown = render_to_string("organizer_submission.md", context)
 
     def save(self, *args, **kwargs):
         if not self.draft and not self.thread_id:

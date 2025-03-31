@@ -103,6 +103,52 @@
 </div>
 {% endif %}
 
+{% if request.user.profile.organizer_nomination_drafts %}
+<hr>
+<div class="form-header">
+  <h2>Project Application Drafts</h2>
+  <div class="table-container">
+    <table>
+        <tr>
+          <th>Last Updated</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+        {% for submission in request.user.profile.organizer_nomination_drafts %}
+        <tr>
+          <td>{{ submission.updated_at|date }}</td>
+          <td>Draft</td>
+          <td><a href="{% url 'organizer_form_edit' pk=submission.id %}">Edit/Submit</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+  </div>
+</div>
+{% endif %}
+
+{% if request.user.profile.organizer_nominations %}
+<hr>
+<div class="form-header">
+  <h2>Project Applications</h2>
+  <div class="table-container">
+    <table>
+        <tr>
+          <th>Submitted</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+        {% for submission in request.user.profile.organizer_nominations %}
+        <tr>
+          <td>{{ submission.updated_at|date }}</td>
+          <td>Submitted</td>
+          <td><a href="{% url 'organizer_form_view' pk=submission.id %}">View</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+  </div>
+</div>
+{% endif %}
+
 <hr>
 <div class="form-header">
   <h2>{% translate "Your District and RCOs" %}</h2>
