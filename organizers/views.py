@@ -52,7 +52,7 @@ def organizer_application(request, pk=None):
     if (
         request.user.profile.organizer_application
         or request.user.profile.organizer_application_draft
-    ):
+    ) and not pk:
         message = "You may only have one organizer application or draft organizer application."
         messages.add_message(request, messages.ERROR, message)
         return redirect("profile")
