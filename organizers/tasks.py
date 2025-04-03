@@ -49,7 +49,18 @@ async def _add_new_organizer_message_and_thread(organizer_application_id):
     link = f"https://apps.bikeaction.org{link}"
     await thread.send(
         f"{mention_role.mention} please review!\n\n"
-        f"You can view the application online [here]({link}) after logging in."
+        f"You can view the application online at <{link}> after logging in.\n\n"
+        "Organizers - please review and follow these instructions:\n\n"
+        "1️⃣  The Nominating Organizer in this application must  "
+        "reply to this thread with a reccomendationn\n\n"
+        "2️⃣  At least 2 Organizers who have worked with the candidate "
+        "should provide endorsement\n\n"
+        "3️⃣  One Organizer must volunteer to mentor this new organizeer"
+        "(tell them they were approved, explain how pba works, "
+        "answer questions, etc)\n\n"
+        "4️⃣  Once the above has happened, everyone can vote ✅ or ❌ "
+        "(minimum 5 votes required, "
+        "contentious votes should be referred to the Board)."
     )
     application.thread_id = thread.id
     await application.asave()
