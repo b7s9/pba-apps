@@ -1158,7 +1158,19 @@ body {
 }
 
 #rco_boundaries {
-  height: 50vh;
+  height: 20rem;
+  max-height: 50vh;
+  max-width: 100%;
+  .leaflet-control-container { display: none; }
+}
+
+.rco-container {
+  max-width: 768px;
+  margin: 0 auto;
+
+  a,a:visited {
+    color: blue;
+  }
 }
 
 /* CMS */
