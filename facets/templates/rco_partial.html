@@ -6,12 +6,19 @@
 
 <ul>
 {% for rco in RCOS %}
-  <li>{{ rco.ORGANIZATION_NAME }}</li>
+  {% if rco.targetable %}
+  <li><b>{{ rco.name }}</b></li>
+  {% endif %}
+{% endfor %}
+{% for rco in RCOS %}
+  {% if not rco.targetable %}
+  <li>{{ rco.name }}</li>
+  {% endif %}
 {% endfor %}
 </ul>
 
 {% if RCOS|length > 1 %}
-<p><small><i>You have multiple RCOs! Most <i>often</i> the first listed RCO is the primary one for your address</i></small></p>
+<p><small><i>You have multiple RCOs! <b>Bolded</b> RCOs are your primary RCO. If there is no bolded RCO, it is <i>often</i> the first one listed for your address</i></small></p>
 {% endif %}
 
 {% if OTHER|length > 0 or WARDS|length > 0 %}

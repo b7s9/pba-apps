@@ -2,6 +2,7 @@ import json
 import pathlib
 
 from django.conf import settings
+from django.contrib.gis.geos import Point as GEOPoint
 from django.db import transaction
 from django.db.models import Count
 from django.http import HttpResponse
@@ -11,9 +12,6 @@ from shapely.geometry import Point, shape
 
 from facets.models import District, RegisteredCommunityOrganization
 from facets.utils import geocode_address
-
-with open(pathlib.Path(__file__).parent / "data" / "Zoning_RCO-2.geojson") as f:
-    RCOS = json.load(f)
 
 with open(pathlib.Path(__file__).parent / "data" / "Council_Districts_2024.geojson") as f:
     DISTRICTS = json.load(f)
@@ -50,21 +48,20 @@ async def query_address(request):
         return HttpResponse(f'<p style="color: red;">{error}</p>')
 
     point = Point(address.longitude, address.latitude)
+    geopoint = GEOPoint(address.longitude, address.latitude)
 
     rcos = []
     rcos_geojson = []
     other = []
     wards = []
-    for feature in RCOS["features"]:
-        polygon = shape(feature["geometry"])
-        if polygon.contains(point):
-            rcos_geojson.append(mark_safe(json.dumps(feature)))
-            if feature["properties"]["ORG_TYPE"] == "Ward":
-                wards.append(feature["properties"])
-            elif feature["properties"]["ORG_TYPE"] in ["NID", "SSD", None]:
-                other.append(feature["properties"])
-            else:
-                rcos.append(feature["properties"])
+    async for rco in RegisteredCommunityOrganization.objects.filter(mpoly__contains=geopoint):
+        rcos_geojson.append(mark_safe(rco.mpoly.geojson))
+        if rco.properties["ORG_TYPE"] == "Ward":
+            wards.append(rco)
+        elif rco.properties["ORG_TYPE"] in ["NID", "SSD", None]:
+            other.append(rco)
+        else:
+            rcos.append(rco)
 
     district = None
     district_geojson = None
