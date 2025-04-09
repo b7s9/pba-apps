@@ -1,3 +1,4 @@
+from allauth.account.forms import ResetPasswordForm
 from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
@@ -14,6 +15,11 @@ class EmailLoginForm(forms.Form):
     email = forms.EmailField(
         help_text="The email address you used to sign up for your Philly Bike Action Account"
     )
+    captcha = ReCaptchaField(widget=ReCaptchaV2Invisible)
+
+
+class CaptchaResetPasswordForm(ResetPasswordForm):
+    captcha = ReCaptchaField(widget=ReCaptchaV2Invisible)
 
 
 class NewsletterSignupForm(forms.Form):

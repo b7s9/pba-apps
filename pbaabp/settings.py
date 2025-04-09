@@ -351,6 +351,7 @@ MAILJET_SECRET_SIGNUP_URL = env("MAILJET_SECRET_SIGNUP_URL", default=None)
 # django-allauth
 ACCOUNT_FORMS = {
     "signup": "profiles.forms.ProfileSignupForm",
+    "reset_password": "pbaabp.forms.CaptchaResetPasswordForm",
 }
 ACCOUNT_ADAPTER = "profiles.adapters.AccountAdapter"
 ACCOUNT_EMAIL_REQUIRED = True
