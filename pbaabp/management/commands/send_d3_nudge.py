@@ -10,7 +10,9 @@ from profiles.models import Profile
 district = District.objects.get(name="District 3")
 profiles = Profile.objects.filter(location__within=district.mpoly)
 
-events = ScheduledEvent.objects.filter(Q(slug__contains="d3") | Q(slug__contains="district-3"))
+events = ScheduledEvent.objects.filter(
+    Q(slug__contains="d3") | Q(slug__contains="district-3") | Q(slug__contains="westsw-philly")
+)
 sign_ins = EventSignIn.objects.filter(event__in=events)
 
 SENT = []
