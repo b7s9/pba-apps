@@ -29,7 +29,6 @@ django-storages[s3]
 django-tuieditor
 easy-thumbnails
 geopy
-mailchimp3
 markdown
 pillow
 psycopg2-binary

@@ -189,7 +189,7 @@ class ProfileAdmin(ReadOnlyLeafletGeoAdminMixin, admin.ModelAdmin):
         else:
             return (
                 "user",
-                "mailchimp_contact_id",
+                "mailjet_contact_id",
                 "council_district_calculated",
                 "council_district_validated",
             )

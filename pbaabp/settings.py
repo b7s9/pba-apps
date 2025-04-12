@@ -337,10 +337,6 @@ WP_LOGIN_EMAIL = env("WP_LOGIN_EMAIL", default=None)
 WP_LOGIN_PASS = env("WP_LOGIN_PASS", default=None)
 WP_CAMPAIGN_PAGE_ID = env("WP_CAMPAIGN_PAGE_ID", default=5877)
 
-# Mailchimp
-MAILCHIMP_API_KEY = env("MAILCHIMP_API_KEY", default=None)
-MAILCHIMP_AUDIENCE_ID = env("MAILCHIMP_AUDIENCE_ID", default=None)
-
 # Mailjet
 MAILJET_API_KEY = env("MAILJET_API_KEY", default=None)
 MAILJET_SECRET_KEY = env("MAILJET_SECRET_KEY", default=None)

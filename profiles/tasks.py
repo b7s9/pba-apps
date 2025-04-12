@@ -2,7 +2,6 @@ from asgiref.sync import async_to_sync
 from celery import shared_task
 from django.conf import settings
 from django.contrib.gis.geos import Point
-from mailchimp3 import MailChimp, helpers
 
 from facets.utils import geocode_address
 from pba_discord.bot import bot
@@ -61,7 +60,7 @@ def sync_to_mailjet(profile_id):
     profile = Profile.objects.get(id=profile_id)
     mailjet = Mailjet()
 
-    mailjet.fetch_contact(profile.user.email)
+    response = mailjet.fetch_contact(profile.user.email)
     mailjet.update_contact_data(
         profile.user.email,
         {
@@ -73,6 +72,8 @@ def sync_to_mailjet(profile_id):
         },
     )
     mailjet.add_contact_to_list(profile.user.email, subscribed=profile.newsletter_opt_in)
+    profile.mailjet_contact_id = response["ID"]
+    profile.save()
 
 
 @shared_task
@@ -98,40 +99,3 @@ def unsubscribe_mailjet_email(list_id, email):
         from profiles.models import Profile
 
         Profile.objects.filter(user__email=email).update(newsletter_opt_in=False)
-
-
-@shared_task
-def sync_to_mailchimp(profile_id):
-    from profiles.models import Profile
-
-    profile = Profile.objects.get(id=profile_id)
-
-    status = "subscribed" if profile.newsletter_opt_in else "unsubscribed"
-
-    mailchimp = MailChimp(mc_api=settings.MAILCHIMP_API_KEY)
-    print("updating contact...")
-    response = mailchimp.lists.members.create_or_update(
-        settings.MAILCHIMP_AUDIENCE_ID,
-        helpers.get_subscriber_hash(profile.user.email),
-        {
-            "email_address": profile.user.email,
-            "status": status,
-            "status_if_new": status,
-            "merge_fields": {
-                "FNAME": profile.user.first_name,
-                "LNAME": profile.user.last_name,
-            },
-        },
-    )
-    Profile.objects.filter(id=profile_id).update(mailchimp_contact_id=response["id"])
-
-    print("updating tags...")
-    mailchimp.lists.members.tags.update(
-        settings.MAILCHIMP_AUDIENCE_ID,
-        helpers.get_subscriber_hash(profile.user.email),
-        data={
-            "tags": [
-                {"name": "apps", "status": "active"},
-            ]
-        },
-    )

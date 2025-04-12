@@ -16,6 +16,17 @@ class Mailjet:
         response.raise_for_status()
         return response.json()["Data"][0]
 
+    def get_contact(self, email):
+        response = requests.get(f"{self.base_url}/contact/{email}", auth=self.auth)
+        try:
+            response.raise_for_status()
+        except requests.exceptions.HTTPError as e:
+            if e.response.status_code == 404:
+                return None
+            else:
+                raise
+        return response.json()["Data"][0]
+
     def fetch_contact(self, email):
         response = requests.get(f"{self.base_url}/contact/{email}", auth=self.auth)
         try:

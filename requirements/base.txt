@@ -256,8 +256,6 @@ kombu==5.5.1
     # via celery
 laces==0.1.2
     # via wagtail
-mailchimp3==3.0.21
-    # via -r base.in
 markdown==3.7
     # via
     #   -r base.in
@@ -329,7 +327,6 @@ redis==5.2.1
 requests==2.32.3
     # via
     #   django-anymail
-    #   mailchimp3
     #   stripe
     #   wagtail
 s3transfer==0.11.4
@@ -365,7 +362,9 @@ toml==0.10.2
 tomli==2.2.1
     # via discord-py-interactions
 twisted[tls]==24.11.0
-    # via daphne
+    # via
+    #   daphne
+    #   twisted
 txaio==23.1.1
     # via autobahn
 typing-extensions==4.13.0

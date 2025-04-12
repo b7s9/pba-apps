@@ -8,7 +8,7 @@ from django.urls import reverse
 from icalendar import Calendar, Event
 from interactions.models.discord.enums import ScheduledEventStatus
 
-from events.tasks import sync_to_mailchimp
+from events.tasks import sync_to_mailjet
 from lib.slugify import unique_slugify
 
 
@@ -103,7 +103,7 @@ class EventSignIn(models.Model):
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     event = models.ForeignKey(ScheduledEvent, to_field="id", on_delete=models.CASCADE)
-    mailchimp_contact_id = models.CharField(max_length=64, null=True, blank=True)
+    mailjet_contact_id = models.BigIntegerField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -130,16 +130,16 @@ class EventSignIn(models.Model):
             change_fields = [
                 f.name
                 for f in EventSignIn._meta._get_fields()
-                if f.name not in ["id", "event", "mailchimp_contact_id"]
+                if f.name not in ["id", "event", "mailjet_contact_id"]
             ]
             modified = False
             for i in change_fields:
                 if getattr(old_model, i, None) != getattr(self, i, None):
                     modified = True
             if modified:
-                transaction.on_commit(lambda: sync_to_mailchimp.delay(self.id))
+                transaction.on_commit(lambda: sync_to_mailjet.delay(self.id))
         else:
-            transaction.on_commit(lambda: sync_to_mailchimp.delay(self.id))
+            transaction.on_commit(lambda: sync_to_mailjet.delay(self.id))
         super(EventSignIn, self).save(*args, **kwargs)
 
     def __str__(self):

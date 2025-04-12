@@ -196,9 +196,9 @@ def event_signin(request, event_slug_or_id):
             if request.GET.get("kiosk", False):
                 return redirect("event_signin_kiosk_postroll", event_slug_or_id=event.slug)
             else:
-                return HttpResponseRedirect("https://bikeaction.org")
+                return HttpResponseRedirect("/")
     elif timezone.now() > event.start_datetime + datetime.timedelta(days=1):
-        return HttpResponseRedirect("https://bikeaction.org")
+        return HttpResponseRedirect("/")
     else:
         form = EventSignInForm()
 

@@ -12,7 +12,7 @@ from facets.models import (
     RegisteredCommunityOrganization as RegisteredCommunityOrganizationFacet,
 )
 from organizers.models import OrganizerApplication
-from profiles.tasks import geocode_profile, sync_to_mailchimp, sync_to_mailjet
+from profiles.tasks import geocode_profile, sync_to_mailjet
 from projects.models import ProjectApplication
 
 
@@ -31,7 +31,7 @@ class Profile(models.Model):
         DISTRICT_10 = 10, _("District 10")
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    mailchimp_contact_id = models.CharField(max_length=64, null=True, blank=True)
+    mailjet_contact_id = models.BigIntegerField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -84,11 +84,9 @@ class Profile(models.Model):
                 if getattr(old_model, i, None) != getattr(self, i, None):
                     modified = True
             if modified:
-                transaction.on_commit(lambda: sync_to_mailchimp.delay(self.id))
                 transaction.on_commit(lambda: sync_to_mailjet.delay(self.id))
                 transaction.on_commit(lambda: geocode_profile.delay(self.id))
         else:
-            transaction.on_commit(lambda: sync_to_mailchimp.delay(self.id))
             transaction.on_commit(lambda: sync_to_mailjet.delay(self.id))
             transaction.on_commit(lambda: geocode_profile.delay(self.id))
         super(Profile, self).save(*args, **kwargs)
