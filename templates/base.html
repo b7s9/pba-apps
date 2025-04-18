@@ -185,6 +185,17 @@
           }
         });
 
+        window.addEventListener('click', function(event) {
+          const divElement = document.getElementById('mobileNavTree');
+          if (event.target.id === "menu-icon") {
+            return;
+          }
+          event.stopPropagation();
+          if (!divElement.contains(event.target) && divElement.style.display !== 'none') {
+            divElement.style.display = 'none';
+          }
+        });
+
     </script>
   </body>
 </html>
