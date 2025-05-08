@@ -1,14 +1,11 @@
-from asgiref.sync import async_to_sync
 from django.conf import settings
-from django.contrib.gis.geos import Point
 from django.core.management.base import BaseCommand
 
-from campaigns.models import PetitionSignature
 from facets.models import RegisteredCommunityOrganization
-from facets.utils import geocode_address
 from pbaabp.email import send_email_message
 
 _rco = RegisteredCommunityOrganization.objects.get(id="3a17d622-0517-4161-b33e-efb5fa95ff44")
+
 
 class Command(BaseCommand):
 
