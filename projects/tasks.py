@@ -15,13 +15,13 @@ async def _add_new_project_message_and_thread(project_application_id):
 
     await bot.login(settings.DISCORD_BOT_TOKEN)
     guild = await bot.fetch_guild(settings.NEW_PROJECT_REVIEW_DISCORD_GUILD_ID)
-    selection_channel = await guild.fetch_channel(settings.NEW_PROJECT_REVIEW_DISCORD_CHANNEL_ID)
+    channel = await guild.fetch_channel(settings.NEW_PROJECT_REVIEW_DISCORD_CHANNEL_ID)
     mention_role = await guild.fetch_role(settings.NEW_PROJECT_REVIEW_DISCORD_ROLE_MENTION_ID)
     submitter = await sync_to_async(lambda: application.submitter)()
     profile = await sync_to_async(lambda: submitter.profile)()
     discord = await sync_to_async(lambda: profile.discord)()
     discord_username = discord.extra_data["username"]
-    thread = await selection_channel.create_thread(
+    thread = await channel.create_thread(
         name=f"{application.data['shortname']['value']}",
         reason=f"Project Application submitted by {discord_username}",
         auto_archive_duration=AutoArchiveDuration.ONE_WEEK,
@@ -48,13 +48,51 @@ async def _add_new_project_message_and_thread(project_application_id):
     link = reverse("project_application_view", kwargs={"pk": application.id})
     link = f"https://apps.bikeaction.org{link}"
     await thread.send(
-        f"{mention_role.mention} please review!\n\n"
+        f"{mention_role.mention} please review and vote with :white_check_mark: or :x:.\n\n"
         f"You can view the application online [here]({link}) after logging in."
     )
     application.thread_id = thread.id
     await application.asave()
 
 
+async def _add_new_project_voting_message_and_thread(project_application_id):
+    application = await ProjectApplication.objects.filter(id=project_application_id).afirst()
+    if application is None or application.approved or application.voting_thread_id:
+        return
+
+    await bot.login(settings.DISCORD_BOT_TOKEN)
+    guild = await bot.fetch_guild(settings.NEW_PROJECT_REVIEW_DISCORD_GUILD_ID)
+    discussion_thread = await guild.fetch_channel(application.thread_id)
+    channel = await guild.fetch_channel(settings.NEW_PROJECT_REVIEW_DISCORD_VOTE_CHANNEL_ID)
+    mention_role = await guild.fetch_role(settings.NEW_PROJECT_REVIEW_DISCORD_ROLE_VOTE_MENTION_ID)
+    submitter = await sync_to_async(lambda: application.submitter)()
+    profile = await sync_to_async(lambda: submitter.profile)()
+    discord = await sync_to_async(lambda: profile.discord)()
+    discord_username = discord.extra_data["username"]
+    thread = await channel.create_thread(
+        name=f"Vote: Project - {application.data['shortname']['value']}",
+        reason=f"Project Application by {discord_username}",
+        auto_archive_duration=AutoArchiveDuration.ONE_WEEK,
+    )
+    link = reverse("project_application_view", kwargs={"pk": application.id})
+    link = f"https://apps.bikeaction.org{link}"
+    message = await thread.send(
+        f"{mention_role.mention} please review and vote with :white_check_mark: or :x:.\n\n"
+        f"See discussion at https://discord.com/channels/{guild.id}/{discussion_thread.id}\n\n"
+        f"You can also view the application online [here]({link}) after logging in."
+    )
+    await message.add_reaction(":white_check_mark:")
+    await message.add_reaction(":x:")
+    await discussion_thread.send("Project application has been sent for vote!")
+    application.voting_thread_id = thread.id
+    await application.asave()
+
+
 @shared_task
 def add_new_project_message_and_thread(project_application_id):
     async_to_sync(_add_new_project_message_and_thread)(project_application_id)
+
+
+@shared_task
+def add_new_project_voting_message_and_thread(project_application_id):
+    async_to_sync(_add_new_project_voting_message_and_thread)(project_application_id)
