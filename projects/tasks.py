@@ -88,6 +88,53 @@ async def _add_new_project_voting_message_and_thread(project_application_id):
     await application.asave()
 
 
+async def _approve_new_project(
+    project_application_id,
+    project_channel_name,
+    project_mentor_id,
+    add_project_lead_role,
+    project_lead_id,
+):
+    application = await ProjectApplication.objects.filter(id=project_application_id).afirst()
+
+    await bot.login(settings.DISCORD_BOT_TOKEN)
+    guild = await bot.fetch_guild(settings.NEW_PROJECT_REVIEW_DISCORD_GUILD_ID)
+    discussion_thread = await guild.fetch_channel(application.thread_id)
+    voting_thread = await guild.fetch_channel(application.voting_thread_id)
+
+    actions = []
+
+    if project_channel_name is not None:
+        channel = await guild.create_text_channel(
+            project_channel_name, category=settings.ACTIVE_PROJECT_CATEGORY_ID
+        )
+        application.channel_id = channel.id
+        actions.append(f"Created channel `{project_channel_name}`")
+
+    if project_mentor_id is not None:
+        application.mentor_id = project_mentor_id
+        mentor = await guild.fetch_member(project_mentor_id)
+        actions.append(f"Assigned Mentor `{mentor}`")
+
+    if add_project_lead_role:
+        role = await guild.fetch_role(settings.ACTIVE_PROJECT_LEAD_ROLE_ID)
+        project_lead = await guild.fetch_member(project_lead_id)
+        await project_lead.add_role(role)
+        actions.append(f"Assigned `{role.name}` role to `{project_lead}`")
+
+    msg = f"Project \"{application.data['shortname']['value']}\" Approved!"
+    if actions:
+        msg += "\n\nActions Taken:\n"
+    for action in actions:
+        msg += f"- {action}\n"
+
+    await discussion_thread.send(msg)
+    await voting_thread.send(msg)
+
+    application.approved = True
+    await application.asave()
+
+
 @shared_task
 def add_new_project_message_and_thread(project_application_id):
     async_to_sync(_add_new_project_message_and_thread)(project_application_id)
@@ -96,3 +143,20 @@ def add_new_project_message_and_thread(project_application_id):
 @shared_task
 def add_new_project_voting_message_and_thread(project_application_id):
     async_to_sync(_add_new_project_voting_message_and_thread)(project_application_id)
+
+
+@shared_task
+def approve_new_project(
+    project_application_id,
+    project_channel_name,
+    project_mentor_id,
+    add_project_lead_role,
+    project_lead_id,
+):
+    async_to_sync(_approve_new_project)(
+        project_application_id,
+        project_channel_name,
+        project_mentor_id,
+        add_project_lead_role,
+        project_lead_id,
+    )

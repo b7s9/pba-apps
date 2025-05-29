@@ -1,7 +1,17 @@
+from allauth.socialaccount.models import SocialAccount
 from django.conf import settings
-from interactions import Extension, SlashContext, slash_command
+from interactions import (
+    Extension,
+    OptionType,
+    SlashContext,
+    slash_command,
+    slash_option,
+)
 
-from projects.tasks import add_new_project_voting_message_and_thread
+from projects.tasks import (
+    add_new_project_voting_message_and_thread,
+    approve_new_project,
+)
 
 
 class ProjectApplications(Extension):
@@ -41,12 +51,40 @@ class ProjectApplications(Extension):
         sub_cmd_name="approve",
         sub_cmd_description="Approve a project after board vote",
     )
-    async def project_approve(self, ctx: SlashContext):
+    @slash_option(
+        name="project_channel_name",
+        description="The name of the project channel to create, if needed",
+        required=False,
+        opt_type=OptionType.STRING,
+    )
+    @slash_option(
+        name="project_mentor",
+        description=(
+            "The discord user name of the organizer who will Mentor the Project Lead, " "if needed"
+        ),
+        required=False,
+        opt_type=OptionType.USER,
+    )
+    @slash_option(
+        name="add_project_lead_role",
+        description="Add the Project Lead role to the Project Lead user?",
+        required=False,
+        opt_type=OptionType.BOOLEAN,
+    )
+    async def project_approve(
+        self,
+        ctx: SlashContext,
+        project_channel_name=None,
+        project_mentor=None,
+        add_project_lead_role=False,
+    ):
         from projects.models import ProjectApplication
 
-        project_application = await ProjectApplication.objects.filter(
-            voting_thread_id=ctx.channel_id
-        ).afirst()
+        project_application = (
+            await ProjectApplication.objects.filter(voting_thread_id=ctx.channel_id)
+            .select_related("submitter")
+            .afirst()
+        )
         if project_application is None:
             msg = (
                 "Sorry, cannot find an associated project application vote "
@@ -57,7 +95,54 @@ class ProjectApplications(Extension):
         elif project_application.approved:
             msg = "Project already approved."
         else:
-            msg = "On it!"
+            discord_account = await SocialAccount.objects.filter(
+                user=project_application.submitter
+            ).afirst()
+            if discord_account:
+                project_lead_id = discord_account.uid
+            errors = []
+            if project_channel_name and project_channel_name in [
+                c.name for c in ctx.guild.channels
+            ]:
+                errors.append(
+                    f"Cannot create Channel: Channel with name `{project_channel_name}` "
+                    "already exists"
+                )
+            if project_channel_name and settings.ACTIVE_PROJECT_CATEGORY_ID is None:
+                errors.append(
+                    "Cannot create Channel: No Active Project Category ID configured in settings"
+                )
+            if project_mentor and project_mentor not in ctx.guild.members:
+                errors.append(f"Cannot assign Mentor: No user {project_mentor} found!")
+            if add_project_lead_role and settings.ACTIVE_PROJECT_LEAD_ROLE_ID is None:
+                errors.append(
+                    "Cannot add Project Lead Role: No Project Lead Role ID configured in settings"
+                )
+            elif add_project_lead_role and discord_account is None:
+                errors.append(
+                    "Cannot add Project Lead Role: No discord user found for Project Lead"
+                )
+            else:
+                role = await ctx.guild.fetch_role(settings.ACTIVE_PROJECT_LEAD_ROLE_ID)
+                if role is None:
+                    errors.append(
+                        "Cannot add Project Lead Role: No Project Lead Role with ID "
+                        f"{settings.ACTIVE_PROJECT_LEAD_ROLE_ID} found!"
+                    )
+            if errors:
+                msg = " :cry: **Sorry, there are some issues!** :cry: \n"
+                msg += "Project approval could not be completed because:\n"
+                for error in errors:
+                    msg += f"- :exclamation: {error}\n"
+            else:
+                msg = "On it!"
+                approve_new_project.delay(
+                    project_application.id,
+                    project_channel_name,
+                    project_mentor.id if project_mentor else None,
+                    add_project_lead_role,
+                    project_lead_id,
+                )
         await ctx.send(msg, ephemeral=True)
 
 
