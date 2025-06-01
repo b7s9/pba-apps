@@ -172,6 +172,40 @@ async def _approve_new_project(
     await application.asave()
 
 
+async def _archive_project(project_application_id):
+    application = await ProjectApplication.objects.filter(id=project_application_id).afirst()
+
+    await bot.login(settings.DISCORD_BOT_TOKEN)
+    guild = await bot.fetch_guild(settings.NEW_PROJECT_REVIEW_DISCORD_GUILD_ID)
+
+    channel = None
+    if application.channel_id:
+        channel = await guild.fetch_channel(application.channel_id)
+        mention_role = await guild.fetch_role(settings.NEW_PROJECT_REVIEW_DISCORD_ROLE_MENTION_ID)
+        await channel.send(
+            f"This project has been marked complete by {application.archived_by}, "
+            "and archived.\n\n"
+            f"{mention_role.mention} please update the project information in "
+            f"https://discord.com/channels/{guild.id}/{settings.PROJECT_LOG_CHANNEL_ID}, "
+            "leave a :white_check_mark: when complete."
+        )
+        print(
+            guild.id,
+            channel.id,
+            settings.ARCHIVED_PROJECT_CATEGORY_ID,
+            True,
+            f"Project marked as complete by {application.archived_by}",
+        )
+        await bot.http.move_channel(
+            guild_id=guild.id,
+            channel_id=channel.id,
+            new_pos=0,
+            parent_id=settings.ARCHIVED_PROJECT_CATEGORY_ID,
+            lock_perms=True,
+            reason=f"Project marked as complete by {application.archived_by}",
+        )
+
+
 @shared_task
 def add_new_project_message_and_thread(project_application_id):
     async_to_sync(_add_new_project_message_and_thread)(project_application_id)
@@ -195,3 +229,8 @@ def approve_new_project(
         project_mentor_id,
         project_lead_id,
     )
+
+
+@shared_task
+def archive_project(project_application_id):
+    async_to_sync(_archive_project)(project_application_id)

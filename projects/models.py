@@ -39,6 +39,7 @@ class ProjectApplication(models.Model):
     approved = models.BooleanField(default=False)
     approved_by = models.CharField(max_length=64, null=True, blank=True)
     archived = models.BooleanField(default=False)
+    archived_by = models.CharField(max_length=64, null=True, blank=True)
 
     def __str__(self):
         return f"{self.data.get('shortname', {'value': 'TBD'}).get('value')}"

@@ -11,6 +11,7 @@ from interactions import (
 from projects.tasks import (
     add_new_project_voting_message_and_thread,
     approve_new_project,
+    archive_project,
 )
 
 
@@ -19,6 +20,31 @@ class ProjectApplications(Extension):
 
     def __init__(self, bot):
         self.bot = bot
+
+    @slash_command(
+        name="project",
+        description="Project Application related commands",
+        sub_cmd_name="archive",
+        sub_cmd_description="Archive a completed project",
+    )
+    async def project_archive(self, ctx: SlashContext):
+        from projects.models import ProjectApplication
+
+        project_application = await ProjectApplication.objects.filter(
+            channel_id=ctx.channel_id
+        ).afirst()
+        if project_application is None:
+            msg = "Sorry, cannot find an associated project in the current channel."
+        elif project_application.archived:
+            msg = "Project already archived."
+        else:
+            msg = "On it!"
+            project_application.archived_by = str(ctx.member)
+            project_application.archived = True
+            await project_application.asave()
+            archive_project.delay(project_application.id)
+
+        await ctx.send(msg, ephemeral=True)
 
     @slash_command(
         name="project",
