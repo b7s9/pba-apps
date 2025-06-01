@@ -48,8 +48,9 @@ async def _add_new_project_message_and_thread(project_application_id):
     link = reverse("project_application_view", kwargs={"pk": application.id})
     link = f"https://apps.bikeaction.org{link}"
     await thread.send(
-        f"{mention_role.mention} please review and vote with :white_check_mark: or :x:.\n\n"
-        f"You can view the application online [here]({link}) after logging in."
+        f"{mention_role.mention} please review!\n\n"
+        f"You can view the application online [here](<{link}>) after logging in.\n\n"
+        "When the project is ready for board review, use the `/project vote` command"
     )
     application.thread_id = thread.id
     await application.asave()
@@ -76,14 +77,19 @@ async def _add_new_project_voting_message_and_thread(project_application_id):
     )
     link = reverse("project_application_view", kwargs={"pk": application.id})
     link = f"https://apps.bikeaction.org{link}"
-    message = await thread.send(
+    await thread.send(
+        f"Project application \"{application.data['shortname']['value']}\" "
+        f"from {discord_username} has been submitted for vote by {application.vote_initiator}\n\n"
         f"{mention_role.mention} please review and vote with :white_check_mark: or :x:.\n\n"
         f"See discussion at https://discord.com/channels/{guild.id}/{discussion_thread.id}\n\n"
-        f"You can also view the application online [here]({link}) after logging in."
+        f"You can view the application online [here](<{link}>) after logging in.\n\n"
+        "If the vote passes, the `/project approve` command can be used to "
+        "optionally create a discord channel and/or assign a mentor, "
+        f"and assign the project lead role to {discord_username}."
     )
-    await message.add_reaction(":white_check_mark:")
-    await message.add_reaction(":x:")
-    await discussion_thread.send("Project application has been sent for vote!")
+    await discussion_thread.send(
+        f"Project application has been submitted for vote by {application.vote_initiator}!"
+    )
     application.voting_thread_id = thread.id
     await application.asave()
 
@@ -92,7 +98,6 @@ async def _approve_new_project(
     project_application_id,
     project_channel_name,
     project_mentor_id,
-    add_project_lead_role,
     project_lead_id,
 ):
     application = await ProjectApplication.objects.filter(id=project_application_id).afirst()
@@ -109,26 +114,58 @@ async def _approve_new_project(
             project_channel_name, category=settings.ACTIVE_PROJECT_CATEGORY_ID
         )
         application.channel_id = channel.id
-        actions.append(f"Created channel `{project_channel_name}`")
+        actions.append(f"Created channel https://discord.com/channels/{guild.id}/{channel.id}")
+
+        project_lead = await guild.fetch_member(project_lead_id)
+        msg = (
+            "This project has been approved!\n\n"
+            "Project Application: "
+            f"https://discord.com/channels/{guild.id}/{application.thread_id}\n\n"
+            f"Project Lead is {project_lead.mention}."
+        )
+        if project_mentor_id:
+            mentor = await guild.fetch_member(project_mentor_id)
+            msg += (
+                f" {mentor.mention} has volunteered to support this project "
+                "by answering any questions."
+            )
+        message = await channel.send(msg)
+        await message.pin()
 
     if project_mentor_id is not None:
         application.mentor_id = project_mentor_id
         mentor = await guild.fetch_member(project_mentor_id)
-        actions.append(f"Assigned Mentor `{mentor}`")
+        actions.append(f"Assigned Mentor {mentor.mention}")
 
-    if add_project_lead_role:
-        role = await guild.fetch_role(settings.ACTIVE_PROJECT_LEAD_ROLE_ID)
-        project_lead = await guild.fetch_member(project_lead_id)
-        await project_lead.add_role(role)
-        actions.append(f"Assigned `{role.name}` role to `{project_lead}`")
+    role = await guild.fetch_role(settings.ACTIVE_PROJECT_LEAD_ROLE_ID)
+    project_lead = await guild.fetch_member(project_lead_id)
+    application.project_lead_id = project_lead.id
+    await project_lead.add_role(role)
+    actions.append(f"Assigned {role.name} role to {project_lead.mention}")
 
-    msg = f"Project \"{application.data['shortname']['value']}\" Approved!"
+    msg = f"Project \"{application.data['shortname']['value']}\" " f"Approved!"
     if actions:
         msg += "\n\nActions Taken:\n"
     for action in actions:
         msg += f"- {action}\n"
 
     await discussion_thread.send(msg)
+
+    msg = (
+        f"Project \"{application.data['shortname']['value']}\" "
+        f"Approved by {application.approved_by}."
+    )
+    if actions:
+        msg += "\n\nActions Taken:\n"
+    for action in actions:
+        msg += f"- {action}\n"
+
+    if settings.PROJECT_LOG_CHANNEL_ID:
+        msg += (
+            "\nSomeone must add the project to the project log in "
+            f"https://discord.com/channels/{guild.id}/{settings.PROJECT_LOG_CHANNEL_ID}, "
+            "leave a :white_check_mark: when complete."
+        )
     await voting_thread.send(msg)
 
     application.approved = True
@@ -150,13 +187,11 @@ def approve_new_project(
     project_application_id,
     project_channel_name,
     project_mentor_id,
-    add_project_lead_role,
     project_lead_id,
 ):
     async_to_sync(_approve_new_project)(
         project_application_id,
         project_channel_name,
         project_mentor_id,
-        add_project_lead_role,
         project_lead_id,
     )

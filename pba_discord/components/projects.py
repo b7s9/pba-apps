@@ -42,6 +42,8 @@ class ProjectApplications(Extension):
             msg = "Project already approved."
         else:
             msg = "On it!"
+            project_application.vote_initiator = str(ctx.member)
+            await project_application.asave()
             add_new_project_voting_message_and_thread.delay(project_application.id)
         await ctx.send(msg, ephemeral=True)
 
@@ -66,8 +68,8 @@ class ProjectApplications(Extension):
         opt_type=OptionType.USER,
     )
     @slash_option(
-        name="add_project_lead_role",
-        description="Add the Project Lead role to the Project Lead user?",
+        name="really_nothing",
+        description="Use this option if you _do not_ want a channel or mentor",
         required=False,
         opt_type=OptionType.BOOLEAN,
     )
@@ -76,8 +78,16 @@ class ProjectApplications(Extension):
         ctx: SlashContext,
         project_channel_name=None,
         project_mentor=None,
-        add_project_lead_role=False,
+        really_nothing=False,
     ):
+        if project_channel_name is None and project_mentor is None and not really_nothing:
+            msg = (
+                "You must either specify a project channel name and/or project mentor, "
+                "OR set really_nothing to True!"
+            )
+            await ctx.send(msg, ephemeral=True)
+            return
+
         from projects.models import ProjectApplication
 
         project_application = (
@@ -100,6 +110,8 @@ class ProjectApplications(Extension):
             ).afirst()
             if discord_account:
                 project_lead_id = discord_account.uid
+            else:
+                project_lead_id = None
             errors = []
             if project_channel_name and project_channel_name in [
                 c.name for c in ctx.guild.channels
@@ -114,11 +126,11 @@ class ProjectApplications(Extension):
                 )
             if project_mentor and project_mentor not in ctx.guild.members:
                 errors.append(f"Cannot assign Mentor: No user {project_mentor} found!")
-            if add_project_lead_role and settings.ACTIVE_PROJECT_LEAD_ROLE_ID is None:
+            if settings.ACTIVE_PROJECT_LEAD_ROLE_ID is None:
                 errors.append(
                     "Cannot add Project Lead Role: No Project Lead Role ID configured in settings"
                 )
-            elif add_project_lead_role and discord_account is None:
+            elif discord_account is None:
                 errors.append(
                     "Cannot add Project Lead Role: No discord user found for Project Lead"
                 )
@@ -136,11 +148,12 @@ class ProjectApplications(Extension):
                     msg += f"- :exclamation: {error}\n"
             else:
                 msg = "On it!"
+                project_application.approved_by = str(ctx.member)
+                await project_application.asave()
                 approve_new_project.delay(
                     project_application.id,
                     project_channel_name,
                     project_mentor.id if project_mentor else None,
-                    add_project_lead_role,
                     project_lead_id,
                 )
         await ctx.send(msg, ephemeral=True)

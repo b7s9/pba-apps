@@ -13,6 +13,7 @@ class ProjectApplication(models.Model):
     submitter = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    project_lead_id = models.CharField(max_length=64, null=True, blank=True)
 
     # Draft Status
     draft = models.BooleanField(default=False)
@@ -23,6 +24,7 @@ class ProjectApplication(models.Model):
     thread_id = models.CharField(max_length=64, null=True, blank=True)
 
     # Voting Data
+    vote_initiator = models.CharField(max_length=64, null=True, blank=True)
     voting_thread_id = models.CharField(max_length=64, null=True, blank=True)
     yay_votes = ArrayField(models.CharField(max_length=32), default=list, blank=True)
     nay_votes = ArrayField(models.CharField(max_length=32), default=list, blank=True)
@@ -35,6 +37,7 @@ class ProjectApplication(models.Model):
 
     # Lifecycle Statuses
     approved = models.BooleanField(default=False)
+    approved_by = models.CharField(max_length=64, null=True, blank=True)
     archived = models.BooleanField(default=False)
 
     def __str__(self):
