@@ -6,4 +6,5 @@ class PBAABPConfig(AppConfig):
     name = "pbaabp"
 
     def ready(self):
+        import pbaabp.monkeypatching  # noqa: F401
         import pbaabp.signals  # noqa: F401
