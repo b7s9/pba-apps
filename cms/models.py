@@ -12,7 +12,9 @@ from wagtail.contrib.routable_page.models import RoutablePageMixin, path
 from wagtail.contrib.table_block.blocks import TableBlock
 from wagtail.fields import RichTextField, StreamField
 from wagtail.images.blocks import ImageBlock
+from wagtail.images.models import Image
 from wagtail.models import Page
+from wagtail.models.media import Collection
 from wagtail_link_block.blocks import LinkBlock
 
 from pbaabp.forms import NewsletterSignupForm
@@ -146,6 +148,25 @@ table_options = {
 }
 
 
+class DisplayCardsBlock(StructBlock):
+
+    collection = ChoiceBlock(
+        label="Collection to display",
+        required=True,
+        choices=[(collection.id, collection.name) for collection in Collection.objects.all()],
+    )
+
+    def get_context(self, value, parent_context=None):
+        context = super().get_context(value, parent_context=parent_context)
+        context["images"] = Image.objects.filter(
+            collection=Collection.objects.get(id=value["collection"])
+        )
+        return context
+
+    class Meta:
+        template = "blocks/display_cards.html"
+
+
 class FullSlugFieldPanel(FieldPanel):
 
     def __init__(self, field_name=None, heading=None, help_text=None, read_only=None, **kwargs):
@@ -180,6 +201,7 @@ class CmsStreamPage(Page):
             ("html", RawHTMLBlock()),
             ("table", TableBlock(table_options=table_options)),
             ("newsletter_signup", NewsletterSignupBlock()),
+            ("display_card_block", DisplayCardsBlock()),
         ],
         use_json_field=True,
     )

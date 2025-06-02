@@ -1,0 +1,7 @@
+{% load wagtailimages_tags %}
+
+<div class="card-display-list">
+{% for image in images %}
+{% image image width-600 class="card-display-card" %}
+{% endfor %}
+</div>
