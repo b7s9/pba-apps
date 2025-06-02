@@ -148,13 +148,13 @@ table_options = {
 }
 
 
+def get_collections():
+    return [(collection.id, collection.name) for collection in Collection.objects.all()]
+
+
 class DisplayCardsBlock(StructBlock):
 
-    collection = ChoiceBlock(
-        label="Collection to display",
-        required=True,
-        choices=[(collection.id, collection.name) for collection in Collection.objects.all()],
-    )
+    collection = ChoiceBlock(label="Collection to display", required=True, choices=get_collections)
 
     def get_context(self, value, parent_context=None):
         context = super().get_context(value, parent_context=parent_context)
