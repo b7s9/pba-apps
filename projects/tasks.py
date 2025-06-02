@@ -168,7 +168,6 @@ async def _approve_new_project(
         )
     await voting_thread.send(msg)
 
-    application.approved = True
     await application.asave()
 
 
@@ -188,13 +187,6 @@ async def _archive_project(project_application_id):
             f"{mention_role.mention} please update the project information in "
             f"https://discord.com/channels/{guild.id}/{settings.PROJECT_LOG_CHANNEL_ID}, "
             "leave a :white_check_mark: when complete."
-        )
-        print(
-            guild.id,
-            channel.id,
-            settings.ARCHIVED_PROJECT_CATEGORY_ID,
-            True,
-            f"Project marked as complete by {application.archived_by}",
         )
         await bot.http.move_channel(
             guild_id=guild.id,

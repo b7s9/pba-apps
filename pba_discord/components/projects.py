@@ -1,5 +1,6 @@
 from allauth.socialaccount.models import SocialAccount
 from django.conf import settings
+from django.utils import timezone
 from interactions import (
     Extension,
     OptionType,
@@ -40,6 +41,7 @@ class ProjectApplications(Extension):
         else:
             msg = "On it!"
             project_application.archived_by = str(ctx.member)
+            project_application.archived_at = timezone.now()
             project_application.archived = True
             await project_application.asave()
             archive_project.delay(project_application.id)
@@ -175,6 +177,8 @@ class ProjectApplications(Extension):
             else:
                 msg = "On it!"
                 project_application.approved_by = str(ctx.member)
+                project_application.approved_at = timezone.now()
+                project_application.approved = True
                 await project_application.asave()
                 approve_new_project.delay(
                     project_application.id,

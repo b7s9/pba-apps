@@ -37,8 +37,10 @@ class ProjectApplication(models.Model):
 
     # Lifecycle Statuses
     approved = models.BooleanField(default=False)
+    approved_at = models.DateTimeField(null=True, blank=True)
     approved_by = models.CharField(max_length=64, null=True, blank=True)
     archived = models.BooleanField(default=False)
+    archived_at = models.DateTimeField(null=True, blank=True)
     archived_by = models.CharField(max_length=64, null=True, blank=True)
 
     def __str__(self):
