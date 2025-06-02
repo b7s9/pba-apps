@@ -106,6 +106,14 @@ async def _approve_new_project(
     guild = await bot.fetch_guild(settings.NEW_PROJECT_REVIEW_DISCORD_GUILD_ID)
     discussion_thread = await guild.fetch_channel(application.thread_id)
     voting_thread = await guild.fetch_channel(application.voting_thread_id)
+    messages = await voting_thread.history(limit=0).flatten()
+    for reaction in messages[-1].reactions:
+        if reaction.emoji.name == "✅":
+            users = await reaction.users().flatten()
+            application.yay_votes = [u.id for u in users]
+        if reaction.emoji.name == "❌":
+            users = await reaction.users().flatten()
+            application.nay_votes = [u.id for u in users]
 
     actions = []
 
