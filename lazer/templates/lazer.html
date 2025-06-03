@@ -9,19 +9,37 @@
       padding: 2rem;
       font-size: 4rem;
     }
+    #header {
+      position: fixed;
+      top: 3rem;
+      font-size: 3rem;
+      width: 100%;
+      text-align: center;
+      background: white;
+      margin: 0;
+    }
     #viewfinder {
       position: fixed;
-      top: 0;
+      top: 8rem;
       left: 0;
       width: 100%;
       height: 75%;
       z-index: 100;
+    }
+    #location {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      text-align: center;
+      font-size: 2.5rem;
     }
   </style>
 </head>
 
 <body>
   <canvas id="viewfinder"></canvas>
+  <p id="header">Snap a pic of a car in a bike lane!</p>
+  <p id="location">Hi</p>
 </body>
 
 <script>
@@ -32,20 +50,26 @@ var capturedImage;
 var capturedLocation;
 
 function geoLocate() {
+  const location = document.getElementById("location");
+  location.innerHTML = "locating you...";
+
   function success(position) {
     const latitude = position.coords.latitude;
     const longitude = position.coords.longitude;
     capturedLocation = { latitude: latitude, longitude: longitude };
+    location.innerHTML = `${latitude}, ${longitude}`;
+    button.removeAttribute('disabled');
   }
 
   function error() {
     capturedLocation = { latitude: null, longitude: null};
+    location.innerHTML = "error!"
   }
 
   if (!navigator.geolocation) {
-    alert("Geolocation is not supported by your browser");
+    location.innerHTML = "Geolocation is not supported by your browser";
   } else {
-    navigator.geolocation.getCurrentPosition(success, error);
+    navigator.geolocation.getCurrentPosition(success, error, {maximumAge: 60000, enableHighAccuracy: true});
   }
 }
 
@@ -53,34 +77,32 @@ function setup() {
 
   geoLocate();
 
-  createCanvas(windowWidth, .75*windowHeight);
+  const canvas = document.getElementById("viewfinder");
+  createCanvas(windowWidth, .75*windowHeight, canvas);
 
   button = createButton("Capture");
   button.mousePressed(capturePhoto);
   button.position(0, .85*windowHeight);
   button.center("horizontal");
+  button.attribute('disabled', '');
 
   capturedImage = createImage(768, 1024);
 
   var constraints = {
     audio: false,
     video: {
-      mandatory: {
-        minWidth: 1024,
-        minHeight: 768
-      },
       facingMode: {
         exact: "environment"
       }
     }    
   };
+
   capture = createCapture(constraints);
   capture.hide();
 }
 
 
 function draw() {
- background(200);
  image(capture, 0, 0, windowWidth, .75*windowHeight); 
 }
 
@@ -110,10 +132,14 @@ function submit() {
 function capturePhoto() {
   button.attribute('disabled', '');
   capturedImage = capture.get(0, 0, 768, 1024);
-  geoLocate();
-  setTimeout(submit, 250);
+  clear();
+  image(capturedImage, 0, 0, windowWidth, .75*windowHeight);
+  capture.remove();
+  setTimeout(submit, 500);
 }
 
-setup();
+window.onload = function() {
+  setup();
+}
 
 </script>
