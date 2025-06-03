@@ -1,0 +1,69 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Project Lazer
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <div *ngIf="geoPerms">
+
+    <ion-card *ngIf="position && myImage">
+      <ion-card-header>
+        <ion-card-title>Violation</ion-card-title>
+        <ion-card-subtitle>Ready to submit</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-img id="imagePreview" *ngIf="myImage" [src]="myImage"></ion-img>
+        <ion-item>
+          <ion-icon name="location" slot="start"></ion-icon>
+          Lat: {{ position.coords.latitude }}
+        </ion-item>
+        <ion-item>
+          <ion-icon name="location" slot="start"></ion-icon>
+          Lng: {{ position.coords.longitude }}
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card *ngIf="(position === null) && (myImage)">
+      <ion-card-content>
+        Awaiting Location data...
+      </ion-card-content>
+    </ion-card>
+
+  </div>
+
+  <ion-card *ngIf="!geoPerms">
+    <ion-card-header>
+      <ion-card-title>GeoLocation</ion-card-title>
+      <ion-card-subtitle>Permission required</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      We need permission to access your location to accurately report violations.
+      <ion-button (click)="requestGeoPerms()" expand="block">
+        <ion-icon name="cloud-upload-outline" slot="start"></ion-icon>
+        Request Now
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+
+</ion-content>
+
+<ion-footer *ngIf="geoPerms">
+
+  <ion-toolbar>
+  <ion-button (click)="takePicture()" *ngIf="myImage === null" expand="block" size="large">
+    <ion-icon name="camera" slot="start"></ion-icon>
+    Capture image
+  </ion-button>
+
+  <ion-button (click)="submit()" *ngIf="(myImage !== null) && (position !== null)" expand="block" size="large">
+    <ion-icon name="cloud-upload-outline" slot="start"></ion-icon>
+    Submit
+  </ion-button>
+  </ion-toolbar>
+
+</ion-footer>

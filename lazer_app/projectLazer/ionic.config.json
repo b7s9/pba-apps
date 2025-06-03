@@ -1,0 +1,7 @@
+{
+  "name": "projectLazer",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
