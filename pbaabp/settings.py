@@ -126,6 +126,7 @@ INSTALLED_APPS = [
     "projects",
     "organizers",
     "aliases",
+    "lazer",
     "cms",
 ]
 

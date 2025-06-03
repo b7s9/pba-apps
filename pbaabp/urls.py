@@ -38,6 +38,7 @@ urlpatterns = [
         _newsletter_signup_partial,
         name="newsletter_signup_partial",
     ),
+    path("lazer/", include("lazer.urls")),
     path("", include("pages.urls")),
     path("admin/", admin.site.urls),
     path("cms/", include(wagtailadmin_urls)),
