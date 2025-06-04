@@ -3,6 +3,8 @@ import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { Component, OnInit } from '@angular/core';
 import { Device, DeviceInfo } from '@capacitor/device';
 import { Geolocation, Position } from '@capacitor/geolocation';
+import { Network } from '@capacitor/network';
+
 
 @Component({
   selector: 'app-home',
@@ -12,6 +14,7 @@ import { Geolocation, Position } from '@capacitor/geolocation';
 })
 export class HomePage implements OnInit {
 
+  online: boolean | null = null;
   deviceInfo: DeviceInfo | null = null;
   geoPerms: boolean | null = null;
 
@@ -90,6 +93,12 @@ export class HomePage implements OnInit {
   ngOnInit(): void {
     Device.getInfo().then((deviceInfo) => {
       this.deviceInfo = deviceInfo;
+      Network.getStatus().then((connectionStatus) => {
+        this.online = connectionStatus.connected;
+      });
+      Network.addListener('networkStatusChange', connectionStatus => {
+        this.online = connectionStatus.connected;
+      });
       this.checkPermission();
     });
   }

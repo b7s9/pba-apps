@@ -1,8 +1,13 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
     <ion-title>
       Project Lazer
     </ion-title>
+    <ion-buttons slot="end">
+      <ion-icon class="onlineIndicator indicatorGreen" [style.display]="online? '': 'none'" name="cloud"></ion-icon>
+      <ion-icon class="onlineIndicator indicatorRed" [style.display]="online? 'none': ''" name="cloud-offline"></ion-icon>
+      <ion-spinner class="onlineIndicator" [style.display]="(online === null)? '': 'none'" name="dots"></ion-spinner>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -43,8 +48,10 @@
     </ion-card-header>
     <ion-card-content>
       We need permission to access your location to accurately report violations.
+      <br>
+      <br>
       <ion-button (click)="requestGeoPerms()" expand="block">
-        <ion-icon name="cloud-upload-outline" slot="start"></ion-icon>
+        <ion-icon name="navigate-circle" slot="start"></ion-icon>
         Request Now
       </ion-button>
     </ion-card-content>
