@@ -4,11 +4,15 @@
 {% block content %}
 
 <div style="max-width: 40em; margin: 0 auto;">
-<h1>Send Email: {{ maillink.title }}</h1>
+<h1>{{ maillink.title }}</h1>
 
 {% if maillink.description%}
-<p style="font-size: larger;">{{ maillink.description }}</p>
+<p style="font-size: larger;">{{ maillink.description|safe }}</p>
 {% endif %}
+
+<p style="width: 100%; text-align: center;">
+  <a class="cta-button submit-button" href="{{ maillink.link }}">Send Now!</a>
+</p>
 
 <table class="email">
   <tr><td>Subject:</td><td><b>{{ maillink.subject }}</b></td></tr>
