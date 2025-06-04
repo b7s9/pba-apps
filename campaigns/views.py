@@ -142,7 +142,21 @@ def sign_petition(request, petition_slug_or_id):
             messages.add_message(request, messages.SUCCESS, message)
 
             if petition.redirect_after is not None:
-                return redirect(petition.redirect_after)
+                return redirect(
+                    petition.redirect_after
+                    + "?"
+                    + urlencode(
+                        {
+                            k: v
+                            for k, v in {
+                                "first_name": form.instance.first_name,
+                                "last_name": form.instance.last_name,
+                                "address": form.instance.postal_address_line_1,
+                            }.items()
+                            if v is not None
+                        }
+                    )
+                )
 
             if petition.campaign:
                 return redirect("campaign", slug=petition.campaign.slug)

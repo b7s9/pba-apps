@@ -35,8 +35,16 @@ class MailLink(models.Model):
     def get_absolute_url(self):
         return reverse("maillink_view", kwargs={"slug": self.slug})
 
-    @property
-    def link(self):
+    def link(self, first_name=None, last_name=None, address=None):
+
+        signature = ""
+        if first_name or last_name or address:
+            signature += "\n\n-"
+            if first_name and last_name:
+                signature += f"{first_name} {last_name}\n"
+            if address:
+                signature += f"{address}\n"
+
         _link = "mailto:"
         _link += quote(self.to)
         _link += "?"
@@ -46,6 +54,6 @@ class MailLink(models.Model):
         if self.bcc is not None:
             params["bcc"] = self.bcc
         params["subject"] = self.subject
-        params["body"] = self.body
+        params["body"] = self.body + signature
         _link += urlencode(params, quote_via=quote)
         return _link

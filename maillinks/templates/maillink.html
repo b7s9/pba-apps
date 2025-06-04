@@ -11,18 +11,22 @@
 {% endif %}
 
 <p style="width: 100%; text-align: center;">
-  <a class="cta-button submit-button" href="{{ maillink.link }}">Send Now!</a>
+  <a class="cta-button submit-button" href="{{ mail_link }}">Send Now!</a>
 </p>
 
 <table class="email">
   <tr><td>Subject:</td><td><b>{{ maillink.subject }}</b></td></tr>
   <tr><td>To:</td><td><b>{{ maillink.to }}</b></td></tr>
   {% if maillink.cc %}<tr><td>Cc:</td><td>{{ maillink.cc }}</td></tr>{% endif %}
-  <tr><td class="email-body" colspan=2>{{ maillink.body }}</td></tr>
+  <tr><td class="email-body" colspan=2>{{ maillink.body }}{% if first_name or last_name or address %}
+
+-{{first_name}} {{last_name}}
+{{address}}
+{% endif %}</td></tr>
 </table>
 
 <p style="width: 100%; text-align: center;">
-  <a class="cta-button submit-button" href="{{ maillink.link }}">Send Now!</a>
+  <a class="cta-button submit-button" href="{{ mail_link }}">Send Now!</a>
 </p>
 </div>
 {% endblock %}
