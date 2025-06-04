@@ -7,7 +7,7 @@ async def read_plate(image, utc_time):
     headers = {"Authorization": f"Token {settings.PLATERECOGNIZER_API_KEY}"}
 
     data = {
-        "upload_url": "https://lazer.ngrok.io" + image.url,
+        "upload_url": image.url,
         "regions": ["us-pa", "us-nj", "us-ny"],
         "timestamp": utc_time.isoformat(),
         "mmc": True,
