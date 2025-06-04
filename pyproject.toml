@@ -1,5 +1,5 @@
 [tool.black]
-exclude = ""
+exclude = "lazer_app"
 line-length = 99
 [tool.isort]
 profile = "black"

@@ -60,6 +60,9 @@ SITE_URL = env("DJANGO_SITE_URL", default="http://localhost:8000")
 CORS_URLS_REGEX = r"^/lazer/.*$"
 CORS_ALLOW_ALL_ORIGINS = True
 
+DATA_UPLOAD_MAX_MEMORY_SIZE = env("DATA_UPLOAD_MAX_MEMORY_SIZE", default=2621440)
+FILE_UPLOAD_MAX_MEMORY_SIZE = env("FILE_UPLOAD_MAX_MEMORY_SIZE", default=2621440)
+
 # Application definition
 
 INSTALLED_APPS = [
