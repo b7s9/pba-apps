@@ -18,8 +18,9 @@ export class HomePage implements OnInit {
   deviceInfo: DeviceInfo | null = null;
   geoPerms: boolean | null = null;
 
-  myImage: string | undefined | null = null;
-  position: Position | null = null;
+  violationImage: string | undefined | null = null;
+  violationPosition: Position | null = null;
+  violationTime: Date | null = null;
 
   constructor() {}
 
@@ -27,7 +28,7 @@ export class HomePage implements OnInit {
     Geolocation.getCurrentPosition({enableHighAccuracy: true, maximumAge: 30000})
     .then(
       (coordinates) => {
-        this.position = coordinates;
+        this.violationPosition = coordinates;
         this.geoPerms = true;
       }
     );
@@ -44,12 +45,13 @@ export class HomePage implements OnInit {
       webUseInput: true
     });
 
-    this.myImage = image.webPath;
+    this.violationImage = image.webPath;
+    this.violationTime = new Date();
   }
 
   async submit() {
-    this.myImage = null;
-    this.position = null;
+    this.violationImage = null;
+    this.violationPosition = null;
   }
 
   requestGeoPerms = () => {
