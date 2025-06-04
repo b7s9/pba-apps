@@ -57,6 +57,9 @@ ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=["localhost"])
 CSRF_TRUSTED_ORIGINS = env.list("DJANGO_CSRF_TRUSTED_ORIGINS", default=["http://localhost"])
 SITE_URL = env("DJANGO_SITE_URL", default="http://localhost:8000")
 
+CORS_URLS_REGEX = r"^/lazer/.*$"
+CORS_ALLOW_ALL_ORIGINS = True
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -98,6 +101,7 @@ INSTALLED_APPS = [
     "allauth.mfa",
     "allauth.socialaccount",
     "allauth.socialaccount.providers.discord",
+    "corsheaders",
     "django_bleach",
     "django_htmx",
     "django_recaptcha",
@@ -134,6 +138,7 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -435,6 +440,9 @@ DISCORD_CONNECTED_ROLE_ID = env("DISCORD_CONNECTED_ROLE_ID", default=None)
 
 # Google Maps
 GOOGLE_MAPS_API_KEY = env("GOOGLE_MAPS_API_KEY", default=None)
+
+# https://app.platerecognizer.com/service/snapshot-cloud/
+PLATERECOGNIZER_API_KEY = env("PLATERECOGNIZER_API_KEY", default=None)
 
 # django-admin-csvexport
 # https://github.com/thomst/django-admin-csvexport/issues/3

@@ -10,6 +10,7 @@ django-admin-csvexport
 django-allauth[mfa]
 django-anymail[mailgun]
 django-bleach
+django-cors-headers
 django-dotenv
 django-email-log
 django-environ
@@ -29,6 +30,7 @@ django-storages[s3]
 django-tuieditor
 easy-thumbnails
 geopy
+httpx
 markdown
 pillow
 psycopg2-binary

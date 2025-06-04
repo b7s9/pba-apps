@@ -107,9 +107,13 @@ function draw() {
 }
 
 function submit() {
+  const now = new Date();
+  const nowUtcIso = now.toISOString();
+
   const data = {
     latitude: capturedLocation.latitude,
     longitude: capturedLocation.longitude,
+    datetime: nowUtcIso,
     image: capturedImage.canvas.toDataURL()
   }
 

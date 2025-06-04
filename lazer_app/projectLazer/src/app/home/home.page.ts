@@ -40,18 +40,57 @@ export class HomePage implements OnInit {
     const image = await Camera.getPhoto({
       quality: 90,
       allowEditing: false,
-      resultType: CameraResultType.Uri,
+      resultType: CameraResultType.DataUrl,
       source: CameraSource.Camera,
       webUseInput: true
     });
 
-    this.violationImage = image.webPath;
+    this.violationImage = image.dataUrl;
     this.violationTime = new Date();
   }
 
   async submit() {
-    this.violationImage = null;
-    this.violationPosition = null;
+
+    function submitData (lat: number, long: number, dt: Date, img: string): Promise<any> {
+      return new Promise((resolve, reject) => {
+        let request = new XMLHttpRequest();
+        request.addEventListener("readystatechange", () => {
+          if (request.readyState === 4 && request.status === 200) {
+            let data = JSON.parse(request.responseText);
+            resolve(data);
+          } else if (request.readyState === 4) {
+            reject("error getting resources");
+          }
+        });
+
+        let formData = new FormData();
+        formData.append("latitude", JSON.stringify(lat));
+        formData.append("longitude", JSON.stringify(long));
+        formData.append("datetime", dt.toISOString());
+        formData.append("image", img);
+
+        request.open("POST", "https://lazer.ngrok.io/lazer/submit/");
+        request.send(formData);
+      });
+    }
+
+    if (this.violationImage !== null && this.violationTime !== null && this.violationPosition !== null) {
+      await submitData(
+        this.violationPosition!.coords!.latitude,
+        this.violationPosition!.coords!.longitude,
+        this.violationTime!,
+        this.violationImage!
+      )
+      .then((data: any) => {
+        this.violationPosition = null;
+        this.violationTime = null;
+        this.violationImage = null;
+      })
+      .catch((err: any) => {
+        console.log(err);
+      });
+    }
+
   }
 
   requestGeoPerms = () => {
