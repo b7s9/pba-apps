@@ -140,6 +140,10 @@ def sign_petition(request, petition_slug_or_id):
                 return response
 
             messages.add_message(request, messages.SUCCESS, message)
+
+            if petition.redirect_after is not None:
+                return redirect(petition.redirect_after)
+
             if petition.campaign:
                 return redirect("campaign", slug=petition.campaign.slug)
             else:

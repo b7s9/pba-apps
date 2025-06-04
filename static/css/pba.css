@@ -1681,3 +1681,18 @@ body {
     transform-origin: top;
   }
 }
+
+.email {
+  padding: 1em;
+  background-color: #eeeeee;
+}
+
+.email td {
+  vertical-align: top;
+  padding: .25em;
+}
+
+.email-body {
+  border-top: 1px solid grey;
+  white-space: pre-line;
+}

@@ -20,6 +20,7 @@ class MailLink(models.Model):
     # Email
     to = models.CharField(max_length=1024)
     cc = models.CharField(max_length=1024, blank=True, null=True)
+    bcc = models.CharField(max_length=1024, blank=True, null=True)
     subject = models.CharField(max_length=512)
     body = models.TextField()
 
@@ -42,6 +43,8 @@ class MailLink(models.Model):
         params = {}
         if self.cc is not None:
             params["cc"] = self.cc
+        if self.bcc is not None:
+            params["bcc"] = self.bcc
         params["subject"] = self.subject
         params["body"] = self.body
         _link += urlencode(params, quote_via=quote)

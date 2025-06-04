@@ -133,6 +133,10 @@ class Petition(models.Model):
     email_cc = models.TextField(blank=True, null=True, help_text="one per line")
     email_include_comment = models.BooleanField(default=False)
 
+    redirect_after = models.URLField(
+        blank=True, null=True, help_text="page to redirect to after signing"
+    )
+
     campaign = models.ForeignKey(
         Campaign,
         null=True,
