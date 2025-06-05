@@ -1,3 +1,4 @@
+import asyncio
 import base64
 import datetime
 import secrets
@@ -9,6 +10,7 @@ from django.http import JsonResponse
 from django.shortcuts import aget_object_or_404, redirect, render, reverse
 from django.views.decorators.csrf import csrf_exempt
 
+from facets.utils import reverse_geocode_point
 from lazer.forms import SubmissionForm
 from lazer.integrations.platerecognizer import read_plate
 from lazer.models import ViolationSubmission
@@ -64,9 +66,26 @@ async def submission_api(request):
             await submission.asave()
             await submission.arefresh_from_db()
 
-            data = await read_plate(submission.image, datetime.datetime.now(datetime.timezone.utc))
-            print(data)
-            return JsonResponse(data)
+            data, address = await asyncio.gather(
+                read_plate(submission.image, datetime.datetime.now(datetime.timezone.utc)),
+                reverse_geocode_point(
+                    f"{form.cleaned_data['latitude']}, {form.cleaned_data['longitude']}"
+                ),
+            )
+            from pprint import pprint as pp
+
+            pp(data)
+            vehicle = next(iter(data.get("results", [])), None)
+            print(vehicle)
+            print(address)
+            return JsonResponse(
+                {
+                    "vehicle": vehicle,
+                    "address": address.address,
+                    "timestamp": form.cleaned_data["datetime"],
+                },
+                status=200,
+            )
         else:
             print(form)
             return JsonResponse({}, status=400)

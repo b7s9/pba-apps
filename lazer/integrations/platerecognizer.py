@@ -7,7 +7,7 @@ async def read_plate(image, utc_time):
     headers = {"Authorization": f"Token {settings.PLATERECOGNIZER_API_KEY}"}
 
     data = {
-        "upload_url": image.url,
+        "upload_url": image.url if image.url.startswith("http") else settings.SITE_URL + image.url,
         "regions": ["us-pa", "us-nj", "us-ny"],
         "timestamp": utc_time.isoformat(),
         "mmc": True,

@@ -61,6 +61,56 @@
     </ion-card-content>
   </ion-card>
 
+  <ion-card *ngIf="lastViolationData">
+    <ion-card-header>
+      <ion-card-title>Last Caputre</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item>
+        <ion-img id="imagePreview" *ngIf="lastImage" [src]="lastImage"></ion-img>
+      </ion-item>
+      <ion-item>
+        <ion-grid>
+          <ion-row>
+            <ion-col>Address</ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col><b>{{ lastViolationData.address }}</b></ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>Date</ion-col>
+            <ion-col>Time</ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col><b>{{ lastTime!.toLocaleDateString() }}</b></ion-col>
+            <ion-col><b>{{ lastTime!.toLocaleTimeString() }}</b></ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>Make</ion-col>
+            <ion-col>Model</ion-col>
+            <ion-col>Color</ion-col>
+          </ion-row>
+          <ion-row *ngIf="lastViolationData.vehicle?.vehicle">
+            <ion-col><b>{{ lastViolationData.vehicle?.vehicle?.props?.make_model[0].make }}</b></ion-col>
+            <ion-col><b>{{ lastViolationData.vehicle?.vehicle?.props?.make_model[0].model }}</b></ion-col>
+            <ion-col><b>{{ lastViolationData.vehicle?.vehicle?.props?.color[0].value }}</b></ion-col>
+          </ion-row>
+          <ion-row *ngIf="lastViolationData.vehicle?.plate">
+            <ion-col colspan=2>Plate</ion-col>
+          </ion-row>
+          <ion-row *ngIf="lastViolationData">
+            <ion-col>
+              <b>
+              {{ lastViolationData!.vehicle?.plate?.props?.region[0]?.value }}
+              {{ lastViolationData!.vehicle?.plate?.props?.plate[0]?.value.toUpperCase() }}
+              </b>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+
 </ion-content>
 
 <ion-footer *ngIf="geoPerms">

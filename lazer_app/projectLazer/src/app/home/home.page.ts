@@ -3,8 +3,32 @@ import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { Component, OnInit } from '@angular/core';
 import { Device, DeviceInfo } from '@capacitor/device';
 import { Geolocation, Position } from '@capacitor/geolocation';
+import { LoadingController } from '@ionic/angular';
 import { Network } from '@capacitor/network';
 
+
+async function compressJpegDataUrl(dataUrl: string, quality: number): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = img.naturalWidth;
+      canvas.height = img.naturalHeight;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) {
+        reject(new Error("Canvas context not available"));
+        return;
+      }
+      ctx.drawImage(img, 0, 0);
+      const compressedDataUrl = canvas.toDataURL('image/jpeg', quality);
+      resolve(compressedDataUrl);
+    };
+    img.onerror = (error) => {
+        reject(error);
+    }
+    img.src = dataUrl;
+  });
+}
 
 @Component({
   selector: 'app-home',
@@ -22,7 +46,14 @@ export class HomePage implements OnInit {
   violationPosition: Position | null = null;
   violationTime: Date | null = null;
 
-  constructor() {}
+  lastImage: string | undefined | null = null;
+  lastPosition: Position | null = null;
+  lastTime: Date | null = null;
+  lastViolationData: any = null;
+
+  constructor(
+    private loadingCtrl: LoadingController,
+  ) {}
 
   async getCurrentPosition() {
     Geolocation.getCurrentPosition({enableHighAccuracy: true, maximumAge: 30000})
@@ -35,6 +66,9 @@ export class HomePage implements OnInit {
   }
 
   async takePicture() {
+    this.violationImage = null;
+    this.violationPosition = null;
+    this.violationTime = null;
     this.getCurrentPosition();
 
     const image = await Camera.getPhoto({
@@ -63,31 +97,50 @@ export class HomePage implements OnInit {
           }
         });
 
-        let formData = new FormData();
-        formData.append("latitude", JSON.stringify(lat));
-        formData.append("longitude", JSON.stringify(long));
-        formData.append("datetime", dt.toISOString());
-        formData.append("image", img);
+        compressJpegDataUrl(img, .3).then((newImg) => {
+          const formData = new FormData();
+          formData.append("latitude", JSON.stringify(lat));
+          formData.append("longitude", JSON.stringify(long));
+          formData.append("datetime", dt.toISOString());
+          formData.append("image", newImg);
 
-        request.open("POST", "https://lazer.ngrok.io/lazer/submit/");
-        request.send(formData);
+          request.open("POST", "https://bikeaction.ngrok.io/lazer/submit/");
+          request.send(formData);
+        });
       });
     }
 
-    if (this.violationImage !== null && this.violationTime !== null && this.violationPosition !== null) {
-      await submitData(
-        this.violationPosition!.coords!.latitude,
-        this.violationPosition!.coords!.longitude,
-        this.violationTime!,
-        this.violationImage!
-      )
-      .then((data: any) => {
-        this.violationPosition = null;
-        this.violationTime = null;
-        this.violationImage = null;
-      })
-      .catch((err: any) => {
-        console.log(err);
+    if (
+      this.violationImage !== null &&
+      this.violationTime !== null &&
+      this.violationPosition !== null
+    ) {
+      this.loadingCtrl.create({
+        message: 'Processing...',
+        duration: 20000,
+      }).then((loader) => {
+        loader.present();
+        submitData(
+          this.violationPosition!.coords!.latitude,
+          this.violationPosition!.coords!.longitude,
+          this.violationTime!,
+          this.violationImage!
+        )
+        .then((data: any) => {
+          this.lastViolationData = data;
+          console.log(data);
+          this.lastImage = this.violationImage;
+          this.lastTime = this.violationTime
+          this.lastPosition = this.violationPosition;
+          this.violationPosition = null;
+          this.violationTime = null;
+          this.violationImage = null;
+          setTimeout(() => {loader.dismiss()}, 100);
+        })
+        .catch((err: any) => {
+          console.log(err);
+          setTimeout(() => {loader.dismiss()}, 100);
+        });
       });
     }
 
