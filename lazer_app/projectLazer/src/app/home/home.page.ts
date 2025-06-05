@@ -104,7 +104,7 @@ export class HomePage implements OnInit {
           formData.append("datetime", dt.toISOString());
           formData.append("image", newImg);
 
-          request.open("POST", "https://bikeaction.ngrok.io/lazer/submit/");
+          request.open("POST", "https://bikeaction.org/lazer/submit/");
           request.send(formData);
         });
       });
