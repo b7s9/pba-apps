@@ -1,30 +1,45 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>
-      Project Lazer
-    </ion-title>
+    <ion-title> Project Lazer </ion-title>
     <ion-buttons slot="end">
-      <ion-icon class="onlineIndicator indicatorGreen" [style.display]="online? '': 'none'" name="cloud"></ion-icon>
-      <ion-icon class="onlineIndicator indicatorRed" [style.display]="online? 'none': ''" name="cloud-offline"></ion-icon>
-      <ion-spinner class="onlineIndicator" [style.display]="(online === null)? '': 'none'" name="dots"></ion-spinner>
+      <ion-icon
+        class="onlineIndicator indicatorGreen"
+        [style.display]="online? '': 'none'"
+        name="cloud"
+      ></ion-icon>
+      <ion-icon
+        class="onlineIndicator indicatorRed"
+        [style.display]="online? 'none': ''"
+        name="cloud-offline"
+      ></ion-icon>
+      <ion-spinner
+        class="onlineIndicator"
+        [style.display]="(online === null)? '': 'none'"
+        name="dots"
+      ></ion-spinner>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-
   <div *ngIf="geoPerms">
-
     <ion-card *ngIf="violationPosition && violationImage">
       <ion-card-header>
         <ion-card-title>Violation</ion-card-title>
         <ion-card-subtitle>Ready to submit</ion-card-subtitle>
       </ion-card-header>
       <ion-card-content>
-        <ion-img id="imagePreview" *ngIf="violationImage" [src]="violationImage"></ion-img>
+        <ion-img
+          id="imagePreview"
+          *ngIf="violationImage"
+          [src]="violationImage"
+        ></ion-img>
         <ion-item>
           <ion-icon name="time" slot="start"></ion-icon>
-          <ion-text *ngIf="violationTime !== null">{{ violationTime.toLocaleDateString() }} {{ violationTime.toLocaleTimeString() }}</ion-text>
+          <ion-text *ngIf="violationTime !== null"
+            >{{ violationTime.toLocaleDateString() }} {{
+            violationTime.toLocaleTimeString() }}</ion-text
+          >
         </ion-item>
         <ion-item>
           <ion-icon name="location" slot="start"></ion-icon>
@@ -38,11 +53,8 @@
     </ion-card>
 
     <ion-card *ngIf="(violationPosition === null) && (violationImage)">
-      <ion-card-content>
-        Awaiting Location data...
-      </ion-card-content>
+      <ion-card-content> Awaiting Location data... </ion-card-content>
     </ion-card>
-
   </div>
 
   <ion-card *ngIf="!geoPerms">
@@ -51,9 +63,10 @@
       <ion-card-subtitle>Permission required</ion-card-subtitle>
     </ion-card-header>
     <ion-card-content>
-      We need permission to access your location to accurately report violations.
-      <br>
-      <br>
+      We need permission to access your location to accurately report
+      violations.
+      <br />
+      <br />
       <ion-button (click)="requestGeoPerms()" expand="block">
         <ion-icon name="navigate-circle" slot="start"></ion-icon>
         Request Now
@@ -67,7 +80,11 @@
     </ion-card-header>
     <ion-card-content>
       <ion-item>
-        <ion-img id="imagePreview" *ngIf="lastImage" [src]="lastImage"></ion-img>
+        <ion-img
+          id="imagePreview"
+          *ngIf="lastImage"
+          [src]="lastImage"
+        ></ion-img>
       </ion-item>
       <ion-item>
         <ion-grid>
@@ -91,18 +108,37 @@
             <ion-col>Color</ion-col>
           </ion-row>
           <ion-row *ngIf="lastViolationData.vehicle?.vehicle">
-            <ion-col><b>{{ lastViolationData.vehicle?.vehicle?.props?.make_model[0].make }}</b></ion-col>
-            <ion-col><b>{{ lastViolationData.vehicle?.vehicle?.props?.make_model[0].model }}</b></ion-col>
-            <ion-col><b>{{ lastViolationData.vehicle?.vehicle?.props?.color[0].value }}</b></ion-col>
+            <ion-col
+              ><b
+                >{{
+                lastViolationData.vehicle?.vehicle?.props?.make_model[0].make
+                }}</b
+              ></ion-col
+            >
+            <ion-col
+              ><b
+                >{{
+                lastViolationData.vehicle?.vehicle?.props?.make_model[0].model
+                }}</b
+              ></ion-col
+            >
+            <ion-col
+              ><b
+                >{{ lastViolationData.vehicle?.vehicle?.props?.color[0].value
+                }}</b
+              ></ion-col
+            >
           </ion-row>
           <ion-row *ngIf="lastViolationData.vehicle?.plate">
-            <ion-col colspan=2>Plate</ion-col>
+            <ion-col colspan="2">Plate</ion-col>
           </ion-row>
           <ion-row *ngIf="lastViolationData">
             <ion-col>
               <b>
-              {{ lastViolationData!.vehicle?.plate?.props?.region[0]?.value }}
-              {{ lastViolationData!.vehicle?.plate?.props?.plate[0]?.value.toUpperCase() }}
+                {{ lastViolationData!.vehicle?.plate?.props?.region[0]?.value }}
+                {{
+                lastViolationData!.vehicle?.plate?.props?.plate[0]?.value.toUpperCase()
+                }}
               </b>
             </ion-col>
           </ion-row>
@@ -110,21 +146,28 @@
       </ion-item>
     </ion-card-content>
   </ion-card>
-
 </ion-content>
 
 <ion-footer *ngIf="geoPerms">
-
   <ion-toolbar>
-  <ion-button (click)="takePicture()" *ngIf="violationImage === null" expand="block" size="large">
-    <ion-icon name="camera" slot="start"></ion-icon>
-    Capture image
-  </ion-button>
+    <ion-button
+      (click)="takePicture()"
+      *ngIf="violationImage === null"
+      expand="block"
+      size="large"
+    >
+      <ion-icon name="camera" slot="start"></ion-icon>
+      Capture image
+    </ion-button>
 
-  <ion-button (click)="submit()" *ngIf="(violationImage !== null) && (violationPosition !== null)" expand="block" size="large">
-    <ion-icon name="cloud-upload-outline" slot="start"></ion-icon>
-    Submit
-  </ion-button>
+    <ion-button
+      (click)="submit()"
+      *ngIf="(violationImage !== null) && (violationPosition !== null)"
+      expand="block"
+      size="large"
+    >
+      <ion-icon name="cloud-upload-outline" slot="start"></ion-icon>
+      Submit
+    </ion-button>
   </ion-toolbar>
-
 </ion-footer>

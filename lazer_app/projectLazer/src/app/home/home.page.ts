@@ -6,8 +6,10 @@ import { Geolocation, Position } from '@capacitor/geolocation';
 import { LoadingController } from '@ionic/angular';
 import { Network } from '@capacitor/network';
 
-
-async function compressJpegDataUrl(dataUrl: string, quality: number): Promise<string> {
+async function compressJpegDataUrl(
+  dataUrl: string,
+  quality: number,
+): Promise<string> {
   return new Promise((resolve, reject) => {
     const img = new Image();
     img.onload = () => {
@@ -16,7 +18,7 @@ async function compressJpegDataUrl(dataUrl: string, quality: number): Promise<st
       canvas.height = img.naturalHeight;
       const ctx = canvas.getContext('2d');
       if (!ctx) {
-        reject(new Error("Canvas context not available"));
+        reject(new Error('Canvas context not available'));
         return;
       }
       ctx.drawImage(img, 0, 0);
@@ -24,8 +26,8 @@ async function compressJpegDataUrl(dataUrl: string, quality: number): Promise<st
       resolve(compressedDataUrl);
     };
     img.onerror = (error) => {
-        reject(error);
-    }
+      reject(error);
+    };
     img.src = dataUrl;
   });
 }
@@ -37,7 +39,6 @@ async function compressJpegDataUrl(dataUrl: string, quality: number): Promise<st
   standalone: false,
 })
 export class HomePage implements OnInit {
-
   online: boolean | null = null;
   deviceInfo: DeviceInfo | null = null;
   geoPerms: boolean | null = null;
@@ -51,18 +52,16 @@ export class HomePage implements OnInit {
   lastTime: Date | null = null;
   lastViolationData: any = null;
 
-  constructor(
-    private loadingCtrl: LoadingController,
-  ) {}
+  constructor(private loadingCtrl: LoadingController) {}
 
   async getCurrentPosition() {
-    Geolocation.getCurrentPosition({enableHighAccuracy: true, maximumAge: 30000})
-    .then(
-      (coordinates) => {
-        this.violationPosition = coordinates;
-        this.geoPerms = true;
-      }
-    );
+    Geolocation.getCurrentPosition({
+      enableHighAccuracy: true,
+      maximumAge: 30000,
+    }).then((coordinates) => {
+      this.violationPosition = coordinates;
+      this.geoPerms = true;
+    });
   }
 
   async takePicture() {
@@ -76,7 +75,7 @@ export class HomePage implements OnInit {
       allowEditing: false,
       resultType: CameraResultType.DataUrl,
       source: CameraSource.Camera,
-      webUseInput: true
+      webUseInput: true,
     });
 
     this.violationImage = image.dataUrl;
@@ -84,27 +83,34 @@ export class HomePage implements OnInit {
   }
 
   async submit() {
-
-    function submitData (lat: number, long: number, dt: Date, img: string): Promise<any> {
+    function submitData(
+      lat: number,
+      long: number,
+      dt: Date,
+      img: string,
+    ): Promise<any> {
       return new Promise((resolve, reject) => {
         let request = new XMLHttpRequest();
-        request.addEventListener("readystatechange", () => {
+        request.addEventListener('readystatechange', () => {
           if (request.readyState === 4 && request.status === 200) {
             let data = JSON.parse(request.responseText);
             resolve(data);
           } else if (request.readyState === 4) {
-            reject("error getting resources");
+            reject('error getting resources');
           }
         });
 
-        compressJpegDataUrl(img, .3).then((newImg) => {
+        compressJpegDataUrl(img, 0.3).then((newImg) => {
           const formData = new FormData();
-          formData.append("latitude", JSON.stringify(lat));
-          formData.append("longitude", JSON.stringify(long));
-          formData.append("datetime", dt.toISOString());
-          formData.append("image", newImg);
+          formData.append('latitude', JSON.stringify(lat));
+          formData.append('longitude', JSON.stringify(long));
+          formData.append('datetime', dt.toISOString());
+          formData.append('image', newImg);
 
-          request.open("POST", "https://bikeaction.org/lazer/submit/");
+          request.open(
+            'POST',
+            'https://1091-2600-1002-b069-8222-25fd-3b4e-9193-cd39.ngrok-free.app/lazer/submit/',
+          );
           request.send(formData);
         });
       });
@@ -115,64 +121,72 @@ export class HomePage implements OnInit {
       this.violationTime !== null &&
       this.violationPosition !== null
     ) {
-      this.loadingCtrl.create({
-        message: 'Processing...',
-        duration: 20000,
-      }).then((loader) => {
-        loader.present();
-        submitData(
-          this.violationPosition!.coords!.latitude,
-          this.violationPosition!.coords!.longitude,
-          this.violationTime!,
-          this.violationImage!
-        )
-        .then((data: any) => {
-          this.lastViolationData = data;
-          console.log(data);
-          this.lastImage = this.violationImage;
-          this.lastTime = this.violationTime
-          this.lastPosition = this.violationPosition;
-          this.violationPosition = null;
-          this.violationTime = null;
-          this.violationImage = null;
-          setTimeout(() => {loader.dismiss()}, 100);
+      this.loadingCtrl
+        .create({
+          message: 'Processing...',
+          duration: 20000,
         })
-        .catch((err: any) => {
-          console.log(err);
-          setTimeout(() => {loader.dismiss()}, 100);
+        .then((loader) => {
+          loader.present();
+          submitData(
+            this.violationPosition!.coords!.latitude,
+            this.violationPosition!.coords!.longitude,
+            this.violationTime!,
+            this.violationImage!,
+          )
+            .then((data: any) => {
+              this.lastViolationData = data;
+              console.log(data);
+              this.lastImage = this.violationImage;
+              this.lastTime = this.violationTime;
+              this.lastPosition = this.violationPosition;
+              this.violationPosition = null;
+              this.violationTime = null;
+              this.violationImage = null;
+              setTimeout(() => {
+                loader.dismiss();
+              }, 100);
+            })
+            .catch((err: any) => {
+              console.log(err);
+              setTimeout(() => {
+                loader.dismiss();
+              }, 100);
+            });
         });
-      });
     }
-
   }
 
   requestGeoPerms = () => {
-    if ( Capacitor.isNativePlatform() ){
+    if (Capacitor.isNativePlatform()) {
       Geolocation.requestPermissions();
     } else {
       this.getCurrentPosition();
     }
     this.checkPermission();
-  }
+  };
 
   checkPermission = async () => {
-    if ( Capacitor.isNativePlatform() ){
+    if (Capacitor.isNativePlatform()) {
       try {
         const status = await Geolocation.checkPermissions();
         if (status) {
           this.geoPerms = true;
         }
         this.geoPerms = false;
-      } catch(e) {
+      } catch (e) {
         console.log(e);
         this.geoPerms = false;
       }
     } else {
-      navigator.permissions.query({ name: "geolocation" }).then((result) => {
-        if (result.state === "granted") {
+      navigator.permissions.query({ name: 'geolocation' }).then((result) => {
+        if (result.state === 'granted') {
           this.geoPerms = true;
-        } else if (result.state === "prompt") {
-          if (this.deviceInfo !== null && this.deviceInfo.operatingSystem === "ios") {
+        } else if (result.state === 'prompt') {
+          if (
+            this.deviceInfo !== null &&
+            this.deviceInfo.operatingSystem === 'ios'
+          ) {
             this.geoPerms = true;
           } else {
             this.geoPerms = false;
@@ -182,7 +196,7 @@ export class HomePage implements OnInit {
         }
       });
     }
-  }
+  };
 
   ngOnInit(): void {
     Device.getInfo().then((deviceInfo) => {
@@ -190,11 +204,10 @@ export class HomePage implements OnInit {
       Network.getStatus().then((connectionStatus) => {
         this.online = connectionStatus.connected;
       });
-      Network.addListener('networkStatusChange', connectionStatus => {
+      Network.addListener('networkStatusChange', (connectionStatus) => {
         this.online = connectionStatus.connected;
       });
       this.checkPermission();
     });
   }
-
 }
