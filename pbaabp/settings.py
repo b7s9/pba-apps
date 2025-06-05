@@ -184,8 +184,12 @@ ASGI_APPLICATION = "pbaabp.asgi.application"
 DATABASES = {"default": env.db("DATABASE_URL")}
 DATABASES["default"]["ENGINE"] = "django.contrib.gis.db.backends.postgis"
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
-DATABASES["default"]["CONN_MAX_AGE"] = 600
-DATABASES["default"]["CONN_HEALTH_CHECKS"] = True
+CONN_MAX_AGE = env.int("DJANGO_CONN_MAX_AGE", default=600)
+if CONN_MAX_AGE:
+    DATABASES["default"]["CONN_MAX_AGE"] = CONN_MAX_AGE
+CONN_HEALTH_CHECKS = env.bool("DJANGO_CONN_HEALTH_CHECKS", default=True)
+if CONN_HEALTH_CHECKS:
+    DATABASES["default"]["CONN_HEALTH_CHECKS"] = CONN_HEALTH_CHECKS
 
 _REDIS_URL = env("REDIS_URL", default="redis://redis:6379/0")
 if _REDIS_URL.startswith("rediss://"):
