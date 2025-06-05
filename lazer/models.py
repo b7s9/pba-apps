@@ -7,7 +7,7 @@ class ViolationSubmission(models.Model):
 
     captured_at = models.DateTimeField()
     location = models.PointField(srid=4326)
-    image = models.ImageField()
+    image = models.ImageField(upload_to="lazer/violations")
 
     def image_tag(self):
         return mark_safe('<img src="%s" style="max-height: 50px;"/>' % (self.image.url))
