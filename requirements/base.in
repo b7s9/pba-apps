@@ -33,7 +33,9 @@ geopy
 httpx
 markdown
 pillow
+playwright
 psycopg2-binary
+pyap2
 pygit2
 pynliner
 sentry-sdk[django]
