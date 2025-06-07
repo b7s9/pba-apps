@@ -51,13 +51,14 @@ export class HomePage implements OnInit {
   lastPosition: Position | null = null;
   lastTime: Date | null = null;
   lastViolationData: any = null;
+  lastViolationSelected: any = null;
 
   constructor(private loadingCtrl: LoadingController) {}
 
   async getCurrentPosition() {
     Geolocation.getCurrentPosition({
       enableHighAccuracy: true,
-      maximumAge: 30000,
+      maximumAge: 10000,
     }).then((coordinates) => {
       this.violationPosition = coordinates;
       this.geoPerms = true;
@@ -71,7 +72,7 @@ export class HomePage implements OnInit {
     this.getCurrentPosition();
 
     const image = await Camera.getPhoto({
-      quality: 90,
+      quality: 60,
       allowEditing: false,
       resultType: CameraResultType.DataUrl,
       source: CameraSource.Camera,
@@ -80,6 +81,78 @@ export class HomePage implements OnInit {
 
     this.violationImage = image.dataUrl;
     this.violationTime = new Date();
+  }
+
+  async selectVehicle(index: number) {
+    this.lastViolationSelected = this.lastViolationData.vehicles[index];
+    console.log(this.lastViolationSelected);
+  }
+
+  async drawHitBoxes() {
+    const image = document.getElementById('imagePreview') as HTMLImageElement;
+    const rect = image.getBoundingClientRect();
+
+    document.getElementById('imageOverlay')?.remove();
+
+    const overlayDiv = document.createElement('div');
+    overlayDiv.id = 'imageOverlay';
+    overlayDiv.className = 'imageOverlay';
+    overlayDiv.style.position = 'absolute';
+    overlayDiv.style.width = rect.width + 'px';
+    overlayDiv.style.height = rect.height + 'px';
+    image.insertAdjacentElement('beforebegin', overlayDiv);
+
+    console.log(image!.width);
+    console.log(image!.naturalWidth);
+    console.log(image!.width / image!.naturalWidth);
+    console.log(image!.height);
+    console.log(image!.naturalHeight);
+    console.log(image!.height / image!.naturalHeight);
+    const scale =
+      (image!.width / image!.naturalWidth +
+        image!.height / image!.naturalHeight) /
+      2;
+
+    this.lastViolationData.vehicles.forEach((element: any, index: number) => {
+      if (element.vehicle) {
+        const box = document.createElement('a');
+        box.style.position = 'absolute';
+        box.style.zIndex = `${15 - index}`;
+        box.style.border = '3px solid lime';
+        box.style.left = element.vehicle.box.xmin * scale + 'px';
+        box.style.top = element.vehicle.box.ymin * scale + 'px';
+        box.addEventListener('click', (event) => {
+          this.selectVehicle(index);
+        });
+        box.style.width =
+          (element.vehicle.box.xmax - element.vehicle.box.xmin) * scale + 'px';
+        box.style.height =
+          (element.vehicle.box.ymax - element.vehicle.box.ymin) * scale + 'px';
+        overlayDiv.appendChild(box);
+      }
+      if (element.plate) {
+        const box = document.createElement('div');
+        box.style.position = 'absolute';
+        box.style.zIndex = '8';
+        box.style.border = '2px solid yellow';
+        box.style.left =
+          (element.plate.box.xmin / image!.naturalWidth) * image!.width + 'px';
+        box.style.top =
+          (element.plate.box.ymin / image!.naturalHeight) * image!.height +
+          'px';
+        box.style.width =
+          ((element.plate.box.xmax - element.plate.box.xmin) /
+            image!.naturalWidth) *
+            image!.width +
+          'px';
+        box.style.height =
+          ((element.plate.box.ymax - element.plate.box.ymin) /
+            image!.naturalHeight) *
+            image!.height +
+          'px';
+        overlayDiv.appendChild(box);
+      }
+    });
   }
 
   async submit() {
@@ -107,10 +180,7 @@ export class HomePage implements OnInit {
           formData.append('datetime', dt.toISOString());
           formData.append('image', newImg);
 
-          request.open(
-            'POST',
-            'https://1091-2600-1002-b069-8222-25fd-3b4e-9193-cd39.ngrok-free.app/lazer/submit/',
-          );
+          request.open('POST', 'https://bikeaction.org/lazer/submit/');
           request.send(formData);
         });
       });
@@ -136,7 +206,11 @@ export class HomePage implements OnInit {
           )
             .then((data: any) => {
               this.lastViolationData = data;
-              console.log(data);
+              if (data.length == 1) {
+                this.lastViolationSelected = data[0];
+              } else {
+                this.lastViolationSelected = null;
+              }
               this.lastImage = this.violationImage;
               this.lastTime = this.violationTime;
               this.lastPosition = this.violationPosition;
@@ -145,6 +219,9 @@ export class HomePage implements OnInit {
               this.violationImage = null;
               setTimeout(() => {
                 loader.dismiss();
+                if (this.lastViolationSelected === null) {
+                  this.drawHitBoxes();
+                }
               }, 100);
             })
             .catch((err: any) => {

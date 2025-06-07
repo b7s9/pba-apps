@@ -67,7 +67,10 @@ async def submission_api(request):
             await submission.arefresh_from_db()
 
             data, address = await asyncio.gather(
-                read_plate(submission.image, datetime.datetime.now(datetime.timezone.utc)),
+                read_plate(
+                    form.cleaned_data["image"].split(";base64,")[1],
+                    datetime.datetime.now(datetime.timezone.utc),
+                ),
                 reverse_geocode_point(
                     f"{form.cleaned_data['latitude']}, {form.cleaned_data['longitude']}"
                 ),
@@ -75,12 +78,15 @@ async def submission_api(request):
             from pprint import pprint as pp
 
             pp(data)
-            vehicle = next(iter(data.get("results", [])), None)
-            print(vehicle)
             print(address)
+
+            vehicle = data.get("results", [])
+            pp(sorted(vehicle, key=lambda x: x.get("vehicle", {}).get("score", 0), reverse=True))
             return JsonResponse(
                 {
-                    "vehicle": vehicle,
+                    "vehicles": sorted(
+                        vehicle, key=lambda x: x.get("vehicle", {}).get("score", 0), reverse=True
+                    )[:4],
                     "address": address.address,
                     "timestamp": form.cleaned_data["datetime"],
                 },

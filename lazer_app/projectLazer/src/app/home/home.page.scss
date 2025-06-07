@@ -1,3 +1,10 @@
+* {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+
 #container {
   text-align: center;
 
@@ -26,9 +33,16 @@
   text-decoration: none;
 }
 
-#imagePreview {
+#imageContainer {
+  position: relative;
   margin: 0 auto;
-  width: 66%;
+  min-height: 30vh;
+  max-height: 50vh;
+  margin-bottom: 1em;
+  width: 75%;
+}
+#imagePreview {
+  position: absolute;
 }
 
 .onlineIndicator {
