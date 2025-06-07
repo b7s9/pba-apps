@@ -3,7 +3,7 @@ from datetime import datetime
 from enum import StrEnum
 import os
 import pyap
-from playwright.sync_api import sync_playwright
+from playwright.async_api import async_playwright
 import pytz
 import urllib
 from django.core.files.base import ContentFile
@@ -210,7 +210,9 @@ class MobilityAccessViolation:
 
 
 async def submit_form_with_playwright(
-    violation: MobilityAccessViolation, photo: str | ContentFile
+    violation: MobilityAccessViolation,
+    photo: str | ContentFile,
+    send_copy_to_email: str | None = None,
 ) -> None:
     """Method to submit a violation to the PPA's Smartsheet using Playwright.
 
@@ -220,10 +222,15 @@ async def submit_form_with_playwright(
     # smartsheet allows pre-filling of fields using query parameters.
     # for example, date observed would be Date%20Observed=06/03/2025
 
-    with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
-        context = browser.new_context()
-        page = context.new_page()
+    if isinstance(photo, str):
+        if not os.path.exists(photo):
+            raise FileNotFoundError(f"Photo file not found: {photo}")
+        photo = ContentFile(open(photo, "rb").read(), name=os.path.basename(photo))
+
+    async with async_playwright() as p:
+        browser = await p.chromium.launch(headless=False)
+        context = await browser.new_context()
+        page = await context.new_page()
 
         # Construct the URL with query parameters
         params = {
@@ -247,16 +254,16 @@ async def submit_form_with_playwright(
 
         full_url = url_parts._replace(query=urllib.parse.urlencode(query)).geturl()
 
-        page.goto(full_url)
+        await page.goto(full_url)
         # wait for the form to load
-        page.wait_for_load_state("networkidle")
+        await page.wait_for_load_state("networkidle")
 
         # click the file chooser
-        with page.expect_file_chooser() as fc_info:
-            page.get_by_text("browse files").click()
-        file_chooser = fc_info.value
+        async with page.expect_file_chooser() as fc_info:
+            await page.get_by_text("browse files").click()
+        file_chooser = await fc_info.value
         if isinstance(photo, str):
-            file_chooser.set_files(photo)
+            await file_chooser.set_files(photo)
         elif isinstance(photo, ContentFile):
             upload = FilePayload(
                 name=getattr(photo, "name", "violation_photo.jpg"),
@@ -264,11 +271,17 @@ async def submit_form_with_playwright(
                 buffer=photo.read(),  # limit how much we read?
             )
 
-            file_chooser.set_files(upload)
+            await file_chooser.set_files(upload)
+
+        if send_copy_to_email:
+            # find a checkbox with name property "EMAIL_RECEIPT_CHECKBOX"
+            await page.locator("[name='EMAIL_RECEIPT_CHECKBOX']").check()
+            # fill the field with name property "EMAIL_RECEIPT"
+            await page.locator("[name='EMAIL_RECEIPT']").fill(send_copy_to_email)
 
         # submit the form
-        page.click("button[type='submit']")
-        page.wait_for_load_state("networkidle")
+        await page.click("button[type='submit']")
+        await page.wait_for_load_state("networkidle")
 
-        context.close()
-        browser.close()
+        await context.close()
+        await browser.close()
