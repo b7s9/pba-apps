@@ -224,6 +224,8 @@ emoji==2.14.1
     # via discord-py-interactions
 et-xmlfile==2.0.0
     # via openpyxl
+fake-http-header==0.3.5
+    # via tf-playwright-stealth
 fido2==1.2.0
     # via django-allauth
 filetype==1.2.0
@@ -296,7 +298,9 @@ pillow==11.1.0
 pillow-heif==0.22.0
     # via willow
 playwright==1.52.0
-    # via -r requirements/base.in
+    # via
+    #   -r requirements/base.in
+    #   tf-playwright-stealth
 polib==1.2.0
     # via wagtail-localize
 prompt-toolkit==3.0.50
@@ -379,6 +383,8 @@ stripe==11.6.0
     # via dj-stripe
 telepath==0.3.1
     # via wagtail
+tf-playwright-stealth==1.1.2
+    # via -r requirements/base.in
 tinycss2==1.4.0
     # via bleach
 toml==0.10.2

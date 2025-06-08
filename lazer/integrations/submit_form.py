@@ -1,21 +1,29 @@
+import asyncio
+import os
+import urllib
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import StrEnum
-import os
+
 import pyap
-from playwright.async_api import async_playwright
 import pytz
-import urllib
 from django.core.files.base import ContentFile
-from playwright.async_api import FilePayload
+from playwright.async_api import FilePayload, async_playwright
+from playwright.async_api import TimeoutError as PlaywrightTimeoutError
+from playwright_stealth import stealth_async
 
 PPA_SMARTSHEET_URL = os.getenv(
     "PPA_SMARTSHEET_URL",
     "https://app.smartsheet.com/b/form/463e9faa2a644f4fae2a956f331f451c",
 )
+SUBMIT_SMARTSHEET_URL = os.getenv(
+    "SUBMIT_SMARTSHEET_URL",
+    "https://forms.smartsheet.com/api/submit/463e9faa2a644f4fae2a956f331f451c",
+)
 
 
 class ViolationObserved(StrEnum):
+    # TODO: Add bicycle lane violations, when available.
     CORNER_CLEARANCE = "Corner Clearance (vehicle parked on corner)"
     CROSSWALK = "Crosswalk (vehicle on crosswalk)"
     HANDICAP_RAMP = "Handicap Ramp (vehicle blocking handicap ramp)"
@@ -104,9 +112,9 @@ class MobilityAccessViolation:
 
     # optional fields
     model: str = ""
+    # this field is good to report license plate, since
+    # there's no field for it in the form.
     additional_information: str = ""
-    # maybe b64 encoded?
-    picture: str = ""
 
     parsed_address: pyap.Address = field(init=False)
 
@@ -164,9 +172,14 @@ class MobilityAccessViolation:
         """Creates a MobilityAccessViolation instance from a JSON-like dictionary."""
         vehicle = data.get("vehicle", {})
         if not vehicle:
-            raise ValueError(
-                "Vehicle data is required to create a MobilityAccessViolation."
-            )
+            # see if there is an array
+            vehicles = data.get("vehicles", [])
+            if vehicles:
+                vehicle = vehicles[0]
+            else:
+                raise ValueError(
+                    "Vehicle data is required to create a MobilityAccessViolation."
+                )
         if "timestamp" not in data or "address" not in data:
             raise ValueError("Timestamp and address are required fields.")
         plate = (
@@ -213,6 +226,7 @@ async def submit_form_with_playwright(
     violation: MobilityAccessViolation,
     photo: str | ContentFile,
     send_copy_to_email: str | None = None,
+    tracing: bool = False,
 ) -> None:
     """Method to submit a violation to the PPA's Smartsheet using Playwright.
 
@@ -225,12 +239,18 @@ async def submit_form_with_playwright(
     if isinstance(photo, str):
         if not os.path.exists(photo):
             raise FileNotFoundError(f"Photo file not found: {photo}")
-        photo = ContentFile(open(photo, "rb").read(), name=os.path.basename(photo))
-
+        with open(photo, "rb") as f:
+            photo = ContentFile(f.read(), name=os.path.basename(photo))
     async with async_playwright() as p:
-        browser = await p.chromium.launch(headless=False)
+        browser = await p.chromium.launch(headless=not tracing)
+        # add record_video_dir="videos/" to record session, but add_debug is better
         context = await browser.new_context()
+        # for now recording is ALWAYS ON, but save only if form submission fails
+        # later, this would only be enabled if tracing is True
+        # if tracing:
+        await context.tracing.start(screenshots=True, snapshots=True, sources=True)
         page = await context.new_page()
+        await stealth_async(page)
 
         # Construct the URL with query parameters
         params = {
@@ -253,7 +273,6 @@ async def submit_form_with_playwright(
         query.update(params)  # type: ignore
 
         full_url = url_parts._replace(query=urllib.parse.urlencode(query)).geturl()
-
         await page.goto(full_url)
         # wait for the form to load
         await page.wait_for_load_state("networkidle")
@@ -280,8 +299,36 @@ async def submit_form_with_playwright(
             await page.locator("[name='EMAIL_RECEIPT']").fill(send_copy_to_email)
 
         # submit the form
-        await page.click("button[type='submit']")
-        await page.wait_for_load_state("networkidle")
+        tracing_debug_key = os.urandom(3).hex()
+        try:
+            async with page.expect_request(
+                lambda request: request.url == SUBMIT_SMARTSHEET_URL
+                and request.method.lower() == "post"
+            ) as _req:
+                await page.click("button[type='submit']")
 
+            # make sure there is a POST to the form URL and it returned 200
+            # also, the submission page should have an h1 element with specific
+            await page.wait_for_load_state("networkidle")
+            # validate the submission page
+            success_text = page.get_by_role(
+                "heading",
+                name="Filling out the mobility access violation reporting form "
+                "may not result in immediate enforcement action",
+            )
+            await success_text.wait_for(state="visible", timeout=10000)
+
+        except PlaywrightTimeoutError as e:
+            await context.tracing.stop(path=f"tracing_{tracing_debug_key}.zip")
+            await context.close()
+            await browser.close()
+            raise RuntimeError(
+                f"Failed to submit the form. Try again later. Trace: {tracing_debug_key}"
+            ) from e
+
+        if tracing:
+            await context.tracing.stop(path=f"tracing_{tracing_debug_key}.zip")
+        else:
+            await context.tracing.stop()
         await context.close()
         await browser.close()
