@@ -1,5 +1,28 @@
 ## Submit PPA Smartsheet
 
+### Usage
+Example:
+```python
+from datetime import datetime, UTC
+from django.core.files.base import ContentFile
+from lazer.integrations.submit_form import MobilityAccessViolation, submit_form_with_playwright
+# could also import enums and use directly, otherwise closest text match is selected
+# from lazer.integrations.submit_form import ViolationObserved, OccurrenceFrequency, VehicleType, VehicleColor
+
+violation = MobilityAccessViolation(
+    date_time_observed=datetime.now(UTC),
+    vehicle_color = "black",
+    make="hyundai",
+    body_style="sedan",
+    violation_observed="bicycle lane",
+    address = "2000 Market St, Philadelphia, PA 19103, USA",
+)
+photo: str | ContentFile = "local_picture_or_content_file.jpg"
+await submit_form_with_playwright(violation, photo)
+```
+
+### Details
+
 The `submit_form.py` contains all necessary tools to submit the form to PPA's Smartsheet. It uses Playwright to open a browser with the form.
 The form is pre-filled using [Smartsheet query string](https://help.smartsheet.com/articles/2478871-url-query-string-form-default-values).
 
@@ -34,7 +57,7 @@ from lazer.integrations.submit_form import MobilityAccessViolation, submit_form_
 submit_result = {"your": "json", "from": "post to /SUBMIT", "goes": "here"}
 
 # Example usage of MobilityAccessViolation
-violation = MobilityAccessViolation.from_json(hyundai)
+violation = MobilityAccessViolation.from_json(submit_result)
 # VALIDATE the violation fields/parsing
 print(violation)
 

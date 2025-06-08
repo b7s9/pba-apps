@@ -1,5 +1,5 @@
-import asyncio
 import os
+from typing import Any
 import urllib
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -22,22 +22,51 @@ SUBMIT_SMARTSHEET_URL = os.getenv(
 )
 
 
-class ViolationObserved(StrEnum):
+class FinderEnum(StrEnum):
+    """Base class for enums that can find the closest match based on a string."""
+
+    @classmethod
+    def unknown_value(cls) -> Any:
+        raise NotImplementedError(
+            f"{cls.__name__} must implement the unknown_value method."
+        )
+
+    @classmethod
+    def find_closest(cls, value: str) -> "FinderEnum":
+        """Finds the closest enum member based on the provided value string."""
+        value = value.lower()
+        for member in cls:
+            if value in member.value.lower():
+                return member
+        return cls.unknown_value()
+
+
+class ViolationObserved(FinderEnum):
     # TODO: Add bicycle lane violations, when available.
     CORNER_CLEARANCE = "Corner Clearance (vehicle parked on corner)"
     CROSSWALK = "Crosswalk (vehicle on crosswalk)"
     HANDICAP_RAMP = "Handicap Ramp (vehicle blocking handicap ramp)"
     SIDEWALK = "Sidewalk"
 
+    @classmethod
+    def unknown_value(cls) -> "ViolationObserved":
+        """Returns a default value for unknown violations."""
+        return cls.SIDEWALK
 
-class OccuranceFrequency(StrEnum):
+
+class OccurrenceFrequency(FinderEnum):
     NOT_FREQUENTLY = "Not Frequently"
     SOMEWHAT_OFTEN = "Somewhat Often"
     FREQUENTLY = "Frequently"
     UNSURE = "Unsure"
 
+    @classmethod
+    def unknown_value(cls) -> "OccurrenceFrequency":
+        """Returns a default value for unknown violations."""
+        return cls.UNSURE
 
-class VehicleType(StrEnum):
+
+class VehicleType(FinderEnum):
     COUPE = "Coupe (2 door car)"
     SEDAN = "Sedan (4 door car)"
     PICKUP_TRUCK = "Pickup Truck"
@@ -60,16 +89,12 @@ class VehicleType(StrEnum):
     UNKNOWN = "Unknown"
 
     @classmethod
-    def find_closest(cls, vehicle_type: str) -> "VehicleType":
-        """Finds the closest VehicleType based on the provided vehicle type string."""
-        vehicle_type = vehicle_type.lower()
-        for vt in cls:
-            if vehicle_type in vt.value.lower():
-                return vt
+    def unknown_value(cls) -> "VehicleType":
+        """Returns a default value for unknown violations."""
         return cls.UNKNOWN
 
 
-class VehicleColor(StrEnum):
+class VehicleColor(FinderEnum):
     RED = "Red"
     BLUE = "Blue"
     GREEN = "Green"
@@ -92,12 +117,8 @@ class VehicleColor(StrEnum):
     OTHER = "Other"
 
     @classmethod
-    def find_closest(cls, vehicle_color: str) -> "VehicleColor":
-        """Finds the closest VehicleType based on the provided vehicle type string."""
-        vehicle_color = vehicle_color.lower()
-        for vc in cls:
-            if vehicle_color in vc.value.lower():
-                return vc
+    def unknown_value(cls) -> "VehicleColor":
+        """Returns a default value for unknown vehicle colors."""
         return cls.OTHER
 
 
@@ -106,16 +127,16 @@ class MobilityAccessViolation:
     date_time_observed: datetime
     make: str
     address: str
-    body_style: VehicleType
-    vehicle_color: VehicleColor
-    violation_observed: ViolationObserved
+    body_style: VehicleType | str
+    vehicle_color: VehicleColor | str
+    violation_observed: ViolationObserved | str
 
     # optional fields
+    occurrence_frequency: OccurrenceFrequency = OccurrenceFrequency.UNSURE
     model: str = ""
     # this field is good to report license plate, since
     # there's no field for it in the form.
     additional_information: str = ""
-
     parsed_address: pyap.Address = field(init=False)
 
     def __post_init__(self):
@@ -132,6 +153,20 @@ class MobilityAccessViolation:
         # convert to est
         est = pytz.timezone("US/Eastern")
         self.date_time_observed = self.date_time_observed.astimezone(est)
+
+        # ensure all enum fields are of the correct type
+        fields: list[str, FinderEnum] = [
+            ("body_style", VehicleType),
+            ("vehicle_color", VehicleColor),
+            ("violation_observed", ViolationObserved),
+            ("occurrence_frequency", OccurrenceFrequency),
+        ]
+
+        for field_name, field_type in fields:
+            field_value = getattr(self, field_name)
+            if not isinstance(field_value, field_type):
+                closest_value = field_type.find_closest(field_value)
+                setattr(self, field_name, closest_value)
 
     # street name here is a dropdown, not a free form.
     # block_number: int
@@ -260,11 +295,11 @@ async def submit_form_with_playwright(
             "Model": violation.model,
             "Body Style": violation.body_style,
             "Vehicle Color": violation.vehicle_color,
-            "Violation Observed": violation.violation_observed.value,
+            "Violation Observed": violation.violation_observed,
             "Block Number": violation.block_number,
             "Street Name": violation.street_name,
             "Zip Code": violation.zip_code,
-            "How frequently does this occur?": OccuranceFrequency.UNSURE,
+            "How frequently does this occur?": violation.occurrence_frequency,
             "Additional Information": violation.additional_information,
             # not sure how to do "send me a copy of my responses"
         }
