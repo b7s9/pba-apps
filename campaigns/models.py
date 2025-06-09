@@ -11,6 +11,7 @@ from ordered_model.models import OrderedModel
 
 from campaigns.tasks import geocode_signature
 from events.models import ScheduledEvent
+from facets.models import District
 from lib.slugify import unique_slugify
 from membership.models import Donation, DonationProduct
 from pbaabp.models import ChoiceArrayField, MarkdownField
@@ -262,6 +263,12 @@ class PetitionSignature(models.Model):
     create_account_opt_in = models.BooleanField(
         blank=False, default=False, verbose_name=_("Create a PBA Account")
     )
+
+    @property
+    def district(self):
+        if self.location is None:
+            return None
+        return District.objects.filter(mpoly__contains=self.location).first()
 
     def save(self, *args, **kwargs):
         if self.email and self.newsletter_opt_in:

@@ -1,5 +1,6 @@
 from csvexport.actions import csvexport
 from django.contrib import admin
+from django.shortcuts import render
 from ordered_model.admin import OrderedModelAdmin
 
 from campaigns.models import Campaign, Petition, PetitionSignature
@@ -24,7 +25,18 @@ class CampaignAdmin(OrderedModelAdmin):
         return super().get_form(*args, **kwargs)
 
 
+def pretty_report(modeladmin, request, queryset):
+    _petitions = {}
+    for petition in queryset:
+        _petitions[petition] = sorted(
+            list(petition.signatures.order_by("email").distinct("email").all()),
+            key=lambda x: x.created_at,
+        )
+    return render(request, "petition_signatures_pretty_report.html", {"petitions": _petitions})
+
+
 class PetitionAdmin(admin.ModelAdmin):
+    actions = [pretty_report]
     readonly_fields = ["petition_report"]
 
     def petition_report(self, obj):
@@ -55,6 +67,20 @@ def geocode(modeladmin, request, queryset):
             geocode_signature.delay(obj.id)
 
 
+class DistrictFilter(admin.SimpleListFilter):
+    title = "District"
+    parameter_name = "district"
+
+    def lookups(self, request, model_amin):
+        return [(f.id, f.name) for f in District.objects.all() if f.targetable]
+
+    def queryset(self, request, queryset):
+        if self.value():
+            d = District.objects.get(id=self.value())
+            return queryset.filter(location__within=d.mpoly)
+        return queryset
+
+
 class PetitionSignatureAdmin(admin.ModelAdmin, ReadOnlyLeafletGeoAdminMixin):
     actions = [csvexport, geocode]
     list_display = [
@@ -66,7 +92,7 @@ class PetitionSignatureAdmin(admin.ModelAdmin, ReadOnlyLeafletGeoAdminMixin):
         "visible",
         "get_petition",
     ]
-    list_filter = ["petition", "visible"]
+    list_filter = ["petition", "visible", DistrictFilter]
     ordering = ["-created_at"]
     search_fields = ["first_name", "last_name", "comment", "email", "zip_code"]
     readonly_fields = [
