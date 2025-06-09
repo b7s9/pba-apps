@@ -9,10 +9,10 @@ from markdownfield.models import RenderedMarkdownField
 from markdownfield.validators import VALIDATOR_NULL
 from ordered_model.models import OrderedModel
 
+from campaigns.tasks import geocode_signature
 from events.models import ScheduledEvent
 from lib.slugify import unique_slugify
 from membership.models import Donation, DonationProduct
-from campaigns.tasks import geocode_signature
 from pbaabp.models import ChoiceArrayField, MarkdownField
 from pbaabp.tasks import create_pba_account, subscribe_to_newsletter
 

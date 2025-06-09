@@ -31,18 +31,20 @@ class PetitionAdmin(admin.ModelAdmin):
         report = ""
         totalsigs = obj.signatures.count()
         report += f"Total signatures: {totalsigs}\n"
-        nongeocoded = obj.signatures.filter(location=None).count()
+        totaldistinctsigs = obj.signatures.distinct("email").count()
+        report += f"Total signatures (distinct by email): {totaldistinctsigs}\n\n"
+        nongeocoded = obj.signatures.distinct("email").filter(location=None).count()
         report += f"Non-geocoded signatures: {nongeocoded}\n\n"
         report += "Districts:\n"
         philly = 0
         for district in District.objects.all():
-            cnt = obj.signatures.filter(location__within=district.mpoly).count()
+            cnt = obj.signatures.filter(location__within=district.mpoly).distinct("email").count()
             philly += cnt
             report += f"{district.name}: {cnt}\n"
         report += f"\nAll of Philadelphia: {philly}\n"
         report += "\nRCOs:\n"
         for rco in RegisteredCommunityOrganization.objects.all():
-            cnt = obj.signatures.filter(location__within=rco.mpoly).count()
+            cnt = obj.signatures.filter(location__within=rco.mpoly).distinct("email").count()
             report += f"{rco.name}: {cnt}\n"
         return report
 
