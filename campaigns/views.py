@@ -1,3 +1,5 @@
+import hashlib
+import json
 import uuid
 from urllib.parse import quote, urlencode
 
@@ -34,6 +36,27 @@ class CampaignDetailView(DetailView):
 
 class CampaignListView(ListView):
     model = Campaign
+
+
+def randomize_lat_long(petition_id, lat, long):
+    hash = hashlib.sha256(f"{petition_id}-{lat}-{long}".encode())
+    smear_int = int.from_bytes(hash.digest(), "big")
+    x_smear = (((smear_int % 2179) / 2179) - 0.5) * 0.000287
+    y_smear = (((smear_int % 2803) / 2803) - 0.5) * 0.000358
+    return (lat + x_smear, long + y_smear)
+
+
+def heatmap(request, petition_slug_or_id):
+    petition = _fetch_petition_by_slug_or_id(petition_slug_or_id)
+    if petition is None:
+        raise Http404
+
+    pins = []
+    for signature in petition.signatures.all():
+        if signature.location:
+            lat, lng = randomize_lat_long(petition.id, signature.location.y, signature.location.x)
+            pins.append([lat, lng, 1])
+    return render(request, "petition/heatmap.html", {"pins_json": json.dumps(pins)})
 
 
 def petition_signatures(request, petition_slug_or_id):

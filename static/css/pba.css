@@ -1173,6 +1173,11 @@ body {
   }
 }
 
+#petition_signatures {
+  height: 75vh;
+  z-index: 0;
+}
+
 /* CMS */
 
 .homepage-button {
