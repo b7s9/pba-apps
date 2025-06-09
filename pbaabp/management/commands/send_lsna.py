@@ -2,8 +2,8 @@ from django.conf import settings
 from django.contrib.gis.geos import GEOSGeometry
 from django.core.management.base import BaseCommand
 
+from campaigns.models import Petition
 from pbaabp.email import send_email_message
-from profiles.models import Profile
 
 GEOJSON = """
 {
@@ -61,7 +61,11 @@ GEOJSON = """
 
 geom = GEOSGeometry(GEOJSON)
 
-profiles = Profile.objects.filter(location__within=geom)
+signatures = (
+    Petition.objects.get(slug="build-the-city-hall-bike-lane")
+    .signatures.filter(location__within=geom)
+    .all()
+)
 SENT = []
 
 
@@ -72,16 +76,16 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         settings.EMAIL_SUBJECT_PREFIX = ""
-        for profile in profiles:
-            if profile.user.email not in SENT:
+        for signature in signatures:
+            if signature.email not in SENT:
                 send_email_message(
                     "LSNA",
                     "Philly Bike Action <noreply@bikeaction.org>",
-                    [profile.user.email],
-                    {"profile": profile},
+                    [signature.email],
+                    {"first_name": signature.first_name},
                     reply_to=["info@bikeaction.org"],
                 )
-                SENT.append(profile.user.email)
+                SENT.append(signature.email)
             else:
-                print(f"skipping {profile}")
+                print(f"skipping {signature}")
         print(len(SENT))
