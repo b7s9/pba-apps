@@ -12,6 +12,7 @@ from ordered_model.models import OrderedModel
 from events.models import ScheduledEvent
 from lib.slugify import unique_slugify
 from membership.models import Donation, DonationProduct
+from campaigns.tasks import geocode_signature
 from pbaabp.models import ChoiceArrayField, MarkdownField
 from pbaabp.tasks import create_pba_account, subscribe_to_newsletter
 
@@ -287,6 +288,8 @@ class PetitionSignature(models.Model):
                     newsletter_opt_in=self.newsletter_opt_in,
                 )
             )
+        if not self.location:
+            transaction.on_commit(lambda: geocode_signature.delay(self.id))
         super(PetitionSignature, self).save(*args, **kwargs)
 
     def __str__(self):
