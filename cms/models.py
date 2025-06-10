@@ -2,6 +2,7 @@ from django.db import models
 from django.http import Http404
 from wagtail.admin.panels import FieldPanel
 from wagtail.blocks import (
+    BooleanBlock,
     CharBlock,
     ChoiceBlock,
     RawHTMLBlock,
@@ -156,12 +157,14 @@ class DisplayCardsBlock(StructBlock):
 
     collection = ChoiceBlock(label="Collection to display", required=True, choices=get_collections)
     card_count_description = CharBlock(required=False)
+    random_order = BooleanBlock(default=True, required=False)
 
     def get_context(self, value, parent_context=None):
+        queryset = Image.objects.filter(collection=Collection.objects.get(id=value["collection"]))
+        if value["random_order"]:
+            queryset = queryset.order_by("?")
         context = super().get_context(value, parent_context=parent_context)
-        context["images"] = Image.objects.filter(
-            collection=Collection.objects.get(id=value["collection"])
-        )
+        context["images"] = queryset
         return context
 
     class Meta:
