@@ -155,6 +155,7 @@ def get_collections():
 class DisplayCardsBlock(StructBlock):
 
     collection = ChoiceBlock(label="Collection to display", required=True, choices=get_collections)
+    card_count_description = CharBlock(required=False)
 
     def get_context(self, value, parent_context=None):
         context = super().get_context(value, parent_context=parent_context)

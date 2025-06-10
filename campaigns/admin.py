@@ -1,3 +1,6 @@
+import hashlib
+import json
+
 from csvexport.actions import csvexport
 from django.contrib import admin
 from django.shortcuts import render
@@ -67,6 +70,25 @@ def geocode(modeladmin, request, queryset):
             geocode_signature.delay(obj.id)
 
 
+def randomize_lat_long(petition_id, lat, long):
+    hash = hashlib.sha256(f"{petition_id}-{lat}-{long}".encode())
+    smear_int = int.from_bytes(hash.digest(), "big")
+    x_smear = (((smear_int % 2179) / 2179) - 0.5) * 0.000287
+    y_smear = (((smear_int % 2803) / 2803) - 0.5) * 0.000358
+    return (lat + x_smear, long + y_smear)
+
+
+def heatmap(modeladmin, request, queryset):
+    pins = []
+    for signature in queryset:
+        if signature.location:
+            lat, lng = randomize_lat_long(
+                signature.petition.id, signature.location.y, signature.location.x
+            )
+            pins.append([lat, lng, 1])
+    return render(request, "petition/heatmap.html", {"pins_json": json.dumps(pins)})
+
+
 class DistrictFilter(admin.SimpleListFilter):
     title = "District"
     parameter_name = "district"
@@ -82,7 +104,7 @@ class DistrictFilter(admin.SimpleListFilter):
 
 
 class PetitionSignatureAdmin(admin.ModelAdmin, ReadOnlyLeafletGeoAdminMixin):
-    actions = [csvexport, geocode]
+    actions = [csvexport, geocode, heatmap]
     list_display = [
         "get_name",
         "email",

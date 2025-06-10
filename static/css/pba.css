@@ -1665,6 +1665,13 @@ body {
 .cms-content h2[id]:hover::after {
 }
 
+.card-display-description {
+  width: 100%;
+  text-align: center;
+  font-weight: bold;
+  font-size: 2em;
+}
+
 .card-display-list {
   display: grid;
   gap: 1em;
