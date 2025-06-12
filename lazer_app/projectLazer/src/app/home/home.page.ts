@@ -5,6 +5,7 @@ import { Device, DeviceInfo } from '@capacitor/device';
 import { Geolocation, Position } from '@capacitor/geolocation';
 import { LoadingController } from '@ionic/angular';
 import { Network } from '@capacitor/network';
+import { Storage } from '@ionic/storage-angular';
 
 async function compressJpegDataUrl(
   dataUrl: string,
@@ -43,6 +44,7 @@ export class HomePage implements OnInit {
   deviceInfo: DeviceInfo | null = null;
   geoPerms: boolean | null = null;
 
+  violationId: number | null = null;
   violationImage: string | undefined | null = null;
   violationPosition: Position | null = null;
   violationTime: Date | null = null;
@@ -53,7 +55,10 @@ export class HomePage implements OnInit {
   lastViolationData: any = null;
   lastViolationSelected: any = null;
 
-  constructor(private loadingCtrl: LoadingController) {}
+  constructor(
+    private loadingCtrl: LoadingController,
+    private storage: Storage,
+  ) {}
 
   async getCurrentPosition() {
     Geolocation.getCurrentPosition({
@@ -73,7 +78,6 @@ export class HomePage implements OnInit {
 
     const image = await Camera.getPhoto({
       quality: 60,
-      allowEditing: false,
       resultType: CameraResultType.DataUrl,
       source: CameraSource.Camera,
       webUseInput: true,
@@ -81,6 +85,27 @@ export class HomePage implements OnInit {
 
     this.violationImage = image.dataUrl;
     this.violationTime = new Date();
+    this.violationId = await this.storage.get('violationId').then((value) => {
+      let violationId;
+      if (value !== null) {
+        violationId = value;
+      } else {
+        violationId = 1;
+      }
+      this.storage.set('violationId', violationId! + 1);
+      return violationId;
+    });
+    console.log(this.violationId);
+    this.storage
+      .set('violation-' + this.violationId, {
+        id: this.violationId,
+        image: JSON.parse(JSON.stringify(image.dataUrl)),
+        time: JSON.parse(JSON.stringify(this.violationTime)),
+        position: JSON.parse(JSON.stringify(this.violationPosition)),
+      })
+      .then((value) => {
+        console.log(value);
+      });
   }
 
   async selectVehicle(index: number) {
