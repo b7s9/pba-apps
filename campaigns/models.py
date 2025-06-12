@@ -80,7 +80,7 @@ class Campaign(OrderedModel):
     @property
     def has_actions(self):
         return (
-            self.petitions.filter(display_on_campaign_page=True).count()
+            self.petitions.filter(display_on_campaign_page=True, active=True).count()
             or self.events.count()
             or self.donation_action
             or self.subscription_action
@@ -116,6 +116,9 @@ class Campaign(OrderedModel):
 
 class Petition(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+
+    active = models.BooleanField(default=True)
+
     title = models.CharField(max_length=512)
     slug = models.SlugField(null=True, blank=True)
     letter = models.TextField(null=True, blank=True)
