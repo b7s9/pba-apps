@@ -4,19 +4,19 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { HistoryPageRoutingModule } from './history-routing.module';
+import { ViolationDetailPageRoutingModule } from './violation-detail-routing.module';
 
 import { RenderImagePipe } from '../render-image.pipe';
-import { HistoryPage } from './history.page';
+import { ViolationDetailPage } from './violation-detail.page';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    HistoryPageRoutingModule,
+    ViolationDetailPageRoutingModule,
     RenderImagePipe,
   ],
-  declarations: [HistoryPage],
+  declarations: [ViolationDetailPage],
 })
-export class HistoryPageModule {}
+export class ViolationDetailPageModule {}

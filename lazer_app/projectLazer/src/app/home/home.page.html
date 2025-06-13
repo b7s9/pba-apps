@@ -78,79 +78,6 @@
       </ion-button>
     </ion-card-content>
   </ion-card>
-
-  <ion-card *ngIf="lastViolationData">
-    <ion-card-header>
-      <ion-card-title>Last Capture</ion-card-title>
-      <ion-card-subtitle *ngIf="!lastViolationSelected"
-        >Select Which Vehicle You're Reporting</ion-card-subtitle
-      >
-    </ion-card-header>
-    <ion-card-content>
-      <ion-item>
-        <div id="imageContainer">
-          <img id="imagePreview" *ngIf="lastImage" [src]="lastImage" />
-        </div>
-      </ion-item>
-      <ion-item>
-        <ion-grid>
-          <ion-row>
-            <ion-col>Address</ion-col>
-          </ion-row>
-          <ion-row>
-            <ion-col><b>{{ lastViolationData.address }}</b></ion-col>
-          </ion-row>
-          <ion-row>
-            <ion-col>Date</ion-col>
-            <ion-col>Time</ion-col>
-          </ion-row>
-          <ion-row>
-            <ion-col><b>{{ lastTime!.toLocaleDateString() }}</b></ion-col>
-            <ion-col><b>{{ lastTime!.toLocaleTimeString() }}</b></ion-col>
-          </ion-row>
-          <div *ngIf="lastViolationSelected">
-            <ion-row>
-              <ion-col>Make</ion-col>
-              <ion-col>Model</ion-col>
-              <ion-col>Color</ion-col>
-            </ion-row>
-            <ion-row *ngIf="lastViolationSelected.vehicle">
-              <ion-col
-                ><b
-                  >{{ lastViolationSelected!.vehicle?.props?.make_model[0].make
-                  }}</b
-                ></ion-col
-              >
-              <ion-col
-                ><b
-                  >{{ lastViolationSelected!.vehicle?.props?.make_model[0].model
-                  }}</b
-                ></ion-col
-              >
-              <ion-col
-                ><b
-                  >{{ lastViolationSelected!.vehicle?.props?.color[0].value
-                  }}</b
-                ></ion-col
-              >
-            </ion-row>
-            <ion-row *ngIf="lastViolationData.vehicle?.plate">
-              <ion-col colspan="2">Plate</ion-col>
-            </ion-row>
-            <ion-row *ngIf="lastViolationData">
-              <ion-col>
-                <b>
-                  {{ lastViolationSelected!.plate?.props?.region[0]?.value }} {{
-                  lastViolationSelected!.plate?.props?.plate[0]?.value.toUpperCase()
-                  }}
-                </b>
-              </ion-col>
-            </ion-row>
-          </div>
-        </ion-grid>
-      </ion-item>
-    </ion-card-content>
-  </ion-card>
 </ion-content>
 
 <ion-footer *ngIf="geoPerms">
@@ -163,16 +90,6 @@
     >
       <ion-icon name="camera" slot="start"></ion-icon>
       Capture image
-    </ion-button>
-
-    <ion-button
-      (click)="submit()"
-      *ngIf="(violationImage !== null) && (violationPosition !== null)"
-      expand="block"
-      size="large"
-    >
-      <ion-icon name="cloud-upload-outline" slot="start"></ion-icon>
-      Process
     </ion-button>
   </ion-toolbar>
 </ion-footer>

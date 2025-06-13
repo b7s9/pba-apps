@@ -3,7 +3,7 @@ import { Directory, Filesystem } from '@capacitor/filesystem';
 
 @Pipe({
   name: 'renderImage',
-  standalone: false,
+  standalone: true,
 })
 export class RenderImagePipe implements PipeTransform {
   transform(filename: string): any {

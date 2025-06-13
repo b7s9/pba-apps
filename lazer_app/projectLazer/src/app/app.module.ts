@@ -11,6 +11,8 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { ServiceWorkerModule } from '@angular/service-worker';
 
+import { RenderImagePipe } from './render-image.pipe';
+
 @NgModule({
   declarations: [AppComponent],
   imports: [

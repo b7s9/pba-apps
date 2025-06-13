@@ -1,0 +1,105 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title> Project Lazer </ion-title>
+    <ion-buttons slot="end">
+      <ion-icon
+        class="onlineIndicator indicatorGreen"
+        [style.display]="onlineStatus.online? '': 'none'"
+        name="cloud"
+      ></ion-icon>
+      <ion-icon
+        class="onlineIndicator indicatorRed"
+        [style.display]="onlineStatus.online? 'none': ''"
+        name="cloud-offline"
+      ></ion-icon>
+      <ion-spinner
+        class="onlineIndicator"
+        [style.display]="(onlineStatus.online === null)? '': 'none'"
+        name="dots"
+      ></ion-spinner>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-card *ngIf="violationData">
+    <ion-card-header>
+      <ion-card-title
+        >Violation - {{ (!violationData.processed && !violationData.submitted) ?
+        'pending' : (violationData.processed) ? 'processed' : 'submitted'
+        }}</ion-card-title
+      >
+      <ion-card-subtitle>
+        {{ violationData.time | date : "medium" }}
+        <div *ngIf="violationData.address">{{ violationData.address }}</div>
+      </ion-card-subtitle>
+    </ion-card-header>
+    <div style="width: 100%; text-align: center">
+      <div id="imageContainer">
+        <ion-img
+          id="imagePreview"
+          style="max-width: 50vw; margin: 0 auto"
+          [src]="violationData!.image | renderImage | async"
+          (ionImgDidLoad)="drawHitBoxes()"
+          lazy="true"
+        />
+      </div>
+    </div>
+    <ion-card-content>
+      <ion-grid>
+        <div *ngIf="violationData.vehicle">
+          <ion-row>
+            <ion-col>Make</ion-col>
+            <ion-col>Model</ion-col>
+            <ion-col>Color</ion-col>
+          </ion-row>
+          <ion-row *ngIf="violationData.vehicle">
+            <ion-col
+              ><b
+                >{{ violationData.vehicle!.vehicle?.props?.make_model[0].make
+                }}</b
+              ></ion-col
+            >
+            <ion-col
+              ><b
+                >{{ violationData.vehicle!.vehicle?.props?.make_model[0].model
+                }}</b
+              ></ion-col
+            >
+            <ion-col
+              ><b
+                >{{ violationData.vehicle!.vehicle?.props?.color[0].value }}</b
+              ></ion-col
+            >
+          </ion-row>
+          <ion-row *ngIf="violationData.vehicle?.plate">
+            <ion-col size="auto">Plate</ion-col>
+            <ion-col>
+              <b>
+                {{ violationData.vehicle!.plate?.props?.region[0]?.value }} {{
+                violationData.vehicle!.plate?.props?.plate[0]?.value.toUpperCase()
+                }}
+              </b>
+            </ion-col>
+          </ion-row>
+        </div>
+      </ion-grid>
+      <ion-button
+        expand="block"
+        (click)="submit()"
+        *ngIf="(!violationData.processed && !violationData.submitted)"
+        ><ion-icon name="cloud-upload-outline" slot="start"></ion-icon>
+        Process</ion-button
+      >
+      <ion-button
+        expand="block"
+        *ngIf="(violationData.processed && !violationData.submitted)"
+        ><ion-icon name="ticket-outline" slot="start"></ion-icon> Submit to
+        PPA</ion-button
+      >
+    </ion-card-content>
+  </ion-card>
+</ion-content>

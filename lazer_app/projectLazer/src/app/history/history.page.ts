@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 
 import { Storage } from '@ionic/storage-angular';
 
@@ -11,7 +11,7 @@ import { PhotoService, UserPhoto } from '../services/photo.service';
   styleUrls: ['./history.page.scss'],
   standalone: false,
 })
-export class HistoryPage implements OnInit {
+export class HistoryPage {
   violationHistory: any[] = [];
 
   constructor(
@@ -76,6 +76,4 @@ export class HistoryPage implements OnInit {
       }
     });
   }
-
-  ngOnInit() {}
 }
