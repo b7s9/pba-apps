@@ -6,7 +6,8 @@ import { Geolocation, Position } from '@capacitor/geolocation';
 import { LoadingController } from '@ionic/angular';
 import { Storage } from '@ionic/storage-angular';
 
-import { OnlineStatusService } from '../online-service';
+import { OnlineStatusService } from '../services/online.service';
+import { PhotoService } from '../services/photo.service';
 
 async function compressJpegDataUrl(
   dataUrl: string,
@@ -58,6 +59,7 @@ export class HomePage implements OnInit {
   constructor(
     private loadingCtrl: LoadingController,
     public onlineStatus: OnlineStatusService,
+    private photos: PhotoService,
     private storage: Storage,
   ) {}
 
@@ -79,12 +81,16 @@ export class HomePage implements OnInit {
 
     const image = await Camera.getPhoto({
       quality: 60,
-      resultType: CameraResultType.DataUrl,
+      resultType: CameraResultType.Uri,
       source: CameraSource.Camera,
       webUseInput: true,
     });
 
-    this.violationImage = image.dataUrl;
+    const savedImage = await this.photos.savePicture(image);
+
+    console.log(savedImage);
+
+    this.violationImage = savedImage.webviewPath;
     this.violationTime = new Date();
     this.violationId = await this.storage.get('violationId').then((value) => {
       let violationId;
@@ -100,7 +106,7 @@ export class HomePage implements OnInit {
     this.storage
       .set('violation-' + this.violationId, {
         id: this.violationId,
-        image: JSON.parse(JSON.stringify(image.dataUrl)),
+        image: JSON.parse(JSON.stringify(savedImage.filepath)),
         time: JSON.parse(JSON.stringify(this.violationTime)),
         position: JSON.parse(JSON.stringify(this.violationPosition)),
       })

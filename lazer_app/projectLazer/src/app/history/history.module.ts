@@ -6,10 +6,11 @@ import { IonicModule } from '@ionic/angular';
 
 import { HistoryPageRoutingModule } from './history-routing.module';
 
+import { RenderImagePipe } from '../render-image.pipe';
 import { HistoryPage } from './history.page';
 
 @NgModule({
   imports: [CommonModule, FormsModule, IonicModule, HistoryPageRoutingModule],
-  declarations: [HistoryPage],
+  declarations: [HistoryPage, RenderImagePipe],
 })
 export class HistoryPageModule {}
