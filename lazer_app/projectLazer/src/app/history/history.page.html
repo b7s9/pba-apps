@@ -26,17 +26,45 @@
 
 <ion-content [fullscreen]="true">
   <ion-list>
-    <ion-item *ngFor="let violation of sortViolations()">
+    <ion-item
+      *ngFor="let violation of sortViolations(); trackBy: trackViolations"
+    >
       <ion-card>
         <ion-card-header>
           <ion-card-subtitle>Violation - Unknown</ion-card-subtitle>
         </ion-card-header>
-        <img alt="" src="{{ violation.image | renderImage | async }}" />
-        <ion-button
-          download="{{ violation.image }}"
-          href="{{ violation.image | renderImage | async }}"
-          >Save Image</ion-button
-        >
+        <ion-img
+          alt=""
+          style="background-image: url(&quot;/assets/placeholder.png&quot;)"
+          [src]="violation.image | renderImage | async"
+        ></ion-img>
+        <ion-toolbar>
+          <ion-buttons slot="start">
+            <ion-button
+              fill="solid"
+              color="secondary"
+              download="{{ violation.image }}"
+              href="{{ violation.image | renderImage | async }}"
+              ><ion-icon slot="start" name="save-outline"></ion-icon> Save
+              Image</ion-button
+            >
+          </ion-buttons>
+          <ion-buttons slot="end">
+            <ion-button
+              id="delete-violation-{{ violation.id }}"
+              fill="solid"
+              color="danger"
+              ><ion-icon slot="start" name="trash-outline"></ion-icon>
+              Delete</ion-button
+            >
+          </ion-buttons>
+          <ion-alert
+            trigger="delete-violation-{{ violation.id }}"
+            header="Are you sure?"
+            message="This will remove the image and all violation data, if it has not yet been processed or submitted nothing will be recoverable"
+            [buttons]="actionButtons(violation.id)"
+          ></ion-alert>
+        </ion-toolbar>
         <ion-card-content>
           <ion-grid>
             <ion-row>

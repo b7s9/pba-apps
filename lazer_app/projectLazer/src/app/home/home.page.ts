@@ -238,10 +238,8 @@ export class HomePage implements OnInit {
           )
             .then((data: any) => {
               this.lastViolationData = data;
-              if (data.length == 1) {
-                this.lastViolationSelected = data[0];
-              } else {
-                this.lastViolationSelected = null;
+              if (data.vehicles.length == 1) {
+                this.selectVehicle(0);
               }
               this.lastImage = this.violationImage;
               this.lastTime = this.violationTime;
@@ -251,9 +249,7 @@ export class HomePage implements OnInit {
               this.violationImage = null;
               setTimeout(() => {
                 loader.dismiss();
-                if (this.lastViolationSelected === null) {
-                  this.drawHitBoxes();
-                }
+                this.drawHitBoxes();
               }, 100);
             })
             .catch((err: any) => {

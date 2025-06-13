@@ -24,6 +24,36 @@ export class HistoryPage implements OnInit {
     return await this.photos.fetchPicture(filename);
   }
 
+  trackViolations(index: number, violation: any) {
+    return violation.id;
+  }
+
+  deleteViolation(violationId: number) {
+    let violation = null;
+    this.storage.get('violation-' + violationId).then((violation) => {
+      this.photos.deletePicture(violation!.image);
+    });
+    this.storage.remove('violation-' + violationId);
+    this.ionViewWillEnter();
+  }
+
+  actionButtons(violationId: number) {
+    return [
+      {
+        text: 'Cancel',
+        role: 'cancel',
+        handler: () => {},
+      },
+      {
+        text: 'OK',
+        role: 'confirm',
+        handler: () => {
+          this.deleteViolation(violationId);
+        },
+      },
+    ];
+  }
+
   sortViolations() {
     return this.violationHistory
       .sort(function (a, b) {

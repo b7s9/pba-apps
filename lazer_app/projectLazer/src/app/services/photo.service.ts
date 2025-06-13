@@ -17,27 +17,6 @@ export class PhotoService {
     private storage: Storage,
   ) {}
 
-  public async loadSaved() {
-    // Retrieve cached photo array data
-    const photoList = await this.storage.get(this.PHOTO_STORAGE);
-    this.photos = JSON.parse(photoList.value) || [];
-
-    // If running on the web...
-    if (!this.platform.is('hybrid')) {
-      // Display the photo by reading into base64 format
-      for (let photo of this.photos) {
-        // Read each saved photo's data from the Filesystem
-        const readFile = await Filesystem.readFile({
-          path: photo.filepath,
-          directory: Directory.External,
-        });
-
-        // Web platform only: Load the photo as base64 data
-        photo.webviewPath = `data:image/jpeg;base64,${readFile.data}`;
-      }
-    }
-  }
-
   // Save picture to file on device
   public async savePicture(photo: Photo) {
     // Convert photo to base64 format, required by Filesystem API to save
@@ -109,15 +88,7 @@ export class PhotoService {
   }
 
   // Delete picture by removing it from reference data and the filesystem
-  public async deletePicture(photo: UserPhoto, position: number) {
-    // Remove this photo from the Photos reference data array
-    this.photos.splice(position, 1);
-
-    // Update photos array cache by overwriting the existing photo array
-    this.storage.set(this.PHOTO_STORAGE, this.photos);
-
-    // delete photo file from filesystem
-    const filename = photo.filepath.substr(photo.filepath.lastIndexOf('/') + 1);
+  public async deletePicture(filename: string) {
     await Filesystem.deleteFile({
       path: filename,
       directory: Directory.External,
