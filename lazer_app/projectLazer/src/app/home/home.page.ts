@@ -108,11 +108,12 @@ export class HomePage implements OnInit {
                       data.position = JSON.parse(
                         JSON.stringify(dis.violationPosition),
                       );
-                      dis.violationPosition = null;
                       dis.storage
                         .set('violation-' + dis.violationId, data)
                         .then((data: any) => {
                           loader.dismiss();
+                          dis.violationImage = null;
+                          dis.violationPosition = null;
                           dis.router.navigate(['/violation-detail', data.id]);
                         });
                     });
