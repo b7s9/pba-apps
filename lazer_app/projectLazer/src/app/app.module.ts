@@ -15,7 +15,10 @@ import { ServiceWorkerModule } from '@angular/service-worker';
   declarations: [AppComponent],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(),
+    IonicModule.forRoot({
+      hardwareBackButton: false,
+      swipeBackEnabled: false,
+    }),
     IonicStorageModule.forRoot({
       name: 'projectLazer',
       driverOrder: [CordovaSQLiteDriver._driver, Drivers.IndexedDB],

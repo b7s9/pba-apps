@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { Storage } from '@ionic/storage-angular';
 
+import { OnlineStatusService } from './online-service';
+
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -8,7 +10,21 @@ import { Storage } from '@ionic/storage-angular';
   standalone: false,
 })
 export class AppComponent {
-  constructor(private storage: Storage) {
+  handleTouchStart(e: any) {}
+  handleTouchMove(e: any) {
+    e.preventDefault();
+  }
+
+  constructor(
+    public onlineStatus: OnlineStatusService,
+    private storage: Storage,
+  ) {
     this.storage.create();
+    document.addEventListener('touchstart', this.handleTouchStart, {
+      passive: false,
+    });
+    document.addEventListener('touchmove', this.handleTouchMove, {
+      passive: false,
+    });
   }
 }

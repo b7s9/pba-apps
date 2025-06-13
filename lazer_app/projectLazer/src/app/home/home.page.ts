@@ -4,8 +4,9 @@ import { Component, OnInit } from '@angular/core';
 import { Device, DeviceInfo } from '@capacitor/device';
 import { Geolocation, Position } from '@capacitor/geolocation';
 import { LoadingController } from '@ionic/angular';
-import { Network } from '@capacitor/network';
 import { Storage } from '@ionic/storage-angular';
+
+import { OnlineStatusService } from '../online-service';
 
 async function compressJpegDataUrl(
   dataUrl: string,
@@ -40,7 +41,6 @@ async function compressJpegDataUrl(
   standalone: false,
 })
 export class HomePage implements OnInit {
-  online: boolean | null = null;
   deviceInfo: DeviceInfo | null = null;
   geoPerms: boolean | null = null;
 
@@ -57,6 +57,7 @@ export class HomePage implements OnInit {
 
   constructor(
     private loadingCtrl: LoadingController,
+    public onlineStatus: OnlineStatusService,
     private storage: Storage,
   ) {}
 
@@ -303,12 +304,6 @@ export class HomePage implements OnInit {
   ngOnInit(): void {
     Device.getInfo().then((deviceInfo) => {
       this.deviceInfo = deviceInfo;
-      Network.getStatus().then((connectionStatus) => {
-        this.online = connectionStatus.connected;
-      });
-      Network.addListener('networkStatusChange', (connectionStatus) => {
-        this.online = connectionStatus.connected;
-      });
       this.checkPermission();
     });
   }
