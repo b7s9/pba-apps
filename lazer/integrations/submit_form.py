@@ -42,7 +42,7 @@ class FinderEnum(StrEnum):
 
 
 class ViolationObserved(FinderEnum):
-    # TODO: Add bicycle lane violations, when available.
+    BIKE_LANE = "Bike Lane (vehicle parked in bike lane)"
     CORNER_CLEARANCE = "Corner Clearance (vehicle parked on corner)"
     CROSSWALK = "Crosswalk (vehicle on crosswalk)"
     HANDICAP_RAMP = "Handicap Ramp (vehicle blocking handicap ramp)"
@@ -51,7 +51,7 @@ class ViolationObserved(FinderEnum):
     @classmethod
     def unknown_value(cls) -> "ViolationObserved":
         """Returns a default value for unknown violations."""
-        return cls.SIDEWALK
+        return cls.BIKE_LANE
 
 
 class OccurrenceFrequency(FinderEnum):
@@ -251,7 +251,7 @@ class MobilityAccessViolation:
             vehicle_color=vehicle_color,
             additional_information=f"License Plate: {plate} ({region})",
             # not sure which one to select here...
-            violation_observed=ViolationObserved.CROSSWALK,  # type: ignore
+            violation_observed=ViolationObserved.BIKE_LANE,  # type: ignore
             address=data["address"],
             # picture=data.get("picture", ""),
         )

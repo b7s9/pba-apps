@@ -14,7 +14,7 @@ violation = MobilityAccessViolation(
     vehicle_color = "black",
     make="hyundai",
     body_style="sedan",
-    violation_observed="bicycle lane",
+    violation_observed="bike lane",
     address = "2000 Market St, Philadelphia, PA 19103, USA",
 )
 photo: str | ContentFile = "local_picture_or_content_file.jpg"
