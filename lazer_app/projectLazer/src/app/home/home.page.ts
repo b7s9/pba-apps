@@ -109,6 +109,11 @@ export class HomePage implements OnInit {
         image: JSON.parse(JSON.stringify(savedImage.filepath)),
         time: JSON.parse(JSON.stringify(this.violationTime)),
         position: JSON.parse(JSON.stringify(this.violationPosition)),
+        processed: false,
+        submitted: false,
+        violationType: null,
+        vehicle: null,
+        address: null,
       })
       .then((value) => {
         console.log(value);
@@ -117,6 +122,10 @@ export class HomePage implements OnInit {
 
   async selectVehicle(index: number) {
     this.lastViolationSelected = this.lastViolationData.vehicles[index];
+    this.storage.get('violation-' + this.violationId).then((violation) => {
+      violation.vehicle = this.lastViolationData.vehicles[index];
+      this.storage.set('violation-' + this.violationId, violation);
+    });
     console.log(this.lastViolationSelected);
   }
 
@@ -134,12 +143,6 @@ export class HomePage implements OnInit {
     overlayDiv.style.height = rect.height + 'px';
     image.insertAdjacentElement('beforebegin', overlayDiv);
 
-    console.log(image!.width);
-    console.log(image!.naturalWidth);
-    console.log(image!.width / image!.naturalWidth);
-    console.log(image!.height);
-    console.log(image!.naturalHeight);
-    console.log(image!.height / image!.naturalHeight);
     const scale =
       (image!.width / image!.naturalWidth +
         image!.height / image!.naturalHeight) /
@@ -247,6 +250,13 @@ export class HomePage implements OnInit {
               this.violationPosition = null;
               this.violationTime = null;
               this.violationImage = null;
+              this.storage
+                .get('violation-' + this.violationId)
+                .then((violation) => {
+                  violation.processed = true;
+                  violation.address = data.address;
+                  this.storage.set('violation-' + this.violationId, violation);
+                });
               setTimeout(() => {
                 loader.dismiss();
                 this.drawHitBoxes();

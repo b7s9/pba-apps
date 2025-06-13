@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 
 import { Storage } from '@ionic/storage-angular';
 
@@ -18,6 +18,7 @@ export class HistoryPage implements OnInit {
     public onlineStatus: OnlineStatusService,
     private storage: Storage,
     public photos: PhotoService,
+    public changeDetectorRef: ChangeDetectorRef,
   ) {}
 
   async renderPhoto(filename: string): Promise<UserPhoto> {
@@ -34,7 +35,10 @@ export class HistoryPage implements OnInit {
       this.photos.deletePicture(violation!.image);
     });
     this.storage.remove('violation-' + violationId);
-    this.ionViewWillEnter();
+    this.violationHistory = this.violationHistory.filter(
+      (item) => item.id !== violationId,
+    );
+    this.changeDetectorRef.detectChanges();
   }
 
   actionButtons(violationId: number) {

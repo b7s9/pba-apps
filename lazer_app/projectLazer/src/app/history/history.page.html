@@ -35,7 +35,11 @@
         </ion-card-header>
         <ion-img
           alt=""
-          style="background-image: url(&quot;/assets/placeholder.png&quot;)"
+          style="
+            min-width: 90vw;
+            min-height: 30vh;
+            background-image: url(&quot;/assets/placeholder.png&quot;);
+          "
           [src]="violation.image | renderImage | async"
         ></ion-img>
         <ion-toolbar>
