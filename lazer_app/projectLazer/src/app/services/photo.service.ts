@@ -29,7 +29,7 @@ export class PhotoService {
         // Read each saved photo's data from the Filesystem
         const readFile = await Filesystem.readFile({
           path: photo.filepath,
-          directory: Directory.Data,
+          directory: Directory.External,
         });
 
         // Web platform only: Load the photo as base64 data
@@ -48,7 +48,7 @@ export class PhotoService {
     const savedFile = await Filesystem.writeFile({
       path: fileName,
       data: base64Data,
-      directory: Directory.Data,
+      directory: Directory.External,
     });
 
     if (this.platform.is('hybrid')) {
@@ -71,7 +71,7 @@ export class PhotoService {
   public async fetchPicture(filename: string): Promise<UserPhoto> {
     return Filesystem.readFile({
       path: filename,
-      directory: Directory.Data,
+      directory: Directory.External,
     }).then((readFile) => {
       return new Promise((resolve, reject) => {
         if (this.platform.is('hybrid')) {
@@ -120,7 +120,7 @@ export class PhotoService {
     const filename = photo.filepath.substr(photo.filepath.lastIndexOf('/') + 1);
     await Filesystem.deleteFile({
       path: filename,
-      directory: Directory.Data,
+      directory: Directory.External,
     });
   }
 

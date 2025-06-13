@@ -9,7 +9,7 @@ export class RenderImagePipe implements PipeTransform {
   transform(filename: string): any {
     return Filesystem.readFile({
       path: filename,
-      directory: Directory.Data,
+      directory: Directory.External,
     }).then((readFile) => {
       return `data:image/jpeg;base64,${readFile.data}`;
     });
