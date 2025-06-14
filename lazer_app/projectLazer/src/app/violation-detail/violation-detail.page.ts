@@ -1,10 +1,12 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Storage } from '@ionic/storage-angular';
-import { LoadingController } from '@ionic/angular';
+import { LoadingController, ModalController } from '@ionic/angular';
 
 import { OnlineStatusService } from '../services/online.service';
 import { PhotoService, UserPhoto } from '../services/photo.service';
+import { ChooseViolationModalComponent } from '../choose-violation-modal/choose-violation-modal.component';
+import { best_match } from '../violation-matcher/violation-matcher';
 
 async function compressJpegDataUrl(
   dataUrl: string,
@@ -47,6 +49,7 @@ export class ViolationDetailPage implements OnInit {
     private route: ActivatedRoute,
     private loadingCtrl: LoadingController,
     public changeDetectorRef: ChangeDetectorRef,
+    private modalCtrl: ModalController,
     private storage: Storage,
     public photos: PhotoService,
     public onlineStatus: OnlineStatusService,
@@ -202,6 +205,24 @@ export class ViolationDetailPage implements OnInit {
             });
         });
       });
+  }
+
+  async openModal() {
+    const chooseViolationModal = await this.modalCtrl.create({
+      component: ChooseViolationModalComponent,
+    });
+    chooseViolationModal.present();
+
+    const { data, role } = await chooseViolationModal.onWillDismiss();
+
+    if (role === 'save') {
+      this.violationData.violationType = data;
+      this.storage
+        .set('violation-' + this.violationId, this.violationData)
+        .then((data) => {
+          this.changeDetectorRef.detectChanges();
+        });
+    }
   }
 
   ngOnInit() {

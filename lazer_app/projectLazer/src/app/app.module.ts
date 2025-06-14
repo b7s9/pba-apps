@@ -12,9 +12,10 @@ import { AppRoutingModule } from './app-routing.module';
 import { ServiceWorkerModule } from '@angular/service-worker';
 
 import { RenderImagePipe } from './render-image.pipe';
+import { ChooseViolationModalComponent } from './choose-violation-modal/choose-violation-modal.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, ChooseViolationModalComponent],
   imports: [
     BrowserModule,
     IonicModule.forRoot({

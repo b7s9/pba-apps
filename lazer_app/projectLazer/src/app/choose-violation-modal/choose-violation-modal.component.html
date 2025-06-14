@@ -1,0 +1,18 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button color="medium" (click)="cancel()">Cancel</ion-button>
+    </ion-buttons>
+    <ion-title>What's the Violation?</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-button
+    *ngFor="let violation of violations"
+    (click)="setViolation(violation)"
+    size="large"
+    expand="block"
+    [innerHTML]="renderViolationText(violation)"
+  ></ion-button>
+</ion-content>

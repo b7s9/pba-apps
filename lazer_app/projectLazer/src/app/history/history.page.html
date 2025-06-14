@@ -38,7 +38,10 @@
         }}</ion-card-title
       >
       <ion-card-subtitle
-        >{{ violation.time | date : "medium" }}</ion-card-subtitle
+        ><div *ngIf="violation.violationType">
+          {{ violation.violationType.split("(")[0] }}
+        </div>
+        <div>{{ violation.time | date : "medium" }}</div></ion-card-subtitle
       >
     </ion-card-header>
     <a
@@ -48,12 +51,7 @@
       <ion-img
         alt=""
         class="violationImg"
-        style="
-          margin: 0 auto;
-          width: 50vw;
-          min-width: 50vw;
-          min-height: 30vh;
-        "
+        style="margin: 0 auto; width: 50vw; min-width: 50vw; min-height: 30vh"
         [src]="violation.image | renderImage | async"
       ></ion-img>
     </a>
