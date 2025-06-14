@@ -13,9 +13,14 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 
 import { RenderImagePipe } from './render-image.pipe';
 import { ChooseViolationModalComponent } from './choose-violation-modal/choose-violation-modal.component';
+import { ConfirmViolationDetailsModalComponent } from './confirm-violation-details-modal/confirm-violation-details-modal.component';
 
 @NgModule({
-  declarations: [AppComponent, ChooseViolationModalComponent],
+  declarations: [
+    AppComponent,
+    ChooseViolationModalComponent,
+    ConfirmViolationDetailsModalComponent,
+  ],
   imports: [
     BrowserModule,
     IonicModule.forRoot({

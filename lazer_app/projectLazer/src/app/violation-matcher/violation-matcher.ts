@@ -13,6 +13,5 @@ export function get_options(field: string) {
 
 export function best_match(field: string, userValue: string) {
   const fuse = new Fuse(get_options(field));
-  console.log(fuse.search(userValue));
-  return fuse.search(userValue);
+  return fuse.search(userValue)[0].item;
 }

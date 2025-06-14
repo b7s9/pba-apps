@@ -1,0 +1,63 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button color="medium" (click)="cancel()">Cancel</ion-button>
+    </ion-buttons>
+    <ion-title>Confirm some details</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item>
+      <ion-select label="Make" [value]="make" interface="modal">
+        <ion-select-option *ngFor="let option of getOptions('Make')">{{
+          option
+        }}</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-input
+        class="ion-text-right"
+        label="Model"
+        [value]="model"
+      ></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-select label="Body Style" [value]="bodyStyle" interface="modal">
+        <ion-select-option *ngFor="let option of getOptions('Body Style')">{{
+          option
+        }}</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-select label="Color" [value]="vehicleColor" interface="modal">
+        <ion-select-option *ngFor="let option of getOptions('Vehicle Color')">{{
+          option
+        }}</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-input
+        class="ion-text-right"
+        label="Block Number"
+        [value]="blockNumber"
+      ></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-select label="Street Name" [value]="streetName" interface="modal">
+        <ion-select-option *ngFor="let option of getOptions('Street Name')">{{
+          option
+        }}</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-select label="Zip Code" [value]="zipCode" interface="modal">
+        <ion-select-option *ngFor="let option of getOptions('Zip Code')">{{
+          option
+        }}</ion-select-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
+</ion-content>

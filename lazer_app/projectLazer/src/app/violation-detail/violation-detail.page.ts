@@ -6,6 +6,7 @@ import { LoadingController, ModalController } from '@ionic/angular';
 import { OnlineStatusService } from '../services/online.service';
 import { PhotoService, UserPhoto } from '../services/photo.service';
 import { ChooseViolationModalComponent } from '../choose-violation-modal/choose-violation-modal.component';
+import { ConfirmViolationDetailsModalComponent } from '../confirm-violation-details-modal/confirm-violation-details-modal.component';
 import { best_match } from '../violation-matcher/violation-matcher';
 
 async function compressJpegDataUrl(
@@ -222,6 +223,21 @@ export class ViolationDetailPage implements OnInit {
         .then((data) => {
           this.changeDetectorRef.detectChanges();
         });
+    }
+
+    this.openViolationModal();
+  }
+
+  async openViolationModal() {
+    const confirmViolationDetailsModal = await this.modalCtrl.create({
+      component: ConfirmViolationDetailsModalComponent,
+      componentProps: { violation: this.violationData },
+    });
+    confirmViolationDetailsModal.present();
+    const { data, role } = await confirmViolationDetailsModal.onWillDismiss();
+
+    if (role === 'save') {
+      console.log(data);
     }
   }
 
