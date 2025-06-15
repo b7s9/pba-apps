@@ -37,6 +37,7 @@
     "@ionic/storage-angular": "^4.0.0",
     "cordova-sqlite-storage": "^7.0.0",
     "fuse.js": "^7.1.0",
+    "image-resize-compress": "^2.1.1",
     "ionicons": "^7.0.0",
     "localforage-cordovasqlitedriver": "^1.8.0",
     "rxjs": "~7.8.0",

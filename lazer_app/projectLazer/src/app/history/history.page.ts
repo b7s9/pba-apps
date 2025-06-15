@@ -1,6 +1,7 @@
 import { Component, ChangeDetectorRef } from '@angular/core';
 
 import { Storage } from '@ionic/storage-angular';
+import { Directory, Filesystem } from '@capacitor/filesystem';
 
 import { OnlineStatusService } from '../services/online.service';
 import { PhotoService, UserPhoto } from '../services/photo.service';
@@ -29,10 +30,18 @@ export class HistoryPage {
     return violation.id;
   }
 
+  getThumb(violation: any) {
+    if (violation.thumbnail) {
+      return violation.thumbnail;
+    }
+    return violation.image;
+  }
+
   deleteViolation(violationId: number) {
     let violation = null;
     this.storage.get('violation-' + violationId).then((violation) => {
       this.photos.deletePicture(violation!.image);
+      this.photos.deletePicture(violation!.thumbnail);
     });
     this.storage.remove('violation-' + violationId);
     this.violationHistory = this.violationHistory.filter(
@@ -56,6 +65,21 @@ export class HistoryPage {
         },
       },
     ];
+  }
+
+  async saveImage(violationId: number) {
+    this.storage.get('violation-' + violationId).then((violation) => {
+      Filesystem.readFile({
+        path: violation.image,
+        directory: Directory.External,
+      }).then((readFile) => {
+        const hiddenElement = document.createElement('a');
+        hiddenElement.target = '_blank';
+        hiddenElement.download = violation.image;
+        hiddenElement.href = `data:image/jpeg;base64,${readFile.data}`;
+        hiddenElement.click();
+      });
+    });
   }
 
   sortViolations() {

@@ -8,6 +8,8 @@ import { Device, DeviceInfo } from '@capacitor/device';
 import { Geolocation, Position } from '@capacitor/geolocation';
 import { Storage } from '@ionic/storage-angular';
 
+import { fromURL, blobToURL } from 'image-resize-compress';
+
 import { OnlineStatusService } from '../services/online.service';
 import { PhotoService } from '../services/photo.service';
 
@@ -65,7 +67,16 @@ export class HomePage implements OnInit {
     });
 
     const savedImage = await this.photos.savePicture(image);
-
+    fromURL(savedImage.webviewPath as string, 0.5, 480, 'auto', 'jpeg').then(
+      (thumbnail) => {
+        blobToURL(thumbnail).then((thumbnailUrl) => {
+          const savedThumbnail = this.photos.savePictureFromBase64(
+            thumbnailUrl as string,
+            `thumb-${savedImage.filepath}`,
+          );
+        });
+      },
+    );
     this.violationImage = savedImage.webviewPath;
     this.violationTime = new Date();
     this.violationId = await this.storage.get('violationId').then((value) => {
@@ -82,6 +93,7 @@ export class HomePage implements OnInit {
       .set('violation-' + this.violationId, {
         id: this.violationId,
         image: JSON.parse(JSON.stringify(savedImage.filepath)),
+        thumbnail: JSON.parse(JSON.stringify(`thumb-${savedImage.filepath}`)),
         time: JSON.parse(JSON.stringify(this.violationTime)),
         position: JSON.parse(JSON.stringify(this.violationPosition)),
         processed: false,

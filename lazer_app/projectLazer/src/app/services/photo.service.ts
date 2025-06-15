@@ -47,6 +47,33 @@ export class PhotoService {
     }
   }
 
+  public async savePictureFromBase64(base64Data: string, fileName?: string) {
+    if (fileName === undefined) {
+      fileName = new Date().getTime() + '.jpeg';
+    }
+    const savedFile = await Filesystem.writeFile({
+      path: fileName,
+      data: base64Data,
+      directory: Directory.External,
+    });
+
+    if (this.platform.is('hybrid')) {
+      // Display the new image by rewriting the 'file://' path to HTTP
+      // Details: https://ionicframework.com/docs/building/webview#file-protocol
+      return {
+        filepath: savedFile.uri,
+        webviewPath: Capacitor.convertFileSrc(savedFile.uri),
+      };
+    } else {
+      // Use webPath to display the new image instead of base64 since it's
+      // already loaded into memory
+      return {
+        filepath: fileName,
+        webviewPath: `data:image/jpeg;base64,${base64Data}`,
+      };
+    }
+  }
+
   public async fetchPicture(filename: string): Promise<UserPhoto> {
     return Filesystem.readFile({
       path: filename,

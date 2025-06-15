@@ -3,37 +3,13 @@ import { ActivatedRoute } from '@angular/router';
 import { Storage } from '@ionic/storage-angular';
 import { LoadingController, ModalController } from '@ionic/angular';
 
+import { fromURL, blobToURL } from 'image-resize-compress';
+
 import { OnlineStatusService } from '../services/online.service';
 import { PhotoService, UserPhoto } from '../services/photo.service';
 import { ChooseViolationModalComponent } from '../choose-violation-modal/choose-violation-modal.component';
 import { ConfirmViolationDetailsModalComponent } from '../confirm-violation-details-modal/confirm-violation-details-modal.component';
 import { best_match } from '../violation-matcher/violation-matcher';
-
-async function compressJpegDataUrl(
-  dataUrl: string,
-  quality: number,
-): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    img.onload = () => {
-      const canvas = document.createElement('canvas');
-      canvas.width = img.naturalWidth;
-      canvas.height = img.naturalHeight;
-      const ctx = canvas.getContext('2d');
-      if (!ctx) {
-        reject(new Error('Canvas context not available'));
-        return;
-      }
-      ctx.drawImage(img, 0, 0);
-      const compressedDataUrl = canvas.toDataURL('image/jpeg', quality);
-      resolve(compressedDataUrl);
-    };
-    img.onerror = (error) => {
-      reject(error);
-    };
-    img.src = dataUrl;
-  });
-}
 
 @Component({
   selector: 'app-violation-detail',
@@ -149,15 +125,17 @@ export class ViolationDetailPage implements OnInit {
           }
         });
 
-        compressJpegDataUrl(img, 0.3).then((newImg) => {
-          const formData = new FormData();
-          formData.append('latitude', JSON.stringify(lat));
-          formData.append('longitude', JSON.stringify(long));
-          formData.append('datetime', dt.toISOString());
-          formData.append('image', newImg);
+        fromURL(img, 0.3, 'auto', 'auto', 'jpeg').then((resizedBlob) => {
+          blobToURL(resizedBlob).then((imgUrl) => {
+            const formData = new FormData();
+            formData.append('latitude', JSON.stringify(lat));
+            formData.append('longitude', JSON.stringify(long));
+            formData.append('datetime', dt.toISOString());
+            formData.append('image', imgUrl as string);
 
-          request.open('POST', 'https://bikeaction.org/lazer/submit/');
-          request.send(formData);
+            request.open('POST', 'https://bikeaction.org/lazer/submit/');
+            request.send(formData);
+          });
         });
       });
     }
