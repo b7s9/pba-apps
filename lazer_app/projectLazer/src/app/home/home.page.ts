@@ -21,18 +21,14 @@ import { PhotoService } from '../services/photo.service';
 })
 export class HomePage implements OnInit {
   deviceInfo: DeviceInfo | null = null;
+
   geoPerms: boolean | null = null;
+  geoWatchId: string | null = null;
 
   violationId: number | null = null;
   violationImage: string | undefined | null = null;
   violationPosition: Position | null = null;
   violationTime: Date | null = null;
-
-  lastImage: string | undefined | null = null;
-  lastPosition: Position | null = null;
-  lastTime: Date | null = null;
-  lastViolationData: any = null;
-  lastViolationSelected: any = null;
 
   constructor(
     private loadingCtrl: LoadingController,
@@ -43,14 +39,21 @@ export class HomePage implements OnInit {
   ) {}
 
   async getCurrentPosition() {
-    Geolocation.getCurrentPosition({
-      enableHighAccuracy: true,
-      timeout: 30000,
-      maximumAge: 20000,
-    }).then((coordinates) => {
-      this.violationPosition = coordinates;
-      this.geoPerms = true;
-    });
+    if (this.geoWatchId !== null) {
+      Geolocation.clearWatch({ id: this.geoWatchId });
+    }
+    this.geoWatchId = await Geolocation.watchPosition(
+      { enableHighAccuracy: true, maximumAge: 10000 },
+      (coordinates) => {
+        if (coordinates!.coords!.accuracy < 100) {
+          this.violationPosition = coordinates;
+          this.geoPerms = true;
+          if (this.geoWatchId !== null) {
+            Geolocation.clearWatch({ id: this.geoWatchId });
+          }
+        }
+      },
+    );
   }
 
   async takePicture() {
@@ -107,34 +110,35 @@ export class HomePage implements OnInit {
         this.loadingCtrl
           .create({
             message: 'Waiting for geolocation data...',
-            duration: 30000,
+            duration: 10000,
           })
           .then((loader) => {
-            loader.present();
-            let check = function (dis: any) {
-              setTimeout(function () {
-                if (dis.violationPosition !== null) {
-                  const violationData = dis.storage
-                    .get('violation-' + dis.violationId)
-                    .then((data: any) => {
-                      data.position = JSON.parse(
-                        JSON.stringify(dis.violationPosition),
-                      );
-                      dis.storage
-                        .set('violation-' + dis.violationId, data)
-                        .then((data: any) => {
-                          loader.dismiss();
-                          dis.violationImage = null;
-                          dis.violationPosition = null;
-                          dis.router.navigate(['/violation-detail', data.id]);
-                        });
-                    });
-                } else {
-                  check(dis);
-                }
-              }, 100);
-            };
-            check(this);
+            loader.present().then(() => {
+              let check = function (dis: any) {
+                setTimeout(function () {
+                  if (dis.violationPosition !== null) {
+                    const violationData = dis.storage
+                      .get('violation-' + dis.violationId)
+                      .then((data: any) => {
+                        data.position = JSON.parse(
+                          JSON.stringify(dis.violationPosition),
+                        );
+                        dis.storage
+                          .set('violation-' + dis.violationId, data)
+                          .then((data: any) => {
+                            loader.dismiss();
+                            dis.violationImage = null;
+                            dis.violationPosition = null;
+                            dis.router.navigate(['/violation-detail', data.id]);
+                          });
+                      });
+                  } else {
+                    check(dis);
+                  }
+                }, 100);
+              };
+              check(this);
+            });
           });
       });
   }
