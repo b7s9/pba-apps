@@ -14,18 +14,23 @@
     size="large"
     expand="block"
   >
-    <ion-icon class="absolute-icon" size="large" color="white" slot="start" [src]="getViolationIcon(violation)"></ion-icon>
+    <ion-icon
+      class="absolute-icon"
+      size="large"
+      color="white"
+      slot="start"
+      [src]="getViolationIcon(violation)"
+    ></ion-icon>
     <span [innerHTML]="renderViolationText(violation)"></span>
   </ion-button>
-
 </ion-content>
 
 <ion-footer class="ion-text-center">
   <small>
-    "Bike Lane" icon by Pierre-Luc Auclair from the Noun Project<br>
-    "Corner Clearance" icon by Firza Alamsyah from the Noun Project<br>
-    "Crosswalk" icon by Uswa KDT from the Noun Project<br>
-    "Handicap" icon by Vadim Solomakhin from the Noun Project<br>
+    "Bike Lane" icon by Pierre-Luc Auclair from the Noun Project<br />
+    "Corner Clearance" icon by Firza Alamsyah from the Noun Project<br />
+    "Crosswalk" icon by Uswa KDT from the Noun Project<br />
+    "Handicap" icon by Vadim Solomakhin from the Noun Project<br />
     "Sidewalk" icon by Magicon from the Noun Project
   </small>
 </ion-footer>
