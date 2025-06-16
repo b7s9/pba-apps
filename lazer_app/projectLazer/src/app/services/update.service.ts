@@ -25,7 +25,7 @@ export class UpdateService implements OnDestroy {
       this.intervalSubscription = this.intervalSource.subscribe(async () => {
         try {
           this.isNewVersionAvailable = await this.swUpdate.checkForUpdate();
-          this.needsUpdate = (this.isNewVersionAvailable || this.needsUpdate);
+          this.needsUpdate = this.isNewVersionAvailable || this.needsUpdate;
           console.log(
             this.isNewVersionAvailable
               ? 'A new version is available.'

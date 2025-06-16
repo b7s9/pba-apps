@@ -30,7 +30,7 @@
           </ion-menu-toggle>
 
           <ion-item
-            [style.display]="updateService.needsUpdate? '': 'none'"
+            [style.display]="updateService.needsUpdate ? '' : 'none'"
             (click)="updateService.applyUpdate()"
           >
             <ion-icon
