@@ -13,12 +13,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { ServiceWorkerModule } from '@angular/service-worker';
 
 import { RenderImagePipe } from './render-image.pipe';
+import { ChooseAddressModalComponent } from './choose-address-modal/choose-address-modal.component';
 import { ChooseViolationModalComponent } from './choose-violation-modal/choose-violation-modal.component';
 import { ConfirmViolationDetailsModalComponent } from './confirm-violation-details-modal/confirm-violation-details-modal.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    ChooseAddressModalComponent,
     ChooseViolationModalComponent,
     ConfirmViolationDetailsModalComponent,
   ],

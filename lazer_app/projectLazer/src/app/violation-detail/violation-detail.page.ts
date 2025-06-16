@@ -9,6 +9,7 @@ import { OnlineStatusService } from '../services/online.service';
 import { PhotoService, UserPhoto } from '../services/photo.service';
 import { UpdateService } from '../services/update.service';
 
+import { ChooseAddressModalComponent } from '../choose-address-modal/choose-address-modal.component';
 import { ChooseViolationModalComponent } from '../choose-violation-modal/choose-violation-modal.component';
 import { ConfirmViolationDetailsModalComponent } from '../confirm-violation-details-modal/confirm-violation-details-modal.component';
 import { best_match } from '../violation-matcher/violation-matcher';
@@ -176,6 +177,7 @@ export class ViolationDetailPage implements OnInit {
               }
               this.violationData.processed = true;
               this.violationData.address = data.address;
+              this.violationData.addressCandidates = data.addresses;
               this.storage
                 .set('violation-' + this.violationId, this.violationData)
                 .then((data) => {
@@ -214,6 +216,29 @@ export class ViolationDetailPage implements OnInit {
     }
 
     this.openViolationModal();
+  }
+
+  async openAddressModal() {
+    if (this.violationData.addressCandidates) {
+      const chooseAddressModal = await this.modalCtrl.create({
+        component: ChooseAddressModalComponent,
+        componentProps: { violation: this.violationData },
+      });
+      chooseAddressModal.present();
+
+      const { data, role } = await chooseAddressModal.onWillDismiss();
+
+      if (role === 'save') {
+        this.violationData.address = data;
+        this.storage
+          .set('violation-' + this.violationId, this.violationData)
+          .then((data) => {
+            this.changeDetectorRef.detectChanges();
+          });
+      }
+    }
+
+    this.openModal();
   }
 
   async openViolationModal() {

@@ -47,6 +47,7 @@
         ><div *ngIf="violation.violationType">
           {{ violation.violationType.split("(")[0] }}
         </div>
+        <div *ngIf="violation.address">{{ violation.address }}</div>
         <div>{{ violation.time | date : "medium" }}</div></ion-card-subtitle
       >
     </ion-card-header>

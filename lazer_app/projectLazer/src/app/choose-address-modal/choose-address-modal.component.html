@@ -1,0 +1,18 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button color="medium" (click)="cancel()">Cancel</ion-button>
+    </ion-buttons>
+    <ion-title>Which Address is best?</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-button
+    *ngFor="let address of addresses"
+    (click)="setAddress(address)"
+    size="regular"
+    expand="block"
+    [innerHTML]="address"
+  ></ion-button>
+</ion-content>
