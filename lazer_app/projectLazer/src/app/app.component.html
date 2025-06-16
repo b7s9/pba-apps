@@ -1,3 +1,52 @@
 <ion-app>
-  <ion-router-outlet></ion-router-outlet>
+  <ion-split-pane contentId="main-content">
+    <ion-menu contentId="main-content">
+      <ion-content>
+        <ion-list lines="none">
+          <ion-list-header>Project Lazer</ion-list-header>
+
+          <ion-menu-toggle autoHide="false">
+            <ion-item
+              routerLink="/home"
+              routerLinkActive="active"
+              routerDirection="root"
+              detail="false"
+            >
+              <ion-icon slot="start" name="camera-outline"></ion-icon>
+              <ion-label>Violation Capture</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+
+          <ion-menu-toggle autoHide="false">
+            <ion-item
+              routerLink="/history"
+              routerLinkActive="active"
+              routerDirection="root"
+              detail="false"
+            >
+              <ion-icon slot="start" name="list-outline"></ion-icon>
+              <ion-label>History</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+
+          <ion-item
+            [style.display]="updateService.needsUpdate ? '' : 'none'"
+            (click)="updateService.applyUpdate()"
+          >
+            <ion-icon
+              color="success"
+              name="refresh-circle-outline"
+              slot="start"
+            ></ion-icon>
+            <ion-label>Update App</ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-content>
+    </ion-menu>
+
+    <ion-router-outlet
+      [swipeGesture]="false"
+      id="main-content"
+    ></ion-router-outlet>
+  </ion-split-pane>
 </ion-app>

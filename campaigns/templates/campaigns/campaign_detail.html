@@ -113,7 +113,7 @@
     <div id="petitions">
     {% for petition in campaign.petitions.all %}
       {% if campaign.petitions.all|length > 0 %}<h2>{{ petition.title }}</h2>{% endif %}
-      {% if petition.display_on_campaign_page %}
+      {% if petition.display_on_campaign_page and petition.active %}
       <div class="petition">
         {% include 'petition/form.html' with petition=petition form=petition.form %}
       </div>

@@ -1,20 +1,29 @@
 <ion-header>
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+      <ion-icon
+        [style.display]="updateService.needsUpdate? '': 'none'"
+        color="success"
+        name="refresh-circle-outline"
+        size="large"
+      ></ion-icon>
+    </ion-buttons>
     <ion-title> Project Lazer </ion-title>
     <ion-buttons slot="end">
       <ion-icon
         class="onlineIndicator indicatorGreen"
-        [style.display]="online? '': 'none'"
+        [style.display]="onlineStatus.online? '': 'none'"
         name="cloud"
       ></ion-icon>
       <ion-icon
         class="onlineIndicator indicatorRed"
-        [style.display]="online? 'none': ''"
+        [style.display]="onlineStatus.online? 'none': ''"
         name="cloud-offline"
       ></ion-icon>
       <ion-spinner
         class="onlineIndicator"
-        [style.display]="(online === null)? '': 'none'"
+        [style.display]="(onlineStatus.online === null)? '': 'none'"
         name="dots"
       ></ion-spinner>
     </ion-buttons>
@@ -22,41 +31,6 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <div *ngIf="geoPerms">
-    <ion-card *ngIf="violationPosition && violationImage">
-      <ion-card-header>
-        <ion-card-title>Violation</ion-card-title>
-        <ion-card-subtitle>Ready to submit</ion-card-subtitle>
-      </ion-card-header>
-      <ion-card-content>
-        <ion-img
-          id="imagePreview"
-          *ngIf="violationImage"
-          [src]="violationImage"
-        ></ion-img>
-        <ion-item>
-          <ion-icon name="time" slot="start"></ion-icon>
-          <ion-text *ngIf="violationTime !== null"
-            >{{ violationTime.toLocaleDateString() }} {{
-            violationTime.toLocaleTimeString() }}</ion-text
-          >
-        </ion-item>
-        <ion-item>
-          <ion-icon name="location" slot="start"></ion-icon>
-          Lat: {{ violationPosition.coords.latitude }}
-        </ion-item>
-        <ion-item>
-          <ion-icon name="location" slot="start"></ion-icon>
-          Lng: {{ violationPosition.coords.longitude }}
-        </ion-item>
-      </ion-card-content>
-    </ion-card>
-
-    <ion-card *ngIf="(violationPosition === null) && (violationImage)">
-      <ion-card-content> Awaiting Location data... </ion-card-content>
-    </ion-card>
-  </div>
-
   <ion-card *ngIf="!geoPerms">
     <ion-card-header>
       <ion-card-title>GeoLocation</ion-card-title>
@@ -73,79 +47,6 @@
       </ion-button>
     </ion-card-content>
   </ion-card>
-
-  <ion-card *ngIf="lastViolationData">
-    <ion-card-header>
-      <ion-card-title>Last Caputre</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-item>
-        <ion-img
-          id="imagePreview"
-          *ngIf="lastImage"
-          [src]="lastImage"
-        ></ion-img>
-      </ion-item>
-      <ion-item>
-        <ion-grid>
-          <ion-row>
-            <ion-col>Address</ion-col>
-          </ion-row>
-          <ion-row>
-            <ion-col><b>{{ lastViolationData.address }}</b></ion-col>
-          </ion-row>
-          <ion-row>
-            <ion-col>Date</ion-col>
-            <ion-col>Time</ion-col>
-          </ion-row>
-          <ion-row>
-            <ion-col><b>{{ lastTime!.toLocaleDateString() }}</b></ion-col>
-            <ion-col><b>{{ lastTime!.toLocaleTimeString() }}</b></ion-col>
-          </ion-row>
-          <ion-row>
-            <ion-col>Make</ion-col>
-            <ion-col>Model</ion-col>
-            <ion-col>Color</ion-col>
-          </ion-row>
-          <ion-row *ngIf="lastViolationData.vehicle?.vehicle">
-            <ion-col
-              ><b
-                >{{
-                lastViolationData.vehicle?.vehicle?.props?.make_model[0].make
-                }}</b
-              ></ion-col
-            >
-            <ion-col
-              ><b
-                >{{
-                lastViolationData.vehicle?.vehicle?.props?.make_model[0].model
-                }}</b
-              ></ion-col
-            >
-            <ion-col
-              ><b
-                >{{ lastViolationData.vehicle?.vehicle?.props?.color[0].value
-                }}</b
-              ></ion-col
-            >
-          </ion-row>
-          <ion-row *ngIf="lastViolationData.vehicle?.plate">
-            <ion-col colspan="2">Plate</ion-col>
-          </ion-row>
-          <ion-row *ngIf="lastViolationData">
-            <ion-col>
-              <b>
-                {{ lastViolationData!.vehicle?.plate?.props?.region[0]?.value }}
-                {{
-                lastViolationData!.vehicle?.plate?.props?.plate[0]?.value.toUpperCase()
-                }}
-              </b>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
-      </ion-item>
-    </ion-card-content>
-  </ion-card>
 </ion-content>
 
 <ion-footer *ngIf="geoPerms">
@@ -158,16 +59,6 @@
     >
       <ion-icon name="camera" slot="start"></ion-icon>
       Capture image
-    </ion-button>
-
-    <ion-button
-      (click)="submit()"
-      *ngIf="(violationImage !== null) && (violationPosition !== null)"
-      expand="block"
-      size="large"
-    >
-      <ion-icon name="cloud-upload-outline" slot="start"></ion-icon>
-      Submit
     </ion-button>
   </ion-toolbar>
 </ion-footer>

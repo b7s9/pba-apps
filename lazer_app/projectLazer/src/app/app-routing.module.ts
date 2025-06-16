@@ -12,6 +12,18 @@ const routes: Routes = [
     redirectTo: 'home',
     pathMatch: 'full',
   },
+  {
+    path: 'history',
+    loadChildren: () =>
+      import('./history/history.module').then((m) => m.HistoryPageModule),
+  },
+  {
+    path: 'violation-detail/:violationId',
+    loadChildren: () =>
+      import('./violation-detail/violation-detail.module').then(
+        (m) => m.ViolationDetailPageModule,
+      ),
+  },
 ];
 
 @NgModule({

@@ -1,0 +1,181 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button color="medium" (click)="cancel()">Cancel</ion-button>
+    </ion-buttons>
+    <ion-title>Confirm some details</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form (ngSubmit)="submit()" ngNativeValidate>
+    <ion-list>
+      <ion-list-header> Violation </ion-list-header>
+      <ion-item style="max-width: 100%; width: 100%">
+        <ion-text class="ion-text-right">{{
+          violation.violationType
+        }}</ion-text>
+      </ion-item>
+      <ion-item>
+        <ion-select
+          label="How frequently does this occur?"
+          [(ngModel)]="frequency"
+          name="frequency"
+          interface="modal"
+          required
+        >
+          <ion-select-option
+            *ngFor="let option of getOptions('How frequently does this occur?')"
+            >{{ option }}</ion-select-option
+          >
+        </ion-select>
+      </ion-item>
+
+      <ion-list-header> Vechicle Details </ion-list-header>
+      <ion-item>
+        <ion-img
+          style="max-width: 50vw"
+          [src]="
+            this.violation!.image
+              | renderImage
+                : this.violation.vehicle.vehicle.box.xmin
+                : this.violation.vehicle.vehicle.box.ymin
+                : this.violation.vehicle.vehicle.box.xmax
+                : this.violation.vehicle.vehicle.box.ymax
+              | async
+          "
+        ></ion-img>
+      </ion-item>
+      <ion-item>
+        <ion-select
+          label="Make"
+          [(ngModel)]="make"
+          name="make"
+          interface="modal"
+          required
+        >
+          <ion-select-option *ngFor="let option of getOptions('Make')">{{
+            option
+          }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-input
+          class="ion-text-right"
+          label="Model"
+          [(ngModel)]="model"
+          name="model"
+        ></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-select
+          label="Body Style"
+          [(ngModel)]="bodyStyle"
+          name="bodyStyle"
+          interface="modal"
+          required
+        >
+          <ion-select-option *ngFor="let option of getOptions('Body Style')">{{
+            option
+          }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-select
+          label="Color"
+          [(ngModel)]="vehicleColor"
+          name="vehicleColor"
+          interface="modal"
+          required
+        >
+          <ion-select-option
+            *ngFor="let option of getOptions('Vehicle Color')"
+            >{{ option }}</ion-select-option
+          >
+        </ion-select>
+      </ion-item>
+
+      <ion-item *ngIf="this.violation.vehicle!.plate">
+        <ion-img
+          style="max-width: 50vw"
+          [src]="
+            this.violation!.image
+              | renderImage
+                : this.violation.vehicle.plate.box.xmin
+                : this.violation.vehicle.plate.box.ymin
+                : this.violation.vehicle.plate.box.xmax
+                : this.violation.vehicle.plate.box.ymax
+              | async
+          "
+        ></ion-img>
+      </ion-item>
+      <ion-item>
+        <ion-select
+          label="Plate State"
+          [(ngModel)]="plateState"
+          name="plateState"
+          interface="modal"
+        >
+          <ion-select-option
+            *ngFor="let option of getStates() | keyvalue"
+            value="{{ option.key }}"
+            >{{ option.value }}</ion-select-option
+          >
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-input
+          class="ion-text-right"
+          label="Plate Number"
+          [(ngModel)]="plateNumber"
+          name="plateNumber"
+        ></ion-input>
+      </ion-item>
+
+      <ion-list-header> Location Details </ion-list-header>
+      <ion-item>
+        <ion-input
+          class="ion-text-right"
+          label="Block Number"
+          [(ngModel)]="blockNumber"
+          name="blockNumber"
+          type="number"
+          inputmode="numeric"
+          required
+        ></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-select
+          label="Street Name"
+          [(ngModel)]="streetName"
+          name="streetName"
+          interface="modal"
+          required
+        >
+          <ion-select-option *ngFor="let option of getOptions('Street Name')">{{
+            option
+          }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-select
+          label="Zip Code"
+          [(ngModel)]="zipCode"
+          name="zipCode"
+          interface="modal"
+          type="number"
+          inputmode="numeric"
+          required
+        >
+          <ion-select-option *ngFor="let option of getOptions('Zip Code')">{{
+            option
+          }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-list>
+
+    <br />
+    <br />
+    <ion-button type="submit" expand="block">Submit!</ion-button>
+  </form>
+</ion-content>

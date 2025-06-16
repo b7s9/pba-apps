@@ -1,0 +1,19 @@
+body {
+  overscroll-behavior-x: none;
+}
+
+ion-avatar {
+  --border-radius: 4px;
+}
+
+.onlineIndicator {
+  margin-right: 1em;
+}
+
+.indicatorGreen {
+  color: #90ee90;
+}
+
+.indicatorRed {
+  color: #ff5733;
+}

@@ -1,36 +1,18 @@
 import { Capacitor } from '@capacitor/core';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { LoadingController } from '@ionic/angular';
+
 import { Device, DeviceInfo } from '@capacitor/device';
 import { Geolocation, Position } from '@capacitor/geolocation';
-import { LoadingController } from '@ionic/angular';
-import { Network } from '@capacitor/network';
+import { Storage } from '@ionic/storage-angular';
 
-async function compressJpegDataUrl(
-  dataUrl: string,
-  quality: number,
-): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    img.onload = () => {
-      const canvas = document.createElement('canvas');
-      canvas.width = img.naturalWidth;
-      canvas.height = img.naturalHeight;
-      const ctx = canvas.getContext('2d');
-      if (!ctx) {
-        reject(new Error('Canvas context not available'));
-        return;
-      }
-      ctx.drawImage(img, 0, 0);
-      const compressedDataUrl = canvas.toDataURL('image/jpeg', quality);
-      resolve(compressedDataUrl);
-    };
-    img.onerror = (error) => {
-      reject(error);
-    };
-    img.src = dataUrl;
-  });
-}
+import { fromURL, blobToURL } from 'image-resize-compress';
+
+import { OnlineStatusService } from '../services/online.service';
+import { PhotoService } from '../services/photo.service';
+import { UpdateService } from '../services/update.service';
 
 @Component({
   selector: 'app-home',
@@ -39,29 +21,41 @@ async function compressJpegDataUrl(
   standalone: false,
 })
 export class HomePage implements OnInit {
-  online: boolean | null = null;
   deviceInfo: DeviceInfo | null = null;
-  geoPerms: boolean | null = null;
 
+  geoPerms: boolean | null = null;
+  geoWatchId: string | null = null;
+
+  violationId: number | null = null;
   violationImage: string | undefined | null = null;
   violationPosition: Position | null = null;
   violationTime: Date | null = null;
 
-  lastImage: string | undefined | null = null;
-  lastPosition: Position | null = null;
-  lastTime: Date | null = null;
-  lastViolationData: any = null;
-
-  constructor(private loadingCtrl: LoadingController) {}
+  constructor(
+    private loadingCtrl: LoadingController,
+    private router: Router,
+    public onlineStatus: OnlineStatusService,
+    public updateService: UpdateService,
+    private photos: PhotoService,
+    private storage: Storage,
+  ) {}
 
   async getCurrentPosition() {
-    Geolocation.getCurrentPosition({
-      enableHighAccuracy: true,
-      maximumAge: 30000,
-    }).then((coordinates) => {
-      this.violationPosition = coordinates;
-      this.geoPerms = true;
-    });
+    if (this.geoWatchId !== null) {
+      Geolocation.clearWatch({ id: this.geoWatchId });
+    }
+    this.geoWatchId = await Geolocation.watchPosition(
+      { enableHighAccuracy: true, maximumAge: 10000 },
+      (coordinates) => {
+        if (coordinates!.coords!.accuracy < 100) {
+          this.violationPosition = coordinates;
+          this.geoPerms = true;
+          if (this.geoWatchId !== null) {
+            Geolocation.clearWatch({ id: this.geoWatchId });
+          }
+        }
+      },
+    );
   }
 
   async takePicture() {
@@ -71,90 +65,84 @@ export class HomePage implements OnInit {
     this.getCurrentPosition();
 
     const image = await Camera.getPhoto({
-      quality: 90,
-      allowEditing: false,
-      resultType: CameraResultType.DataUrl,
+      quality: 60,
+      resultType: CameraResultType.Uri,
       source: CameraSource.Camera,
       webUseInput: true,
     });
 
-    this.violationImage = image.dataUrl;
-    this.violationTime = new Date();
-  }
-
-  async submit() {
-    function submitData(
-      lat: number,
-      long: number,
-      dt: Date,
-      img: string,
-    ): Promise<any> {
-      return new Promise((resolve, reject) => {
-        let request = new XMLHttpRequest();
-        request.addEventListener('readystatechange', () => {
-          if (request.readyState === 4 && request.status === 200) {
-            let data = JSON.parse(request.responseText);
-            resolve(data);
-          } else if (request.readyState === 4) {
-            reject('error getting resources');
-          }
-        });
-
-        compressJpegDataUrl(img, 0.3).then((newImg) => {
-          const formData = new FormData();
-          formData.append('latitude', JSON.stringify(lat));
-          formData.append('longitude', JSON.stringify(long));
-          formData.append('datetime', dt.toISOString());
-          formData.append('image', newImg);
-
-          request.open(
-            'POST',
-            'https://1091-2600-1002-b069-8222-25fd-3b4e-9193-cd39.ngrok-free.app/lazer/submit/',
+    const savedImage = await this.photos.savePicture(image);
+    fromURL(savedImage.webviewPath as string, 0.5, 480, 'auto', 'jpeg').then(
+      (thumbnail) => {
+        blobToURL(thumbnail).then((thumbnailUrl) => {
+          const savedThumbnail = this.photos.savePictureFromBase64(
+            thumbnailUrl as string,
+            `thumb-${savedImage.filepath}`,
           );
-          request.send(formData);
         });
-      });
-    }
-
-    if (
-      this.violationImage !== null &&
-      this.violationTime !== null &&
-      this.violationPosition !== null
-    ) {
-      this.loadingCtrl
-        .create({
-          message: 'Processing...',
-          duration: 20000,
-        })
-        .then((loader) => {
-          loader.present();
-          submitData(
-            this.violationPosition!.coords!.latitude,
-            this.violationPosition!.coords!.longitude,
-            this.violationTime!,
-            this.violationImage!,
-          )
-            .then((data: any) => {
-              this.lastViolationData = data;
-              console.log(data);
-              this.lastImage = this.violationImage;
-              this.lastTime = this.violationTime;
-              this.lastPosition = this.violationPosition;
-              this.violationPosition = null;
-              this.violationTime = null;
-              this.violationImage = null;
-              setTimeout(() => {
-                loader.dismiss();
-              }, 100);
-            })
-            .catch((err: any) => {
-              console.log(err);
-              setTimeout(() => {
-                loader.dismiss();
-              }, 100);
+      },
+    );
+    this.violationImage = savedImage.webviewPath;
+    this.violationTime = new Date();
+    this.violationId = await this.storage.get('violationId').then((value) => {
+      let violationId;
+      if (value !== null) {
+        violationId = value;
+      } else {
+        violationId = 1;
+      }
+      this.storage.set('violationId', violationId! + 1);
+      return violationId;
+    });
+    this.storage
+      .set('violation-' + this.violationId, {
+        id: this.violationId,
+        image: JSON.parse(JSON.stringify(savedImage.filepath)),
+        thumbnail: JSON.parse(JSON.stringify(`thumb-${savedImage.filepath}`)),
+        time: JSON.parse(JSON.stringify(this.violationTime)),
+        position: JSON.parse(JSON.stringify(this.violationPosition)),
+        processed: false,
+        submitted: false,
+        violationType: null,
+        vehicle: null,
+        address: null,
+        raw: null,
+      })
+      .then((data) => {
+        this.loadingCtrl
+          .create({
+            message: 'Waiting for geolocation data...',
+            duration: 10000,
+          })
+          .then((loader) => {
+            loader.present().then(() => {
+              let check = function (dis: any) {
+                setTimeout(function () {
+                  if (dis.violationPosition !== null) {
+                    const violationData = dis.storage
+                      .get('violation-' + dis.violationId)
+                      .then((data: any) => {
+                        data.position = JSON.parse(
+                          JSON.stringify(dis.violationPosition),
+                        );
+                        dis.storage
+                          .set('violation-' + dis.violationId, data)
+                          .then((data: any) => {
+                            loader.dismiss();
+                            dis.violationImage = null;
+                            dis.violationPosition = null;
+                            dis.router.navigate(['/violation-detail', data.id]);
+                          });
+                      });
+                  } else {
+                    check(dis);
+                  }
+                }, 100);
+              };
+              check(this);
             });
-        });
-    }
+          });
+      });
   }
 
   requestGeoPerms = () => {
@@ -201,12 +189,6 @@ export class HomePage implements OnInit {
   ngOnInit(): void {
     Device.getInfo().then((deviceInfo) => {
       this.deviceInfo = deviceInfo;
-      Network.getStatus().then((connectionStatus) => {
-        this.online = connectionStatus.connected;
-      });
-      Network.addListener('networkStatusChange', (connectionStatus) => {
-        this.online = connectionStatus.connected;
-      });
       this.checkPermission();
     });
   }

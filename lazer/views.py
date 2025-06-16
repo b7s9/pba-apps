@@ -66,28 +66,30 @@ async def submission_api(request):
             await submission.asave()
             await submission.arefresh_from_db()
 
-            data, address = await asyncio.gather(
-                read_plate(submission.image, datetime.datetime.now(datetime.timezone.utc)),
+            data, addresses = await asyncio.gather(
+                read_plate(
+                    form.cleaned_data["image"].split(";base64,")[1],
+                    datetime.datetime.now(datetime.timezone.utc),
+                ),
                 reverse_geocode_point(
-                    f"{form.cleaned_data['latitude']}, {form.cleaned_data['longitude']}"
+                    f"{form.cleaned_data['latitude']}, {form.cleaned_data['longitude']}",
+                    exactly_one=False,
                 ),
             )
-            from pprint import pprint as pp
 
-            pp(data)
-            vehicle = next(iter(data.get("results", [])), None)
-            print(vehicle)
-            print(address)
+            vehicle = data.get("results", [])
             return JsonResponse(
                 {
-                    "vehicle": vehicle,
-                    "address": address.address,
+                    "vehicles": sorted(
+                        vehicle, key=lambda x: x.get("vehicle", {}).get("score", 0), reverse=True
+                    )[:4],
+                    "addresses": [address.address for address in addresses],
+                    "address": addresses[0].address,
                     "timestamp": form.cleaned_data["datetime"],
                 },
                 status=200,
             )
         else:
-            print(form)
             return JsonResponse({}, status=400)
 
 

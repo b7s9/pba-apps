@@ -1,3 +1,10 @@
+* {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+
 #container {
   text-align: center;
 
@@ -26,19 +33,14 @@
   text-decoration: none;
 }
 
-#imagePreview {
+#imageContainer {
+  position: relative;
   margin: 0 auto;
-  width: 66%;
+  min-height: 30vh;
+  max-height: 50vh;
+  margin-bottom: 1em;
+  width: 75%;
 }
-
-.onlineIndicator {
-  margin-right: 1em;
-}
-
-.indicatorGreen {
-  color: #90ee90;
-}
-
-.indicatorRed {
-  color: #ff5733;
+#imagePreview {
+  position: absolute;
 }
