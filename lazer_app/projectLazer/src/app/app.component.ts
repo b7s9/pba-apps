@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Storage } from '@ionic/storage-angular';
 
 import { OnlineStatusService } from './services/online.service';
+import { UpdateService } from './services/update.service';
 
 @Component({
   selector: 'app-root',
@@ -41,6 +42,7 @@ export class AppComponent {
 
   constructor(
     public onlineStatus: OnlineStatusService,
+    public updateService: UpdateService,
     private storage: Storage,
   ) {
     this.storage.create();

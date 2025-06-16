@@ -5,6 +5,7 @@ import { Directory, Filesystem } from '@capacitor/filesystem';
 
 import { OnlineStatusService } from '../services/online.service';
 import { PhotoService, UserPhoto } from '../services/photo.service';
+import { UpdateService } from '../services/update.service';
 
 @Component({
   selector: 'app-history',
@@ -20,6 +21,7 @@ export class HistoryPage {
     private storage: Storage,
     public photos: PhotoService,
     public changeDetectorRef: ChangeDetectorRef,
+    public updateService: UpdateService,
   ) {}
 
   async renderPhoto(filename: string): Promise<UserPhoto> {

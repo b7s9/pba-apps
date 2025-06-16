@@ -12,6 +12,7 @@ import { fromURL, blobToURL } from 'image-resize-compress';
 
 import { OnlineStatusService } from '../services/online.service';
 import { PhotoService } from '../services/photo.service';
+import { UpdateService } from '../services/update.service';
 
 @Component({
   selector: 'app-home',
@@ -34,6 +35,7 @@ export class HomePage implements OnInit {
     private loadingCtrl: LoadingController,
     private router: Router,
     public onlineStatus: OnlineStatusService,
+    public updateService: UpdateService,
     private photos: PhotoService,
     private storage: Storage,
   ) {}

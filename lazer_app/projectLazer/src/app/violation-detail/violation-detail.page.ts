@@ -7,6 +7,8 @@ import { fromURL, blobToURL } from 'image-resize-compress';
 
 import { OnlineStatusService } from '../services/online.service';
 import { PhotoService, UserPhoto } from '../services/photo.service';
+import { UpdateService } from '../services/update.service';
+
 import { ChooseViolationModalComponent } from '../choose-violation-modal/choose-violation-modal.component';
 import { ConfirmViolationDetailsModalComponent } from '../confirm-violation-details-modal/confirm-violation-details-modal.component';
 import { best_match } from '../violation-matcher/violation-matcher';
@@ -30,6 +32,7 @@ export class ViolationDetailPage implements OnInit {
     private storage: Storage,
     public photos: PhotoService,
     public onlineStatus: OnlineStatusService,
+    public updateService: UpdateService,
   ) {}
 
   async selectVehicle(index: number) {
