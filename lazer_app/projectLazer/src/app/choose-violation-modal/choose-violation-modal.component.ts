@@ -3,6 +3,14 @@ import { ModalController } from '@ionic/angular';
 
 import { get_options } from '../violation-matcher/violation-matcher';
 
+const iconMap = new Map([
+  ["Bike Lane (vehicle parked in bike lane)", "assets/icons/noun-bike-lane-19256.svg"],
+  ["Handicap Ramp (vehicle blocking handicap ramp)", "assets/icons/noun-handicap-3217991.svg"],
+  ["Crosswalk (vehicle on crosswalk)", "assets/icons/noun-crosswalk-7075103.svg"],
+  ["Sidewalk", "assets/icons/noun-bad-parking-470749.svg"],
+  ["Corner Clearance (vehicle parked on corner)", "assets/icons/noun-intersection-6096494.svg"],
+]);
+
 @Component({
   selector: 'app-choose-violation-modal',
   templateUrl: './choose-violation-modal.component.html',
@@ -21,6 +29,10 @@ export class ChooseViolationModalComponent {
     } else {
       return `<div>${violation}</div>`;
     }
+  }
+  getViolationIcon(violation: string): string | null {
+    const icon = iconMap.get(violation) || null;
+    return icon;
   }
 
   setViolation(violation: string) {
