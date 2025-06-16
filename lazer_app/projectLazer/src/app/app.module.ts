@@ -22,6 +22,7 @@ import { ConfirmViolationDetailsModalComponent } from './confirm-violation-detai
     ConfirmViolationDetailsModalComponent,
   ],
   imports: [
+    RenderImagePipe,
     BrowserModule,
     IonicModule.forRoot({
       hardwareBackButton: false,

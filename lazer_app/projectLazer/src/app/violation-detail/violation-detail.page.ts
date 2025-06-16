@@ -35,6 +35,7 @@ export class ViolationDetailPage implements OnInit {
   async selectVehicle(index: number) {
     this.violationData.vehicle = this.violationData.raw.vehicles[index];
     this.storage.set('violation-' + this.violationId, this.violationData);
+    this.drawHitBoxes();
     this.changeDetectorRef.detectChanges();
   }
 
@@ -67,7 +68,13 @@ export class ViolationDetailPage implements OnInit {
         const box = document.createElement('a');
         box.style.position = 'absolute';
         box.style.zIndex = `${15 - index}`;
-        box.style.border = '3px solid lime';
+        if (
+          JSON.stringify(element) === JSON.stringify(this.violationData.vehicle)
+        ) {
+          box.style.border = '3px solid hotpink';
+        } else {
+          box.style.border = '3px solid lime';
+        }
         box.style.left = element.vehicle.box.xmin * scale + 'px';
         box.style.top = element.vehicle.box.ymin * scale + 'px';
         box.addEventListener('click', (event) => {

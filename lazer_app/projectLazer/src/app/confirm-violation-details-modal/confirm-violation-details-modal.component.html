@@ -9,6 +9,37 @@
 
 <ion-content>
   <ion-list>
+    <ion-list-header> Violation </ion-list-header>
+    <ion-item style="max-width: 100%; width: 100%">
+      <ion-text class="ion-text-right">{{ violation.violationType }}</ion-text>
+    </ion-item>
+    <ion-item>
+      <ion-select
+        label="How frequently does this occur?"
+        [value]="frequency"
+        interface="modal"
+      >
+        <ion-select-option
+          *ngFor="let option of getOptions('How frequently does this occur?')"
+          >{{ option }}</ion-select-option
+        >
+      </ion-select>
+    </ion-item>
+
+    <ion-list-header> Vechicle Details </ion-list-header>
+    <ion-item>
+      <ion-img
+        [src]="
+          this.violation!.image
+            | renderImage
+              : this.violation.vehicle.vehicle.box.xmin
+              : this.violation.vehicle.vehicle.box.ymin
+              : this.violation.vehicle.vehicle.box.xmax
+              : this.violation.vehicle.vehicle.box.ymax
+            | async
+        "
+      ></ion-img>
+    </ion-item>
     <ion-item>
       <ion-select label="Make" [value]="make" interface="modal">
         <ion-select-option *ngFor="let option of getOptions('Make')">{{
@@ -38,6 +69,37 @@
       </ion-select>
     </ion-item>
 
+    <ion-item *ngIf="this.violation.vehicle!.plate">
+      <ion-img
+        [src]="
+          this.violation!.image
+            | renderImage
+              : this.violation.vehicle.plate.box.xmin
+              : this.violation.vehicle.plate.box.ymin
+              : this.violation.vehicle.plate.box.xmax
+              : this.violation.vehicle.plate.box.ymax
+            | async
+        "
+      ></ion-img>
+    </ion-item>
+    <ion-item>
+      <ion-select label="Plate State" [value]="plateState" interface="modal">
+        <ion-select-option
+          *ngFor="let option of getStates() | keyvalue"
+          value="{{ option.key }}"
+          >{{ option.value }}</ion-select-option
+        >
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-input
+        class="ion-text-right"
+        label="Plate Number"
+        [value]="plateNumber"
+      ></ion-input>
+    </ion-item>
+
+    <ion-list-header> Location Details </ion-list-header>
     <ion-item>
       <ion-input
         class="ion-text-right"
@@ -60,4 +122,8 @@
       </ion-select>
     </ion-item>
   </ion-list>
+
+  <br />
+  <br />
+  <ion-button (click)="submit()" expand="block">Submit!</ion-button>
 </ion-content>

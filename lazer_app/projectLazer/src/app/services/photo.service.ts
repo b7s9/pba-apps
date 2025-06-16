@@ -96,7 +96,7 @@ export class PhotoService {
   }
 
   // Read camera photo into base64 format based on the platform the app is running on
-  private async readAsBase64(photo: Photo) {
+  public async readAsBase64(photo: Photo) {
     // "hybrid" will detect Cordova or Capacitor
     if (this.platform.is('hybrid')) {
       // Read the file into base64 format
