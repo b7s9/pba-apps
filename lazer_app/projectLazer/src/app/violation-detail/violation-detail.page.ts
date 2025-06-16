@@ -223,6 +223,8 @@ export class ViolationDetailPage implements OnInit {
         .then((data) => {
           this.changeDetectorRef.detectChanges();
         });
+    } else {
+      return;
     }
 
     this.openViolationModal();
@@ -245,6 +247,8 @@ export class ViolationDetailPage implements OnInit {
           .then((data) => {
             this.changeDetectorRef.detectChanges();
           });
+      } else {
+        return;
       }
     }
 
@@ -261,6 +265,8 @@ export class ViolationDetailPage implements OnInit {
 
     if (role === 'save') {
       console.log(data);
+    } else {
+      return;
     }
   }
 
