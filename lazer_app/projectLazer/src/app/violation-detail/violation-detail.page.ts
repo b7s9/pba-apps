@@ -118,6 +118,16 @@ export class ViolationDetailPage implements OnInit {
     });
   }
 
+  async reprocess() {
+    this.violationData.processed = false;
+    this.violationData.raw = null;
+    this.violationData.address = null;
+    this.violationData.addressCandidates = null;
+    this.violationData.vehicle = null;
+    this.violationData.violationType = null;
+    this.submit();
+  }
+
   async submit() {
     function submitData(
       lat: number,
