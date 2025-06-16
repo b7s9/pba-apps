@@ -6,6 +6,7 @@ import * as CordovaSQLiteDriver from 'localforage-cordovasqlitedriver';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { IonicStorageModule } from '@ionic/storage-angular';
 import { Drivers } from '@ionic/storage';
+import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -23,6 +24,7 @@ import { ConfirmViolationDetailsModalComponent } from './confirm-violation-detai
   ],
   imports: [
     RenderImagePipe,
+    FormsModule,
     BrowserModule,
     IonicModule.forRoot({
       hardwareBackButton: false,

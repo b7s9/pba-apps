@@ -47,7 +47,12 @@ export class RenderImagePipe implements PipeTransform {
       directory: Directory.External,
     }).then((readFile) => {
       const dataUrl = `data:image/jpeg;base64,${readFile.data}`;
-      if (ymin && xmin && ymax && xmax) {
+      if (
+        ymin !== undefined &&
+        xmin !== undefined &&
+        ymax !== undefined &&
+        xmax !== undefined
+      ) {
         return cropDataUrl(dataUrl, xmin, ymin, xmax - xmin, ymax - ymin).then(
           (newDataUrl) => {
             return newDataUrl;
