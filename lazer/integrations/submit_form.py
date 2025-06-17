@@ -123,12 +123,23 @@ class VehicleColor(FinderEnum):
 
 @dataclass
 class MobilityAccessViolation:
-    date_time_observed: datetime
+
     make: str
-    address: str
     body_style: VehicleType | str
     vehicle_color: VehicleColor | str
+
     violation_observed: ViolationObserved | str
+
+    _date_observed: Optional[str]
+    _time_observed: Optional[str]
+    _block_number: Optional[str]
+    _street_name: Optional[str]
+    _zip_code: Optional[str]
+
+    # Parsable fields, optionally provided instead of strings
+    parsed_address: Optional[pyap.Address] = field(init=False)
+    address: Optional[str]
+    date_time_observed: Optional[datetime]
 
     # optional fields
     occurrence_frequency: OccurrenceFrequency = OccurrenceFrequency.UNSURE
@@ -136,22 +147,29 @@ class MobilityAccessViolation:
     # this field is good to report license plate, since
     # there's no field for it in the form.
     additional_information: str = ""
-    parsed_address: pyap.Address = field(init=False)
 
     def __post_init__(self):
         """Post-initialization to parse the address."""
-        parsed_addresses = pyap.parse(self.address, country="US")
-        if (
-            len(parsed_addresses) != 1
-            or parsed_addresses[0].street_name is None
-            or parsed_addresses[0].street_type is None
-            or parsed_addresses[0].postal_code is None
-        ):
-            raise ValueError(f"address could not be parsed: {self.address}")
-        self.parsed_address = parsed_addresses[0]
-        # convert to est
-        est = pytz.timezone("US/Eastern")
-        self.date_time_observed = self.date_time_observed.astimezone(est)
+        if not all([self._block_number, self._street_name, self._zip_code]) or self.address:
+            raise ValueError("Must supply all address parts or an address to parse")
+        self.parsed_address = None
+        if self.address:
+            parsed_addresses = pyap.parse(self.address, country="US")
+            if (
+                len(parsed_addresses) != 1
+                or parsed_addresses[0].street_name is None
+                or parsed_addresses[0].street_type is None
+                or parsed_addresses[0].postal_code is None
+            ):
+                raise ValueError(f"address could not be parsed: {self.address}")
+            self.parsed_address = parsed_addresses[0]
+
+        if not all([self._date_observed, self._time_observed]) or self.date_time_observed:
+            raise ValueError("Must supply all date/time observed parts or a datetime to parse")
+        if self.date_time_observed:
+            # convert to est
+            est = pytz.timezone("US/Eastern")
+            self.date_time_observed = self.date_time_observed.astimezone(est)
 
         # ensure all enum fields are of the correct type
         fields: list[str, FinderEnum] = [
@@ -174,11 +192,15 @@ class MobilityAccessViolation:
     @property
     def block_number(self) -> int:
         """Returns the block number from the address."""
+        if self._block_number:
+            return self._block_number
         return self.parsed_address.street_number  # type: ignore
 
     @property
     def street_name(self) -> str:
         """Returns the street name from the address."""
+        if self._street_name:
+            return self._street_name
         return (
             self.parsed_address.street_name.upper()  # type: ignore
             + " "
@@ -188,16 +210,22 @@ class MobilityAccessViolation:
     @property
     def zip_code(self) -> str:
         """Returns the zip code from the address."""
+        if self._zip_code:
+            return self._zip_code
         return self.parsed_address.postal_code  # type: ignore
 
     @property
     def date_observed(self) -> str:
         """Returns the date part of the observed datetime."""
+        if self._date_observed:
+            return self._date_observed
         return self.date_time_observed.strftime("%m/%d/%Y")
 
     @property
     def time_observed(self) -> str:
         """Returns the time part of the observed datetime."""
+        if self._time_observed:
+            return self._time_observed
         # Return the time in EST (should this be 24 hour format?)
         return self.date_time_observed.strftime("%I:%M %p")
 
