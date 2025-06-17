@@ -8,6 +8,9 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     apt-get update \
     && apt-get install -y gettext binutils libproj-dev gdal-bin
 
+RUN pip install playwright
+RUN playwright install-deps chromium
+
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
 RUN mkdir /code
@@ -16,13 +19,13 @@ COPY requirements /code/requirements
 RUN --mount=type=cache,target=/root/.cache/pip \
     pip install -r requirements/base.txt
 
+RUN playwright install chromium
+
 RUN --mount=type=cache,target=/root/.cache/pip \
     pip install -r requirements/deploy.txt
 
 COPY .ssh /root/.ssh
 COPY . /code/
-
-RUN playwright install chromium --with-deps
 
 RUN \
     DJANGO_SECRET_KEY=deadbeefcafe \
