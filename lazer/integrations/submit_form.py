@@ -1,15 +1,16 @@
 import os
-from typing import Any
 import urllib
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import StrEnum
+from typing import Any, Optional
 
 import pyap
 import pytz
 from django.core.files.base import ContentFile
-from playwright.async_api import FilePayload, async_playwright
+from playwright.async_api import FilePayload
 from playwright.async_api import TimeoutError as PlaywrightTimeoutError
+from playwright.async_api import async_playwright
 from playwright_stealth import stealth_async
 
 PPA_SMARTSHEET_URL = os.getenv(
@@ -27,9 +28,7 @@ class FinderEnum(StrEnum):
 
     @classmethod
     def unknown_value(cls) -> Any:
-        raise NotImplementedError(
-            f"{cls.__name__} must implement the unknown_value method."
-        )
+        raise NotImplementedError(f"{cls.__name__} must implement the unknown_value method.")
 
     @classmethod
     def find_closest(cls, value: str) -> "FinderEnum":
@@ -212,23 +211,11 @@ class MobilityAccessViolation:
             if vehicles:
                 vehicle = vehicles[0]
             else:
-                raise ValueError(
-                    "Vehicle data is required to create a MobilityAccessViolation."
-                )
+                raise ValueError("Vehicle data is required to create a MobilityAccessViolation.")
         if "timestamp" not in data or "address" not in data:
             raise ValueError("Timestamp and address are required fields.")
-        plate = (
-            vehicle.get("plate", {})
-            .get("props", {})
-            .get("plate", {})[0]
-            .get("value", "")
-        )
-        region = (
-            vehicle.get("plate", {})
-            .get("props", {})
-            .get("region", {})[0]
-            .get("value", "")
-        )
+        plate = vehicle.get("plate", {}).get("props", {}).get("plate", {})[0].get("value", "")
+        region = vehicle.get("plate", {}).get("props", {}).get("region", {})[0].get("value", "")
         # override to make it easier
         vehicle = vehicle.get("vehicle", {})
 
@@ -339,7 +326,7 @@ async def submit_form_with_playwright(
             async with page.expect_request(
                 lambda request: request.url == SUBMIT_SMARTSHEET_URL
                 and request.method.lower() == "post"
-            ) as _req:
+            ) as _:
                 await page.click("button[type='submit']")
 
             # make sure there is a POST to the form URL and it returned 200
