@@ -3,6 +3,7 @@ import base64
 import datetime
 import secrets
 
+from anyio import TemporaryDirectory
 from django.contrib.gis.geos import Point
 from django.core.files.base import ContentFile
 from django.db import transaction
@@ -11,8 +12,12 @@ from django.shortcuts import aget_object_or_404, redirect, render, reverse
 from django.views.decorators.csrf import csrf_exempt
 
 from facets.utils import reverse_geocode_point
-from lazer.forms import SubmissionForm
+from lazer.forms import ReportForm, SubmissionForm
 from lazer.integrations.platerecognizer import read_plate
+from lazer.integrations.submit_form import (
+    MobilityAccessViolation,
+    submit_form_with_playwright,
+)
 from lazer.models import ViolationSubmission
 
 
@@ -86,11 +91,64 @@ async def submission_api(request):
                     "addresses": [address.address for address in addresses],
                     "address": addresses[0].address,
                     "timestamp": form.cleaned_data["datetime"],
+                    "submissionId": submission.submission_id,
                 },
                 status=200,
             )
         else:
             return JsonResponse({}, status=400)
+
+
+@csrf_exempt
+@transaction.non_atomic_requests
+async def report_api(request):
+    if request.method == "POST":
+        form = ReportForm(request.POST)
+        if form.is_valid():
+            image, _ = get_image_from_data_url(form.cleaned_data["image"])
+            submission = await ViolationSubmission.objects.filter(
+                submission_id=form.cleaned_data["submission_id"]
+            ).afirst()
+            if submission is None:
+                return JsonResponse(
+                    {"submitted": False, "error": "Reports must have a valid submission_id"},
+                    status=400,
+                )
+
+            mobility_access_violation = MobilityAccessViolation(
+                make=form.cleaned_data["make"],
+                model=form.cleaned_data["model"],
+                body_style=form.cleaned_data["body_style"],
+                vehicle_color=form.cleaned_data["vehicle_color"],
+                violation_observed=form.cleaned_data["violation_observed"],
+                occurrence_frequency=form.cleaned_data["occurrence_frequency"],
+                additional_information=form.cleaned_data["additional_information"],
+                date_time_observed=None,
+                _date_observed=form.cleaned_data["date_observed"],
+                _time_observed=form.cleaned_data["time_observed"],
+                address=None,
+                _block_number=form.cleaned_data["block_number"],
+                _street_name=form.cleaned_data["street_name"],
+                _zip_code=form.cleaned_data["zip_code"],
+            )
+
+            async with TemporaryDirectory() as temp_dir:
+                violation = await submit_form_with_playwright(
+                    submission=submission,
+                    violation=mobility_access_violation,
+                    photo=image,
+                    screenshot_dir=temp_dir,
+                )
+                await violation.asave()
+
+            return JsonResponse(
+                {
+                    "submitted": True,
+                },
+                status=200,
+            )
+        else:
+            return JsonResponse({"submitted": False}, status=400)
 
 
 @transaction.non_atomic_requests

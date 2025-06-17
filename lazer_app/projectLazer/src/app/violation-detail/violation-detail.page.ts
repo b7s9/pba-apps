@@ -44,7 +44,7 @@ export class ViolationDetailPage implements OnInit {
   }
 
   async drawHitBoxes() {
-    if (!this.violationData.raw!.vehicles) {
+    if (!this.violationData.raw?.vehicles) {
       return;
     }
     const image = document.getElementById('imagePreview') as HTMLImageElement;
@@ -188,6 +188,7 @@ export class ViolationDetailPage implements OnInit {
               this.violationData.processed = true;
               this.violationData.address = data.address;
               this.violationData.addressCandidates = data.addresses;
+              this.violationData.submissionId = data.submissionId;
               this.storage
                 .set('violation-' + this.violationId, this.violationData)
                 .then((data) => {

@@ -2,7 +2,7 @@ import { Capacitor } from '@capacitor/core';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { LoadingController } from '@ionic/angular';
+import { LoadingController, ToastController } from '@ionic/angular';
 
 import { Device, DeviceInfo } from '@capacitor/device';
 import { Geolocation, Position } from '@capacitor/geolocation';
@@ -33,6 +33,7 @@ export class HomePage implements OnInit {
 
   constructor(
     private loadingCtrl: LoadingController,
+    private toastController: ToastController,
     private router: Router,
     public onlineStatus: OnlineStatusService,
     public updateService: UpdateService,
@@ -47,7 +48,7 @@ export class HomePage implements OnInit {
     this.geoWatchId = await Geolocation.watchPosition(
       { enableHighAccuracy: true, maximumAge: 10000 },
       (coordinates) => {
-        if (coordinates!.coords!.accuracy < 100) {
+        if (coordinates!.coords!.accuracy < 50) {
           this.violationPosition = coordinates;
           this.geoPerms = true;
           if (this.geoWatchId !== null) {
@@ -112,10 +113,21 @@ export class HomePage implements OnInit {
         this.loadingCtrl
           .create({
             message: 'Waiting for geolocation data...',
-            duration: 10000,
           })
           .then((loader) => {
             loader.present().then(() => {
+              let locationTimeoutID = setTimeout(async () => {
+                await loader.dismiss();
+                const toast = await this.toastController.create({
+                  message: 'Unable to geolocate your photo, try again',
+                  duration: 2000,
+                  position: 'top',
+                  icon: 'alert-circle-outline',
+                });
+                await toast.present();
+
+                this.violationImage = null;
+              }, 10000);
               let check = function (dis: any) {
                 setTimeout(function () {
                   if (dis.violationPosition !== null) {
@@ -128,6 +140,7 @@ export class HomePage implements OnInit {
                         dis.storage
                           .set('violation-' + dis.violationId, data)
                           .then((data: any) => {
+                            clearTimeout(locationTimeoutID);
                             loader.dismiss();
                             dis.violationImage = null;
                             dis.violationPosition = null;

@@ -17,13 +17,20 @@ RUN useradd -o -m -u $USER_ID -g $GROUP_ID user
 RUN mkdir /code
 RUN chown user /code
 ENV PATH="${PATH}:/home/user/.local/bin"
+
+RUN pip install playwright
+RUN playwright install-deps chromium
+
 USER user
 WORKDIR /code
 COPY requirements /code/requirements
-RUN --mount=type=cache,target=/root/.cache/pip \
+RUN --mount=type=cache,target=/home/user/.cache/pip \
     pip install -r requirements/base.txt
-RUN --mount=type=cache,target=/root/.cache/pip \
+RUN --mount=type=cache,target=/home/user/.cache/pip \
     pip install -r requirements/dev.txt
-RUN --mount=type=cache,target=/root/.cache/pip \
+RUN --mount=type=cache,target=/home/user/.cache/pip \
     pip install -r requirements/deploy.txt
+
+RUN playwright install chromium
+
 COPY . /code/

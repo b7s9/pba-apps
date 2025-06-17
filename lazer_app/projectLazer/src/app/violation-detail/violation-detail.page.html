@@ -35,7 +35,8 @@
     <ion-card-header>
       <ion-card-title
         >Violation - {{ (!violationData.processed && !violationData.submitted) ?
-        'pending' : (violationData.processed) ? 'processed' : 'submitted' }}
+        'Pending' : (violationData.processed && !violationData.submitted) ?
+        'Processed' : 'Submitted' }}
         <ion-button
           size="small"
           color="medium"
@@ -50,7 +51,7 @@
         >
           <ng-template>
             <ion-content class="ion-padding">
-              <ion-item>
+              <ion-item *ngIf="!violationData.submitted">
                 <ion-button
                   fill="solid"
                   color="warning"
@@ -80,7 +81,8 @@
               <ion-col size="auto">
                 <span>
                   {{ violationData.position.coords.latitude }}<br />
-                  {{ violationData.position.coords.longitude }}
+                  {{ violationData.position.coords.longitude }}<br />
+                  {{ violationData.position.coords.accuracy }}
                 </span>
               </ion-col>
             </ion-row>

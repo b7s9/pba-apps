@@ -1,8 +1,11 @@
+import uuid
+
 from django.contrib.gis.db import models
 from django.utils.safestring import mark_safe
 
 
 class ViolationSubmission(models.Model):
+    submission_id = models.UUIDField(default=uuid.uuid4, editable=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
     captured_at = models.DateTimeField()
@@ -10,4 +13,74 @@ class ViolationSubmission(models.Model):
     image = models.ImageField(upload_to="lazer/violations")
 
     def image_tag(self):
-        return mark_safe('<img src="%s" style="max-height: 50px;"/>' % (self.image.url))
+        return mark_safe(
+            '<a href="%s"><img src="%s" style="max-height: 50px;"/></a>'
+            % (self.image.url, self.image.url)
+        )
+
+
+def report_image_upload_to(instance, filename):
+    return f"lazer/reports/{instance.submission.submission_id}/{filename}"
+
+
+class ViolationReport(models.Model):
+    submission = models.ForeignKey(ViolationSubmission, on_delete=models.CASCADE)
+
+    date_observed = models.CharField()
+    time_observed = models.CharField()
+
+    make = models.CharField()
+    model = models.CharField(null=True, blank=True)
+    body_style = models.CharField()
+    vehicle_color = models.CharField()
+
+    violation_observed = models.CharField()
+    occurrence_frequency = models.CharField()
+
+    block_number = models.CharField()
+    street_name = models.CharField()
+    zip_code = models.CharField()
+
+    additional_information = models.CharField(null=True, blank=True)
+
+    screenshot_before_submit = models.ImageField(
+        null=True, blank=True, upload_to=report_image_upload_to
+    )
+    screenshot_after_submit = models.ImageField(
+        null=True, blank=True, upload_to=report_image_upload_to
+    )
+    screenshot_success = models.ImageField(null=True, blank=True, upload_to=report_image_upload_to)
+    screenshot_error = models.ImageField(null=True, blank=True, upload_to=report_image_upload_to)
+    screenshot_final = models.ImageField(null=True, blank=True, upload_to=report_image_upload_to)
+
+    submitted = models.DateTimeField(null=True, blank=True)
+
+    def image_tag_before_submit(self):
+        return mark_safe(
+            '<a href="%s"><img src="%s" style="max-height: 50px;"/></a>'
+            % (self.screenshot_before_submit.url, self.screenshot_before_submit.url)
+        )
+
+    def image_tag_after_submit(self):
+        return mark_safe(
+            '<a href="%s"><img src="%s" style="max-height: 50px;"/></a>'
+            % (self.screenshot_after_submit.url, self.screenshot_after_submit.url)
+        )
+
+    def image_tag_success(self):
+        return mark_safe(
+            '<a href="%s"><img src="%s" style="max-height: 50px;"/></a>'
+            % (self.screenshot_success.url, self.screenshot_success.url)
+        )
+
+    def image_tag_error(self):
+        return mark_safe(
+            '<a href="%s"><img src="%s" style="max-height: 50px;"/></a>'
+            % (self.screenshot_error.url, self.screenshot_error.url)
+        )
+
+    def image_tag_final(self):
+        return mark_safe(
+            '<a href="%s"><img src="%s" style="max-height: 50px;"/></a>'
+            % (self.screenshot_final.url, self.screenshot_final.url)
+        )

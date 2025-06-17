@@ -40,8 +40,8 @@
     <ion-card-header>
       <ion-card-title
         >Violation - {{ (!violation.processed && !violation.submitted) ?
-        'Pending' : (violation.processed) ? 'Processed' : 'Submitted'
-        }}</ion-card-title
+        'Pending' : (violation.processed && !violation.submitted) ? 'Processed'
+        : 'Submitted' }}</ion-card-title
       >
       <ion-card-subtitle
         ><div *ngIf="violation.violationType">
