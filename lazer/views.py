@@ -3,6 +3,7 @@ import base64
 import datetime
 import secrets
 
+from anyio import TemporaryDirectory
 from django.contrib.gis.geos import Point
 from django.core.files.base import ContentFile
 from django.db import transaction
@@ -131,7 +132,14 @@ async def report_api(request):
                 _zip_code=form.cleaned_data["zip_code"],
             )
 
-            await submit_form_with_playwright(violation=mobility_access_violation, photo=image)
+            async with TemporaryDirectory() as temp_dir:
+                violation = await submit_form_with_playwright(
+                    submission=submission,
+                    violation=mobility_access_violation,
+                    photo=image,
+                    screenshot_dir=temp_dir,
+                )
+                await violation.asave()
 
             return JsonResponse(
                 {

@@ -8,10 +8,13 @@ from typing import Any, Optional
 import pyap
 import pytz
 from django.core.files.base import ContentFile
+from django.utils import timezone
 from playwright.async_api import FilePayload
 from playwright.async_api import TimeoutError as PlaywrightTimeoutError
 from playwright.async_api import async_playwright
 from playwright_stealth import stealth_async
+
+from lazer.models import ViolationReport, ViolationSubmission
 
 PPA_SMARTSHEET_URL = os.getenv(
     "PPA_SMARTSHEET_URL",
@@ -273,10 +276,12 @@ class MobilityAccessViolation:
 
 
 async def submit_form_with_playwright(
+    submission: ViolationSubmission,
     violation: MobilityAccessViolation,
     photo: str | ContentFile,
     send_copy_to_email: str | None = None,
     tracing: bool = False,
+    screenshot_dir: str | None = None,
 ) -> None:
     """Method to submit a violation to the PPA's Smartsheet using Playwright.
 
@@ -286,6 +291,22 @@ async def submit_form_with_playwright(
     # smartsheet allows pre-filling of fields using query parameters.
     # for example, date observed would be Date%20Observed=06/03/2025
 
+    violation_report = ViolationReport(
+        submission=submission,
+        date_observed=violation.date_observed,
+        time_observed=violation.time_observed,
+        make=violation.make,
+        model=violation.model,
+        body_style=violation.body_style,
+        vehicle_color=violation.vehicle_color,
+        violation_observed=violation.violation_observed,
+        occurrence_frequency=violation.occurrence_frequency,
+        block_number=violation.block_number,
+        street_name=violation.street_name,
+        zip_code=violation.zip_code,
+        additional_information=violation.additional_information,
+    )
+
     if isinstance(photo, str):
         if not os.path.exists(photo):
             raise FileNotFoundError(f"Photo file not found: {photo}")
@@ -293,12 +314,12 @@ async def submit_form_with_playwright(
             photo = ContentFile(f.read(), name=os.path.basename(photo))
     async with async_playwright() as p:
         browser = await p.chromium.launch(headless=not tracing)
-        # add record_video_dir="videos/" to record session, but add_debug is better
         context = await browser.new_context()
-        # for now recording is ALWAYS ON, but save only if form submission fails
-        # later, this would only be enabled if tracing is True
-        # if tracing:
-        await context.tracing.start(screenshots=True, snapshots=True, sources=True)
+
+        if tracing:
+            tracing_debug_key = os.urandom(3).hex()
+            await context.tracing.start(screenshots=True, snapshots=True, sources=True)
+
         page = await context.new_page()
         await stealth_async(page)
 
@@ -342,20 +363,40 @@ async def submit_form_with_playwright(
 
             await file_chooser.set_files(upload)
 
-        if send_copy_to_email:
+        # TODO: We cannot do an email confirmation since it _always_
+        # requires recaptcha :(
+        # if send_copy_to_email:
+        if False:
             # find a checkbox with name property "EMAIL_RECEIPT_CHECKBOX"
             await page.locator("[name='EMAIL_RECEIPT_CHECKBOX']").check()
             # fill the field with name property "EMAIL_RECEIPT"
             await page.locator("[name='EMAIL_RECEIPT']").fill(send_copy_to_email)
 
         # submit the form
-        tracing_debug_key = os.urandom(3).hex()
         try:
+            if screenshot_dir:
+                await page.screenshot(
+                    path=f"{screenshot_dir}/screenshot-before-submit.png", full_page=True
+                )
+                with open(f"{screenshot_dir}/screenshot-before-submit.png", "rb") as f:
+                    violation_report.screenshot_before_submit.save(
+                        "screenshot-before-submit.png", f, save=False
+                    )
+
             async with page.expect_request(
                 lambda request: request.url == SUBMIT_SMARTSHEET_URL
                 and request.method.lower() == "post"
             ) as _:
                 await page.click("button[type='submit']")
+
+            if screenshot_dir:
+                await page.screenshot(
+                    path=f"{screenshot_dir}/screenshot-after-submit.png", full_page=True
+                )
+                with open(f"{screenshot_dir}/screenshot-after-submit.png", "rb") as f:
+                    violation_report.screenshot_after_submit.save(
+                        "screenshot-after-submit.png", f, save=False
+                    )
 
             # make sure there is a POST to the form URL and it returned 200
             # also, the submission page should have an h1 element with specific
@@ -367,18 +408,35 @@ async def submit_form_with_playwright(
                 "may not result in immediate enforcement action",
             )
             await success_text.wait_for(state="visible", timeout=10000)
+            if screenshot_dir:
+                await page.screenshot(
+                    path=f"{screenshot_dir}/screenshot-success.png", full_page=True
+                )
+                with open(f"{screenshot_dir}/screenshot-success.png", "rb") as f:
+                    violation_report.screenshot_success.save(
+                        "screenshot-success.png", f, save=False
+                    )
+            violation_report.submitted = timezone.now()
 
-        except PlaywrightTimeoutError as e:
-            await context.tracing.stop(path=f"tracing_{tracing_debug_key}.zip")
+        except PlaywrightTimeoutError:
+            if screenshot_dir:
+                await page.screenshot(
+                    path=f"{screenshot_dir}/screenshot-error.png", full_page=True
+                )
+                with open(f"{screenshot_dir}/screenshot-error.png", "rb") as f:
+                    violation_report.screenshot_error.save("screenshot-error.png", f, save=False)
+            if tracing:
+                await context.tracing.stop(path=f"tracing_{tracing_debug_key}.zip")
             await context.close()
             await browser.close()
-            raise RuntimeError(
-                f"Failed to submit the form. Try again later. Trace: {tracing_debug_key}"
-            ) from e
+            return violation_report
 
         if tracing:
             await context.tracing.stop(path=f"tracing_{tracing_debug_key}.zip")
-        else:
-            await context.tracing.stop()
+        if screenshot_dir:
+            await page.screenshot(path=f"{screenshot_dir}/screenshot-final.png", full_page=True)
+            with open(f"{screenshot_dir}/screenshot-final.png", "rb") as f:
+                violation_report.screenshot_final.save("screenshot-final.png", f, save=False)
         await context.close()
         await browser.close()
+        return violation_report
