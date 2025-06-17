@@ -1,10 +1,16 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import {
+  LoadingController,
+  ModalController,
+  ToastController,
+} from '@ionic/angular';
 
 import { Browser } from '@capacitor/browser';
+import { Storage } from '@ionic/storage-angular';
 
 import { parseAddress } from 'vladdress';
 import { usaStates } from 'typed-usa-states/dist/states';
+import { fromURL, blobToURL } from 'image-resize-compress';
 
 import { RenderImagePipe } from '../render-image.pipe';
 import { PhotoService } from '../services/photo.service';
@@ -62,7 +68,10 @@ export class ConfirmViolationDetailsModalComponent implements OnInit {
 
   constructor(
     private modalCtrl: ModalController,
+    private loadingCtrl: LoadingController,
+    private toastController: ToastController,
     private photos: PhotoService,
+    private storage: Storage,
   ) {}
 
   cancel() {
@@ -70,6 +79,125 @@ export class ConfirmViolationDetailsModalComponent implements OnInit {
   }
 
   submit() {
+    function submitData(
+      submission_id: string,
+      date_observed: string,
+      time_observed: string,
+      make: string,
+      model: string,
+      body_style: string,
+      vehicle_color: string,
+      violation_observed: string,
+      occurrence_frequency: string,
+      block_number: string,
+      street_name: string,
+      zip_code: string,
+      additional_information: string,
+      img: string,
+    ): Promise<any> {
+      return new Promise((resolve, reject) => {
+        let request = new XMLHttpRequest();
+        request.addEventListener('readystatechange', () => {
+          if (request.readyState === 4 && request.status === 200) {
+            let data = JSON.parse(request.responseText);
+            resolve(data);
+          } else if (request.readyState === 4 && request.status === 400) {
+            let data = JSON.parse(request.responseText);
+            reject(data.error);
+          } else if (request.readyState === 4) {
+            reject('error getting resources');
+          }
+        });
+
+        fromURL(img, 0.3, 'auto', 'auto', 'jpeg').then((resizedBlob) => {
+          blobToURL(resizedBlob).then((imgUrl) => {
+            const formData = new FormData();
+            let uuid = submission_id ? submission_id : crypto.randomUUID();
+
+            formData.append('submission_id', uuid);
+            formData.append('date_observed', date_observed);
+            formData.append('time_observed', time_observed);
+            formData.append('make', make);
+            formData.append('model', model);
+            formData.append('body_style', body_style);
+            formData.append('vehicle_color', vehicle_color);
+            formData.append('violation_observed', violation_observed);
+            formData.append('occurrence_frequency', occurrence_frequency);
+            formData.append('block_number', block_number);
+            formData.append('street_name', street_name);
+            formData.append('zip_code', zip_code);
+            formData.append('additional_information', additional_information);
+            formData.append('image', imgUrl as string);
+
+            request.open('POST', 'https://bikeaction.org/lazer/report/');
+            request.send(formData);
+          });
+        });
+      });
+    }
+
+    this.loadingCtrl
+      .create({
+        message: 'Processing...',
+        duration: 20000,
+      })
+      .then((loader) => {
+        loader.present();
+        this.photos.fetchPicture(this.violation.image!).then((photo) => {
+          const violationTime = new Date(this.violation.time!);
+          let additionalInfo = 'none at this time';
+          if (this.plateNumber || this.plateState) {
+            additionalInfo = `Plate: ${this.plateState!} ${this.plateNumber}`;
+          }
+
+          submitData(
+            this.violation.submissionId,
+            violationTime.toLocaleDateString('en-US', {
+              month: '2-digit',
+              day: '2-digit',
+              year: 'numeric',
+            }),
+            violationTime.toLocaleTimeString('en-US'),
+            this.make,
+            this.model,
+            this.bodyStyle,
+            this.vehicleColor,
+            this.violation.violationType,
+            this.frequency,
+            this.blockNumber,
+            this.streetName,
+            this.zipCode,
+            additionalInfo,
+            photo.webviewPath,
+          )
+            .then((data: any) => {
+              this.violation.submitted = true;
+              this.storage
+                .set('violation-' + this.violation.id, this.violation)
+                .then((data) => {
+                  setTimeout(() => {
+                    loader.dismiss();
+                  }, 100);
+                });
+            })
+            .catch((err: any) => {
+              console.log(err);
+              setTimeout(async () => {
+                const toast = await this.toastController.create({
+                  message: `Error: ${err}`,
+                  duration: 2000,
+                  position: 'top',
+                  icon: 'alert-circle-outline',
+                });
+                await toast.present();
+                loader.dismiss();
+              }, 100);
+            });
+        });
+      });
+  }
+
+  submitBrowser() {
     const imageBase64 = this.photos.readAsBase64(this.violation.image);
     const violationTime = new Date(this.violation.time!);
     let additionalInfo = 'none at this time';
