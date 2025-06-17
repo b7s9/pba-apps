@@ -155,9 +155,14 @@
       <ion-button
         expand="block"
         (click)="openAddressModal()"
-        *ngIf="(violationData.processed && violationData.vehicle && !violationData.submitted)"
+        *ngIf="(violationData.processed && violationData.vehicle && !violationData.submitted) && violationData.submissionId"
         ><ion-icon name="ticket-outline" slot="start"></ion-icon> Submit to
         PPA</ion-button
+      >
+      <ion-text *ngIf="!violationData.submissionId"
+        >Captures from the beta testing period cannot be submitted without
+        reprocessing, see the
+        <ion-icon name="cog-outline"></ion-icon> above</ion-text
       >
     </ion-card-content>
   </ion-card>
