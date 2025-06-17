@@ -1178,6 +1178,11 @@ body {
   z-index: 0;
 }
 
+#lazer_reports {
+  height: 75vh;
+  z-index: 0;
+}
+
 /* CMS */
 
 .homepage-button {

@@ -1,6 +1,7 @@
 import asyncio
 import base64
 import datetime
+import json
 import secrets
 
 from anyio import TemporaryDirectory
@@ -18,7 +19,7 @@ from lazer.integrations.submit_form import (
     MobilityAccessViolation,
     submit_form_with_playwright,
 )
-from lazer.models import ViolationSubmission
+from lazer.models import ViolationReport, ViolationSubmission
 
 
 def get_image_from_data_url(data_url):
@@ -159,3 +160,11 @@ async def review(request, submission_id):
 
     pp(data)
     return render(request, "lazer_success.html", {"submission": submission})
+
+
+def map(request):
+    pins = []
+    for report in ViolationReport.objects.select_related("submission").all():
+        lat, lng = (report.submission.location.y, report.submission.location.x)
+        pins.append([lat, lng, 1])
+    return render(request, "heatmap.html", {"pins_json": json.dumps(pins)})
