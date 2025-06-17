@@ -1,7 +1,12 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button color="medium" (click)="cancel()">Cancel</ion-button>
+      <ion-button
+        color="medium"
+        (click)="cancel()"
+        class="plausible-event-name=Cancel+Submission+From+Violation"
+        >Cancel</ion-button
+      >
     </ion-buttons>
     <ion-title>What's the Violation?</ion-title>
   </ion-toolbar>
@@ -13,6 +18,7 @@
     (click)="setViolation(violation)"
     size="large"
     expand="block"
+    class="plausible-event-name=Submission+Choose+Violation"
   >
     <ion-icon
       class="absolute-icon"

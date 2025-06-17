@@ -17,6 +17,4 @@ export class SuccessModalComponent {
   confirm() {
     this.modalCtrl.dismiss();
   }
-
-  ngOnInit(): void {}
 }

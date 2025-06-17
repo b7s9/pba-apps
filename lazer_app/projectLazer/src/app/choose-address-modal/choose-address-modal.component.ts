@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 
 @Component({
@@ -7,7 +7,7 @@ import { ModalController } from '@ionic/angular';
   styleUrls: ['./choose-address-modal.component.scss'],
   standalone: false,
 })
-export class ChooseAddressModalComponent {
+export class ChooseAddressModalComponent implements OnInit {
   selection!: string;
   addresses!: string[];
 

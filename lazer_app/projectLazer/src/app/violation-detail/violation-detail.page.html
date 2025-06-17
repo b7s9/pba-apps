@@ -42,6 +42,7 @@
           color="medium"
           class="ion-float-right"
           id="open-advanced-modal"
+          class="plausible-event-name=Violation+Advanced+Open"
           ><ion-icon name="cog-outline"></ion-icon
         ></ion-button>
         <ion-popover
@@ -58,6 +59,7 @@
                   size="regular"
                   (click)="reprocess()"
                   *ngIf="violationData.processed"
+                  class="plausible-event-name=Violation+Advanced+Reprocess"
                 >
                   Reprocess
                 </ion-button>
@@ -149,6 +151,7 @@
         expand="block"
         (click)="submit()"
         *ngIf="(!violationData.processed && !violationData.submitted)"
+        class="plausible-event-name=Start+Violation+Process"
         ><ion-icon name="cloud-upload-outline" slot="start"></ion-icon>
         Process</ion-button
       >
@@ -156,6 +159,7 @@
         expand="block"
         (click)="openAddressModal()"
         *ngIf="(violationData.processed && violationData.vehicle && !violationData.submitted) && violationData.submissionId"
+        class="plausible-event-name=Start+Violation+Submit"
         ><ion-icon name="ticket-outline" slot="start"></ion-icon> Submit to
         PPA</ion-button
       >

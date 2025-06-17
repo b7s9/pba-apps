@@ -1,7 +1,12 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button color="medium" (click)="cancel()">Cancel</ion-button>
+      <ion-button
+        color="medium"
+        (click)="cancel()"
+        class="plausible-event-name=Cancel+Submission+From+Confirm+Details"
+        >Cancel</ion-button
+      >
     </ion-buttons>
     <ion-title>Confirm some details</ion-title>
   </ion-toolbar>
@@ -176,6 +181,11 @@
 
     <br />
     <br />
-    <ion-button type="submit" expand="block">Submit!</ion-button>
+    <ion-button
+      type="submit"
+      expand="block"
+      class="plausible-event-name=Submission+Submit"
+      >Submit!</ion-button
+    >
   </form>
 </ion-content>

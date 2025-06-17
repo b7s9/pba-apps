@@ -18,7 +18,7 @@ const routes: Routes = [
       import('./history/history.module').then((m) => m.HistoryPageModule),
   },
   {
-    path: 'violation-detail/:violationId',
+    path: 'violation-detail',
     loadChildren: () =>
       import('./violation-detail/violation-detail.module').then(
         (m) => m.ViolationDetailPageModule,

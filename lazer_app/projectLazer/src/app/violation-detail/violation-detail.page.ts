@@ -272,9 +272,7 @@ export class ViolationDetailPage implements OnInit {
   }
 
   ngOnInit() {
-    this.violationId = parseInt(
-      this.route.snapshot.paramMap.get('violationId') as string,
-    );
+    this.violationId = this.route.snapshot.queryParams['violationId'];
     this.storage.get('violation-' + this.violationId).then((data) => {
       this.violationData = data;
     });

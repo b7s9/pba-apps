@@ -52,7 +52,8 @@
       >
     </ion-card-header>
     <a
-      [routerLink]="['/violation-detail', violation.id]"
+      [routerLink]="['/violation-detail']"
+      [queryParams]="{violationId: violation.id}"
       style="width: 100%; text-align: center"
     >
       <ion-img

@@ -1,7 +1,12 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button color="medium" (click)="cancel()">Cancel</ion-button>
+      <ion-button
+        color="medium"
+        (click)="cancel()"
+        class="plausible-event-name=Cancel+Submission+From+Address"
+        >Cancel</ion-button
+      >
     </ion-buttons>
     <ion-title>Which Address is best?</ion-title>
   </ion-toolbar>
@@ -14,5 +19,6 @@
     size="regular"
     expand="block"
     [innerHTML]="address"
+    class="plausible-event-name=Submission+Choose+Address"
   ></ion-button>
 </ion-content>

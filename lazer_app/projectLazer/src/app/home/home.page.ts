@@ -144,7 +144,9 @@ export class HomePage implements OnInit {
                             loader.dismiss();
                             dis.violationImage = null;
                             dis.violationPosition = null;
-                            dis.router.navigate(['/violation-detail', data.id]);
+                            dis.router.navigate(['/violation-detail'], {
+                              queryParams: { violationId: data.id },
+                            });
                           });
                       });
                   } else {
