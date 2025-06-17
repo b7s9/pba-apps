@@ -1,8 +1,11 @@
+import uuid
+
 from django.contrib.gis.db import models
 from django.utils.safestring import mark_safe
 
 
 class ViolationSubmission(models.Model):
+    submission_id = models.UUIDField(default=uuid.uuid4, editable=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
     captured_at = models.DateTimeField()
