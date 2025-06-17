@@ -185,7 +185,12 @@
       type="submit"
       expand="block"
       class="plausible-event-name=Submission+Submit"
+      *ngIf="this.onlineStatus.online"
       >Submit!</ion-button
     >
+    <ion-text *ngIf="!this.onlineStatus.online">
+      You're currently offline! Don't fear though! You can submit your report
+      when you're back online.
+    </ion-text>
   </form>
 </ion-content>

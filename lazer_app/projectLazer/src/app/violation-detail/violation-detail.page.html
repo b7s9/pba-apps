@@ -150,7 +150,7 @@
       <ion-button
         expand="block"
         (click)="submit()"
-        *ngIf="(!violationData.processed && !violationData.submitted)"
+        *ngIf="(!violationData.processed && !violationData.submitted) && this.onlineStatus.online"
         class="plausible-event-name=Start+Violation+Process"
         ><ion-icon name="cloud-upload-outline" slot="start"></ion-icon>
         Process</ion-button
@@ -158,12 +158,16 @@
       <ion-button
         expand="block"
         (click)="openAddressModal()"
-        *ngIf="(violationData.processed && violationData.vehicle && !violationData.submitted) && violationData.submissionId"
+        *ngIf="(violationData.processed && violationData.vehicle && !violationData.submitted) && violationData.submissionId && this.onlineStatus.online"
         class="plausible-event-name=Start+Violation+Submit"
         ><ion-icon name="ticket-outline" slot="start"></ion-icon> Submit to
         PPA</ion-button
       >
-      <ion-text *ngIf="!violationData.submissionId"
+      <ion-text *ngIf="!this.onlineStatus.online"
+        >You're currently offline! Don't fear though! Your captures can be
+        processed and submitted when you're back online.
+      </ion-text>
+      <ion-text *ngIf="violationData.processed && !violationData.submissionId"
         >Captures from the beta testing period cannot be submitted without
         reprocessing, see the
         <ion-icon name="cog-outline"></ion-icon> above</ion-text

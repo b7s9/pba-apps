@@ -19,6 +19,8 @@ import { RenderImagePipe } from '../render-image.pipe';
 import { PhotoService } from '../services/photo.service';
 import { SuccessModalComponent } from '../success-modal/success-modal.component';
 
+import { OnlineStatusService } from '../services/online.service';
+
 import {
   best_match,
   get_options,
@@ -78,6 +80,7 @@ export class ConfirmViolationDetailsModalComponent implements OnInit {
     private router: Router,
     private photos: PhotoService,
     private storage: Storage,
+    public onlineStatus: OnlineStatusService,
   ) {}
 
   async presentReallySubmit() {
