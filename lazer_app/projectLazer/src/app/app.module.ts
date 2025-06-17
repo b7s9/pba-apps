@@ -16,6 +16,7 @@ import { RenderImagePipe } from './render-image.pipe';
 import { ChooseAddressModalComponent } from './choose-address-modal/choose-address-modal.component';
 import { ChooseViolationModalComponent } from './choose-violation-modal/choose-violation-modal.component';
 import { ConfirmViolationDetailsModalComponent } from './confirm-violation-details-modal/confirm-violation-details-modal.component';
+import { SuccessModalComponent } from './success-modal/success-modal.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { ConfirmViolationDetailsModalComponent } from './confirm-violation-detai
     ChooseAddressModalComponent,
     ChooseViolationModalComponent,
     ConfirmViolationDetailsModalComponent,
+    SuccessModalComponent,
   ],
   imports: [
     RenderImagePipe,

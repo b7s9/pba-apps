@@ -5,6 +5,8 @@ import {
   ToastController,
 } from '@ionic/angular';
 
+import { Router } from '@angular/router';
+
 import { Browser } from '@capacitor/browser';
 import { Storage } from '@ionic/storage-angular';
 
@@ -14,6 +16,7 @@ import { fromURL, blobToURL } from 'image-resize-compress';
 
 import { RenderImagePipe } from '../render-image.pipe';
 import { PhotoService } from '../services/photo.service';
+import { SuccessModalComponent } from '../success-modal/success-modal.component';
 
 import {
   best_match,
@@ -70,6 +73,7 @@ export class ConfirmViolationDetailsModalComponent implements OnInit {
     private modalCtrl: ModalController,
     private loadingCtrl: LoadingController,
     private toastController: ToastController,
+    private router: Router,
     private photos: PhotoService,
     private storage: Storage,
   ) {}
@@ -175,8 +179,11 @@ export class ConfirmViolationDetailsModalComponent implements OnInit {
               this.storage
                 .set('violation-' + this.violation.id, this.violation)
                 .then((data) => {
-                  setTimeout(() => {
+                  setTimeout(async () => {
+                    this.success();
+                    this.cancel();
                     loader.dismiss();
+                    this.router.navigate(['home']);
                   }, 100);
                 });
             })
@@ -195,6 +202,16 @@ export class ConfirmViolationDetailsModalComponent implements OnInit {
             });
         });
       });
+  }
+
+  async success() {
+    const successModal = await this.modalCtrl.create({
+      component: SuccessModalComponent,
+    });
+    successModal.present();
+    setTimeout(async () => {
+      await successModal.dismiss();
+    }, 1500);
   }
 
   submitBrowser() {
