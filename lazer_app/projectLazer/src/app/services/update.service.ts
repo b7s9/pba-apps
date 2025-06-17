@@ -18,22 +18,30 @@ export class UpdateService implements OnDestroy {
     this.checkForUpdate();
   }
 
+  async checkForUpdateNow(): Promise<void> {
+    this.intervalSubscription?.unsubscribe();
+
+    try {
+      this.isNewVersionAvailable = await this.swUpdate.checkForUpdate();
+      this.needsUpdate = this.isNewVersionAvailable || this.needsUpdate;
+      console.log(
+        this.isNewVersionAvailable
+          ? 'A new version is available.'
+          : 'Already on the latest version.',
+      );
+    } catch (error) {
+      console.error('Failed to check for updates:', error);
+    }
+
+    this.checkForUpdate();
+  }
+
   checkForUpdate(): void {
     this.intervalSubscription?.unsubscribe();
 
     this.zone.runOutsideAngular(() => {
       this.intervalSubscription = this.intervalSource.subscribe(async () => {
-        try {
-          this.isNewVersionAvailable = await this.swUpdate.checkForUpdate();
-          this.needsUpdate = this.isNewVersionAvailable || this.needsUpdate;
-          console.log(
-            this.isNewVersionAvailable
-              ? 'A new version is available.'
-              : 'Already on the latest version.',
-          );
-        } catch (error) {
-          console.error('Failed to check for updates:', error);
-        }
+        this.checkForUpdateNow();
       });
     });
   }

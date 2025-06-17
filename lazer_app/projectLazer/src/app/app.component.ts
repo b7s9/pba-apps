@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Storage } from '@ionic/storage-angular';
+import { Platform } from '@ionic/angular'; // Import Platform
 
 import { OnlineStatusService } from './services/online.service';
 import { UpdateService } from './services/update.service';
@@ -10,7 +11,7 @@ import { UpdateService } from './services/update.service';
   styleUrls: ['app.component.scss'],
   standalone: false,
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   private xDown: number | null = null;
   private yDown: number | null = null;
 
@@ -40,7 +41,25 @@ export class AppComponent {
     }
   }
 
+  ngOnInit(): void {
+    if (this.platform.is('hybrid')) {
+      this.platform.resume.subscribe(() => {
+        // Subscribe to resume event
+        this.updateService.checkForUpdateNow();
+      });
+    } else {
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+        } else {
+          // Page became visible! Resume playing if audio was "playing on hide"
+          this.updateService.checkForUpdateNow();
+        }
+      });
+    }
+  }
+
   constructor(
+    private platform: Platform,
     public onlineStatus: OnlineStatusService,
     public updateService: UpdateService,
     private storage: Storage,
