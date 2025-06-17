@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import {
+  AlertController,
   LoadingController,
   ModalController,
   ToastController,
@@ -70,6 +71,7 @@ export class ConfirmViolationDetailsModalComponent implements OnInit {
   @Input() form: any;
 
   constructor(
+    private alertController: AlertController,
     private modalCtrl: ModalController,
     private loadingCtrl: LoadingController,
     private toastController: ToastController,
@@ -77,6 +79,31 @@ export class ConfirmViolationDetailsModalComponent implements OnInit {
     private photos: PhotoService,
     private storage: Storage,
   ) {}
+
+  async presentReallySubmit() {
+    const alert = await this.alertController.create({
+      header: 'Are you sure?',
+      subHeader:
+        'This will really make a report to the PPA. Make sure all details are correct before submitting!',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            this.cancel();
+          },
+        },
+        {
+          text: 'Submit it!',
+          role: 'confirm',
+          handler: () => {
+            this.submit();
+          },
+        },
+      ],
+    });
+    await alert.present();
+  }
 
   cancel() {
     return this.modalCtrl.dismiss(null, 'cancel');
