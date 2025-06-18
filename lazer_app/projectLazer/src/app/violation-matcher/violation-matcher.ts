@@ -1,12 +1,12 @@
 import Fuse from 'fuse.js';
-import * as LazerData from './lazer.json';
+import * as PPAFormData from './ppa-form-data.json';
 
 export function get_fields() {
-  return Object.keys(LazerData);
+  return Object.keys(PPAFormData);
 }
 
 export function get_options(field: string) {
-  return Object.entries(LazerData).find(
+  return Object.entries(PPAFormData).find(
     ([key]) => key === field,
   )?.[1] as readonly string[];
 }

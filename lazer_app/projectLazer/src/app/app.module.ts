@@ -36,7 +36,7 @@ import { SuccessModalComponent } from './success-modal/success-modal.component';
       swipeBackEnabled: false,
     }),
     IonicStorageModule.forRoot({
-      name: 'projectLazer',
+      name: 'laserVision',
       driverOrder: [CordovaSQLiteDriver._driver, Drivers.IndexedDB],
     }),
     AppRoutingModule,
