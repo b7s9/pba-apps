@@ -12,6 +12,9 @@ class ViolationSubmission(models.Model):
     location = models.PointField(srid=4326)
     image = models.ImageField(upload_to="lazer/violations")
 
+    def image_tag_no_href(self):
+        return mark_safe('<img src="%s" style="max-height: 50px;"/>' % (self.image.url,))
+
     def image_tag(self):
         return mark_safe(
             '<a href="%s"><img src="%s" style="max-height: 50px;"/></a>'
@@ -54,6 +57,24 @@ class ViolationReport(models.Model):
     screenshot_final = models.ImageField(null=True, blank=True, upload_to=report_image_upload_to)
 
     submitted = models.DateTimeField(null=True, blank=True)
+
+    def image_tag_violation_no_href(self):
+        return mark_safe(
+            '<img src="%s" style="max-height: 50px;"/>' % (self.submission.image.url,)
+        )
+
+    image_tag_violation_no_href.short_description = "Image"
+
+    def violation_observed_short(self):
+        return self.violation_observed.split(" (")[0]
+
+    violation_observed_short.short_description = "Violation"
+
+    def image_tag_violation(self):
+        return mark_safe(
+            '<a href="%s"><img src="%s" style="max-height: 50px;"/></a>'
+            % (self.submission.image.url, self.submission.image.url)
+        )
 
     def image_tag_before_submit(self):
         return mark_safe(

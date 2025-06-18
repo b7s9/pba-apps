@@ -12,6 +12,12 @@
       var heatmapLayer = L.heatLayer(JSON.parse('{{ pins_json }}'), {radius: 10, blur: 5, minOpacity: .4})
       function map_init (map, options) {
         map.setView([39.9528, -75.1635], 12);
+        map.setMinZoom(12);
+        const bounds = L.latLngBounds([[39.8528, -75.2635], [40.0528, -75.0635]]);
+        map.setMaxBounds(bounds);
+        map.on('drag', function() {
+            map.panInsideBounds(bounds, { animate: false });
+        });
         heatmapLayer.addTo(map);
       }
     </script>

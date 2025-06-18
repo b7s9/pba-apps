@@ -7,6 +7,7 @@ import secrets
 from anyio import TemporaryDirectory
 from django.contrib.gis.geos import Point
 from django.core.files.base import ContentFile
+from django.core.paginator import Paginator
 from django.db import transaction
 from django.http import JsonResponse
 from django.shortcuts import aget_object_or_404, redirect, render, reverse
@@ -168,3 +169,15 @@ def map(request):
         lat, lng = (report.submission.location.y, report.submission.location.x)
         pins.append([lat, lng, 1])
     return render(request, "heatmap.html", {"pins_json": json.dumps(pins)})
+
+
+def list(request):
+    queryset = (
+        ViolationReport.objects.select_related("submission")
+        .order_by("-submission__captured_at")
+        .all()
+    )
+    paginator = Paginator(queryset, 20)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+    return render(request, "list.html", {"page_obj": page_obj})

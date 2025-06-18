@@ -17,7 +17,7 @@
 
 {% block content %}
 <div class="event-nav-top">
-  <a href="{% url 'events_list' %}"><span><i class='bx bx-chevrons-left'></i> All Events</span></a>
+  <a href="{% url 'events_list' %}"><span><i class='fa-solid fa-angles-left'></i> All Events</span></a>
 </div>
 
 {% with event=object %}
@@ -35,7 +35,7 @@
   <div class="event-details">
     <div class="event-date">{{ event.start_datetime|date:"F j @ g:i a" }}{% if event.end_datetime %} - {{ event.end_datetime|date:"g:i a" }}{% endif %}</div>
     <div class="event-title">{{ event.title }}</div>
-    <div class="event-location"><i class="bx bxs-map"></i> {{ event.location }}</div>
+    <div class="event-location"><i class="fa-solid fa-map-location-dot"></i> {{ event.location }}</div>
     {% if event.status != 'completed' %}
     <div class="button-holder">
       {% if request.user.is_authenticated %}
@@ -95,13 +95,13 @@
 <div class="pagination">
   <div class="pagination-nav next">
     {% if next_event %}
-    <span><a href="{% url 'event_detail' next_event.slug %}">{{ next_event.title }} <i class='bx bx-chevrons-right'></i></a></span>
+    <span><a href="{% url 'event_detail' next_event.slug %}">{{ next_event.title }} <i class='fa-solid fa-angles-right'></i></a></span>
     {% endif %}
   </div>
   <br><br>
   <div class="pagination-nav previous">
     {% if previous_event %}
-    <span><a href="{% url 'event_detail' previous_event.slug %}"><i class='bx bx-chevron-left'></i> {{ previous_event.title }}</a></span>
+    <span><a href="{% url 'event_detail' previous_event.slug %}"><i class='fa-solid fa-angle-left'></i> {{ previous_event.title }}</a></span>
     {% endif %}
   </div>
 </div>
