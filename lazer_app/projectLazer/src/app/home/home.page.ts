@@ -13,6 +13,7 @@ import { fromURL, blobToURL } from 'image-resize-compress';
 import { OnlineStatusService } from '../services/online.service';
 import { PhotoService } from '../services/photo.service';
 import { UpdateService } from '../services/update.service';
+import { ViolationService } from '../services/violation.service';
 
 @Component({
   selector: 'app-home',
@@ -39,6 +40,7 @@ export class HomePage implements OnInit {
     public updateService: UpdateService,
     private photos: PhotoService,
     private storage: Storage,
+    private violations: ViolationService,
   ) {}
 
   async getCurrentPosition() {
@@ -200,6 +202,10 @@ export class HomePage implements OnInit {
       });
     }
   };
+
+  ionViewDidEnter() {
+    this.violations.cleanup();
+  }
 
   ngOnInit(): void {
     Device.getInfo().then((deviceInfo) => {
