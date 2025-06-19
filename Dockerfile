@@ -38,7 +38,7 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 COPY .ssh /root/.ssh
 COPY . /code/
 
-COPY --from=build-lazer /code/lazer_app/projectLazer/www /code/static/laser
+COPY --from=build-lazer /code/lazer_app/projectLazer/www /code/static/lazer
 
 RUN \
     DJANGO_SECRET_KEY=deadbeefcafe \
