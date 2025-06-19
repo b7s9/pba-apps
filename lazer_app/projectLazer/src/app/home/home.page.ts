@@ -40,7 +40,7 @@ export class HomePage implements OnInit {
     public updateService: UpdateService,
     private photos: PhotoService,
     private storage: Storage,
-    private violations: ViolationService,
+    private violations: ViolationService
   ) {}
 
   async getCurrentPosition() {
@@ -80,10 +80,10 @@ export class HomePage implements OnInit {
         blobToURL(thumbnail).then((thumbnailUrl) => {
           const savedThumbnail = this.photos.savePictureFromBase64(
             thumbnailUrl as string,
-            `thumb-${savedImage.filepath}`,
+            `thumb-${savedImage.filepath}`
           );
         });
-      },
+      }
     );
     this.violationImage = savedImage.webviewPath;
     this.violationTime = new Date();
@@ -137,7 +137,7 @@ export class HomePage implements OnInit {
                       .get('violation-' + dis.violationId)
                       .then((data: any) => {
                         data.position = JSON.parse(
-                          JSON.stringify(dis.violationPosition),
+                          JSON.stringify(dis.violationPosition)
                         );
                         dis.storage
                           .set('violation-' + dis.violationId, data)

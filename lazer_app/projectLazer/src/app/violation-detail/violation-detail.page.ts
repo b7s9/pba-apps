@@ -33,7 +33,7 @@ export class ViolationDetailPage implements OnInit {
     private storage: Storage,
     public photos: PhotoService,
     public onlineStatus: OnlineStatusService,
-    public updateService: UpdateService,
+    public updateService: UpdateService
   ) {}
 
   async selectVehicle(index: number) {
@@ -133,7 +133,7 @@ export class ViolationDetailPage implements OnInit {
       lat: number,
       long: number,
       dt: Date,
-      img: string,
+      img: string
     ): Promise<any> {
       return new Promise((resolve, reject) => {
         let request = new XMLHttpRequest();
@@ -154,7 +154,7 @@ export class ViolationDetailPage implements OnInit {
             formData.append('datetime', dt.toISOString());
             formData.append('image', imgUrl as string);
 
-            request.open('POST', 'https://bikeaction.org/lazer/submit/');
+            request.open('POST', '/lazer/submit/');
             request.send(formData);
           });
         });
@@ -174,13 +174,13 @@ export class ViolationDetailPage implements OnInit {
             this.violationData.position!.coords!.latitude,
             this.violationData.position!.coords!.longitude,
             violationTime,
-            photo.webviewPath,
+            photo.webviewPath
           )
             .then((data: any) => {
               this.violationData.raw = data;
               this.storage.set(
                 'violation-' + this.violationId,
-                this.violationData,
+                this.violationData
               );
               if (data.vehicles.length == 1) {
                 this.selectVehicle(0);

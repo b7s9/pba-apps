@@ -37,7 +37,9 @@ export class ChooseViolationModalComponent {
 
   renderViolationText(violation: string): string {
     if (violation.split('(').length > 1) {
-      return `<div style="display: flex; flex-direction: column;"><div>${violation.split('(')[0]}</div><div><small>(${violation.split('(')[1]}</small></div>`;
+      return `<div style="display: flex; flex-direction: column;"><div>${
+        violation.split('(')[0]
+      }</div><div><small>(${violation.split('(')[1]}</small></div>`;
     } else {
       return `<div>${violation}</div>`;
     }

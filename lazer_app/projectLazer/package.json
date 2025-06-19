@@ -1,13 +1,13 @@
 {
   "name": "projectLazer",
   "version": "0.0.1",
-  "author": "Ionic Framework",
-  "homepage": "https://ionicframework.com/",
+  "author": "Philly Bike Action",
+  "homepage": "https://bikeaction.org/laser",
   "scripts": {
     "ionic:build:before": "node update-version.js",
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "BUILD_ENV=${BUILD_ENV:-local} ng build --configuration=$BUILD_ENV",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "lint": "ng lint"
