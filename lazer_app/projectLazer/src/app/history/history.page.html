@@ -32,7 +32,10 @@
 
 <ion-content [fullscreen]="true">
   <div style="width: 100%; text-align: center; padding-top: 1em">
-    <ion-text>Your 20 most recent scans are stored. Tap an image to view details, process, or submit</ion-text>
+    <ion-text
+      >Your 20 most recent scans are stored. Tap an image to view details,
+      process, or submit</ion-text
+    >
   </div>
   <ion-card
     *ngFor="let violation of sortViolations(); trackBy: trackViolations"

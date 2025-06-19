@@ -80,7 +80,7 @@ export class ConfirmViolationDetailsModalComponent implements OnInit {
     private router: Router,
     private photos: PhotoService,
     private storage: Storage,
-    public onlineStatus: OnlineStatusService,
+    public onlineStatus: OnlineStatusService
   ) {}
 
   async presentReallySubmit() {
@@ -127,7 +127,7 @@ export class ConfirmViolationDetailsModalComponent implements OnInit {
       street_name: string,
       zip_code: string,
       additional_information: string,
-      img: string,
+      img: string
     ): Promise<any> {
       return new Promise((resolve, reject) => {
         let request = new XMLHttpRequest();
@@ -163,7 +163,7 @@ export class ConfirmViolationDetailsModalComponent implements OnInit {
             formData.append('additional_information', additional_information);
             formData.append('image', imgUrl as string);
 
-            request.open('POST', 'https://bikeaction.org/lazer/report/');
+            request.open('POST', '/lazer/report/');
             request.send(formData);
           });
         });
@@ -202,7 +202,7 @@ export class ConfirmViolationDetailsModalComponent implements OnInit {
             this.streetName,
             this.zipCode,
             additionalInfo,
-            photo.webviewPath,
+            photo.webviewPath
           )
             .then((data: any) => {
               this.violation.submitted = true;
@@ -285,8 +285,8 @@ export class ConfirmViolationDetailsModalComponent implements OnInit {
   getStates(): Map<string, string> {
     return new Map(
       usaStates.map(
-        (obj) => [obj.abbreviation as string, obj.name as string] as const,
-      ),
+        (obj) => [obj.abbreviation as string, obj.name as string] as const
+      )
     );
   }
 
@@ -295,14 +295,14 @@ export class ConfirmViolationDetailsModalComponent implements OnInit {
     this.blockNumber = parsedAddress.streetNumber as string;
     this.streetName = best_match(
       'Street Name',
-      `${parsedAddress.streetName} ${parsedAddress.streetSuffix}`,
+      `${parsedAddress.streetName} ${parsedAddress.streetSuffix}`
     );
     this.zipCode = best_match('Zip Code', parsedAddress.zipCode as string);
 
     if (this.violation.vehicle!.vehicle?.props?.make_model[0].make) {
       this.make = best_match(
         'Make',
-        this.violation.vehicle.vehicle.props.make_model[0].make,
+        this.violation.vehicle.vehicle.props.make_model[0].make
       );
     }
     if (this.violation.vehicle!.vehicle?.props?.make_model[0].model) {
@@ -311,13 +311,13 @@ export class ConfirmViolationDetailsModalComponent implements OnInit {
     if (this.violation.vehicle!.vehicle?.props?.color[0].value) {
       this.vehicleColor = best_match(
         'Vehicle Color',
-        this.violation.vehicle.vehicle.props.color[0].value,
+        this.violation.vehicle.vehicle.props.color[0].value
       );
     }
     if (this.violation.vehicle!.vehicle?.type) {
       this.bodyStyle = best_match(
         'Body Style',
-        this.violation.vehicle.vehicle.type,
+        this.violation.vehicle.vehicle.type
       );
     }
     if (this.violation.vehicle!.plate) {

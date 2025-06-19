@@ -1,7 +1,12 @@
+import os
+from pathlib import Path
+
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import include, path
+from django.urls import include, path, re_path
+from django.views import static as static_view
+from django.views.generic.base import RedirectView
 from sesame.views import LoginView
 from wagtail import urls as wagtail_urls
 from wagtail.admin import urls as wagtailadmin_urls
@@ -39,6 +44,21 @@ urlpatterns = [
         name="newsletter_signup_partial",
     ),
     path("lazer/", include("lazer.urls")),
+    re_path(
+        r"^laser/(?:index.html)?$",
+        static_view.serve,
+        {
+            "document_root": os.path.join(settings.BASE_DIR, Path("static/lazer")),
+            "path": "index.html",
+        },
+    ),
+    re_path(r"laser/home/?$", RedirectView.as_view(url="/laser/")),
+    re_path(r"laser/history/?$", RedirectView.as_view(url="/laser/")),
+    re_path(
+        r"^laser/(?P<path>.*)$",
+        static_view.serve,
+        {"document_root": os.path.join(settings.BASE_DIR, Path("static/lazer"))},
+    ),
     path("", include("pages.urls")),
     path("admin/", admin.site.urls),
     path("cms/", include(wagtailadmin_urls)),
