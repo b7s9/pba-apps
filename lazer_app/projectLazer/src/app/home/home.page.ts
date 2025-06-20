@@ -57,7 +57,7 @@ export class HomePage implements OnInit {
             Geolocation.clearWatch({ id: this.geoWatchId });
           }
         }
-      },
+      }
     );
   }
 

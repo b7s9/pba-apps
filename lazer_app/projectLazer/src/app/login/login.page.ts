@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-
+import { ActivatedRoute } from '@angular/router';
 import { NgForm } from '@angular/forms';
 
 import { OnlineStatusService } from '../services/online.service';
@@ -20,13 +20,15 @@ interface UserOptions {
 })
 export class LoginPage implements OnInit {
   login: UserOptions = { username: '', password: '' };
-  submitted = false;
+  submitted: boolean = false;
+  next: any = null;
 
   constructor(
     public accountService: AccountService,
     public onlineStatus: OnlineStatusService,
     public updateService: UpdateService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
   onLogin(form: NgForm) {
@@ -34,9 +36,15 @@ export class LoginPage implements OnInit {
 
     if (form.valid) {
       this.accountService.logIn(this.login.username, this.login.password);
-      this.router.navigate(['home']);
+      if (this.next) {
+        this.router.navigateByUrl(this.next);
+      } else {
+        this.router.navigate(['home']);
+      }
     }
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.next = this.route.snapshot.queryParams['next'];
+  }
 }

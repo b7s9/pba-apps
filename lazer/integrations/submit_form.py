@@ -7,6 +7,7 @@ from typing import Any, Optional
 
 import pyap
 import pytz
+from django.conf import settings
 from django.core.files.base import ContentFile
 from django.utils import timezone
 from playwright.async_api import FilePayload
@@ -383,11 +384,12 @@ async def submit_form_with_playwright(
                         "screenshot-before-submit.png", f, save=False
                     )
 
-            async with page.expect_request(
-                lambda request: request.url == SUBMIT_SMARTSHEET_URL
-                and request.method.lower() == "post"
-            ) as _:
-                await page.click("button[type='submit']")
+            if not settings.DEBUG:
+                async with page.expect_request(
+                    lambda request: request.url == SUBMIT_SMARTSHEET_URL
+                    and request.method.lower() == "post"
+                ) as _:
+                    await page.click("button[type='submit']")
 
             if screenshot_dir:
                 await page.screenshot(
@@ -401,13 +403,14 @@ async def submit_form_with_playwright(
             # make sure there is a POST to the form URL and it returned 200
             # also, the submission page should have an h1 element with specific
             await page.wait_for_load_state("networkidle")
-            # validate the submission page
-            success_text = page.get_by_role(
-                "heading",
-                name="Filling out the mobility access violation reporting form "
-                "may not result in immediate enforcement action",
-            )
-            await success_text.wait_for(state="visible", timeout=10000)
+            if not settings.DEBUG:
+                # validate the submission page
+                success_text = page.get_by_role(
+                    "heading",
+                    name="Filling out the mobility access violation reporting form "
+                    "may not result in immediate enforcement action",
+                )
+                await success_text.wait_for(state="visible", timeout=10000)
             if screenshot_dir:
                 await page.screenshot(
                     path=f"{screenshot_dir}/screenshot-success.png", full_page=True

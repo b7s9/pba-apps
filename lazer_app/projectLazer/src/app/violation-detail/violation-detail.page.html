@@ -150,7 +150,7 @@
       <ion-button
         expand="block"
         (click)="submit()"
-        *ngIf="(!violationData.processed && !violationData.submitted) && this.onlineStatus.online"
+        *ngIf="(!violationData.processed && !violationData.submitted) && this.onlineStatus.online && this.accountService.loggedIn"
         class="plausible-event-name=Start+Violation+Process"
         ><ion-icon name="cloud-upload-outline" slot="start"></ion-icon>
         Process</ion-button
@@ -158,11 +158,22 @@
       <ion-button
         expand="block"
         (click)="openAddressModal()"
-        *ngIf="(violationData.processed && violationData.vehicle && !violationData.submitted) && violationData.submissionId && this.onlineStatus.online"
+        *ngIf="(violationData.processed && violationData.vehicle && !violationData.submitted) && violationData.submissionId && this.onlineStatus.online && this.accountService.loggedIn"
         class="plausible-event-name=Start+Violation+Submit"
         ><ion-icon name="ticket-outline" slot="start"></ion-icon> Submit to
         PPA</ion-button
       >
+      <div *ngIf="!this.accountService.loggedIn">
+        <ion-text>
+          You need to sign in with your bikeaction.org account in order to
+          continue.
+        </ion-text>
+        <div>
+          <ion-button [routerLink]="['/login']" [queryParams]="{next: location}"
+            >Log In</ion-button
+          >
+        </div>
+      </div>
       <ion-text *ngIf="!this.onlineStatus.online"
         >You're currently offline! Don't fear though! Your captures can be
         processed and submitted when you're back online.

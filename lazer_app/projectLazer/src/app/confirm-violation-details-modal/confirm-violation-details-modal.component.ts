@@ -163,7 +163,7 @@ export class ConfirmViolationDetailsModalComponent implements OnInit {
             formData.append('additional_information', additional_information);
             formData.append('image', imgUrl as string);
 
-            request.open('POST', '/lazer/report/');
+            request.open('POST', '/lazer/api/report/');
             request.send(formData);
           });
         });

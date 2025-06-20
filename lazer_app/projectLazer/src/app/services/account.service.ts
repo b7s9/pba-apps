@@ -9,7 +9,7 @@ export class AccountService {
   loggedIn: boolean = false;
 
   async logIn(username: string, password: string) {
-    const url = '/lazer/login/';
+    const url = '/lazer/api/login/';
     try {
       const response = await fetch(url, {
         method: 'POST',
@@ -28,7 +28,7 @@ export class AccountService {
   }
 
   async logOut() {
-    const url = '/lazer/logout/';
+    const url = '/lazer/api/logout/';
     try {
       const response = await fetch(url);
       if (!response.ok) {

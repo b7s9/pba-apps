@@ -8,6 +8,7 @@ import { fromURL, blobToURL } from 'image-resize-compress';
 import { OnlineStatusService } from '../services/online.service';
 import { PhotoService, UserPhoto } from '../services/photo.service';
 import { UpdateService } from '../services/update.service';
+import { AccountService } from '../services/account.service';
 
 import { ChooseAddressModalComponent } from '../choose-address-modal/choose-address-modal.component';
 import { ChooseViolationModalComponent } from '../choose-violation-modal/choose-violation-modal.component';
@@ -24,16 +25,18 @@ export class ViolationDetailPage implements OnInit {
   violationId: number | null = null;
   violationData: any = null;
   violationImageLoaded: boolean = false;
+  location: string | null = null;
 
   constructor(
-    private route: ActivatedRoute,
+    public route: ActivatedRoute,
     private loadingCtrl: LoadingController,
     public changeDetectorRef: ChangeDetectorRef,
     private modalCtrl: ModalController,
     private storage: Storage,
     public photos: PhotoService,
     public onlineStatus: OnlineStatusService,
-    public updateService: UpdateService
+    public updateService: UpdateService,
+    public accountService: AccountService
   ) {}
 
   async selectVehicle(index: number) {
@@ -154,7 +157,7 @@ export class ViolationDetailPage implements OnInit {
             formData.append('datetime', dt.toISOString());
             formData.append('image', imgUrl as string);
 
-            request.open('POST', '/lazer/submit/');
+            request.open('POST', '/lazer/api/submit/');
             request.send(formData);
           });
         });
@@ -272,6 +275,7 @@ export class ViolationDetailPage implements OnInit {
   }
 
   ngOnInit() {
+    this.location = window.location.pathname + window.location.search;
     this.violationId = this.route.snapshot.queryParams['violationId'];
     this.storage.get('violation-' + this.violationId).then((data) => {
       this.violationData = data;
