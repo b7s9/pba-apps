@@ -5,6 +5,7 @@ import { Platform } from '@ionic/angular'; // Import Platform
 import { OnlineStatusService } from './services/online.service';
 import { UpdateService } from './services/update.service';
 import { VersionService } from './services/version.service';
+import { AccountService } from './services/account.service';
 
 @Component({
   selector: 'app-root',
@@ -64,6 +65,7 @@ export class AppComponent implements OnInit {
     public onlineStatus: OnlineStatusService,
     public updateService: UpdateService,
     public versionService: VersionService,
+    public accountService: AccountService,
     private storage: Storage
   ) {
     this.storage.create();

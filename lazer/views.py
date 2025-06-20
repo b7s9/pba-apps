@@ -5,12 +5,14 @@ import json
 import secrets
 
 from anyio import TemporaryDirectory
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib.gis.geos import Point
 from django.core.files.base import ContentFile
 from django.core.paginator import Paginator
 from django.db import transaction
 from django.http import JsonResponse
-from django.shortcuts import aget_object_or_404, redirect, render, reverse
+from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 
 from facets.utils import reverse_geocode_point
@@ -33,31 +35,8 @@ def get_image_from_data_url(data_url):
 
 
 @csrf_exempt
-def submission(request):
-    if request.method == "POST":
-        form = SubmissionForm(request.POST)
-        if form.is_valid():
-            image, _ = get_image_from_data_url(form.cleaned_data["image"])
-
-            submission = ViolationSubmission(
-                image=image,
-                location=Point(
-                    float(form.cleaned_data["longitude"]), float(form.cleaned_data["latitude"])
-                ),
-                captured_at=form.cleaned_data["datetime"],
-            )
-            submission.save()
-            return redirect(
-                reverse("violation_submission_review", kwargs={"submission_id": submission.id})
-            )
-
-    form = SubmissionForm()
-    return render(request, "lazer.html", {"form": form})
-
-
-@csrf_exempt
 @transaction.non_atomic_requests
-async def submission_api(request):
+async def submission_api_no_auth(request):
     if request.method == "POST":
         form = SubmissionForm(request.POST)
         if form.is_valid():
@@ -100,10 +79,14 @@ async def submission_api(request):
         else:
             return JsonResponse({}, status=400)
 
+@login_required
+async def submission_api(request):
+    return await submission_api_no_auth
+
 
 @csrf_exempt
 @transaction.non_atomic_requests
-async def report_api(request):
+async def report_api_no_auth(request):
     if request.method == "POST":
         form = ReportForm(request.POST)
         if form.is_valid():
@@ -152,15 +135,9 @@ async def report_api(request):
         else:
             return JsonResponse({"submitted": False}, status=400)
 
-
-@transaction.non_atomic_requests
-async def review(request, submission_id):
-    submission = await aget_object_or_404(ViolationSubmission, id=submission_id)
-    data = await read_plate(submission.image, datetime.datetime.now(datetime.timezone.utc))
-    from pprint import pprint as pp
-
-    pp(data)
-    return render(request, "lazer_success.html", {"submission": submission})
+@login_required
+def report_api(request):
+    return report_api_no_auth(request)
 
 
 def map(request):
@@ -181,3 +158,50 @@ def list(request):
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
     return render(request, "list.html", {"page_obj": page_obj})
+
+
+@csrf_exempt
+def login_api(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body.decode())
+        except json.JSONDecodeError:
+            return JsonResponse({"error": "invalid JSON"}, status=400)
+
+        username = data.get("username")
+        password = data.get("password")
+
+        errors = []
+        if username is None:
+            errors.append("username required")
+        if password is None:
+            errors.append("password required")
+
+        if errors:
+            return JsonResponse({"error": ",".join(errors)}, status=400)
+    else:
+        return JsonResponse({"error": "POST only"}, status=400)
+
+    user = authenticate(username=username, password=password)
+    if user is not None:
+        login(request, user)
+        request.session.set_expiry(30 * 24 * 60 * 60)
+        return JsonResponse(
+            {
+                "success": "ok",
+                "username": request.user.email,
+                "first_name": request.user.first_name,
+            },
+            status=200,
+        )
+    return JsonResponse({"error": "invalid auth"}, status=403)
+
+
+@login_required
+def check_login(request):
+    return JsonResponse({"success": "ok"}, status=200)
+
+
+def logout_api(request):
+    logout(request)
+    return JsonResponse({"success": "ok"}, status=200)
