@@ -31,6 +31,34 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
+  <ion-card
+    *ngIf="(platform.is('android') || platform.is('ios') || platform.is('iphone')) && !platform.is('pwa')"
+  >
+    <ion-card-header>
+      <ion-card-title>Install Laser Vision</ion-card-title>
+      <ion-card-subtitle>For a better experience</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      This app can be installed to your device for a quick access and a native
+      like experience.
+      <div *ngIf="platform.is('ios') || platform.is('iphone')">
+        <ol>
+          <li>Open the Share menu</li>
+          <li>Tap "Add to Home Screen"</li>
+          <li>Tap "Add" in the upper right</li>
+        </ol>
+        <ion-img src="assets/ios-instructions.png"></ion-img>
+      </div>
+      <div *ngIf="platform.is('android')">
+        <ol>
+          <li>Tap the three dots in the upper right</li>
+          <li>Tap "Add to Home screen"</li>
+          <li>Select <b>Install</b></li>
+        </ol>
+        <ion-img src="assets/android-instructions.png"></ion-img>
+      </div>
+    </ion-card-content>
+  </ion-card>
   <ion-card *ngIf="!geoPerms">
     <ion-card-header>
       <ion-card-title>GeoLocation</ion-card-title>

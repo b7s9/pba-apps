@@ -3,6 +3,7 @@ import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoadingController, ToastController } from '@ionic/angular';
+import { Platform } from '@ionic/angular'; // Import Platform
 
 import { Device, DeviceInfo } from '@capacitor/device';
 import { Geolocation, Position } from '@capacitor/geolocation';
@@ -40,7 +41,8 @@ export class HomePage implements OnInit {
     public updateService: UpdateService,
     private photos: PhotoService,
     private storage: Storage,
-    private violations: ViolationService
+    private violations: ViolationService,
+    public platform: Platform
   ) {}
 
   async getCurrentPosition() {
