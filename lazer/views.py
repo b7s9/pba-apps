@@ -75,9 +75,15 @@ async def submission_api(request):
             vehicle = data.get("results", [])
             return JsonResponse(
                 {
-                    "vehicles": sorted(
-                        vehicle, key=lambda x: x.get("vehicle", {}).get("score", 0), reverse=True
-                    )[:4],
+                    "vehicles": (
+                        sorted(
+                            vehicle,
+                            key=lambda x: x.get("vehicle", {}).get("score", 0),
+                            reverse=True,
+                        )[:4]
+                        if vehicle
+                        else []
+                    ),
                     "addresses": [address.address for address in addresses],
                     "address": addresses[0].address,
                     "timestamp": form.cleaned_data["datetime"],
