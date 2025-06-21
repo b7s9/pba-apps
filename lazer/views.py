@@ -46,6 +46,7 @@ async def submission(request):
                     float(form.cleaned_data["longitude"]), float(form.cleaned_data["latitude"])
                 ),
                 captured_at=form.cleaned_data["datetime"],
+                created_by=(request.user if request.user.is_authenticated else None),
             )
             await submission.asave()
             await submission.arefresh_from_db()
@@ -213,7 +214,14 @@ def login_api(request):
 
 @login_required
 def check_login(request):
-    return JsonResponse({"success": "ok"}, status=200)
+    return JsonResponse(
+        {
+            "success": "ok",
+            "username": request.user.email,
+            "first_name": request.user.first_name,
+        },
+        status=200,
+    )
 
 
 def logout_api(request):

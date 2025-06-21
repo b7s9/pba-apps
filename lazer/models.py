@@ -1,12 +1,16 @@
 import uuid
 
+from django.contrib.auth import get_user_model
 from django.contrib.gis.db import models
 from django.utils.safestring import mark_safe
+
+User = get_user_model()
 
 
 class ViolationSubmission(models.Model):
     submission_id = models.UUIDField(default=uuid.uuid4, editable=False)
     created_at = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
 
     captured_at = models.DateTimeField()
     location = models.PointField(srid=4326)

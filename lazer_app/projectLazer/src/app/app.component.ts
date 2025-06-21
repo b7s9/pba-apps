@@ -44,16 +44,17 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.accountService.checkLoggedIn();
     if (this.platform.is('hybrid')) {
       this.platform.resume.subscribe(() => {
-        // Subscribe to resume event
+        this.accountService.checkLoggedIn();
         this.updateService.checkForUpdateNow();
       });
     } else {
       document.addEventListener('visibilitychange', () => {
         if (document.hidden) {
         } else {
-          // Page became visible! Resume playing if audio was "playing on hide"
+          this.accountService.checkLoggedIn();
           this.updateService.checkForUpdateNow();
         }
       });

@@ -59,6 +59,18 @@ export class HomePage implements OnInit {
         }
       }
     );
+    //this.violationPosition = {
+    //  timestamp: 123,
+    //  coords: {
+    //    latitude: 39.9526,
+    //    longitude: 75.1652,
+    //    accuracy: 10,
+    //    speed: null,
+    //    heading: null,
+    //    altitude: null,
+    //    altitudeAccuracy: null,
+    //  },
+    //};
   }
 
   async takePicture() {
