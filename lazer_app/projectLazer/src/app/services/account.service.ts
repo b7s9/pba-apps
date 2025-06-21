@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage-angular';
+import { ToastController } from '@ionic/angular';
 
 @Injectable({
   providedIn: 'root',
@@ -43,8 +44,12 @@ export class AccountService {
       this.username = json.username;
       this.loggedIn = true;
       await this.storage.set('loggedIn', this.username);
+      await this.presentSuccess(json);
     } catch (error: any) {
-      console.log(error.message);
+      console.log(error);
+      if (error.message) {
+        await this.presentError(error.message);
+      }
     }
   }
 
@@ -65,7 +70,30 @@ export class AccountService {
     }
   }
 
-  constructor(private storage: Storage) {}
+  async presentError(message: string) {
+    const toast = await this.toastController.create({
+      message: 'Invalid Auth: ' + message,
+      duration: 1000,
+      position: 'top',
+      icon: 'alert',
+    });
+    toast.present();
+  }
+
+  async presentSuccess(data: any) {
+    const toast = await this.toastController.create({
+      message: 'Success! Welcome, ' + data.username,
+      duration: 1000,
+      position: 'top',
+      icon: 'check',
+    });
+    toast.present();
+  }
+
+  constructor(
+    private storage: Storage,
+    private toastController: ToastController
+  ) {}
   ngOnInit(): void {
     this.storage.get('loggedIn').then((username) => {
       if (username) {

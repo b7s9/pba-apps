@@ -31,15 +31,18 @@ export class LoginPage implements OnInit {
     private route: ActivatedRoute
   ) {}
 
-  onLogin(form: NgForm) {
+  async onLogin(form: NgForm) {
     this.submitted = true;
 
     if (form.valid) {
-      this.accountService.logIn(this.login.username, this.login.password);
-      if (this.next) {
-        this.router.navigateByUrl(this.next);
-      } else {
-        this.router.navigate(['home']);
+      await this.accountService.logIn(this.login.username, this.login.password);
+
+      if (this.accountService.loggedIn === true) {
+        if (this.next) {
+          this.router.navigateByUrl(this.next);
+        } else {
+          this.router.navigate(['home']);
+        }
       }
     }
   }
