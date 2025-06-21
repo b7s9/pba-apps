@@ -34,7 +34,10 @@ def get_image_from_data_url(data_url):
     return file, (_filename, _extension)
 
 
-async def submission(request):
+@login_required
+@csrf_exempt
+@transaction.non_atomic_requests
+async def submission_api(request):
     if request.method == "POST":
         form = SubmissionForm(request.POST)
         if form.is_valid():
@@ -79,20 +82,10 @@ async def submission(request):
             return JsonResponse({}, status=400)
 
 
-@csrf_exempt
-@transaction.non_atomic_requests
-async def submission_api_no_auth(request):
-    return await submission(request)
-
-
 @login_required
 @csrf_exempt
 @transaction.non_atomic_requests
-async def submission_api(request):
-    return await submission(request)
-
-
-async def report(request):
+async def report_api(request):
     if request.method == "POST":
         form = ReportForm(request.POST)
         if form.is_valid():
@@ -140,19 +133,6 @@ async def report(request):
             )
         else:
             return JsonResponse({"submitted": False}, status=400)
-
-
-@login_required
-@csrf_exempt
-@transaction.non_atomic_requests
-async def report_api(request):
-    return await report(request)
-
-
-@csrf_exempt
-@transaction.non_atomic_requests
-async def report_api_no_auth(request):
-    return await report(request)
 
 
 def map(request):
