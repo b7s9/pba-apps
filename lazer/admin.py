@@ -8,6 +8,7 @@ class ViolationSubmissionAdmin(ReadOnlyLeafletGeoAdminMixin, admin.ModelAdmin):
     list_display = (
         "image_tag_no_href",
         "captured_at",
+        "created_by",
         "location",
     )
     readonly_fields = ("image_tag",)
@@ -17,6 +18,7 @@ class ViolationReportAdmin(admin.ModelAdmin):
     list_display = (
         "image_tag_violation_no_href",
         "violation_observed_short",
+        "created_by",
         "date_observed",
         "time_observed",
     )

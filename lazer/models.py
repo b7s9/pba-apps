@@ -62,6 +62,9 @@ class ViolationReport(models.Model):
 
     submitted = models.DateTimeField(null=True, blank=True)
 
+    def created_by(self):
+        return self.submission.created_by
+
     def image_tag_violation_no_href(self):
         return mark_safe(
             '<img src="%s" style="max-height: 50px;"/>' % (self.submission.image.url,)
