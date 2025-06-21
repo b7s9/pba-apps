@@ -5,6 +5,7 @@ import json
 import secrets
 
 from anyio import TemporaryDirectory
+from asgiref.sync import sync_to_async
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.gis.geos import Point
@@ -34,6 +35,11 @@ def get_image_from_data_url(data_url):
     return file, (_filename, _extension)
 
 
+@sync_to_async
+def get_user_from_request(request):
+    return request.user if bool(request.user) else None
+
+
 @login_required
 @csrf_exempt
 @transaction.non_atomic_requests
@@ -42,6 +48,7 @@ async def submission_api(request):
         form = SubmissionForm(request.POST)
         if form.is_valid():
             image, _ = get_image_from_data_url(form.cleaned_data["image"])
+            user = await get_user_from_request(request)
 
             submission = ViolationSubmission(
                 image=image,
@@ -49,7 +56,7 @@ async def submission_api(request):
                     float(form.cleaned_data["longitude"]), float(form.cleaned_data["latitude"])
                 ),
                 captured_at=form.cleaned_data["datetime"],
-                created_by=(request.user if request.user.is_authenticated else None),
+                created_by=user,
             )
             await submission.asave()
             await submission.arefresh_from_db()
