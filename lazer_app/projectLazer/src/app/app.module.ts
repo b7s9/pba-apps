@@ -19,6 +19,8 @@ import { ChooseViolationModalComponent } from './choose-violation-modal/choose-v
 import { ConfirmViolationDetailsModalComponent } from './confirm-violation-details-modal/confirm-violation-details-modal.component';
 import { SuccessModalComponent } from './success-modal/success-modal.component';
 
+import { TypeaheadComponent } from './components/typeahead-select.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -26,6 +28,7 @@ import { SuccessModalComponent } from './success-modal/success-modal.component';
     ChooseViolationModalComponent,
     ConfirmViolationDetailsModalComponent,
     SuccessModalComponent,
+    TypeaheadComponent,
   ],
   imports: [
     RenderImagePipe,

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import {
   AlertController,
   LoadingController,
@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 
 import { Browser } from '@capacitor/browser';
 import { Storage } from '@ionic/storage-angular';
+import { IonModal } from '@ionic/angular';
 
 import { parseAddress } from 'vladdress';
 import { usaStates } from 'typed-usa-states/dist/states';
@@ -20,6 +21,8 @@ import { PhotoService } from '../services/photo.service';
 import { SuccessModalComponent } from '../success-modal/success-modal.component';
 
 import { OnlineStatusService } from '../services/online.service';
+
+import { Item } from '../components/types';
 
 import {
   best_match,
@@ -43,6 +46,9 @@ function mapToUrlParams(map: any) {
   standalone: false,
 })
 export class ConfirmViolationDetailsModalComponent implements OnInit {
+  @ViewChild('streetNameModal', { static: true }) streetNameModal!: IonModal;
+  @ViewChild('zipCodeModal', { static: true }) zipCodeModal!: IonModal;
+
   make!: string;
   model!: string;
   bodyStyle!: string;
@@ -68,6 +74,22 @@ export class ConfirmViolationDetailsModalComponent implements OnInit {
 
     'How frequently does this occur?',
   ];
+
+  streetNameOptions: Item[] = this.getOptions('Street Name').map((elem) => {
+    return { value: elem, text: elem };
+  });
+  streetNameChanged(streetName: string) {
+    this.streetName = streetName;
+    this.streetNameModal.dismiss();
+  }
+
+  zipCodeOptions: Item[] = this.getOptions('Zip Code').map((elem) => {
+    return { value: elem, text: elem };
+  });
+  zipCodeChanged(zipCode: string) {
+    this.zipCode = zipCode;
+    this.zipCodeModal.dismiss();
+  }
 
   @Input() violation: any;
   @Input() form: any;
