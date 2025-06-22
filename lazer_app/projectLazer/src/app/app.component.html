@@ -56,6 +56,19 @@
             </ion-item>
           </ion-menu-toggle>
 
+          <ion-menu-toggle>
+            <ion-item
+              routerLink="/about"
+              routerLinkActive="active"
+              routerLinkActive="active"
+              routerDirection="root"
+              detail="false"
+            >
+              <ion-icon slot="start" name="help-circle-outline"></ion-icon>
+              <ion-label>About</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+
           <ion-item
             [style.display]="updateService.needsUpdate ? '' : 'none'"
             (click)="updateService.applyUpdate()"
