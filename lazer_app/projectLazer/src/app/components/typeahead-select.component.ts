@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import type { OnInit } from '@angular/core';
 
-import { Item } from './types';
+import Fuse from 'fuse.js';
 
 @Component({
   selector: 'app-typeahead',
@@ -9,19 +9,28 @@ import { Item } from './types';
   standalone: false,
 })
 export class TypeaheadComponent implements OnInit {
-  @Input() items: Item[] = [];
+  @Input() items: Map<string, string>[] = [];
   @Input() selectedItem: string | undefined = undefined;
   @Input() title = 'Select Item';
 
   @Output() selectionCancel = new EventEmitter<void>();
   @Output() selectionChange = new EventEmitter<string>();
 
-  filteredItems: Item[] = [];
+  fuse: any = null;
+  filteredItems: Map<string, string>[] = [];
   workingSelectedValue: string | undefined = undefined;
 
   ngOnInit() {
-    this.filteredItems = [...this.items];
+    this.filteredItems = [];
+    const options = {
+      keys: [
+        { name: 'text', getFn: (item: any) => item.get('text') },
+        { name: 'value', getFn: (item: any) => item.get('value') },
+      ],
+    };
+    this.fuse = new Fuse(this.items, options);
     this.workingSelectedValue = this.selectedItem;
+    this.filterList(this.selectedItem);
   }
 
   cancelChanges() {
@@ -56,14 +65,17 @@ export class TypeaheadComponent implements OnInit {
        * query and check to see which items
        * contain the search query as a substring.
        */
-      const normalizedQuery = searchQuery.toLowerCase();
-      this.filteredItems = this.items.filter((item) =>
-        item.text.toLowerCase().includes(normalizedQuery)
-      );
+      this.filteredItems = this.fuse
+        .search(searchQuery, { limit: 50 })
+        .map((result: any) => result.item);
+      // const normalizedQuery = searchQuery.toLowerCase();
+      // this.filteredItems = this.items.filter((item) =>
+      //   item.text.toLowerCase().includes(normalizedQuery)
+      // );
     }
   }
 
-  isChecked(value: string): boolean {
+  isChecked(value: string | undefined): boolean {
     return this.workingSelectedValue == value;
   }
 

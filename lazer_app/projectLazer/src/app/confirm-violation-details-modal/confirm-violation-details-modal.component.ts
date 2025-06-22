@@ -75,16 +75,22 @@ export class ConfirmViolationDetailsModalComponent implements OnInit {
     'How frequently does this occur?',
   ];
 
-  streetNameOptions: Item[] = this.getOptions('Street Name').map((elem) => {
-    return { value: elem, text: elem };
+  streetNameOptions: any = this.getOptions('Street Name').map((elem) => {
+    return new Map([
+      ['value', elem],
+      ['text', elem],
+    ]);
   });
   streetNameChanged(streetName: string) {
     this.streetName = streetName;
     this.streetNameModal.dismiss();
   }
 
-  zipCodeOptions: Item[] = this.getOptions('Zip Code').map((elem) => {
-    return { value: elem, text: elem };
+  zipCodeOptions: any = this.getOptions('Zip Code').map((elem) => {
+    return new Map([
+      ['value', elem],
+      ['text', elem],
+    ]);
   });
   zipCodeChanged(zipCode: string) {
     this.zipCode = zipCode;
