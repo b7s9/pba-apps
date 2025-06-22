@@ -143,8 +143,15 @@
         </div>
       </ion-grid>
       <div class="ion-text-center">
-        <ion-text *ngIf="violationData.processed && !violationData.vehicle"
+        <ion-text
+          *ngIf="violationData.processed && !violationData.vehicle && violationData.raw.vehicles.length > 0"
           ><b>Select vehicle in violation!</b></ion-text
+        >
+        <ion-text
+          *ngIf="violationData.processed && !violationData.vehicle && violationData.raw.vehicles.length === 0"
+          ><b
+            >No vehicles recognized. Try zooming in or better lighting.</b
+          ></ion-text
         >
       </div>
       <ion-button

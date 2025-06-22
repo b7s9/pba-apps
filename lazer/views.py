@@ -72,17 +72,15 @@ async def submission_api(request):
                 ),
             )
 
-            vehicle = data.get("results", [])
+            vehicles = data.get("results", [])
             return JsonResponse(
                 {
                     "vehicles": (
                         sorted(
-                            vehicle,
+                            [v for v in vehicles if v.get("vehicle") is not None],
                             key=lambda x: x.get("vehicle", {}).get("score", 0),
                             reverse=True,
                         )[:4]
-                        if vehicle
-                        else []
                     ),
                     "addresses": [address.address for address in addresses],
                     "address": addresses[0].address,
