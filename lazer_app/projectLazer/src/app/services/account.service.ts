@@ -94,15 +94,4 @@ export class AccountService {
     private storage: Storage,
     private toastController: ToastController
   ) {}
-  ngOnInit(): void {
-    this.storage.get('loggedIn').then((username) => {
-      if (username) {
-        this.loggedIn = true;
-        this.username = username;
-      } else {
-        this.loggedIn = false;
-        this.username = null;
-      }
-    });
-  }
 }
