@@ -3,11 +3,13 @@ import base64
 import datetime
 import json
 import secrets
+from functools import wraps
+from importlib import import_module
 
 from anyio import TemporaryDirectory
 from asgiref.sync import sync_to_async
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
+from django.conf import settings
+from django.contrib.auth import authenticate, get_user_model, login, logout
 from django.contrib.gis.geos import Point
 from django.core.files.base import ContentFile
 from django.core.paginator import Paginator
@@ -25,6 +27,9 @@ from lazer.integrations.submit_form import (
 )
 from lazer.models import ViolationReport, ViolationSubmission
 
+SessionStore = import_module(settings.SESSION_ENGINE).SessionStore
+User = get_user_model()
+
 
 def get_image_from_data_url(data_url):
     _format, _dataurl = data_url.split(";base64,")
@@ -40,7 +45,52 @@ def get_user_from_request(request):
     return request.user if bool(request.user) else None
 
 
-@login_required
+def api_auth(view_func):
+    @wraps(view_func)
+    def _wrapped_view(request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return view_func(request, *args, **kwargs)
+        if "Authorization" in request.headers and request.headers["Authorization"].startswith(
+            "Session: "
+        ):
+            session_key = request.headers["Authorization"].split("Session: ")[1]
+            session = SessionStore(session_key=session_key)
+            request.session = session
+            user_id = session.get("_auth_user_id")
+            try:
+                request.user = User.objects.get(id=user_id)
+                return view_func(request, *args, **kwargs)
+            except User.DoesNotExist:
+                pass
+        return JsonResponse({"error": "invalid auth"}, status=403)
+
+    return _wrapped_view
+
+
+def aapi_auth(view_func):
+    @wraps(view_func)
+    async def _wrapped_view(request, *args, **kwargs):
+        _user = await request.auser()
+        if _user.is_authenticated:
+            return await view_func(request, *args, **kwargs)
+        if "Authorization" in request.headers and request.headers["Authorization"].startswith(
+            "Session: "
+        ):
+            session_key = request.headers["Authorization"].split("Session: ")[1]
+            session = SessionStore(session_key=session_key)
+            request.session = session
+            user_id = await session.aget("_auth_user_id")
+            try:
+                request.user = await User.objects.aget(id=user_id)
+                return await view_func(request, *args, **kwargs)
+            except User.DoesNotExist:
+                pass
+        return JsonResponse({"error": "invalid auth"}, status=403)
+
+    return _wrapped_view
+
+
+@aapi_auth
 @csrf_exempt
 @transaction.non_atomic_requests
 async def submission_api(request):
@@ -93,7 +143,7 @@ async def submission_api(request):
             return JsonResponse({}, status=400)
 
 
-@login_required
+@aapi_auth
 @csrf_exempt
 @transaction.non_atomic_requests
 async def report_api(request):
@@ -192,18 +242,22 @@ def login_api(request):
     if user is not None:
         login(request, user)
         request.session.set_expiry(30 * 24 * 60 * 60)
+        session_key = request.session.session_key
+        expiry_date = request.session.get_expiry_date()
         return JsonResponse(
             {
                 "success": "ok",
                 "username": request.user.email,
                 "first_name": request.user.first_name,
+                "session_key": session_key,
+                "expiry_date": expiry_date,
             },
             status=200,
         )
     return JsonResponse({"error": "invalid auth"}, status=403)
 
 
-@login_required
+@api_auth
 def check_login(request):
     return JsonResponse(
         {
