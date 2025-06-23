@@ -7,6 +7,7 @@ import {
 } from '@ionic/angular';
 
 import { Router } from '@angular/router';
+import { Platform } from '@ionic/angular';
 
 import { Browser } from '@capacitor/browser';
 import { Storage } from '@ionic/storage-angular';
@@ -21,6 +22,7 @@ import { PhotoService } from '../services/photo.service';
 import { SuccessModalComponent } from '../success-modal/success-modal.component';
 
 import { OnlineStatusService } from '../services/online.service';
+import { AccountService } from '../services/account.service';
 
 import { Item } from '../components/types';
 
@@ -48,6 +50,8 @@ function mapToUrlParams(map: any) {
 export class ConfirmViolationDetailsModalComponent implements OnInit {
   @ViewChild('streetNameModal', { static: true }) streetNameModal!: IonModal;
   @ViewChild('zipCodeModal', { static: true }) zipCodeModal!: IonModal;
+
+  rootUrl: string = '';
 
   make!: string;
   model!: string;
@@ -108,7 +112,9 @@ export class ConfirmViolationDetailsModalComponent implements OnInit {
     private router: Router,
     private photos: PhotoService,
     private storage: Storage,
-    public onlineStatus: OnlineStatusService
+    public onlineStatus: OnlineStatusService,
+    private accountService: AccountService,
+    private platform: Platform
   ) {}
 
   async presentReallySubmit() {
@@ -141,6 +147,7 @@ export class ConfirmViolationDetailsModalComponent implements OnInit {
   }
 
   submit() {
+    const submitUrl = `${this.rootUrl}/lazer/api/report/`;
     function submitData(
       submission_id: string,
       date_observed: string,
@@ -155,22 +162,10 @@ export class ConfirmViolationDetailsModalComponent implements OnInit {
       street_name: string,
       zip_code: string,
       additional_information: string,
-      img: string
+      img: string,
+      headers: any
     ): Promise<any> {
       return new Promise((resolve, reject) => {
-        let request = new XMLHttpRequest();
-        request.addEventListener('readystatechange', () => {
-          if (request.readyState === 4 && request.status === 200) {
-            let data = JSON.parse(request.responseText);
-            resolve(data);
-          } else if (request.readyState === 4 && request.status === 400) {
-            let data = JSON.parse(request.responseText);
-            reject(data.error);
-          } else if (request.readyState === 4) {
-            reject('error getting resources');
-          }
-        });
-
         fromURL(img, 0.3, 'auto', 'auto', 'jpeg').then((resizedBlob) => {
           blobToURL(resizedBlob).then((imgUrl) => {
             const formData = new FormData();
@@ -191,8 +186,27 @@ export class ConfirmViolationDetailsModalComponent implements OnInit {
             formData.append('additional_information', additional_information);
             formData.append('image', imgUrl as string);
 
-            request.open('POST', '/lazer/api/report/');
-            request.send(formData);
+            try {
+              fetch(submitUrl, {
+                method: 'POST',
+                body: formData,
+                headers: headers,
+              }).then((response) => {
+                if (!response.ok) {
+                  if (response.status === 400) {
+                    response.json().then((json) => {
+                      reject(json.error);
+                    });
+                  }
+                  throw new Error(`Response status: ${response.status}`);
+                }
+                response.json().then((json) => {
+                  resolve(json);
+                });
+              });
+            } catch (error: any) {
+              reject('error reporting, try again?');
+            }
           });
         });
       });
@@ -230,7 +244,8 @@ export class ConfirmViolationDetailsModalComponent implements OnInit {
             this.streetName,
             this.zipCode,
             additionalInfo,
-            photo.webviewPath
+            photo.webviewPath,
+            this.accountService.headers()
           )
             .then((data: any) => {
               this.violation.submitted = true;
@@ -319,6 +334,9 @@ export class ConfirmViolationDetailsModalComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if (this.platform.is('hybrid')) {
+      this.rootUrl = 'https://bikeaction.org';
+    }
     const parsedAddress = parseAddress(this.violation.address);
     this.blockNumber = parsedAddress.streetNumber as string;
     this.streetName = best_match(

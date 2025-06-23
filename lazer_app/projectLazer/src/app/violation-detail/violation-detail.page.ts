@@ -1,6 +1,8 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Storage } from '@ionic/storage-angular';
+import { Platform } from '@ionic/angular';
+
 import { LoadingController, ModalController } from '@ionic/angular';
 
 import { fromURL, blobToURL } from 'image-resize-compress';
@@ -26,6 +28,7 @@ export class ViolationDetailPage implements OnInit {
   violationData: any = null;
   violationImageLoaded: boolean = false;
   location: string | null = null;
+  rootUrl: string = '';
 
   constructor(
     public route: ActivatedRoute,
@@ -36,7 +39,8 @@ export class ViolationDetailPage implements OnInit {
     public photos: PhotoService,
     public onlineStatus: OnlineStatusService,
     public updateService: UpdateService,
-    public accountService: AccountService
+    public accountService: AccountService,
+    private platform: Platform
   ) {}
 
   async selectVehicle(index: number) {
@@ -132,23 +136,15 @@ export class ViolationDetailPage implements OnInit {
   }
 
   async submit() {
+    const submitUrl = `${this.rootUrl}/lazer/api/submit/`;
     function submitData(
       lat: number,
       long: number,
       dt: Date,
-      img: string
+      img: string,
+      headers: any
     ): Promise<any> {
       return new Promise((resolve, reject) => {
-        let request = new XMLHttpRequest();
-        request.addEventListener('readystatechange', () => {
-          if (request.readyState === 4 && request.status === 200) {
-            let data = JSON.parse(request.responseText);
-            resolve(data);
-          } else if (request.readyState === 4) {
-            reject('error getting resources');
-          }
-        });
-
         fromURL(img, 0.3, 'auto', 'auto', 'jpeg').then((resizedBlob) => {
           blobToURL(resizedBlob).then((imgUrl) => {
             const formData = new FormData();
@@ -157,8 +153,22 @@ export class ViolationDetailPage implements OnInit {
             formData.append('datetime', dt.toISOString());
             formData.append('image', imgUrl as string);
 
-            request.open('POST', '/lazer/api/submit/');
-            request.send(formData);
+            try {
+              fetch(submitUrl, {
+                method: 'POST',
+                body: formData,
+                headers: headers,
+              }).then((response) => {
+                if (!response.ok) {
+                  throw new Error(`Response status: ${response.status}`);
+                }
+                response.json().then((json) => {
+                  resolve(json);
+                });
+              });
+            } catch (error: any) {
+              reject('error processing, try again?');
+            }
           });
         });
       });
@@ -177,7 +187,8 @@ export class ViolationDetailPage implements OnInit {
             this.violationData.position!.coords!.latitude,
             this.violationData.position!.coords!.longitude,
             violationTime,
-            photo.webviewPath
+            photo.webviewPath,
+            this.accountService.headers()
           )
             .then((data: any) => {
               this.violationData.raw = data;
@@ -268,13 +279,15 @@ export class ViolationDetailPage implements OnInit {
     const { data, role } = await confirmViolationDetailsModal.onWillDismiss();
 
     if (role === 'save') {
-      console.log(data);
     } else {
       return;
     }
   }
 
   ngOnInit() {
+    if (this.platform.is('hybrid')) {
+      this.rootUrl = 'https://bikeaction.org';
+    }
     this.location = window.location.pathname + window.location.search;
     this.violationId = this.route.snapshot.queryParams['violationId'];
     this.storage.get('violation-' + this.violationId).then((data) => {

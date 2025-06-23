@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
+import { Platform } from '@ionic/angular';
 import { Storage } from '@ionic/storage-angular';
 import { ToastController } from '@ionic/angular';
+import { Preferences } from '@capacitor/preferences';
 
 @Injectable({
   providedIn: 'root',
@@ -8,15 +10,36 @@ import { ToastController } from '@ionic/angular';
 export class AccountService {
   username: string | null = null;
   loggedIn: boolean = false;
+  urlRoot: string = '';
+  session_key: string | null = null;
+  expiry_date: string | null = null;
+
+  headers() {
+    const headers = new Headers();
+    headers.append('Authorization', `Session: ${this.session_key}`);
+    return headers;
+  }
 
   async checkLoggedIn() {
-    const url = '/lazer/api/check-login/';
+    await this.loadSession();
+    const url = `${this.urlRoot}/lazer/api/check-login/`;
     try {
       const response = await fetch(url, {
         method: 'GET',
+        redirect: 'error',
+        headers: this.headers(),
       });
       if (!response.ok) {
-        throw new Error(`Response status: ${response.status}`);
+        if (response.status === 403) {
+          await this.storage.set('loggedIn', null);
+          this.loggedIn = false;
+          await this.storage.set('loggedIn', null);
+          this.session_key = null;
+          await Preferences.remove({ key: 'session_key' });
+          return;
+        } else {
+          throw new Error(`Response status: ${response.status}`);
+        }
       }
 
       const json = await response.json();
@@ -24,17 +47,19 @@ export class AccountService {
       this.loggedIn = true;
       await this.storage.set('loggedIn', this.username);
     } catch (error: any) {
-      console.log(error.message);
-      await this.storage.set('loggedIn', null);
+      if (error.message) {
+        await this.presentError(error.message);
+      }
     }
   }
 
   async logIn(username: string, password: string) {
-    const url = '/lazer/api/login/';
+    const url = `${this.urlRoot}/lazer/api/login/`;
     try {
       const response = await fetch(url, {
         method: 'POST',
         body: JSON.stringify({ username: username, password: password }),
+        redirect: 'error',
       });
       if (!response.ok) {
         throw new Error(`Response status: ${response.status}`);
@@ -42,8 +67,14 @@ export class AccountService {
 
       const json = await response.json();
       this.username = json.username;
+      this.session_key = json.session_key;
+      this.expiry_date = json.expiry_date;
       this.loggedIn = true;
       await this.storage.set('loggedIn', this.username);
+      await Preferences.set({
+        key: 'session_key',
+        value: this.session_key as string,
+      });
       await this.presentSuccess(json);
     } catch (error: any) {
       console.log(error);
@@ -54,9 +85,12 @@ export class AccountService {
   }
 
   async logOut() {
-    const url = '/lazer/api/logout/';
+    const url = `${this.urlRoot}/lazer/api/logout/`;
     try {
-      const response = await fetch(url);
+      const response = await fetch(url, {
+        redirect: 'error',
+        headers: this.headers(),
+      });
       if (!response.ok) {
         throw new Error(`Response status: ${response.status}`);
       }
@@ -65,6 +99,8 @@ export class AccountService {
       this.username = null;
       this.loggedIn = false;
       await this.storage.set('loggedIn', null);
+      this.session_key = null;
+      await Preferences.remove({ key: 'session_key' });
     } catch (error: any) {
       console.log(error.message);
     }
@@ -90,8 +126,28 @@ export class AccountService {
     toast.present();
   }
 
+  async loadSession() {
+    await Preferences.get({ key: 'session_key' }).then((value) => {
+      this.session_key = value.value;
+    });
+    await this.storage.get('loggedIn').then((username) => {
+      if (username) {
+        this.loggedIn = true;
+        this.username = username;
+      } else {
+        this.loggedIn = false;
+        this.username = null;
+      }
+    });
+  }
+
   constructor(
     private storage: Storage,
-    private toastController: ToastController
-  ) {}
+    private toastController: ToastController,
+    private platform: Platform
+  ) {
+    if (platform.is('hybrid')) {
+      this.urlRoot = 'https://bikeaction.org';
+    }
+  }
 }

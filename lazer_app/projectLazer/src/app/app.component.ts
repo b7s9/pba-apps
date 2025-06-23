@@ -63,11 +63,11 @@ export class AppComponent implements OnInit {
 
   constructor(
     private platform: Platform,
+    private storage: Storage,
     public onlineStatus: OnlineStatusService,
     public updateService: UpdateService,
     public versionService: VersionService,
-    public accountService: AccountService,
-    private storage: Storage
+    public accountService: AccountService
   ) {
     this.storage.create();
     document.addEventListener('touchstart', this.handleTouchStart, {
