@@ -351,7 +351,7 @@ async def submit_form_with_playwright(
 
         # click the file chooser
         async with page.expect_file_chooser() as fc_info:
-            await page.get_by_text("browse files").click()
+            await page.get_by_text("browse").click()
         file_chooser = await fc_info.value
         if isinstance(photo, str):
             await file_chooser.set_files(photo)
