@@ -283,6 +283,7 @@ async def submit_form_with_playwright(
     send_copy_to_email: str | None = None,
     tracing: bool = False,
     screenshot_dir: str | None = None,
+    violation_report: ViolationReport | None = None,
 ) -> None:
     """Method to submit a violation to the PPA's Smartsheet using Playwright.
 
@@ -292,21 +293,22 @@ async def submit_form_with_playwright(
     # smartsheet allows pre-filling of fields using query parameters.
     # for example, date observed would be Date%20Observed=06/03/2025
 
-    violation_report = ViolationReport(
-        submission=submission,
-        date_observed=violation.date_observed,
-        time_observed=violation.time_observed,
-        make=violation.make,
-        model=violation.model,
-        body_style=violation.body_style,
-        vehicle_color=violation.vehicle_color,
-        violation_observed=violation.violation_observed,
-        occurrence_frequency=violation.occurrence_frequency,
-        block_number=violation.block_number,
-        street_name=violation.street_name,
-        zip_code=violation.zip_code,
-        additional_information=violation.additional_information,
-    )
+    if violation_report is None:
+        violation_report = ViolationReport(
+            submission=submission,
+            date_observed=violation.date_observed,
+            time_observed=violation.time_observed,
+            make=violation.make,
+            model=violation.model,
+            body_style=violation.body_style,
+            vehicle_color=violation.vehicle_color,
+            violation_observed=violation.violation_observed,
+            occurrence_frequency=violation.occurrence_frequency,
+            block_number=violation.block_number,
+            street_name=violation.street_name,
+            zip_code=violation.zip_code,
+            additional_information=violation.additional_information,
+        )
 
     if isinstance(photo, str):
         if not os.path.exists(photo):

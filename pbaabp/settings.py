@@ -119,6 +119,7 @@ INSTALLED_APPS = [
     "leaflet",
     "easy_thumbnails",
     "qr_code",
+    "admin_extra_buttons",
     # Our apps
     "pbaabp",
     "pages",
