@@ -315,7 +315,7 @@ async def submit_form_with_playwright(
             photo = ContentFile(f.read(), name=os.path.basename(photo))
     async with async_playwright() as p:
         browser = await p.chromium.launch(headless=not tracing)
-        context = await browser.new_context()
+        context = await browser.new_context(viewport={"width": 1024, "height": 3000})
 
         if tracing:
             tracing_debug_key = os.urandom(3).hex()
@@ -389,7 +389,7 @@ async def submit_form_with_playwright(
                     lambda request: request.url == SUBMIT_SMARTSHEET_URL
                     and request.method.lower() == "post"
                 ) as _:
-                    await page.click("button[type='submit']")
+                    await page.click('button:text("Submit")')
 
             if screenshot_dir:
                 await page.screenshot(
