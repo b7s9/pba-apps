@@ -234,7 +234,7 @@ export class HomePage implements OnInit {
   ngOnInit(): void {
     Preferences.get({ key: 'openToCapture' }).then((value) => {
       if (value.value === null) {
-        this.openToCapture = true;
+        this.openToCapture = false;
       } else {
         this.openToCapture = JSON.parse(value.value);
       }
