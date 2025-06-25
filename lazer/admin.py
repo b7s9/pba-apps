@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.db.models import Q
 
 from lazer.models import ViolationReport, ViolationSubmission
-from lazer.utils import submit_violation_report_to_ppa
+from lazer.tasks import submit_violation_report_to_ppa
 from pbaabp.admin import ReadOnlyLeafletGeoAdminMixin
 
 
@@ -61,7 +61,7 @@ class ViolationReportAdmin(ExtraButtonsMixin, admin.ModelAdmin):
     )
     def resubmit(self, request, object_id):
         report = ViolationReport.objects.get(pk=object_id)
-        submit_violation_report_to_ppa(report)
+        submit_violation_report_to_ppa.delay(report.id)
 
 
 admin.site.register(ViolationSubmission, ViolationSubmissionAdmin)
