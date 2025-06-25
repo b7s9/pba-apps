@@ -6,7 +6,6 @@ import secrets
 from functools import wraps
 from importlib import import_module
 
-from anyio import TemporaryDirectory
 from asgiref.sync import sync_to_async
 from django.conf import settings
 from django.contrib.auth import authenticate, get_user_model, login, logout
@@ -21,10 +20,7 @@ from django.views.decorators.csrf import csrf_exempt
 from facets.utils import reverse_geocode_point
 from lazer.forms import ReportForm, SubmissionForm
 from lazer.integrations.platerecognizer import read_plate
-from lazer.integrations.submit_form import (
-    MobilityAccessViolation,
-    submit_form_with_playwright,
-)
+from lazer.integrations.submit_form import MobilityAccessViolation
 from lazer.models import ViolationReport, ViolationSubmission
 
 SessionStore = import_module(settings.SESSION_ENGINE).SessionStore
@@ -150,7 +146,6 @@ async def report_api(request):
     if request.method == "POST":
         form = ReportForm(request.POST)
         if form.is_valid():
-            image, _ = get_image_from_data_url(form.cleaned_data["image"])
             submission = await ViolationSubmission.objects.filter(
                 submission_id=form.cleaned_data["submission_id"]
             ).afirst()
@@ -177,14 +172,23 @@ async def report_api(request):
                 _zip_code=form.cleaned_data["zip_code"],
             )
 
-            async with TemporaryDirectory() as temp_dir:
-                violation = await submit_form_with_playwright(
-                    submission=submission,
-                    violation=mobility_access_violation,
-                    photo=image,
-                    screenshot_dir=temp_dir,
-                )
-                await violation.asave()
+            violation_report = ViolationReport(
+                submission=submission,
+                date_observed=mobility_access_violation.date_observed,
+                time_observed=mobility_access_violation.time_observed,
+                make=mobility_access_violation.make,
+                model=mobility_access_violation.model,
+                body_style=mobility_access_violation.body_style,
+                vehicle_color=mobility_access_violation.vehicle_color,
+                violation_observed=mobility_access_violation.violation_observed,
+                occurrence_frequency=mobility_access_violation.occurrence_frequency,
+                block_number=mobility_access_violation.block_number,
+                street_name=mobility_access_violation.street_name,
+                zip_code=mobility_access_violation.zip_code,
+                additional_information=mobility_access_violation.additional_information,
+            )
+
+            await violation_report.asave()
 
             return JsonResponse(
                 {
@@ -198,7 +202,9 @@ async def report_api(request):
 
 def map(request):
     pins = []
-    for report in ViolationReport.objects.select_related("submission").all():
+    for report in (
+        ViolationReport.objects.filter(submitted__isnull=False).select_related("submission").all()
+    ):
         lat, lng = (report.submission.location.y, report.submission.location.x)
         pins.append([lat, lng, 1])
     return render(request, "heatmap.html", {"pins_json": json.dumps(pins)})
@@ -206,7 +212,8 @@ def map(request):
 
 def list(request):
     queryset = (
-        ViolationReport.objects.select_related("submission")
+        ViolationReport.objects.filter(submitted__isnull=False)
+        .select_related("submission")
         .order_by("-submission__captured_at")
         .all()
     )

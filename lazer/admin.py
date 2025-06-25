@@ -1,14 +1,9 @@
-from tempfile import TemporaryDirectory
-
 from admin_extra_buttons.api import ExtraButtonsMixin, button
-from asgiref.sync import async_to_sync
 from django.contrib import admin
+from django.db.models import Q
 
-from lazer.integrations.submit_form import (
-    MobilityAccessViolation,
-    submit_form_with_playwright,
-)
 from lazer.models import ViolationReport, ViolationSubmission
+from lazer.utils import submit_violation_report_to_ppa
 from pbaabp.admin import ReadOnlyLeafletGeoAdminMixin
 
 
@@ -22,15 +17,33 @@ class ViolationSubmissionAdmin(ReadOnlyLeafletGeoAdminMixin, admin.ModelAdmin):
     readonly_fields = ("image_tag",)
 
 
+class IsSubmittedFilter(admin.SimpleListFilter):
+    title = "is submitted"
+    parameter_name = "submitted"
+
+    def lookups(self, request, model_admin):
+        return ((True, "Yes"), (False, "No"))
+
+    def queryset(self, request, queryset):
+        if self.value() == "True":
+            return queryset.filter(
+                submitted__isnull=False,
+            )
+        elif self.value() == "False":
+            return queryset.filter(Q(submitted__isnull=True))
+        return queryset
+
+
 class ViolationReportAdmin(ExtraButtonsMixin, admin.ModelAdmin):
     list_display = (
         "image_tag_violation_no_href",
         "violation_observed_short",
+        "is_submitted",
         "created_by",
         "date_observed",
         "time_observed",
     )
-    list_filter = ("violation_observed",)
+    list_filter = ("violation_observed", IsSubmittedFilter)
     readonly_fields = (
         "image_tag_violation",
         "image_tag_before_submit",
@@ -44,36 +57,11 @@ class ViolationReportAdmin(ExtraButtonsMixin, admin.ModelAdmin):
         label="Resubmit",
         change_form=True,
         change_list=True,
-        permission=lambda request, obj, **kw: bool(obj.screenshot_error),
+        permission=lambda request, obj, **kw: bool(obj.screenshot_error) or obj.submitted is None,
     )
     def resubmit(self, request, object_id):
         report = ViolationReport.objects.get(pk=object_id)
-        report.screenshot_error.delete()
-        mobility_access_violation = MobilityAccessViolation(
-            make=report.make,
-            model=report.model,
-            body_style=report.body_style,
-            vehicle_color=report.vehicle_color,
-            violation_observed=report.violation_observed,
-            occurrence_frequency=report.occurrence_frequency,
-            additional_information=report.additional_information,
-            date_time_observed=None,
-            _date_observed=report.date_observed,
-            _time_observed=report.time_observed,
-            address=None,
-            _block_number=report.block_number,
-            _street_name=report.street_name,
-            _zip_code=report.zip_code,
-        )
-        with TemporaryDirectory() as temp_dir:
-            violation = async_to_sync(submit_form_with_playwright)(
-                submission=report.submission,
-                violation=mobility_access_violation,
-                photo=report.submission.image,
-                screenshot_dir=temp_dir,
-                violation_report=report,
-            )
-            violation.save()
+        submit_violation_report_to_ppa(report)
 
 
 admin.site.register(ViolationSubmission, ViolationSubmissionAdmin)

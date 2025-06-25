@@ -62,6 +62,11 @@ class ViolationReport(models.Model):
 
     submitted = models.DateTimeField(null=True, blank=True)
 
+    def is_submitted(self):
+        return self.submitted is not None
+
+    is_submitted.boolean = True
+
     def created_by(self):
         return self.submission.created_by
 
