@@ -75,6 +75,25 @@
       </ion-button>
     </ion-card-content>
   </ion-card>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Settings</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list lines="inset">
+        <ion-item>
+          <ion-checkbox
+            helperText="Whenever Laser Vision is started, it will return to this page, ensuring that you have quick access to capture violations."
+            labelPlacement="start"
+            [(ngModel)]="openToCapture"
+            (ionChange)="toggleOpenToCapture()"
+            >Open to capture</ion-checkbox
+          >
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
 </ion-content>
 
 <ion-footer *ngIf="geoPerms">

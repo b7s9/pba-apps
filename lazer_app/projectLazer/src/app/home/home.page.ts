@@ -4,10 +4,11 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoadingController, ToastController } from '@ionic/angular';
 import { Platform } from '@ionic/angular'; // Import Platform
+import { Storage } from '@ionic/storage-angular';
 
 import { Device, DeviceInfo } from '@capacitor/device';
 import { Geolocation, Position } from '@capacitor/geolocation';
-import { Storage } from '@ionic/storage-angular';
+import { Preferences } from '@capacitor/preferences';
 
 import { fromURL, blobToURL } from 'image-resize-compress';
 
@@ -28,6 +29,8 @@ export class HomePage implements OnInit {
   geoPerms: boolean | null = null;
   geoWatchId: string | null = null;
 
+  openToCapture: boolean = true;
+
   violationId: number | null = null;
   violationImage: string | undefined | null = null;
   violationPosition: Position | null = null;
@@ -44,6 +47,13 @@ export class HomePage implements OnInit {
     private violations: ViolationService,
     public platform: Platform
   ) {}
+
+  async toggleOpenToCapture() {
+    await Preferences.set({
+      key: 'openToCapture',
+      value: this.openToCapture.toString(),
+    });
+  }
 
   async getCurrentPosition() {
     if (this.geoWatchId !== null) {
@@ -222,6 +232,13 @@ export class HomePage implements OnInit {
   }
 
   ngOnInit(): void {
+    Preferences.get({ key: 'openToCapture' }).then((value) => {
+      if (value.value === null) {
+        this.openToCapture = true;
+      } else {
+        this.openToCapture = JSON.parse(value.value);
+      }
+    });
     Device.getInfo().then((deviceInfo) => {
       this.deviceInfo = deviceInfo;
       this.checkPermission();
