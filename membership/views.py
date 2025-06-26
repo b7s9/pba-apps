@@ -244,11 +244,14 @@ def complete_one_time_donation_checkout_session(request):
     if session["status"] == "complete":
         _session = Session()._get_or_retrieve(session["id"], expand=["line_items"])
         _session.save()
+        _line_items = _session.line_items.get("data")
+        if _line_items is None:
+            _line_items = _session.line_items
         donation_products = DonationProduct.objects.filter(
-            stripe_product__id__in=[li["price"]["product"] for li in _session.line_items]
+            stripe_product__id__in=[li["price"]["product"] for li in _line_items]
         ).all()
         if donation_products:
-            for line_item in _session.line_items:
+            for line_item in _line_items:
                 donation_product = DonationProduct.objects.filter(
                     stripe_product__id=line_item["price"]["product"]
                 ).first()
