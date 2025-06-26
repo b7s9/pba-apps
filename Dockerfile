@@ -1,7 +1,8 @@
 FROM node:22-bookworm AS build-lazer
 
-WORKDIR /code/lazer_app/projectLazer/
-COPY ./ /code/
+WORKDIR /code/
+COPY ./lazer_app/projectLazer/ /code/
+COPY /.git/ /code/.git/
 
 RUN --mount=type=cache,target=/root/.npm,sharing=locked \
     npm install
@@ -38,7 +39,7 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 COPY .ssh /root/.ssh
 COPY . /code/
 
-COPY --from=build-lazer /code/lazer_app/projectLazer/www /code/static/lazer
+COPY --from=build-lazer /code/www /code/static/lazer
 
 RUN \
     DJANGO_SECRET_KEY=deadbeefcafe \
