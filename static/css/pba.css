@@ -911,6 +911,15 @@ body {
   text-align: center;
 }
 
+.event-qr-container {
+  text-align: center;
+}
+
+.event-signin-qr-code {
+  max-width: 128px;
+  width: 75vw;
+}
+
 .calendar-subscribe {
   margin-top: 1em;
   text-align: center;
