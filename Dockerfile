@@ -1,8 +1,10 @@
 FROM node:22-bookworm AS build-lazer
 
+ARG GIT_REV
+ENV GIT_REV=${GIT_REV}
+
 WORKDIR /code/
 COPY ./lazer_app/projectLazer/ /code/
-COPY /.git/ /code/.git/
 
 RUN --mount=type=cache,target=/root/.npm,sharing=locked \
     npm install
