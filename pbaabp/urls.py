@@ -7,6 +7,7 @@ from django.contrib import admin
 from django.urls import include, path, re_path
 from django.views import static as static_view
 from django.views.generic.base import RedirectView
+from djstripe.views import ProcessWebhookView
 from sesame.views import LoginView
 from wagtail import urls as wagtail_urls
 from wagtail.admin import urls as wagtailadmin_urls
@@ -33,7 +34,7 @@ urlpatterns = [
     path("release/", include("release.urls")),
     path("donations/", include("membership.urls")),
     path("campaigns/", include("campaigns.urls")),
-    path("stripe/", include("djstripe.urls", namespace="djstripe")),
+    path("stripe/webhook/", ProcessWebhookView.as_view()),
     path("sesame/login/", LoginView.as_view(), name="sesame_login"),
     path("email/login/", EmailLoginView.as_view(), name="email_login"),
     path("maillink/", include("maillinks.urls")),
