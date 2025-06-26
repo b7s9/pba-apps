@@ -16,6 +16,8 @@ from wagtail.documents import urls as wagtaildocs_urls
 
 from campaigns.sitemap import CampaignSitemap
 from events.sitemap import ScheduledEventSitemap
+from lazer.views import list as laser_list
+from lazer.views import map as laser_map
 from pbaabp.views import (
     EmailLoginView,
     _newsletter_signup_partial,
@@ -59,6 +61,8 @@ urlpatterns = [
         static_view.serve,
         {"document_root": os.path.join(settings.BASE_DIR, Path("static/lazer"))},
     ),
+    path("tools/laser/map/", laser_map),
+    path("tools/laser/list/", laser_list),
     path("", include("pages.urls")),
     path("admin/", admin.site.urls),
     path("cms/", include(wagtailadmin_urls)),
