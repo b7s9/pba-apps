@@ -44,6 +44,7 @@ class ViolationReportAdmin(ExtraButtonsMixin, admin.ModelAdmin):
         "time_observed",
     )
     list_filter = ("violation_observed", IsSubmittedFilter)
+    list_select_related = True
     readonly_fields = (
         "image_tag_violation",
         "image_tag_before_submit",
