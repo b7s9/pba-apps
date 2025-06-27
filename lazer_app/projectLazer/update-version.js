@@ -4,9 +4,9 @@ const execSync = require("child_process").execSync;
 const version = require("./package.json").version;
 let commitHash = process.env.GIT_REV;
 if (!commitHash) {
-  commitHash = 'deadbeef';
+  commitHash = "deadbeef";
 } else {
-  console.log('got commit sha from GIT_REV')
+  console.log("got commit sha from GIT_REV");
 }
 const buildDate = new Date().toISOString();
 
