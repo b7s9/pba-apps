@@ -17,6 +17,7 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 
+from campaigns.admin import randomize_lat_long
 from facets.utils import reverse_geocode_point
 from lazer.forms import ReportForm, SubmissionForm
 from lazer.integrations.platerecognizer import read_plate
@@ -224,8 +225,10 @@ def map_data(request):
                 submission__captured_at__lte=datetime.datetime.strptime(date_lte, "%Y-%m-%d")
             )
 
-    for report in queryset.all():
-        lat, lng = (report.submission.location.y, report.submission.location.x)
+    for report in queryset.only("submission__location").all():
+        lat, lng = randomize_lat_long(
+            report.id, *(report.submission.location.y, report.submission.location.x)
+        )
         pins.append([lat, lng, 1])
 
     return JsonResponse(pins, safe=False)

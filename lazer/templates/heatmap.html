@@ -25,7 +25,7 @@
           }
       }
 
-      function updateHeader() {
+      function updateHeader(count) {
         if (searchParams.get('violation') === null) {
           document.getElementById("violationName").innerHTML = "<b>Violation</b>: All";
         } else {
@@ -39,6 +39,8 @@
         } else {
           document.getElementById("violationDate").innerHTML = `<b>Date(s)</b>: All`;
         }
+
+        document.getElementById("violationCount").innerHTML = `<b>Count</b>: ${count}`;
       }
 
       function setDate(startOffset, endOffset = null) {
@@ -84,8 +86,8 @@
             if (!response.ok) {
               throw new Error(`Response status: ${response.status}`);
             }
-            updateHeader();
-            return response.json()
+            const data = response.json();
+            return data;
           })
           .catch(error => {
             console.error('Error fetching data:', error);
@@ -102,7 +104,8 @@
             heatmapLayer.setOptions({radius: 10, blur: 5, minOpacity: .4});
             heatmapLayer.setLatLngs(data);
             heatmapLayer.redraw();
-            updateHeader();
+            updateHeader(data.length);
+            setTimeout(updateData, 10000)
           });
       }
       function map_init (map, options) {
@@ -113,11 +116,7 @@
         map.on('drag', function() {
             map.panInsideBounds(bounds, { animate: false });
         });
-        fetchData()
-          .then(data => {
-            heatmapLayer.setOptions({radius: 10, blur: 5, minOpacity: .4});
-            heatmapLayer.setLatLngs(data);
-          });
+        updateData();
         heatmapLayer.addTo(map);
       }
     </script>
@@ -125,6 +124,7 @@
     <div>
       <div id="violationName"><b>Violation</b>: {% if request.GET.violation %}{{ request.GET.violation }}{% else %}All{% endif %}</div>
       <div id="violationDate"><b>Date(s)</b>: {% if request.GET.date %}{{ request.GET.date }}{% elif request.GET.date_gte or request.GET.date_lte %}{% if request.GET.date_gte %}{{ request.GET.date_gte }}{% endif %} - {% if request.GET.date_lte %}{{ request.GET.date_lte }}{% endif %}{% else %}All{% endif %}</div>
+      <div id="violationCount"><b>Count</b>: ...</div>
     </div>
     <div style="text-align: center">
       <button onclick="setDate(0)">Today</button>
