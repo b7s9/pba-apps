@@ -69,5 +69,6 @@ def build_embed(violation_report):
     if not image_url.startswith("http"):
         image_url = f"{settings.SITE_URL}{image_url}"
     embed.set_thumbnail(url=image_url)
+    embed.add_field("View Image", f"[here]({image_url})")
 
     return embed
