@@ -4,10 +4,13 @@ ARG GIT_REV
 ENV GIT_REV=${GIT_REV}
 
 WORKDIR /code/
-COPY ./lazer_app/projectLazer/ /code/
 
+COPY ./lazer_app/projectLazer/package.json /code/
+COPY ./lazer_app/projectLazer/package-lock.json /code/
 RUN --mount=type=cache,target=/root/.npm,sharing=locked \
     npm install
+
+COPY ./lazer_app/projectLazer/ /code/
 
 RUN npx ionic build --prod
 
