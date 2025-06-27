@@ -4,7 +4,7 @@
   "author": "Philly Bike Action",
   "homepage": "https://bikeaction.org/laser",
   "scripts": {
-    "ionic:build:before": "node update-version.js",
+    "ionic:build:before": "node scripts/update-version.js",
     "ng": "ng",
     "start": "ng serve",
     "build": "BUILD_ENV=${BUILD_ENV:-local} ng build --configuration=$BUILD_ENV",
