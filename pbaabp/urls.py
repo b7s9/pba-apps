@@ -18,6 +18,7 @@ from campaigns.sitemap import CampaignSitemap
 from events.sitemap import ScheduledEventSitemap
 from lazer.views import list as laser_list
 from lazer.views import map as laser_map
+from lazer.views import map_data as laser_map_data
 from pbaabp.views import (
     EmailLoginView,
     _newsletter_signup_partial,
@@ -62,6 +63,7 @@ urlpatterns = [
         {"document_root": os.path.join(settings.BASE_DIR, Path("static/lazer"))},
     ),
     path("tools/laser/map/", laser_map),
+    path("tools/laser/map_data/", laser_map_data),
     path("tools/laser/list/", laser_list),
     path("", include("pages.urls")),
     path("admin/", admin.site.urls),

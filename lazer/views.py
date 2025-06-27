@@ -200,14 +200,39 @@ async def report_api(request):
             return JsonResponse({"submitted": False}, status=400)
 
 
-def map(request):
+def map_data(request):
+    violation_filter = request.GET.get("violation", None)
+    date_gte = request.GET.get("date_gte", None)
+    date_lte = request.GET.get("date_lte", None)
+    date = request.GET.get("date", None)
+
     pins = []
-    for report in (
-        ViolationReport.objects.filter(submitted__isnull=False).select_related("submission").all()
-    ):
+    queryset = ViolationReport.objects.filter(submitted__isnull=False).select_related("submission")
+    if violation_filter:
+        queryset = queryset.filter(violation_observed__startswith=violation_filter)
+    if date:
+        queryset = queryset.filter(
+            submission__captured_at__date=datetime.datetime.strptime(date, "%Y-%m-%d")
+        )
+    else:
+        if date_gte:
+            queryset = queryset.filter(
+                submission__captured_at__gte=datetime.datetime.strptime(date_gte, "%Y-%m-%d")
+            )
+        if date_lte:
+            queryset = queryset.filter(
+                submission__captured_at__lte=datetime.datetime.strptime(date_lte, "%Y-%m-%d")
+            )
+
+    for report in queryset.all():
         lat, lng = (report.submission.location.y, report.submission.location.x)
         pins.append([lat, lng, 1])
-    return render(request, "heatmap.html", {"pins_json": json.dumps(pins)})
+
+    return JsonResponse(pins, safe=False)
+
+
+def map(request):
+    return render(request, "heatmap.html")
 
 
 def list(request):
