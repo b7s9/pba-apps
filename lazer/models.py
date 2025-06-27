@@ -12,7 +12,7 @@ class ViolationSubmission(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
 
-    captured_at = models.DateTimeField()
+    captured_at = models.DateTimeField(db_index=True)
     location = models.PointField(srid=4326)
     image = models.ImageField(upload_to="lazer/violations")
 
@@ -41,7 +41,7 @@ class ViolationReport(models.Model):
     body_style = models.CharField()
     vehicle_color = models.CharField()
 
-    violation_observed = models.CharField()
+    violation_observed = models.CharField(db_index=True)
     occurrence_frequency = models.CharField()
 
     block_number = models.CharField()
