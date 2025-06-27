@@ -218,6 +218,14 @@ class CmsStreamPage(Page):
         FieldPanel("body"),
     ]
 
+    og_image = models.ForeignKey(
+        "wagtailimages.Image", null=True, blank=True, on_delete=models.SET_NULL, related_name="+"
+    )
+
+    promote_panels = Page.promote_panels + [
+        FieldPanel("og_image"),
+    ]
+
 
 class NavigationContainerPage(Page):
     """
