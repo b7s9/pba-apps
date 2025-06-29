@@ -6,6 +6,7 @@ import secrets
 from functools import wraps
 from importlib import import_module
 
+import pytz
 from asgiref.sync import sync_to_async
 from django.conf import settings
 from django.contrib.auth import authenticate, get_user_model, login, logout
@@ -15,6 +16,7 @@ from django.core.paginator import Paginator
 from django.db import transaction
 from django.http import JsonResponse
 from django.shortcuts import render
+from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 
 from campaigns.admin import randomize_lat_long
@@ -210,19 +212,28 @@ def map_data(request):
     pins = []
     queryset = ViolationReport.objects.filter(submitted__isnull=False).select_related("submission")
     if violation_filter:
-        queryset = queryset.filter(violation_observed__startswith=violation_filter)
+        queryset = queryset.filter(violation_observed__startswith=violation_filter).filter(
+            submission__captured_at__lt=timezone.now() - datetime.timedelta(minutes=15)
+        )
+
     if date:
         queryset = queryset.filter(
             submission__captured_at__date=datetime.datetime.strptime(date, "%Y-%m-%d")
+            .astimezone(pytz.timezone("America/New_York"))
+            .date()
         )
     else:
         if date_gte:
             queryset = queryset.filter(
                 submission__captured_at__gte=datetime.datetime.strptime(date_gte, "%Y-%m-%d")
+                .astimezone(pytz.timezone("America/New_York"))
+                .date()
             )
         if date_lte:
             queryset = queryset.filter(
                 submission__captured_at__lte=datetime.datetime.strptime(date_lte, "%Y-%m-%d")
+                .astimezone(pytz.timezone("America/New_York"))
+                .date()
             )
 
     for report in queryset.only("submission__location").all():
