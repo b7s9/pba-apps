@@ -22,12 +22,18 @@ class ProfileCompleteFilter(admin.SimpleListFilter):
         return ((True, "Yes"), (False, "No"))
 
     def queryset(self, request, queryset):
-        if self.value() == "True":
+        if self.value() in (
+            "True",
+            True,
+        ):
             return queryset.filter(
                 street_address__isnull=False,
                 zip_code__isnull=False,
             )
-        elif self.value() == "False":
+        elif self.value() in (
+            "False",
+            False,
+        ):
             return queryset.filter(Q(street_address__isnull=True) | Q(zip_code__isnull=True))
         return queryset
 
@@ -40,11 +46,17 @@ class GeolocatedFilter(admin.SimpleListFilter):
         return ((True, "Yes"), (False, "No"))
 
     def queryset(self, request, queryset):
-        if self.value() == "True":
+        if self.value() in (
+            "True",
+            True,
+        ):
             return queryset.filter(
                 location__isnull=False,
             )
-        elif self.value() == "False":
+        elif self.value() in (
+            "False",
+            False,
+        ):
             return queryset.filter(Q(location__isnull=True))
         return queryset
 
@@ -57,9 +69,15 @@ class AppsConnectedFilter(admin.SimpleListFilter):
         return ((True, "Yes"), (False, "No"))
 
     def queryset(self, request, queryset):
-        if self.value() == "True":
+        if self.value() in (
+            "True",
+            True,
+        ):
             return queryset.annotate(total=Count("user__socialaccount")).filter(total__gt=0)
-        elif self.value() == "False":
+        elif self.value() in (
+            "False",
+            False,
+        ):
             return queryset.annotate(total=Count("user__socialaccount")).filter(total=0)
         return queryset
 
@@ -76,9 +94,62 @@ class MemberFilter(admin.SimpleListFilter):
             Q(user__socialaccount__provider="discord")
             & Q(discord_activity__date__gte=(timezone.now().date() - datetime.timedelta(days=30)))
         ) | Q(user__djstripe_customers__subscriptions__status__in=["active"])
-        if self.value() == "True":
+        if self.value() in (
+            "True",
+            True,
+        ):
             return queryset.filter(condition).distinct().annotate(total=Count("id"))
-        elif self.value() == "False":
+        elif self.value() in (
+            "False",
+            False,
+        ):
+            return queryset.exclude(condition).distinct().annotate(total=Count("id"))
+        return queryset
+
+
+class MemberByDonationFilter(admin.SimpleListFilter):
+    title = "PBA Member (donation)"
+    parameter_name = "member_donation"
+
+    def lookups(self, request, model_admin):
+        return ((True, "Yes"), (False, "No"))
+
+    def queryset(self, request, queryset):
+        condition = Q(user__djstripe_customers__subscriptions__status__in=["active"])
+        if self.value() in (
+            "True",
+            True,
+        ):
+            return queryset.filter(condition).distinct().annotate(total=Count("id"))
+        elif self.value() in (
+            "False",
+            False,
+        ):
+            return queryset.exclude(condition).distinct().annotate(total=Count("id"))
+        return queryset
+
+
+class MemberByDiscordActivityFilter(admin.SimpleListFilter):
+    title = "PBA Member (discord)"
+    parameter_name = "member_discord"
+
+    def lookups(self, request, model_admin):
+        return ((True, "Yes"), (False, "No"))
+
+    def queryset(self, request, queryset):
+        condition = Q(
+            Q(user__socialaccount__provider="discord")
+            & Q(discord_activity__date__gte=(timezone.now().date() - datetime.timedelta(days=30)))
+        )
+        if self.value() in (
+            "True",
+            True,
+        ):
+            return queryset.filter(condition).distinct().annotate(total=Count("id"))
+        elif self.value() in (
+            "False",
+            False,
+        ):
             return queryset.exclude(condition).distinct().annotate(total=Count("id"))
         return queryset
 
@@ -87,7 +158,7 @@ class DistrictFilter(admin.SimpleListFilter):
     title = "Council District (verified)"
     parameter_name = "council_district_verified"
 
-    def lookups(self, request, model_amin):
+    def lookups(self, request, model_admin):
         return [(f.id, f.name) for f in District.objects.all() if f.targetable]
 
     def queryset(self, request, queryset):
@@ -101,7 +172,7 @@ class RCOFilter(admin.SimpleListFilter):
     title = "RCOs (verified)"
     parameter_name = "rcos_verified"
 
-    def lookups(self, request, model_amin):
+    def lookups(self, request, model_admin):
         return [
             (f.id, f.name) for f in RegisteredCommunityOrganization.objects.all() if f.targetable
         ]
@@ -126,6 +197,8 @@ class ProfileAdmin(ReadOnlyLeafletGeoAdminMixin, admin.ModelAdmin):
     list_filter = [
         ProfileCompleteFilter,
         MemberFilter,
+        MemberByDonationFilter,
+        MemberByDiscordActivityFilter,
         AppsConnectedFilter,
         GeolocatedFilter,
         DistrictFilter,
