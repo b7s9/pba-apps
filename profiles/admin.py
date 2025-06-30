@@ -1,14 +1,17 @@
 import csv
+import datetime
 
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
 from django.db.models import Count, Q
 from django.http import HttpResponse
+from django.utils import timezone
+from django.utils.safestring import mark_safe
 
 from facets.models import District, RegisteredCommunityOrganization
 from pbaabp.admin import ReadOnlyLeafletGeoAdminMixin
-from profiles.models import Profile, ShirtOrder
+from profiles.models import DiscordActivity, Profile, ShirtOrder
 
 
 class ProfileCompleteFilter(admin.SimpleListFilter):
@@ -112,7 +115,12 @@ class ProfileAdmin(ReadOnlyLeafletGeoAdminMixin, admin.ModelAdmin):
         RCOFilter,
         "council_district",
     ]
-    search_fields = ["user__first_name", "user__last_name", "user__email"]
+    search_fields = [
+        "user__first_name",
+        "user__last_name",
+        "user__email",
+        "user__socialaccount__extra_data__username",
+    ]
     autocomplete_fields = ("user",)
 
     def _user(self, obj=None):
@@ -129,6 +137,55 @@ class ProfileAdmin(ReadOnlyLeafletGeoAdminMixin, admin.ModelAdmin):
         if obj is None or obj.discord is None:
             return ""
         return obj.discord.extra_data["username"]
+
+    def discord_activity(self, obj=None):
+        if obj is None:
+            return ""
+        date_range_prev_60 = [
+            timezone.now().date() - datetime.timedelta(days=(90 - i)) for i in range(60)
+        ]
+        date_range_last_30 = [
+            timezone.now().date() - datetime.timedelta(days=(30 - i)) for i in range(31)
+        ]
+        query_prev_60 = DiscordActivity.objects.filter(
+            profile=obj, date__in=date_range_prev_60
+        ).all()
+        query_last_30 = DiscordActivity.objects.filter(
+            profile=obj, date__in=date_range_last_30
+        ).all()
+        counts_by_date_prev_60 = {activity.date: activity.count for activity in query_prev_60}
+        counts_by_date_last_30 = {activity.date: activity.count for activity in query_last_30}
+        counts_prev_60 = ",".join(
+            [str(counts_by_date_prev_60.get(date, 0)) for date in date_range_prev_60]
+        )
+        counts_last_30 = ",".join(
+            [str(counts_by_date_last_30.get(date, 0)) for date in date_range_last_30]
+        )
+        return mark_safe(
+            f"""
+            <div style="padding: 0; margin: 0; display: block; border-collapse: collapse;">
+                <div
+                    style="display: inline-block;"
+                    data-sparkline="true"
+                    data-points="{counts_prev_60}"
+                    data-width="150"
+                    data-height="50"
+                    data-gap="0"
+                ></div>
+                <div
+                    style="display: inline-block;"
+                    data-colors="#83bd56"
+                    data-sparkline="true"
+                    data-points="{counts_last_30}"
+                    data-width="75"
+                    data-height="50"
+                    data-gap="0"
+                ></div>
+            </div>
+            """
+        )
+
+    discord_activity.help_text = "Discord activity over last 90 days, most recent 30 is in green"
 
     def geolocated(self, obj=None):
         if obj is None:
@@ -188,6 +245,7 @@ class ProfileAdmin(ReadOnlyLeafletGeoAdminMixin, admin.ModelAdmin):
             return ()
         else:
             return (
+                "discord_activity",
                 "user",
                 "mailjet_contact_id",
                 "council_district_calculated",
