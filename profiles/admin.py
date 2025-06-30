@@ -58,11 +58,28 @@ class AppsConnectedFilter(admin.SimpleListFilter):
 
     def queryset(self, request, queryset):
         if self.value() == "True":
-            return queryset.annotate(connected=Count("user__socialaccount")).filter(
-                connected__gt=0
-            )
+            return queryset.annotate(total=Count("user__socialaccount")).filter(total__gt=0)
         elif self.value() == "False":
-            return queryset.annotate(connected=Count("user__socialaccount")).filter(connected=0)
+            return queryset.annotate(total=Count("user__socialaccount")).filter(total=0)
+        return queryset
+
+
+class MemberFilter(admin.SimpleListFilter):
+    title = "PBA Member"
+    parameter_name = "member"
+
+    def lookups(self, request, model_admin):
+        return ((True, "Yes"), (False, "No"))
+
+    def queryset(self, request, queryset):
+        condition = Q(
+            Q(user__socialaccount__provider="discord")
+            & Q(discord_activity__date__gte=(timezone.now().date() - datetime.timedelta(days=30)))
+        ) | Q(user__djstripe_customers__subscriptions__status__in=["active"])
+        if self.value() == "True":
+            return queryset.filter(condition).distinct().annotate(total=Count("id"))
+        elif self.value() == "False":
+            return queryset.exclude(condition).distinct().annotate(total=Count("id"))
         return queryset
 
 
@@ -105,15 +122,14 @@ class ProfileAdmin(ReadOnlyLeafletGeoAdminMixin, admin.ModelAdmin):
         "apps_connected",
         "geolocated",
         "council_district_display",
-        "council_district_validated",
     ]
     list_filter = [
         ProfileCompleteFilter,
+        MemberFilter,
         AppsConnectedFilter,
         GeolocatedFilter,
         DistrictFilter,
         RCOFilter,
-        "council_district",
     ]
     search_fields = [
         "user__first_name",
@@ -218,39 +234,65 @@ class ProfileAdmin(ReadOnlyLeafletGeoAdminMixin, admin.ModelAdmin):
 
     council_district_calculated.short_description = "Calculated District"
 
-    def council_district_validated(self, obj=None):
-        if obj is None:
-            return False
-        if obj.council_district is None:
-            return False
-        if int(obj.council_district) == 0 and obj.district is None:
-            return True
-        if obj.location and obj.district is not None:
-            if obj.council_district:
-                return int(obj.district.name.split()[1]) == obj.council_district
-            return False
-        return False
-
-    council_district_validated.boolean = True
-
     def council_district_display(self, obj=None):
         if obj is None:
             return None
-        return obj.council_district
+        return obj.district
 
     council_district_display.short_description = "District"
+
+    def active_subscription(self, obj=None):
+        if obj is None:
+            return None
+        if customer := obj.user.djstripe_customers.first():
+            print(customer)
+            if subscription := customer.active_subscriptions.first():
+                return (
+                    f"${subscription.stripe_data['plan']['amount'] / 100:,.2f}/"
+                    f"{subscription.stripe_data['plan']['interval']} "
+                    f"since {subscription.created:%B %Y}"
+                )
+        return None
 
     def get_readonly_fields(self, request, obj=None):
         if obj is None:
             return ()
         else:
             return (
+                "active_subscription",
                 "discord_activity",
+                "apps_connected",
+                "membership",
                 "user",
                 "mailjet_contact_id",
                 "council_district_calculated",
-                "council_district_validated",
             )
+
+    fieldsets = [
+        (
+            "Membership",
+            {
+                "fields": [
+                    "membership",
+                    "active_subscription",
+                    "apps_connected",
+                    "discord_activity",
+                ]
+            },
+        ),
+        (
+            "Demographics",
+            {"fields": ["user", "street_address", "zip_code", "council_district_calculated"]},
+        ),
+        (
+            "Preferences",
+            {"fields": ["newsletter_opt_in"]},
+        ),
+        (
+            "Internal",
+            {"fields": ["mailjet_contact_id"]},
+        ),
+    ]
 
 
 @admin.action(description="Mark selected shirts as fulfilled")

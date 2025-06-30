@@ -5,6 +5,8 @@ from django.contrib.auth.models import User
 from django.contrib.gis.db import models
 from django.core.validators import RegexValidator
 from django.db import transaction
+from django.db.models import Q
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from facets.models import District as DistrictFacet
@@ -17,28 +19,12 @@ from projects.models import ProjectApplication
 
 
 class Profile(models.Model):
-    class District(models.IntegerChoices):
-        NO_DISTRICT = 0, _("N/A - I do not live in Philadelphia")
-        DISTRICT_1 = 1, _("District 1")
-        DISTRICT_2 = 2, _("District 2")
-        DISTRICT_3 = 3, _("District 3")
-        DISTRICT_4 = 4, _("District 4")
-        DISTRICT_5 = 5, _("District 5")
-        DISTRICT_6 = 6, _("District 6")
-        DISTRICT_7 = 7, _("District 7")
-        DISTRICT_8 = 8, _("District 8")
-        DISTRICT_9 = 9, _("District 9")
-        DISTRICT_10 = 10, _("District 10")
-
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     mailjet_contact_id = models.BigIntegerField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     user = models.OneToOneField(User, related_name="profile", on_delete=models.CASCADE)
 
-    council_district = models.IntegerField(
-        null=True, blank=True, choices=District.choices, verbose_name=_("Council District")
-    )
     street_address = models.CharField(
         max_length=256,
         null=True,
@@ -90,6 +76,25 @@ class Profile(models.Model):
             transaction.on_commit(lambda: sync_to_mailjet.delay(self.id))
             transaction.on_commit(lambda: geocode_profile.delay(self.id))
         super(Profile, self).save(*args, **kwargs)
+
+    def membership(self):
+        return (
+            User.objects.filter(id=self.user.id)
+            .filter(
+                Q(
+                    Q(socialaccount__provider="discord")
+                    & Q(
+                        profile__discord_activity__date__gte=(
+                            timezone.now().date() - datetime.timedelta(days=30)
+                        )
+                    )
+                )
+                | Q(djstripe_customers__subscriptions__status__in=["active"])
+            )
+            .exists()
+        )
+
+    membership.boolean = True
 
     @property
     def complete(self):
