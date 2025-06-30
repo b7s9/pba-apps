@@ -34,7 +34,7 @@ class Profile(models.Model):
     mailjet_contact_id = models.BigIntegerField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, related_name="profile", on_delete=models.CASCADE)
 
     council_district = models.IntegerField(
         null=True, blank=True, choices=District.choices, verbose_name=_("Council District")
@@ -182,6 +182,15 @@ class Profile(models.Model):
 
     def __str__(self):
         return f"{self.user.first_name} {self.user.last_name} - {self.user.email}"
+
+
+class DiscordActivity(models.Model):
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="discord_activity")
+    date = models.DateField()
+    count = models.IntegerField()
+
+    class Meta:
+        indexes = [models.Index(fields=["profile", "date"])]
 
 
 class ShirtOrder(models.Model):

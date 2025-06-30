@@ -260,6 +260,9 @@ admin.site.register(Profile, ProfileAdmin)
 
 class UserAdmin(BaseUserAdmin):
     list_display = ["email", "first_name", "last_name", "is_staff", "is_superuser"]
+    fieldsets = (("Profile", {"fields": ("profile",)}),) + BaseUserAdmin.fieldsets
+    add_fieldsets = (("Profile", {"fields": ("profile",)}),) + BaseUserAdmin.add_fieldsets
+    readonly_fields = ["profile"]
 
 
 admin.site.unregister(User)
