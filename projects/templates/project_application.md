@@ -1,6 +1,7 @@
 {% load bleach_tags %}
 # {{ application.data.shortname.value|bleach }}
 
+**Quick Summary**:
 ```
 {{ application.data.quick_summary.value|bleach }}
 ```
