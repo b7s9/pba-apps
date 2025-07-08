@@ -49,10 +49,14 @@
   }
 
   function setDate(startOffset, endOffset = null) {
+    const nextElem = document.getElementById("nextDay");
+    const prevElem = document.getElementById("prevDay");
     if (startOffset === null && endOffset === null) {
       searchParams.delete("date");
       searchParams.delete("date_lte");
       searchParams.delete("date_gte");
+      nextElem.style.display = "none";
+      prevElem.style.display = "none";
     }
     let today = new Date();
     if (startOffset !== null && endOffset === null) {
@@ -61,6 +65,15 @@
       const querydate = new Date(today);
       querydate.setDate(today.getDate() + startOffset);
       searchParams.set("date", querydate.toISOString().substring(0, 10));
+      if (startOffset === 0) {
+        nextElem.style.display = "none";
+        prevElem.style.display = "";
+      } else {
+        nextElem.style.display = "";
+        prevElem.style.display = "";
+      }
+      nextElem.onclick = function() {setDate(startOffset + 1)}
+      prevElem.onclick = function() {setDate(startOffset - 1)}
     }
     if (startOffset !== null && endOffset !== null) {
       searchParams.delete("date");
@@ -73,6 +86,8 @@
       const endquerydate = new Date(today);
       endquerydate.setDate(today.getDate() + endOffset);
       searchParams.set("date_lte", endquerydate.toISOString().substring(0, 10));
+      nextElem.style.display = "none";
+      prevElem.style.display = "none";
     }
     writeQueryString();
     updateData();
@@ -146,19 +161,21 @@
   <div id="violationCount"><b>Count</b>: ...</div>
 </div>
 <div style="text-align: center">
+  <button onclick="setDate(null)">All Time</button> |
   <button onclick="setDate(0)">Today</button>
   <button onclick="setDate(-1)">Yesterday</button>
+  <button id="prevDay" style="display: none;">Prev</button>
+  <button id="nextDay" style="display: none;">Next</button>
   <button onclick="setDate(-6, 1)">Last 7 Days</button>
   <button onclick="setDate(-27, 1)">Last 28 Days</button>
-  <button onclick="setDate(null)">All Time</button>
 </div>
 <div style="text-align: center; margin: 0.5em">
+  <button onclick="setViolation(null)">All</button> |
   <button onclick="setViolation('Bike Lane')">Bike Lane</button>
   <button onclick="setViolation('Sidewalk')">Sidewalk</button>
   <button onclick="setViolation('Crosswalk')">Crosswalk</button>
   <button onclick="setViolation('Corner Clearance')">Corner Clearance</button>
   <button onclick="setViolation('Handicap Ramp')">Handicap Ramp</button>
-  <button onclick="setViolation(null)">All</button>
 </div>
 <div>
   <p
