@@ -3,7 +3,7 @@
 <script src="{% static 'js/leaflet-heat.js' %}"></script>
 <script src="{% static 'js/philly.js' %}"></script>
 {% endblock %} {% block content %}
-<h1>Laser Vision Violation Reports</h1>
+<h1><a href="/tools/laser-vision/">Laser Vision</a> Violation Reports</h1>
 <script>
   var paramsString = window.location.search;
   var searchParams = new URLSearchParams(paramsString);
@@ -131,7 +131,6 @@
       heatmapLayer.setLatLngs(data);
       heatmapLayer.redraw();
       updateHeader(data.length);
-      setTimeout(updateData, 10000);
     });
   }
   function map_init(map, options) {
@@ -176,6 +175,9 @@
   <button onclick="setViolation('Crosswalk')">Crosswalk</button>
   <button onclick="setViolation('Corner Clearance')">Corner Clearance</button>
   <button onclick="setViolation('Handicap Ramp')">Handicap Ramp</button>
+</div>
+<div style="text-align: center; margin: 0.5em">
+  <button onclick="updateData()">Refresh Data</button>
 </div>
 <div>
   <p
