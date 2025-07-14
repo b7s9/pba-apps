@@ -17,6 +17,7 @@ from django.db import transaction
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.utils import timezone
+from django.views.decorators.cache import cache_page
 from django.views.decorators.csrf import csrf_exempt
 
 from campaigns.admin import randomize_lat_long
@@ -203,6 +204,7 @@ async def report_api(request):
             return JsonResponse({"submitted": False}, status=400)
 
 
+@cache_page(30)
 def map_data(request):
     violation_filter = request.GET.get("violation", None)
     date_gte = request.GET.get("date_gte", None)
