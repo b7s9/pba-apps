@@ -299,6 +299,7 @@ def login_api(request):
                 "first_name": request.user.first_name,
                 "session_key": session_key,
                 "expiry_date": expiry_date,
+                "donor": request.user.profile.donor(),
             },
             status=200,
         )
@@ -312,6 +313,7 @@ def check_login(request):
             "success": "ok",
             "username": request.user.email,
             "first_name": request.user.first_name,
+            "donor": request.user.profile.donor(),
         },
         status=200,
     )

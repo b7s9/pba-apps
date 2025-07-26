@@ -96,6 +96,15 @@ class Profile(models.Model):
 
     membership.boolean = True
 
+    def donor(self):
+        return (
+            User.objects.filter(id=self.user.id)
+            .filter(Q(djstripe_customers__subscriptions__status__in=["active"]))
+            .exists()
+        )
+
+    donor.boolean = True
+
     @property
     def complete(self):
         return bool(self.street_address) and bool(self.zip_code)

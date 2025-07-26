@@ -5,9 +5,7 @@ from campaigns.models import PetitionSignature
 from facets.models import District
 from pbaabp.email import send_email_message
 
-signatures = PetitionSignature.objects.filter(
-    petition__title="Save the 3rd Street Bike Lane!"
-)
+signatures = PetitionSignature.objects.filter(petition__title="Save the 3rd Street Bike Lane!")
 profiles = District.objects.get(name="District 1").contained_profiles.all()
 
 SENT = []
