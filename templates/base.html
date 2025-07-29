@@ -45,8 +45,6 @@
     {% block extra_head %}
     {% endblock %}
 
-    {% block extra_js %}
-    {% endblock %}
   </head>
   <body>
     <div class="wrapper">
@@ -156,6 +154,8 @@
     </div>
     <script src="{% static 'js/htmx.min.js' %}" defer></script>
     {% django_htmx_script %}
+    {% block extra_js %}
+    {% endblock %}
     <script>
         function closeAlert(elem) {
             elem.parentElement.remove()
