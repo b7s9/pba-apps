@@ -13,7 +13,7 @@ import { Browser } from '@capacitor/browser';
 import { Storage } from '@ionic/storage-angular';
 import { IonModal } from '@ionic/angular';
 
-import { parseAddress } from 'vladdress';
+import { AddressParser } from '@sroussey/parse-address';
 import { usaStates } from 'typed-usa-states/dist/states';
 import { fromURL, blobToURL } from 'image-resize-compress';
 
@@ -328,12 +328,14 @@ export class ConfirmViolationDetailsModalComponent implements OnInit {
     if (this.platform.is('hybrid')) {
       this.rootUrl = 'https://bikeaction.org';
     }
-    const parsedAddress = parseAddress(this.violation.address);
-    this.blockNumber = parsedAddress.streetNumber as string;
-    this.streetName = best_match(
-      'Street Name',
-      `${parsedAddress.streetName} ${parsedAddress.streetSuffix}`,
-    );
+    const addressParser = new AddressParser();
+    const parsedAddress = addressParser.parseLocation(this.violation.address);
+    this.blockNumber = parsedAddress.number as string;
+    const inputStreetName =
+      `${parsedAddress.prefix || ''} ${parsedAddress.street || ''} ${parsedAddress.type || ''}`
+        .trim()
+        .replace(/\s+/g, ' ');
+    this.streetName = best_match('Street Name', inputStreetName);
     this.zipCode = best_match('Zip Code', parsedAddress.zipCode as string);
 
     if (this.violation.vehicle!.vehicle?.props?.make_model[0].make) {
