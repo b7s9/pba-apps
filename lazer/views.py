@@ -238,13 +238,17 @@ def map_data(request):
                 .date()
             )
 
-    for report in queryset.only("submission__location").all():
+    # Count unique users who submitted violations
+    unique_users = set()
+    for report in queryset.only("submission__location", "submission__created_by").all():
+        if report.submission.created_by_id:
+            unique_users.add(report.submission.created_by_id)
         lat, lng = randomize_lat_long(
             report.id, *(report.submission.location.y, report.submission.location.x)
         )
         pins.append([lat, lng, 1])
 
-    return JsonResponse(pins, safe=False)
+    return JsonResponse({"pins": pins, "unique_users_count": len(unique_users)}, safe=False)
 
 
 def map(request):

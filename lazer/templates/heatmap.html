@@ -21,7 +21,7 @@
     }
   }
 
-  function updateHeader(count) {
+  function updateHeader(count, uniqueUsers) {
     if (searchParams.get("violation") === null) {
       document.getElementById("violationName").innerHTML =
         "<b>Violation</b>: All";
@@ -46,6 +46,9 @@
 
     document.getElementById("violationCount").innerHTML =
       `<b>Count</b>: ${count}`;
+
+    document.getElementById("uniqueUsers").innerHTML =
+      `<b>Reporters</b>: ${uniqueUsers}`;
   }
 
   function setDate(startOffset, endOffset = null) {
@@ -128,9 +131,9 @@
   function updateData() {
     fetchData().then((data) => {
       heatmapLayer.setOptions({ radius: 10, blur: 5, minOpacity: 0.4 });
-      heatmapLayer.setLatLngs(data);
+      heatmapLayer.setLatLngs(data.pins);
       heatmapLayer.redraw();
-      updateHeader(data.length);
+      updateHeader(data.pins.length, data.unique_users_count);
     });
   }
   function map_init(map, options) {
@@ -158,6 +161,7 @@
     <b>Date(s)</b>: {% if request.GET.date %}{{ request.GET.date }}{% elif request.GET.date_gte or request.GET.date_lte %}{% if request.GET.date_gte %}{{ request.GET.date_gte }}{% endif %} - {% if request.GET.date_lte %}{{ request.GET.date_lte }}{% endif %}{% else %}All{% endif %}
   </div>
   <div id="violationCount"><b>Count</b>: ...</div>
+  <div id="uniqueUsers"><b>Reporters</b>: ...</div>
 </div>
 <div style="text-align: center">
   <button onclick="setDate(null)">All Time</button> |
