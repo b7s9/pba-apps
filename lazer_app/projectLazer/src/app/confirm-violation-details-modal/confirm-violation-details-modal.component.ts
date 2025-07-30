@@ -127,6 +127,10 @@ export class ConfirmViolationDetailsModalComponent implements OnInit {
           text: 'Cancel',
           role: 'cancel',
           handler: () => {
+            // Fire Plausible event for cancel
+            if (typeof (window as any).plausible !== 'undefined') {
+              (window as any).plausible('Confirm Submit - Cancel');
+            }
             this.cancel();
           },
         },
@@ -134,6 +138,10 @@ export class ConfirmViolationDetailsModalComponent implements OnInit {
           text: 'Submit it!',
           role: 'confirm',
           handler: () => {
+            // Fire Plausible event for submit
+            if (typeof (window as any).plausible !== 'undefined') {
+              (window as any).plausible('Confirm Submit - Submit');
+            }
             this.submit();
           },
         },

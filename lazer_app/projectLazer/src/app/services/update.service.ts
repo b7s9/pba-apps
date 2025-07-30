@@ -31,6 +31,14 @@ export class UpdateService implements OnDestroy {
           ? 'A new version is available.'
           : 'Already on the latest version.',
       );
+
+      // Fire Plausible event when a new version is detected
+      if (
+        this.isNewVersionAvailable &&
+        typeof (window as any).plausible !== 'undefined'
+      ) {
+        (window as any).plausible('App Update Available');
+      }
     } catch (error) {
       console.error('Failed to check for updates:', error);
     }
@@ -50,6 +58,12 @@ export class UpdateService implements OnDestroy {
 
   applyUpdate(): void {
     this.needsUpdate = false;
+
+    // Fire Plausible event when update is applied
+    if (typeof (window as any).plausible !== 'undefined') {
+      (window as any).plausible('App Update Applied');
+    }
+
     // Reload the page to update to the latest version after the new version is activated
     this.swUpdate
       .activateUpdate()
