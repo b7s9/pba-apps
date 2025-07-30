@@ -336,7 +336,7 @@ export class ConfirmViolationDetailsModalComponent implements OnInit {
         .trim()
         .replace(/\s+/g, ' ');
     this.streetName = best_match('Street Name', inputStreetName);
-    this.zipCode = best_match('Zip Code', parsedAddress.zipCode as string);
+    this.zipCode = best_match('Zip Code', parsedAddress.postal_code as string);
 
     if (this.violation.vehicle!.vehicle?.props?.make_model[0].make) {
       this.make = best_match(
