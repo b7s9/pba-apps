@@ -142,6 +142,10 @@ export class ConfirmViolationDetailsModalComponent implements OnInit {
     await alert.present();
   }
 
+  back() {
+    return this.modalCtrl.dismiss(null, 'back');
+  }
+
   cancel() {
     return this.modalCtrl.dismiss(null, 'cancel');
   }
