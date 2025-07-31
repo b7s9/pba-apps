@@ -71,7 +71,6 @@ class PetitionSignatureForm(forms.ModelForm):
             required_fields.append("email")
             required_fields.append("postal_address_line_1")
             required_fields.append("zip_code")
-            required_fields.append("newsletter_opt_in")
             if "first_name" in to_remove:
                 to_remove.remove("first_name")
             if "last_name" in to_remove:
