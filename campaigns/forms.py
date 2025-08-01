@@ -16,7 +16,7 @@ class PetitionSignatureForm(forms.ModelForm):
         ]
         help_texts = {
             "comment": "Your comment, which will be displayed on the campaign page",
-            "newsletter_opt_in": "Subscribe to Philly Bike Actions monthly newsletter.",
+            "newsletter_opt_in": "Subscribe to Philly Bike Action's monthly newsletter.",
             "create_account_opt_in": (
                 "By creating a PBA account, you agree that you have read the "
                 '<a target="_blank" href="https://apps.bikeaction.org/policies/code-of-conduct/">'
